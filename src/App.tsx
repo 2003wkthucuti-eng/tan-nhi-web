@@ -8,7 +8,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { ArrowUpRight, DoorOpen, Search, X } from 'lucide-react';
 import { BlackCatMascot } from './components/BlackCatMascot';
 
-export type GenreTag = 'Tổng tài' | 'Fantasy' | 'Cổ trang' | 'Tâm lý' | 'Chữa lành';
+export type GenreTag = string;
 
 export interface CharacterItem {
   id: string;
@@ -25,9 +25,19 @@ export interface CharacterItem {
  * - Để thêm nhân vật mới, chỉ cần thêm 1 object vào mảng CHARACTERS bên dưới.
  * - Nếu nhân vật chỉ có 1 trong 2 link (DokiChat hoặc GGAI), để trống '' hoặc bỏ qua trường còn lại.
  */
-const CHARACTERS: CharacterItem[] = [];
+const CHARACTERS: CharacterItem[] = [
+  {
+    id: 'te-ngac',
+    name: 'Tề Ngạc',
+    avatar: 'https://files.catbox.moe/oz9pkx.jpg',
+    description: '“Tôi chưa từng yêu em.”',
+    tags: ['Boygirl', 'Lạnh Lùng', 'Thống Trị', 'Mafia'],
+    dokiLink: 'https://www.dokichat.club/vi/role/6f866b44-70ea-4103-b2a0-df4d2a59ebec?isShare=true',
+    ggaiLink: '',
+  },
+];
 
-const GENRE_FILTERS: Array<'Tất cả' | GenreTag> = [
+const BASE_GENRES: GenreTag[] = [
   'Tất cả',
   'Tổng tài',
   'Fantasy',
@@ -35,6 +45,10 @@ const GENRE_FILTERS: Array<'Tất cả' | GenreTag> = [
   'Tâm lý',
   'Chữa lành',
 ];
+
+const GENRE_FILTERS: GenreTag[] = Array.from(
+  new Set([...BASE_GENRES, ...CHARACTERS.flatMap((char) => char.tags)])
+);
 
 function normalizeText(value: string): string {
   return value

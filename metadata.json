@@ -1,0 +1,6 @@
+{
+  "name": "Ngôi Nhà Nhỏ Của Tần Nhi",
+  "description": "Ngôi nhà nhỏ ấm cúng tổng hợp các nhân vật AI Chatbot tuyển chọn của Tần Nhi.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

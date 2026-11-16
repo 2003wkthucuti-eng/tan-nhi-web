@@ -123,6 +123,35 @@ const CHARACTERS: CharacterItem[] = [
     dokiLink: 'https://www.dokichat.club/vi/role/7c933a41-fec8-4b79-8942-a950a84fed8a?isShare=true',
     ggaiLink: '',
   },
+  {
+    id: 'co-tram',
+    name: 'Cố Trầm',
+    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/17mQcL2bF.png',
+    description: '“Cái gì?! Kẻ bắt nạt tôi hằng ngày lại là người yêu qua mạng của tôi ư?”',
+    tags: ['Boygirl', 'Bắt nạt', 'Thiếu gia', 'Mỏ hỗn'],
+    dokiLink: 'https://www.dokichat.club/vi/role/4c9f86ed-29b8-46a4-9d2c-5edc4b28b24d?isShare=true',
+    ggaiLink:
+      'https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%221TZRWp_Zbak0PhIOZrX4XHvL_cPcZX3i3%22%5D,%22action%22:%22open%22,%22userId%22:%22111559786295807256713%22,%22resourceKeys%22:%7B%7D%7D&usp=sharing',
+  },
+  {
+    id: 'co-da-lam',
+    name: 'Cố Dạ Lam - 顾夜岚',
+    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/1gY04hZ5t.jpg',
+    description: '“Cậu xem tôi là trò tiêu khiển, còn tôi… lại xem cậu là cả thế giới.”',
+    tags: ['Boygirl', 'Ngược', 'TXVT', 'Đơn phương'],
+    dokiLink: 'https://www.dokichat.club/vi/role/908367c4-9f6d-4b54-b05d-17a77b9e7161?isShare=true',
+    ggaiLink:
+      'https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%221J1Gwo9FfL9xeg5x2OUxPc6faw6KcyajU%22%5D,%22action%22:%22open%22,%22userId%22:%22111559786295807256713%22,%22resourceKeys%22:%7B%7D%7D&usp=sharing',
+  },
+  {
+    id: 'tham-da',
+    name: 'Thẩm Dạ',
+    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/pXhNo0Eq.jpg',
+    description: '“Em thất vọng vì mong đợi, không phải vì tôi.”',
+    tags: ['Boygirl', 'Lạnh lẽo', 'Trap boy', 'Không thật lòng', 'Học đường'],
+    dokiLink: 'https://www.dokichat.club/vi/role/f7353eeb-c1e2-4934-b874-c420056e1f2d?isShare=true',
+    ggaiLink: '',
+  },
 ];
 
 export interface PlaylistTrack {

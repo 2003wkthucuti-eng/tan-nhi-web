@@ -7,6 +7,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { ArrowUpRight, DoorOpen, Music, Pause, Play, Search, SkipForward, X } from 'lucide-react';
 import { BlackCatMascot } from './components/BlackCatMascot';
+import { GoldenStardust } from './components/GoldenStardust';
 
 export type GenreTag = string;
 
@@ -261,10 +262,13 @@ export default function App() {
               }}
             />
 
+            {/* Bụi vàng & sao 4 cánh lấp lánh ở nền Intro */}
+            <GoldenStardust className="z-0" />
+
             {/* Khung viền ánh kim mảnh bao quanh màn chào */}
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute inset-4 sm:inset-8 rounded-3xl border border-[#D4AF37]/20"
+              className="pointer-events-none absolute inset-4 sm:inset-8 rounded-3xl border border-[#D4AF37]/25"
             />
 
             <div className="relative z-10 flex flex-col items-center text-center max-w-xl mx-auto">
@@ -272,7 +276,7 @@ export default function App() {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                className="animate-cat-float mb-5"
+                className="animate-cat-float mb-5 drop-shadow-[0_0_24px_rgba(212,175,55,0.32)]"
               >
                 <BlackCatMascot size={126} variant="hero" />
               </motion.div>
@@ -290,7 +294,7 @@ export default function App() {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.75, delay: 0.18, ease: [0.16, 1, 0.3, 1] }}
-                className="font-display text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight text-[#F3E5AB] leading-[1.12] [text-wrap:balance]"
+                className="font-display text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight leading-[1.12] [text-wrap:balance] gold-shimmer-text"
               >
                 Ngôi Nhà Nhỏ Của Tần Nhi
               </motion.h1>
@@ -318,7 +322,7 @@ export default function App() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 0.38, ease: [0.16, 1, 0.3, 1] }}
                 onClick={handleEnterHouse}
-                className="group inline-flex items-center justify-center gap-2.5 min-h-[48px] px-8 py-3 rounded-full bg-[#121218] border border-[#D4AF37] text-[#F3E5AB] text-base font-medium tracking-wide shadow-[0_0_24px_rgba(212,175,55,0.18)] hover:bg-[#D4AF37] hover:text-[#0B0B0F] hover:shadow-[0_0_32px_rgba(212,175,55,0.4)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3E5AB] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0B0B0F] transition-all duration-200 cursor-pointer whitespace-nowrap"
+                className="shimmer-gold-btn group inline-flex items-center justify-center gap-2.5 min-h-[48px] px-8 py-3 rounded-full bg-[#121218] border border-[#D4AF37] text-[#F3E5AB] text-base font-medium tracking-wide shadow-[0_0_24px_rgba(212,175,55,0.22)] hover:bg-[#D4AF37] hover:text-[#0B0B0F] hover:shadow-[0_0_32px_rgba(212,175,55,0.45)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3E5AB] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0B0B0F] transition-all duration-200 cursor-pointer whitespace-nowrap"
               >
                 <DoorOpen className="w-4 h-4 transition-transform duration-200 group-hover:-translate-x-0.5" />
                 <span>Gõ cửa nhà nhỏ</span>
@@ -331,12 +335,15 @@ export default function App() {
       {/* Giao diện Trang chủ */}
       <div
         aria-hidden={!hasEntered}
-        className={`min-h-screen flex flex-col transition-opacity duration-500 ${
+        className={`relative min-h-screen flex flex-col transition-opacity duration-500 ${
           hasEntered ? 'opacity-100' : 'opacity-0 pointer-events-none h-screen overflow-hidden'
         }`}
       >
+        {/* Bụi vàng lấp lánh ở nền Trang chủ */}
+        <GoldenStardust className="fixed inset-0 z-0 opacity-85" />
+
         {/* Top Bar 3 vùng rõ ràng */}
-        <header className="sticky top-0 z-30 bg-[#0B0B0F]/92 backdrop-blur-md border-b border-[#D4AF37]/20">
+        <header className="sticky top-0 z-30 bg-[#0B0B0F]/90 backdrop-blur-md border-b border-[#D4AF37]/20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-4 sm:gap-8">
             {/* Zone 1: Brand Title + Linh vật mèo đen */}
             <a
@@ -347,8 +354,8 @@ export default function App() {
               }}
               className="flex items-center gap-2.5 whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] rounded-lg py-1"
             >
-              <BlackCatMascot size={34} variant="badge" className="shrink-0" />
-              <span className="font-display text-xl sm:text-2xl font-semibold tracking-tight text-[#F3E5AB]">
+              <BlackCatMascot size={34} variant="badge" className="shrink-0 drop-shadow-[0_0_10px_rgba(212,175,55,0.35)]" />
+              <span className="font-display text-xl sm:text-2xl font-semibold tracking-tight gold-shimmer-text">
                 Ngôi Nhà Nhỏ Của Tần Nhi
               </span>
             </a>
@@ -393,7 +400,7 @@ export default function App() {
         </header>
 
         {/* Nội dung chính */}
-        <main id="top" className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <main id="top" className="relative z-10 flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
           {/* Phần giới thiệu ngắn đầu trang */}
           <section className="mb-8 sm:mb-10 pb-8 border-b border-[#D4AF37]/15">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -486,19 +493,26 @@ export default function App() {
               aria-label="Danh sách nhân vật"
               className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
             >
-              {filteredCharacters.map((char) => {
+              {filteredCharacters.map((char, index) => {
                 const hasDoki = Boolean(char.dokiLink && char.dokiLink.trim() !== '');
                 const hasGgai = Boolean(char.ggaiLink && char.ggaiLink.trim() !== '');
                 const hasBothLinks = hasDoki && hasGgai;
 
                 return (
-                  <article
+                  <motion.article
                     key={char.id}
-                    className="group bg-[#121218] border border-[#D4AF37]/22 hover:border-[#D4AF37]/65 rounded-2xl p-4 sm:p-5 flex flex-col justify-between transition-all duration-200 hover:shadow-[0_0_28px_-6px_rgba(212,175,55,0.28)]"
+                    initial={{ opacity: 0, y: 18 }}
+                    animate={hasEntered ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
+                    transition={{
+                      duration: 0.5,
+                      delay: hasEntered ? 0.14 + Math.min(index * 0.09, 0.54) : 0,
+                      ease: [0.16, 1, 0.3, 1],
+                    }}
+                    className="shimmer-card-border group bg-[#121218]/92 backdrop-blur-sm border border-[#D4AF37]/25 hover:border-[#D4AF37]/70 rounded-2xl p-4 sm:p-5 flex flex-col justify-between transition-all duration-200 hover:shadow-[0_0_32px_-6px_rgba(212,175,55,0.32)]"
                   >
                     <div>
                       {/* Ảnh đại diện bo góc, viền mảnh ánh vàng Gold phát sáng nhẹ khi hover */}
-                      <div className="relative aspect-square w-full rounded-xl overflow-hidden bg-[#0B0B0F] border border-[#D4AF37]/35 group-hover:border-[#F3E5AB]/75 group-hover:shadow-[0_0_22px_rgba(212,175,55,0.25)] transition-all duration-200">
+                      <div className="relative aspect-square w-full rounded-xl overflow-hidden bg-[#0B0B0F] border border-[#D4AF37]/35 group-hover:border-[#F3E5AB]/75 group-hover:shadow-[0_0_22px_rgba(212,175,55,0.28)] transition-all duration-200">
                         <img
                           src={char.avatar}
                           alt={`Ảnh đại diện nhân vật ${char.name}`}
@@ -552,7 +566,7 @@ export default function App() {
                             href={char.dokiLink}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className={`inline-flex items-center justify-center gap-1.5 min-h-[42px] px-3 py-2 rounded-lg bg-gradient-to-r from-[#D4AF37] to-[#E6C86E] text-[#0B0B0F] text-[13px] font-semibold whitespace-nowrap hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3E5AB] transition-all duration-150 ${
+                            className={`shimmer-gold-btn inline-flex items-center justify-center gap-1.5 min-h-[42px] px-3 py-2 rounded-lg bg-gradient-to-r from-[#D4AF37] to-[#E6C86E] text-[#0B0B0F] text-[13px] font-semibold whitespace-nowrap hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3E5AB] transition-all duration-150 ${
                               !hasBothLinks ? 'w-full' : ''
                             }`}
                           >
@@ -576,7 +590,7 @@ export default function App() {
                         )}
                       </div>
                     )}
-                  </article>
+                  </motion.article>
                 );
               })}
             </section>
@@ -611,7 +625,7 @@ export default function App() {
         </main>
 
         {/* Footer tối giản */}
-        <footer className="border-t border-[#D4AF37]/15 py-6 mt-12">
+        <footer className="relative z-10 border-t border-[#D4AF37]/15 py-6 mt-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#8E877A]">
             <p className="text-[#B8B0A0]">
               Ngôi Nhà Nhỏ Của Tần Nhi · Góc lưu trữ nhân vật AI Chatbot

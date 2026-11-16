@@ -37,14 +37,36 @@ export const BlackCatMascot: React.FC<BlackCatMascotProps> = ({
           <stop offset="50%" stopColor="#D4AF37" />
           <stop offset="100%" stopColor="#AA8220" />
         </linearGradient>
-        <radialGradient id={auraId} cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#D4AF37" stopOpacity="0.22" />
+        <radialGradient id={auraId} cx="50%" cy="54%" r="50%">
+          <stop offset="0%" stopColor="#F3E5AB" stopOpacity="0.34" />
+          <stop offset="52%" stopColor="#D4AF37" stopOpacity="0.16" />
           <stop offset="100%" stopColor="#D4AF37" stopOpacity="0" />
         </radialGradient>
       </defs>
 
-      {variant === 'hero' && (
-        <circle cx="60" cy="62" r="52" fill={`url(#${auraId})`} />
+      {variant !== 'badge' && (
+        <circle cx="60" cy="60" r="56" fill={`url(#${auraId})`} />
+      )}
+
+      {/* 3 ngôi sao nhỏ nhấp nháy quanh mèo đen */}
+      {variant !== 'badge' && (
+        <g aria-hidden="true">
+          <path
+            d="M22 28L23.6 33.4L29 35L23.6 36.6L22 42L20.4 36.6L15 35L20.4 33.4Z"
+            fill="#F3E5AB"
+            className="animate-cat-star-1"
+          />
+          <path
+            d="M99 42L100.2 45.8L104 47L100.2 48.2L99 52L97.8 48.2L94 47L97.8 45.8Z"
+            fill="#D4AF37"
+            className="animate-cat-star-2"
+          />
+          <path
+            d="M24 78L25 81L28 82L25 83L24 86L23 83L20 82L23 81Z"
+            fill="#F3E5AB"
+            className="animate-cat-star-3"
+          />
+        </g>
       )}
 
       {/* Mặt trăng khuyết mảnh phía sau cho bản hero & companion */}

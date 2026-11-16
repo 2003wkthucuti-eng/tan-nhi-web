@@ -60,10 +60,180 @@
   animation: cat-float 5s ease-in-out infinite;
 }
 
+/* Bụi vàng & ngôi sao lấp lánh thuần CSS (chỉ transform & opacity) */
+@keyframes stardust-drift {
+  0%, 100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(6px, -16px, 0);
+  }
+}
+
+@keyframes stardust-twinkle {
+  0%, 100% {
+    opacity: 0.22;
+    transform: scale(0.78);
+  }
+  50% {
+    opacity: 0.95;
+    transform: scale(1.12);
+  }
+}
+
+.stardust-drift {
+  will-change: transform;
+  animation-name: stardust-drift;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+.stardust-twinkle {
+  will-change: transform, opacity;
+  animation-name: stardust-twinkle;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+/* Sao nhấp nháy quanh mèo đen */
+@keyframes cat-star-blink {
+  0%, 100% {
+    opacity: 0.25;
+    transform: scale(0.75) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15) rotate(12deg);
+  }
+}
+
+.animate-cat-star-1 {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: cat-star-blink 2.8s ease-in-out infinite;
+}
+
+.animate-cat-star-2 {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: cat-star-blink 3.4s ease-in-out 0.9s infinite;
+}
+
+.animate-cat-star-3 {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: cat-star-blink 3.1s ease-in-out 1.6s infinite;
+}
+
+/* Chữ ánh kim vàng chuyển động lấp lánh */
+@keyframes gold-text-flow {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 220% 50%;
+  }
+}
+
+.gold-shimmer-text {
+  color: #F3E5AB;
+  background-image: linear-gradient(
+    110deg,
+    #C89F31 0%,
+    #F3E5AB 24%,
+    #FFF7D6 38%,
+    #D4AF37 54%,
+    #F3E5AB 76%,
+    #C89F31 100%
+  );
+  background-size: 220% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gold-text-flow 6.5s linear infinite;
+}
+
+/* Vệt sáng ánh kim lướt qua nút bấm khi hover/chạm */
+.shimmer-gold-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer-gold-btn::after {
+  content: "";
+  position: absolute;
+  top: -20%;
+  bottom: -20%;
+  left: 0;
+  width: 55%;
+  background: linear-gradient(
+    115deg,
+    transparent 0%,
+    rgba(255, 250, 224, 0.45) 50%,
+    transparent 100%
+  );
+  transform: translate3d(-180%, 0, 0) skewX(-18deg);
+  transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.shimmer-gold-btn:hover::after,
+.shimmer-gold-btn:active::after,
+.shimmer-gold-btn:focus-visible::after {
+  transform: translate3d(260%, 0, 0) skewX(-18deg);
+}
+
+/* Vệt ánh kim lướt qua viền thẻ nhân vật khi hover/chạm */
+.shimmer-card-border {
+  position: relative;
+}
+
+.shimmer-card-border::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: linear-gradient(
+    115deg,
+    transparent 28%,
+    rgba(243, 229, 171, 0.85) 50%,
+    transparent 72%
+  );
+  background-size: 240% 100%;
+  background-position: 140% 0;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition:
+    opacity 0.25s ease,
+    background-position 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.shimmer-card-border:hover::before,
+.shimmer-card-border:active::before {
+  opacity: 1;
+  background-position: -60% 0;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-cat-tail,
-  .animate-cat-float {
+  .animate-cat-float,
+  .stardust-drift,
+  .stardust-twinkle,
+  .animate-cat-star-1,
+  .animate-cat-star-2,
+  .animate-cat-star-3,
+  .gold-shimmer-text {
     animation: none;
+  }
+  .shimmer-gold-btn::after,
+  .shimmer-card-border::before {
+    transition: none;
   }
   html {
     scroll-behavior: auto;

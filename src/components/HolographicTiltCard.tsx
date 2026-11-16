@@ -4,6 +4,7 @@ interface HolographicTiltCardProps {
   children: React.ReactNode;
   className?: string;
   maxTilt?: number;
+  disableTilt?: boolean;
   onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
@@ -15,6 +16,7 @@ export const HolographicTiltCard: React.FC<HolographicTiltCardProps> = ({
   children,
   className = '',
   maxTilt = 7,
+  disableTilt = false,
   onClick,
 }) => {
   const cardRef = useRef<HTMLDivElement | null>(null);
@@ -29,8 +31,8 @@ export const HolographicTiltCard: React.FC<HolographicTiltCardProps> = ({
     const px = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
     const py = Math.max(0, Math.min(1, (clientY - rect.top) / rect.height));
 
-    const rotateY = (px - 0.5) * (maxTilt * 2);
-    const rotateX = (0.5 - py) * (maxTilt * 2);
+    const rotateY = disableTilt ? 0 : (px - 0.5) * (maxTilt * 2);
+    const rotateX = disableTilt ? 0 : (0.5 - py) * (maxTilt * 2);
 
     el.setAttribute('data-tilting', 'true');
     el.style.setProperty('--tilt-rx', `${rotateX.toFixed(2)}deg`);

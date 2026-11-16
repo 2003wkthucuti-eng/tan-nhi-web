@@ -362,6 +362,33 @@
   mix-blend-mode: screen;
 }
 
+@keyframes soulmate-badge-glow {
+  0% {
+    background-position: 0% 50%;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.32);
+  }
+  50% {
+    background-position: 100% 50%;
+    box-shadow: 0 0 18px rgba(243, 229, 171, 0.62);
+  }
+  100% {
+    background-position: 0% 50%;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.32);
+  }
+}
+
+.soulmate-shimmer-badge {
+  background-image: linear-gradient(
+    115deg,
+    rgba(36, 27, 8, 0.96) 0%,
+    rgba(88, 66, 16, 0.95) 45%,
+    rgba(130, 98, 26, 0.95) 55%,
+    rgba(36, 27, 8, 0.96) 100%
+  );
+  background-size: 200% auto;
+  animation: soulmate-badge-glow 4s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-cat-tail,
   .animate-cat-float,
@@ -375,7 +402,8 @@
   .animate-cat-star-1,
   .animate-cat-star-2,
   .animate-cat-star-3,
-  .gold-shimmer-text {
+  .gold-shimmer-text,
+  .soulmate-shimmer-badge {
     animation: none;
   }
   .tilt-3d-card {

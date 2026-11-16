@@ -5,16 +5,45 @@
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { ArrowUpRight, ChevronDown, ChevronLeft, ChevronRight, Music, Pause, Play, Search, SkipForward, SlidersHorizontal, Sparkles, X } from 'lucide-react';
+import {
+  ArrowUpRight,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  DoorOpen,
+  Music,
+  Pause,
+  Play,
+  Search,
+  SkipForward,
+  SlidersHorizontal,
+  Sparkles,
+  User,
+  X,
+} from 'lucide-react';
 import { BlackCatMascot } from './components/BlackCatMascot';
 import { CharacterDetailTarotModal } from './components/CharacterDetailTarotModal';
 import { DestinyTarotModal } from './components/DestinyTarotModal';
+import { GoldenFireworks } from './components/GoldenFireworks';
 import { GoldenSparkleTrail } from './components/GoldenSparkleTrail';
 import { GoldenStardust } from './components/GoldenStardust';
 import { HolographicTiltCard } from './components/HolographicTiltCard';
 import { IntroSealDoors, type IntroPhase } from './components/IntroSealDoors';
 import { MysticalFogOverlay } from './components/MysticalFogOverlay';
-import { playCatMeowChime, playDoorChime, playSoftTap } from './utils/soundEffects';
+import { SecretBadgeModal } from './components/SecretBadgeModal';
+import { SoulmateCornerModal } from './components/SoulmateCornerModal';
+import { UserAvatarBadge } from './components/UserAvatarBadge';
+import {
+  loadHeartfeltLetters,
+  loadSoulmateUnlocked,
+  loadUserProfile,
+  saveHeartfeltLetters,
+  saveSoulmateUnlocked,
+  saveUserProfile,
+  type HeartfeltLetter,
+  type UserProfile,
+} from './types/user';
+import { playAchievementChime, playCatMeowChime, playDoorChime, playSoftTap, playTarotSpreadChime } from './utils/soundEffects';
 
 export type GenreTag = string;
 
@@ -26,6 +55,8 @@ export interface CharacterItem {
   tags: GenreTag[];
   dokiLink?: string;
   ggaiLink?: string;
+  backstory?: string;
+  firstMessage?: string;
 }
 
 /**
@@ -390,6 +421,16 @@ export default function App() {
   const [headerCatMessage, setHeaderCatMessage] = useState<string | null>(null);
   const [isDestinyModalOpen, setIsDestinyModalOpen] = useState(false);
   const [selectedCharacter, setSelectedCharacter] = useState<CharacterItem | null>(null);
+  const [isSecretBadgeOpen, setIsSecretBadgeOpen] = useState(false);
+  const [hasUnlockedSoulmateBadge, setHasUnlockedSoulmateBadge] = useState<boolean>(() =>
+    loadSoulmateUnlocked()
+  );
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(() => loadUserProfile());
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+  const [lettersByChar, setLettersByChar] = useState<Record<string, HeartfeltLetter[]>>(() =>
+    loadHeartfeltLetters()
+  );
+  const [fireworkBurstKey, setFireworkBurstKey] = useState(0);
   const [failedAvatars, setFailedAvatars] = useState<Record<string, boolean>>({});
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -397,16 +438,27 @@ export default function App() {
   const errorStreakRef = useRef(0);
   const headerCatTimerRef = useRef<number | null>(null);
   const introTimerRef = useRef<number | null>(null);
+  const catTapCountRef = useRef(0);
+  const catTapResetTimerRef = useRef<number | null>(null);
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
 
   const hasEntered = introPhase !== 'idle';
   const currentTrack = PLAYLIST[currentTrackIndex];
+  const totalLettersSent = useMemo(
+    () =>
+      Object.values(lettersByChar).reduce(
+        (sum, list) => sum + (Array.isArray(list) ? list.length : 0),
+        0
+      ),
+    [lettersByChar]
+  );
 
   useEffect(() => {
     return () => {
       if (headerCatTimerRef.current) window.clearTimeout(headerCatTimerRef.current);
       if (introTimerRef.current) window.clearTimeout(introTimerRef.current);
+      if (catTapResetTimerRef.current) window.clearTimeout(catTapResetTimerRef.current);
     };
   }, []);
 
@@ -579,7 +631,96 @@ export default function App() {
     }
   };
 
+  const unlockSoulmateAchievement = (showModal: boolean) => {
+    setHasUnlockedSoulmateBadge(true);
+    saveSoulmateUnlocked(true);
+    playAchievementChime();
+    setFireworkBurstKey((prev) => prev + 1);
+    if (showModal) {
+      setIsSecretBadgeOpen(true);
+    }
+  };
+
+  const registerSecretCatTap = (): boolean => {
+    catTapCountRef.current += 1;
+    if (catTapResetTimerRef.current) {
+      window.clearTimeout(catTapResetTimerRef.current);
+    }
+
+    if (catTapCountRef.current >= 3) {
+      catTapCountRef.current = 0;
+      catTapResetTimerRef.current = null;
+      setHeaderCatMessage(null);
+      setCatGreetingOpen(false);
+      unlockSoulmateAchievement(true);
+      return true;
+    }
+
+    catTapResetTimerRef.current = window.setTimeout(() => {
+      catTapCountRef.current = 0;
+      catTapResetTimerRef.current = null;
+    }, 3500);
+    return false;
+  };
+
+  const handleSaveUserProfile = (nextProfile: UserProfile) => {
+    setUserProfile(nextProfile);
+    saveUserProfile(nextProfile);
+  };
+
+  const handleLogoutUserProfile = () => {
+    setUserProfile(null);
+    saveUserProfile(null);
+  };
+
+  const handleSendHeartfeltLetter = (characterId: string, content: string) => {
+    if (!userProfile) return;
+
+    const nextTotalCount = totalLettersSent + 1;
+    const willUnlockNow = !hasUnlockedSoulmateBadge && nextTotalCount >= 3;
+    const badgeActive = hasUnlockedSoulmateBadge || willUnlockNow;
+
+    const newLetter: HeartfeltLetter = {
+      id: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+      characterId,
+      authorName: userProfile.displayName,
+      authorAvatarUrl: userProfile.avatarUrl,
+      authorAvatarIcon: userProfile.avatarIcon,
+      hasSoulmateBadge: badgeActive,
+      content,
+      createdAt: Date.now(),
+    };
+
+    setLettersByChar((prev) => {
+      const existing = prev[characterId] || [];
+      const updated = {
+        ...prev,
+        [characterId]: [newLetter, ...existing],
+      };
+      saveHeartfeltLetters(updated);
+      return updated;
+    });
+
+    if (willUnlockNow) {
+      unlockSoulmateAchievement(true);
+    }
+  };
+
+  const handleDeleteHeartfeltLetter = (characterId: string, letterId: string) => {
+    setLettersByChar((prev) => {
+      const existing = prev[characterId] || [];
+      const updated = {
+        ...prev,
+        [characterId]: existing.filter((item) => item.id !== letterId),
+      };
+      saveHeartfeltLetters(updated);
+      return updated;
+    });
+  };
+
   const handleHeaderCatClick = () => {
+    if (registerSecretCatTap()) return;
+
     playCatMeowChime();
     const candidates = HOST_CAT_GREETINGS.filter((msg) => msg !== headerCatMessage);
     const pool = candidates.length > 0 ? candidates : HOST_CAT_GREETINGS;
@@ -596,7 +737,7 @@ export default function App() {
 
   const handleOpenDestinyModal = () => {
     if (CHARACTERS.length === 0) return;
-    playSoftTap('nav');
+    playTarotSpreadChime();
     setIsDestinyModalOpen(true);
   };
 
@@ -635,18 +776,18 @@ export default function App() {
 
         {/* Top Bar 3 vùng rõ ràng */}
         <header className="sticky top-0 z-30 bg-[#0B0B0F]/90 backdrop-blur-md border-b border-[#D4AF37]/20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-4 sm:gap-8">
+          <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-2 sm:gap-8">
             {/* Zone 1: Linh vật mèo đen tương tác + Brand Title */}
-            <div className="relative flex items-center gap-2 sm:gap-2.5 shrink-0">
+            <div className="relative flex items-center gap-1.5 sm:gap-2.5 min-w-0">
               <button
                 type="button"
                 onClick={handleHeaderCatClick}
                 aria-label="Chạm vào chú mèo đen để nhận lời chào"
                 title="Meow~ Chạm vào mình đi!"
-                className="relative p-0.5 rounded-xl hover:bg-[#D4AF37]/10 active:scale-95 transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]"
+                className="relative p-0.5 rounded-xl hover:bg-[#D4AF37]/10 active:scale-95 transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] shrink-0"
               >
                 <BlackCatMascot
-                  size={36}
+                  size={34}
                   variant="badge"
                   className="shrink-0 drop-shadow-[0_0_10px_rgba(212,175,55,0.4)]"
                 />
@@ -659,9 +800,9 @@ export default function App() {
                   playSoftTap('nav');
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
-                className="whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] rounded-lg py-1"
+                className="min-w-0 truncate focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] rounded-lg py-1"
               >
-                <span className="font-display text-lg sm:text-2xl font-semibold tracking-tight gold-shimmer-text">
+                <span className="font-display text-[17px] sm:text-2xl font-semibold tracking-tight gold-shimmer-text">
                   Ngôi Nhà Nhỏ Của Tần Nhi
                 </span>
               </a>
@@ -712,8 +853,47 @@ export default function App() {
               )}
             </nav>
 
-            {/* Zone 3: 1 Primary Action */}
-            <div className="flex items-center shrink-0">
+            {/* Zone 3: Góc Tri Kỷ (Tài khoản cục bộ) + Màn chào */}
+            <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+              <button
+                type="button"
+                onClick={() => {
+                  playSoftTap('tap');
+                  setIsProfileModalOpen(true);
+                }}
+                aria-label={userProfile ? `Hồ sơ của ${userProfile.displayName}` : 'Mở Góc Tri Kỷ'}
+                title={userProfile ? 'Chỉnh sửa hồ sơ Góc Tri Kỷ' : 'Đăng nhập / Tạo hồ sơ Góc Tri Kỷ'}
+                className={`inline-flex items-center gap-1.5 min-h-[38px] sm:min-h-[40px] px-2.5 sm:px-3 py-1.5 rounded-xl border text-[11px] sm:text-xs font-medium transition-all duration-150 whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] ${
+                  userProfile
+                    ? 'bg-[#17140E] border-[#D4AF37]/65 text-[#F3E5AB] hover:border-[#F3E5AB] shadow-[0_0_14px_rgba(212,175,55,0.16)]'
+                    : 'bg-[#121218] border-[#D4AF37]/40 text-[#F3E5AB] hover:bg-[#D4AF37]/15 hover:border-[#D4AF37]'
+                }`}
+              >
+                {userProfile ? (
+                  <>
+                    <UserAvatarBadge
+                      avatarUrl={userProfile.avatarUrl}
+                      avatarIcon={userProfile.avatarIcon}
+                      displayName={userProfile.displayName}
+                      size="xs"
+                    />
+                    <span className="max-w-[74px] sm:max-w-[115px] truncate">
+                      {userProfile.displayName}
+                    </span>
+                    {hasUnlockedSoulmateBadge && (
+                      <span title="Tri kỷ" className="text-[11px] leading-none shrink-0">
+                        ✨
+                      </span>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <User className="w-3.5 h-3.5 text-[#D4AF37] shrink-0" aria-hidden="true" />
+                    <span>Góc Tri Kỷ</span>
+                  </>
+                )}
+              </button>
+
               <button
                 type="button"
                 onClick={() => {
@@ -723,9 +903,12 @@ export default function App() {
                   }
                   setIntroPhase('idle');
                 }}
-                className="min-h-[40px] px-4 py-2 rounded-lg border border-[#D4AF37]/45 bg-[#121218] text-xs sm:text-sm font-medium text-[#F3E5AB] hover:bg-[#D4AF37]/15 hover:border-[#D4AF37] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] transition-colors duration-150 whitespace-nowrap shrink-0 cursor-pointer"
+                aria-label="Xem lại màn chào"
+                title="Xem lại màn chào"
+                className="inline-flex items-center justify-center gap-1.5 min-w-[38px] min-h-[38px] sm:min-h-[40px] px-2 sm:px-3.5 py-1.5 rounded-xl border border-[#D4AF37]/35 bg-[#121218] text-xs font-medium text-[#DCD4C6] hover:text-[#F3E5AB] hover:bg-[#D4AF37]/15 hover:border-[#D4AF37] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] transition-colors duration-150 whitespace-nowrap shrink-0 cursor-pointer"
               >
-                Màn chào
+                <DoorOpen className="w-3.5 h-3.5 text-[#D4AF37] sm:hidden shrink-0" aria-hidden="true" />
+                <span className="hidden sm:inline">Màn chào</span>
               </button>
             </div>
           </div>
@@ -1172,13 +1355,33 @@ export default function App() {
           )}
         </main>
 
-        {/* Footer tối giản */}
-        <footer className="relative z-10 border-t border-[#D4AF37]/15 py-6 mt-12">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#8E877A]">
-            <p className="text-[#B8B0A0]">
-              Ngôi Nhà Nhỏ Của Tần Nhi · Góc lưu trữ nhân vật AI Chatbot
-            </p>
-            <p>Chúc bạn có những cuộc trò chuyện thật êm đềm.</p>
+        {/* Footer tối giản + Caption gợi ý bí mật ẩn giấu */}
+        <footer className="relative z-10 border-t border-[#D4AF37]/15 pt-6 pb-24 sm:pb-8 mt-12">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-3">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-[#8E877A]">
+              <p className="text-[#B8B0A0]">
+                Ngôi Nhà Nhỏ Của Tần Nhi · Góc lưu trữ nhân vật AI Chatbot
+              </p>
+              <p>Chúc bạn có những cuộc trò chuyện thật êm đềm.</p>
+            </div>
+
+            <div className="flex flex-wrap items-center justify-center gap-2 pt-1 text-center">
+              <p className="text-[11px] sm:text-xs italic tracking-wide text-[#D4AF37]/75 drop-shadow-[0_0_8px_rgba(212,175,55,0.28)] animate-pulse">
+                ✦ Bật mí: Thử chạm vào chú mèo đen 3 lần xem điều kỳ diệu gì xảy ra...
+              </p>
+              {hasUnlockedSoulmateBadge && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    playSoftTap('card');
+                    setIsSecretBadgeOpen(true);
+                  }}
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#D4AF37]/15 border border-[#D4AF37]/45 text-[11px] font-medium text-[#F3E5AB] hover:border-[#F3E5AB] transition-colors cursor-pointer"
+                >
+                  <span>✨ Tri kỷ của Tần Nhi</span>
+                </button>
+              )}
+            </div>
           </div>
         </footer>
       </div>
@@ -1208,6 +1411,7 @@ export default function App() {
             <button
               type="button"
               onClick={() => {
+                if (registerSecretCatTap()) return;
                 playSoftTap('music');
                 setCatGreetingOpen((prev) => !prev);
               }}
@@ -1270,10 +1474,34 @@ export default function App() {
         onClose={() => setIsDestinyModalOpen(false)}
       />
 
-      {/* Lá bài Tarot khổng lồ xem chi tiết nhân vật */}
+      {/* Lá bài Tarot khổng lồ xem chi tiết nhân vật & Hòm Thư Tâm Tình */}
       <CharacterDetailTarotModal
         character={selectedCharacter}
+        userProfile={userProfile}
+        hasSoulmateBadge={hasUnlockedSoulmateBadge}
+        letters={selectedCharacter ? lettersByChar[selectedCharacter.id] || [] : []}
+        onSendLetter={handleSendHeartfeltLetter}
+        onDeleteLetter={handleDeleteHeartfeltLetter}
+        onOpenProfileModal={() => setIsProfileModalOpen(true)}
         onClose={() => setSelectedCharacter(null)}
+      />
+
+      {/* Modal Góc Tri Kỷ: Tạo / chỉnh sửa tài khoản cục bộ */}
+      <SoulmateCornerModal
+        isOpen={isProfileModalOpen}
+        userProfile={userProfile}
+        hasSoulmateBadge={hasUnlockedSoulmateBadge}
+        totalLettersSent={totalLettersSent}
+        onSaveProfile={handleSaveUserProfile}
+        onLogout={handleLogoutUserProfile}
+        onClose={() => setIsProfileModalOpen(false)}
+      />
+
+      {/* Pháo hoa bụi vàng & Bảng huy hiệu thành tựu ẩn */}
+      <GoldenFireworks burstKey={fireworkBurstKey} />
+      <SecretBadgeModal
+        isOpen={isSecretBadgeOpen}
+        onClose={() => setIsSecretBadgeOpen(false)}
       />
     </div>
   );

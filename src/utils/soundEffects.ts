@@ -333,3 +333,113 @@ export function playDestinyChime(): void {
     // An toàn nếu trình duyệt chặn audio context
   }
 }
+
+/**
+ * Chuỗi chuông pha lê nhẹ nhàng khi 5 lá bài Tarot bay lên theo hình cánh quạt trên bàn nhung.
+ */
+export function playTarotSpreadChime(): void {
+  try {
+    const chain = getAudioChain();
+    if (!chain) return;
+
+    const { ctx, destination } = chain;
+    const now = ctx.currentTime;
+
+    const masterGain = ctx.createGain();
+    masterGain.gain.setValueAtTime(0.84, now);
+    masterGain.connect(destination);
+
+    // 5 nốt chuông ứng với 5 lá bài bay lên (D6 - E6 - F#6 - A6 - B6)
+    const notes = [1174.66, 1318.51, 1479.98, 1760.0, 1975.53];
+
+    notes.forEach((freq, idx) => {
+      const startTime = now + idx * 0.085;
+      const duration = 1.05;
+
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, startTime);
+
+      gain.gain.setValueAtTime(0.0001, startTime);
+      gain.gain.linearRampToValueAtTime(0.28, startTime + 0.006);
+      gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+
+      const overtone = ctx.createOscillator();
+      const overtoneGain = ctx.createGain();
+      overtone.type = 'sine';
+      overtone.frequency.setValueAtTime(freq * 2, startTime);
+
+      overtoneGain.gain.setValueAtTime(0.0001, startTime);
+      overtoneGain.gain.linearRampToValueAtTime(0.08, startTime + 0.004);
+      overtoneGain.gain.exponentialRampToValueAtTime(0.0001, startTime + 0.45);
+
+      osc.connect(gain);
+      overtone.connect(overtoneGain);
+      gain.connect(masterGain);
+      overtoneGain.connect(masterGain);
+
+      osc.start(startTime);
+      overtone.start(startTime);
+      osc.stop(startTime + duration + 0.04);
+      overtone.stop(startTime + 0.48);
+    });
+  } catch {
+    // An toàn nếu trình duyệt chặn audio context
+  }
+}
+
+/**
+ * Âm thanh chuông pha lê rạng rỡ ngân vang khi mở khóa huy hiệu ẩn "Tri kỷ của Tần Nhi".
+ */
+export function playAchievementChime(): void {
+  try {
+    const chain = getAudioChain();
+    if (!chain) return;
+
+    const { ctx, destination } = chain;
+    const now = ctx.currentTime;
+
+    const masterGain = ctx.createGain();
+    masterGain.gain.setValueAtTime(0.92, now);
+    masterGain.connect(destination);
+
+    // Hợp âm chúc mừng lấp lánh (G5 - B5 - D6 - F#6 - A6 - D7)
+    const notes = [783.99, 987.77, 1174.66, 1479.98, 1760.0, 2349.32];
+
+    notes.forEach((freq, idx) => {
+      const startTime = now + idx * 0.068;
+      const tailDuration = 2.6 - idx * 0.08;
+
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, startTime);
+
+      gain.gain.setValueAtTime(0.0001, startTime);
+      gain.gain.linearRampToValueAtTime(0.36, startTime + 0.006);
+      gain.gain.exponentialRampToValueAtTime(0.0001, startTime + tailDuration);
+
+      const sparkle = ctx.createOscillator();
+      const sparkleGain = ctx.createGain();
+      sparkle.type = 'sine';
+      sparkle.frequency.setValueAtTime(freq * 2, startTime);
+
+      sparkleGain.gain.setValueAtTime(0.0001, startTime);
+      sparkleGain.gain.linearRampToValueAtTime(0.11, startTime + 0.004);
+      sparkleGain.gain.exponentialRampToValueAtTime(0.0001, startTime + tailDuration * 0.45);
+
+      osc.connect(gain);
+      sparkle.connect(sparkleGain);
+      gain.connect(masterGain);
+      sparkleGain.connect(masterGain);
+
+      osc.start(startTime);
+      sparkle.start(startTime);
+      osc.stop(startTime + tailDuration + 0.05);
+      sparkle.stop(startTime + tailDuration * 0.5);
+    });
+  } catch {
+    // An toàn nếu trình duyệt chặn audio context
+  }
+}

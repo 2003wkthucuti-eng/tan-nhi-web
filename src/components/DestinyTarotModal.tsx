@@ -3,8 +3,9 @@ import { AnimatePresence, motion } from 'motion/react';
 import { ArrowUpRight, RotateCcw, Sparkles, X } from 'lucide-react';
 import type { CharacterItem } from '../App';
 import { BlackCatMascot } from './BlackCatMascot';
+import { GoldenStardust } from './GoldenStardust';
 import { HolographicTiltCard } from './HolographicTiltCard';
-import { playDestinyChime, playSoftTap } from '../utils/soundEffects';
+import { playDestinyChime, playSoftTap, playTarotSpreadChime } from '../utils/soundEffects';
 
 interface DestinyTarotModalProps {
   isOpen: boolean;
@@ -15,6 +16,14 @@ interface DestinyTarotModalProps {
 type DrawPhase = 'choosing' | 'spinning' | 'revealed';
 
 const ROMAN_NUMERALS = ['I', 'II', 'III', 'IV', 'V'] as const;
+
+const FAN_SPREAD = [
+  { angle: -15, arcY: 26, zIndex: 10 },
+  { angle: -7.5, arcY: 8, zIndex: 12 },
+  { angle: 0, arcY: 0, zIndex: 14 },
+  { angle: 7.5, arcY: 8, zIndex: 12 },
+  { angle: 15, arcY: 26, zIndex: 10 },
+] as const;
 
 function formatQuotedDescription(text: string): string {
   const trimmed = text.trim();
@@ -97,7 +106,7 @@ export const DestinyTarotModal: React.FC<DestinyTarotModalProps> = ({
   };
 
   const handleRedraw = () => {
-    playSoftTap('nav');
+    playTarotSpreadChime();
     clearTimers();
     setPhase('choosing');
     setSelectedIndex(null);
@@ -136,27 +145,38 @@ export const DestinyTarotModal: React.FC<DestinyTarotModalProps> = ({
           className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-[#050508]/88 backdrop-blur-md overflow-y-auto"
         >
           <motion.div
-            initial={{ opacity: 0, scale: 0.96, y: 12 }}
+            initial={{ opacity: 0, scale: 0.95, y: 14 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.96, y: 12 }}
-            transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+            exit={{ opacity: 0, scale: 0.95, y: 14 }}
+            transition={{ duration: 0.34, ease: [0.16, 1, 0.3, 1] }}
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-3xl my-auto rounded-3xl bg-gradient-to-b from-[#13121A] via-[#0B0B10] to-[#111017] border border-[#D4AF37]/45 shadow-[0_24px_80px_rgba(0,0,0,0.9),0_0_50px_rgba(212,175,55,0.18)] p-5 sm:p-8 overflow-hidden"
+            className="relative w-full max-w-4xl my-auto rounded-[28px] border border-[#D4AF37]/55 shadow-[0_28px_90px_rgba(0,0,0,0.95),0_0_64px_rgba(212,175,55,0.2)] p-4 sm:p-8 overflow-hidden"
+            style={{
+              background:
+                'radial-gradient(ellipse at 50% 48%, #1A1622 0%, #0C0B11 54%, #050508 100%)',
+            }}
           >
-            {/* Họa tiết ánh sáng nền Tarot huyền bí */}
+            {/* Ánh nến vàng ấm tỏa trên mặt bàn nhung đen huyền bí */}
             <div
               aria-hidden="true"
               className="pointer-events-none absolute inset-0"
               style={{
                 background:
-                  'radial-gradient(circle at 50% 25%, rgba(212, 175, 55, 0.14) 0%, transparent 62%)',
+                  'radial-gradient(ellipse 68% 48% at 50% 58%, rgba(212, 175, 55, 0.16) 0%, rgba(243, 229, 171, 0.05) 45%, transparent 76%)',
               }}
             />
 
-            {/* Khung viền mảnh bên trong */}
+            {/* Bụi sao nhẹ trên bàn bọc nhung */}
+            <GoldenStardust className="z-0 opacity-60" />
+
+            {/* Đường viền mạ vàng bàn bọc nhung */}
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute inset-2.5 sm:inset-3.5 rounded-2xl border border-[#D4AF37]/20"
+              className="pointer-events-none absolute inset-2.5 sm:inset-4 rounded-2xl border border-[#D4AF37]/25"
+            />
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-4 sm:inset-5 rounded-xl border border-[#D4AF37]/12"
             />
 
             {/* Nút Đóng góc trên bên phải */}
@@ -164,17 +184,17 @@ export const DestinyTarotModal: React.FC<DestinyTarotModalProps> = ({
               type="button"
               onClick={handleCloseModal}
               aria-label="Đóng bàn bốc bài định mệnh"
-              className="absolute top-4 right-4 sm:top-5 sm:right-5 z-20 inline-flex items-center gap-1.5 min-h-[36px] px-3 py-1.5 rounded-xl bg-[#0B0B0F]/90 border border-[#D4AF37]/40 text-xs font-medium text-[#F3E5AB] hover:border-[#F3E5AB] hover:bg-[#D4AF37]/15 active:scale-95 transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]"
+              className="absolute top-4 right-4 sm:top-6 sm:right-6 z-30 inline-flex items-center gap-1.5 min-h-[36px] px-3 py-1.5 rounded-xl bg-[#0B0B0F]/92 border border-[#D4AF37]/45 text-xs font-medium text-[#F3E5AB] hover:border-[#F3E5AB] hover:bg-[#D4AF37]/15 active:scale-95 transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]"
             >
               <X className="w-3.5 h-3.5" aria-hidden="true" />
               <span>Đóng</span>
             </button>
 
-            {/* Tiêu đề bàn bốc bài */}
-            <div className="relative z-10 text-center pt-1 pb-4 sm:pb-6 pr-12 sm:pr-0 sm:px-14">
+            {/* Tiêu đề bàn bọc nhung */}
+            <div className="relative z-10 text-center pt-1 pb-3 sm:pb-5 pr-12 sm:pr-0 sm:px-14">
               <div className="inline-flex items-center gap-1.5 text-[11px] sm:text-xs font-medium tracking-widest text-[#D4AF37] mb-1.5">
                 <Sparkles className="w-3.5 h-3.5 text-[#F3E5AB]" aria-hidden="true" />
-                <span>Trải bài Tarot</span>
+                <span>Bàn Trải Bài Tarot</span>
                 <Sparkles className="w-3.5 h-3.5 text-[#F3E5AB]" aria-hidden="true" />
               </div>
               <h2
@@ -190,68 +210,87 @@ export const DestinyTarotModal: React.FC<DestinyTarotModalProps> = ({
               </p>
             </div>
 
-            {/* Khu vực 5 lá bài hoặc thẻ nhân vật lộ diện */}
-            <div className="relative z-10 min-h-[300px] sm:min-h-[340px] flex flex-col items-center justify-center">
+            {/* Khu vực trải bài cánh quạt hoặc thẻ nhân vật lộ diện */}
+            <div className="relative z-10 min-h-[270px] sm:min-h-[350px] flex flex-col items-center justify-center">
               {phase === 'choosing' && (
                 <div
                   key={`deck-${dealKey}`}
-                  className="w-full flex flex-wrap items-center justify-center gap-2.5 sm:gap-4 py-2"
+                  className="relative w-full flex items-end justify-center pt-4 pb-10 sm:pt-6 sm:pb-12"
                 >
-                  {ROMAN_NUMERALS.map((numeral, idx) => (
-                    <motion.button
-                      key={`${dealKey}-${numeral}`}
-                      type="button"
-                      initial={{ opacity: 0, y: 18, scale: 0.94 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      transition={{
-                        duration: 0.38,
-                        delay: idx * 0.06,
-                        ease: [0.16, 1, 0.3, 1],
-                      }}
-                      whileHover={{ y: -8, scale: 1.03 }}
-                      whileTap={{ scale: 0.96 }}
-                      onClick={() => handlePickCard(idx)}
-                      aria-label={`Chọn lá bài Tarot số ${idx + 1}`}
-                      className="group relative w-[94px] sm:w-[122px] md:w-[132px] aspect-[2/3] rounded-2xl cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3E5AB]"
-                    >
-                      <HolographicTiltCard
-                        maxTilt={10}
-                        className="w-full h-full rounded-2xl bg-gradient-to-b from-[#171622] via-[#0D0D14] to-[#15131E] border border-[#D4AF37]/65 group-hover:border-[#F3E5AB] shadow-[0_12px_28px_rgba(0,0,0,0.75),0_0_16px_rgba(212,175,55,0.16)] group-hover:shadow-[0_18px_36px_rgba(0,0,0,0.85),0_0_28px_rgba(243,229,171,0.42)] flex flex-col items-center justify-between p-2.5 sm:p-3 transition-colors duration-200"
+                  {/* Vòng hào quang vàng dịu dưới chân 5 lá bài cánh quạt */}
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 w-[84%] max-w-lg h-16 rounded-full blur-xl"
+                    style={{
+                      background:
+                        'radial-gradient(ellipse at center, rgba(243, 229, 171, 0.28) 0%, rgba(212, 175, 55, 0.08) 60%, transparent 100%)',
+                    }}
+                  />
+
+                  {ROMAN_NUMERALS.map((numeral, idx) => {
+                    const fan = FAN_SPREAD[idx];
+                    return (
+                      <motion.button
+                        key={`${dealKey}-${numeral}`}
+                        type="button"
+                        initial={{ opacity: 0, y: 88, scale: 0.78, rotate: 0 }}
+                        animate={{ opacity: 1, y: fan.arcY, scale: 1, rotate: fan.angle }}
+                        transition={{
+                          duration: 0.62,
+                          delay: idx * 0.085,
+                          ease: [0.16, 1, 0.3, 1],
+                        }}
+                        whileHover={{ y: fan.arcY - 18, scale: 1.09, zIndex: 35 }}
+                        whileTap={{ scale: 0.97 }}
+                        onClick={() => handlePickCard(idx)}
+                        aria-label={`Chọn lá bài Tarot số ${idx + 1}`}
+                        style={{ zIndex: fan.zIndex, transformOrigin: 'bottom center' }}
+                        className="group relative -mx-2.5 sm:-mx-1.5 md:mx-0.5 w-[76px] sm:w-[116px] md:w-[132px] aspect-[2/3] rounded-xl sm:rounded-2xl cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3E5AB]"
                       >
-                        {/* Viền mảnh trang trí mặt lưng Tarot */}
-                        <span
-                          aria-hidden="true"
-                          className="pointer-events-none absolute inset-1.5 rounded-xl border border-[#D4AF37]/35 group-hover:border-[#F3E5AB]/70 transition-colors"
-                        />
-                        {/* Số La Mã & sao nhỏ trên đỉnh */}
-                        <div className="relative z-10 flex items-center gap-1 text-[10px] sm:text-[11px] font-display tracking-widest text-[#D4AF37] group-hover:text-[#F3E5AB]">
-                          <span>✦</span>
-                          <span>{numeral}</span>
-                          <span>✦</span>
-                        </div>
-
-                        {/* Mèo đen & vầng hào quang lấp lánh giữa lá bài */}
-                        <div className="relative z-10 flex items-center justify-center">
-                          <div
+                        <HolographicTiltCard
+                          maxTilt={10}
+                          className="w-full h-full rounded-xl sm:rounded-2xl bg-gradient-to-b from-[#1A1826] via-[#0D0D15] to-[#171420] border border-[#D4AF37]/75 group-hover:border-[#FFF4C4] shadow-[0_14px_30px_rgba(0,0,0,0.82),0_0_18px_rgba(212,175,55,0.2)] group-hover:shadow-[0_22px_42px_rgba(0,0,0,0.9),0_0_34px_rgba(243,229,171,0.52)] flex flex-col items-center justify-between p-1.5 sm:p-3 transition-colors duration-200"
+                        >
+                          {/* Viền mảnh trang trí mặt lưng Tarot */}
+                          <span
                             aria-hidden="true"
-                            className="absolute inset-0 rounded-full bg-[#D4AF37]/12 blur-md group-hover:bg-[#F3E5AB]/25 transition-colors"
+                            className="pointer-events-none absolute inset-1 sm:inset-1.5 rounded-lg sm:rounded-xl border border-[#D4AF37]/40 group-hover:border-[#F3E5AB]/75 transition-colors"
                           />
-                          <BlackCatMascot
-                            size={58}
-                            variant="companion"
-                            className="relative drop-shadow-[0_0_10px_rgba(212,175,55,0.45)] group-hover:scale-105 transition-transform duration-200"
-                          />
-                        </div>
+                          {/* Số La Mã & sao nhỏ trên đỉnh */}
+                          <div className="relative z-10 flex items-center gap-0.5 sm:gap-1 text-[8px] sm:text-[11px] font-display tracking-widest text-[#D4AF37] group-hover:text-[#F3E5AB]">
+                            <span>✦</span>
+                            <span>{numeral}</span>
+                            <span>✦</span>
+                          </div>
 
-                        {/* Mặt trăng khuyết nhỏ ở đáy lá bài */}
-                        <div className="relative z-10 flex items-center gap-1.5 text-[9px] sm:text-[10px] tracking-widest uppercase text-[#D4AF37]/80 group-hover:text-[#F3E5AB]">
-                          <span>✧</span>
-                          <span>Tarot</span>
-                          <span>✧</span>
-                        </div>
-                      </HolographicTiltCard>
-                    </motion.button>
-                  ))}
+                          {/* Mèo đen & vầng hào quang lấp lánh giữa lá bài */}
+                          <div className="relative z-10 flex items-center justify-center">
+                            <div
+                              aria-hidden="true"
+                              className="absolute inset-0 rounded-full bg-[#D4AF37]/14 blur-md group-hover:bg-[#F3E5AB]/30 transition-colors"
+                            />
+                            <BlackCatMascot
+                              size={42}
+                              variant="companion"
+                              className="sm:hidden relative drop-shadow-[0_0_10px_rgba(212,175,55,0.5)]"
+                            />
+                            <BlackCatMascot
+                              size={60}
+                              variant="companion"
+                              className="hidden sm:block relative drop-shadow-[0_0_12px_rgba(212,175,55,0.5)] group-hover:scale-105 transition-transform duration-200"
+                            />
+                          </div>
+
+                          {/* Chữ Tarot nhỏ ở đáy lá bài */}
+                          <div className="relative z-10 flex items-center gap-1 text-[7px] sm:text-[10px] tracking-widest uppercase text-[#D4AF37]/85 group-hover:text-[#F3E5AB]">
+                            <span>✧</span>
+                            <span>Tarot</span>
+                            <span>✧</span>
+                          </div>
+                        </HolographicTiltCard>
+                      </motion.button>
+                    );
+                  })}
                 </div>
               )}
 

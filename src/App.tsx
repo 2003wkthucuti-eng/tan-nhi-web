@@ -152,6 +152,54 @@ const CHARACTERS: CharacterItem[] = [
     dokiLink: 'https://www.dokichat.club/vi/role/f7353eeb-c1e2-4934-b874-c420056e1f2d?isShare=true',
     ggaiLink: '',
   },
+  {
+    id: 'tham-canh-tham',
+    name: 'Thẩm Cảnh Thâm — 沈景深',
+    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/kdwJ1oM5.jpg',
+    description: '“Tao không phải không yêu em, tao chỉ chọn sai cách yêu.”',
+    tags: ['Boygirl', 'Thay lòng', 'TXVT', 'Người thứ 3', 'Ngược'],
+    dokiLink: 'https://www.dokichat.club/vi/role/66120485-89a3-48b4-88e8-6ca66e718e56?isShare=true',
+    ggaiLink:
+      'https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%221fzioM2wQHfu-8qyG5pXgHw5DKWjvTokE%22%5D,%22action%22:%22open%22,%22userId%22:%22111559786295807256713%22,%22resourceKeys%22:%7B%7D%7D&usp=sharing',
+  },
+  {
+    id: 'tham-hoai-can',
+    name: 'Thẩm Hoài Cẩn — 沈怀瑾',
+    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/1eybTfkrq.jpg',
+    description: '“Anh có thể không biết cách yêu em, nhưng lại quá quen với việc em luôn ở bên cạnh.”',
+    tags: ['Boygirl', 'Gia trưởng', 'Chiếm hữu', 'Cưới Trước Yêu Sau', 'Ngược'],
+    dokiLink: 'https://www.dokichat.club/vi/role/01a1c1e5-78ec-745c-afdd-c49b1fae1712?isShare=true',
+    ggaiLink:
+      'https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%221XqB3IZH-hgDEPhJTz0vOuPrhJS8Eymcr%22%5D,%22action%22:%22open%22,%22userId%22:%22111559786295807256713%22,%22resourceKeys%22:%7B%7D%7D',
+  },
+  {
+    id: 'mac-bac',
+    name: 'Mạc Bắc',
+    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/11v2k09lL.png',
+    description: '“Ở cạnh tao quen rồi, giờ làm bộ khách sáo nhìn ngứa mắt ghê.”',
+    tags: ['BG', 'Bạn thân', 'Ghen', 'TXVT', 'Mỏ hỗn'],
+    dokiLink: 'https://www.dokichat.club/vi/role/588f9690-98ae-443d-b204-580e977bf3e5?isShare=true',
+    ggaiLink: '',
+  },
+  {
+    id: 'tan-tram',
+    name: 'Tần Trầm',
+    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/nWb2AW97.png',
+    description: '“Anh ở đây rồi, ngoan nào.”',
+    tags: ['BG', 'Côn đồ', 'Thái tử gia Bắc Kinh', 'Ngọt Sủng', 'Ngốc bạch ngọt'],
+    dokiLink: 'https://www.dokichat.club/vi/role/6c9f786d-37ff-40ea-9ca0-4888fd70b330?isShare=true',
+    ggaiLink:
+      'https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%221CEQDIWbpQIzFZ9NTcHitdXa_BxheMjWs%22%5D,%22action%22:%22open%22,%22userId%22:%22111559786295807256713%22,%22resourceKeys%22:%7B%7D%7D&usp=sharing',
+  },
+  {
+    id: 'tan-hao-nhien',
+    name: 'Tần Hạo Nhiên — 秦浩然',
+    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/4LbBxCu3.png',
+    description: '“Mày cứ làm bạn với tao đi… để xem tao nhịn được đến bao giờ.”',
+    tags: ['BG', 'TXVT', 'Trên tình bạn dưới tình yêu', 'Bạn thân', 'Cưng Chiều', 'SizeGap', 'Ngọt'],
+    dokiLink: 'https://www.dokichat.club/vi/role/019feda1-2d09-7e02-b542-2c060383f400?isShare=true',
+    ggaiLink: '',
+  },
 ];
 
 export interface PlaylistTrack {

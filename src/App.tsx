@@ -5,7 +5,7 @@
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { ArrowUpRight, ChevronDown, DoorOpen, Music, Pause, Play, Search, SkipForward, SlidersHorizontal, X } from 'lucide-react';
+import { ArrowUpRight, ChevronDown, ChevronLeft, ChevronRight, DoorOpen, Music, Pause, Play, Search, SkipForward, SlidersHorizontal, X } from 'lucide-react';
 import { BlackCatMascot } from './components/BlackCatMascot';
 import { GoldenStardust } from './components/GoldenStardust';
 
@@ -297,6 +297,8 @@ const GENRE_FILTERS: GenreTag[] = (() => {
   return result;
 })();
 
+const ITEMS_PER_PAGE = 12;
+
 function normalizeText(value: string): string {
   return value
     .normalize('NFD')
@@ -317,11 +319,28 @@ function ensureQuoted(text: string): string {
   return `“${cleaned}”`;
 }
 
+function getPaginationItems(current: number, total: number): Array<number | 'ellipsis'> {
+  if (total <= 7) {
+    return Array.from({ length: total }, (_, i) => i + 1);
+  }
+  const items: Array<number | 'ellipsis'> = [1];
+  const left = Math.max(2, current - 1);
+  const right = Math.min(total - 1, current + 1);
+  if (left > 2) items.push('ellipsis');
+  for (let p = left; p <= right; p += 1) {
+    items.push(p);
+  }
+  if (right < total - 1) items.push('ellipsis');
+  items.push(total);
+  return items;
+}
+
 export default function App() {
   const [hasEntered, setHasEntered] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedGenre, setSelectedGenre] = useState<'Tất cả' | GenreTag>('Tất cả');
   const [showAllTags, setShowAllTags] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
   const [catGreetingOpen, setCatGreetingOpen] = useState(false);
   const [failedAvatars, setFailedAvatars] = useState<Record<string, boolean>>({});
 
@@ -453,6 +472,35 @@ export default function App() {
       return matchesGenre && matchesSearch;
     });
   }, [searchQuery, selectedGenre]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, selectedGenre]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredCharacters.length / ITEMS_PER_PAGE));
+  const safeCurrentPage = Math.min(currentPage, totalPages);
+
+  const paginatedCharacters = useMemo(() => {
+    const startIndex = (safeCurrentPage - 1) * ITEMS_PER_PAGE;
+    return filteredCharacters.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  }, [filteredCharacters, safeCurrentPage]);
+
+  const pageRangeStart =
+    filteredCharacters.length === 0 ? 0 : (safeCurrentPage - 1) * ITEMS_PER_PAGE + 1;
+  const pageRangeEnd = Math.min(
+    safeCurrentPage * ITEMS_PER_PAGE,
+    filteredCharacters.length
+  );
+
+  const handlePageChange = (nextPage: number) => {
+    const clamped = Math.max(1, Math.min(nextPage, totalPages));
+    if (clamped === safeCurrentPage) return;
+    setCurrentPage(clamped);
+    const galleryEl = document.getElementById('bo-suu-tap');
+    if (galleryEl) {
+      galleryEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
 
   const handleSelectGenreFromHeader = (genre: 'Tất cả' | GenreTag) => {
     setSelectedGenre(genre);
@@ -667,7 +715,7 @@ export default function App() {
           <section
             id="bo-suu-tap"
             aria-label="Tìm kiếm và lọc nhân vật"
-            className="mb-5 sm:mb-7 flex flex-col gap-3"
+            className="scroll-mt-20 mb-5 sm:mb-7 flex flex-col gap-3"
           >
             {/* Hàng trên: Thanh tìm kiếm + Nút mở rộng/thu gọn bộ lọc Tag */}
             <div className="flex items-center gap-2 sm:gap-3">
@@ -778,29 +826,30 @@ export default function App() {
 
           {/* Lưới hiển thị các thẻ nhân vật (2 cột trên điện thoại, 3-4 cột trên màn lớn) */}
           {filteredCharacters.length > 0 ? (
-            <section
-              aria-label="Danh sách nhân vật"
-              className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 lg:gap-6"
-            >
-              {filteredCharacters.map((char, index) => {
-                const hasDoki = Boolean(char.dokiLink && char.dokiLink.trim() !== '');
-                const hasGgai = Boolean(char.ggaiLink && char.ggaiLink.trim() !== '');
-                const hasBothLinks = hasDoki && hasGgai;
+            <>
+              <section
+                aria-label="Danh sách nhân vật"
+                className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 lg:gap-6"
+              >
+                {paginatedCharacters.map((char, index) => {
+                  const hasDoki = Boolean(char.dokiLink && char.dokiLink.trim() !== '');
+                  const hasGgai = Boolean(char.ggaiLink && char.ggaiLink.trim() !== '');
+                  const hasBothLinks = hasDoki && hasGgai;
 
-                const nameParts = char.name.split(/\s+[—-]\s+/);
-                const primaryName = nameParts[0];
-                const secondaryName = nameParts.length > 1 ? nameParts.slice(1).join(' · ') : '';
+                  const nameParts = char.name.split(/\s+[—-]\s+/);
+                  const primaryName = nameParts[0];
+                  const secondaryName = nameParts.length > 1 ? nameParts.slice(1).join(' · ') : '';
 
-                return (
-                  <motion.article
-                    key={char.id}
-                    initial={{ opacity: 0, y: 18 }}
-                    animate={hasEntered ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
-                    transition={{
-                      duration: 0.48,
-                      delay: hasEntered ? 0.12 + Math.min(index * 0.07, 0.49) : 0,
-                      ease: [0.16, 1, 0.3, 1],
-                    }}
+                  return (
+                    <motion.article
+                      key={`${char.id}-p${safeCurrentPage}`}
+                      initial={{ opacity: 0, y: 18 }}
+                      animate={hasEntered ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
+                      transition={{
+                        duration: 0.45,
+                        delay: hasEntered ? 0.08 + Math.min(index * 0.05, 0.35) : 0,
+                        ease: [0.16, 1, 0.3, 1],
+                      }}
                     className="shimmer-card-border group bg-[#121218]/92 backdrop-blur-sm border border-[#D4AF37]/25 hover:border-[#D4AF37]/70 rounded-xl sm:rounded-2xl p-2.5 sm:p-4 lg:p-5 flex flex-col justify-between transition-all duration-200 hover:shadow-[0_0_32px_-6px_rgba(212,175,55,0.32)]"
                   >
                     <div>
@@ -924,10 +973,78 @@ export default function App() {
                         )}
                       </div>
                     )}
-                  </motion.article>
-                );
-              })}
-            </section>
+                    </motion.article>
+                  );
+                })}
+              </section>
+
+              {/* Thanh phân trang */}
+              {totalPages > 1 && (
+                <nav
+                  aria-label="Phân trang danh sách nhân vật"
+                  className="mt-8 sm:mt-10 flex flex-col items-center gap-3"
+                >
+                  <div className="inline-flex items-center gap-1.5 sm:gap-2 p-1.5 rounded-2xl bg-[#121218]/92 border border-[#D4AF37]/25 shadow-[0_6px_24px_rgba(0,0,0,0.45)]">
+                    <button
+                      type="button"
+                      onClick={() => handlePageChange(safeCurrentPage - 1)}
+                      disabled={safeCurrentPage === 1}
+                      aria-label="Trang trước"
+                      className="inline-flex items-center justify-center min-w-[38px] min-h-[38px] sm:px-3 rounded-xl border border-transparent text-xs font-medium text-[#F3E5AB] hover:border-[#D4AF37]/45 hover:bg-[#D4AF37]/10 disabled:opacity-35 disabled:pointer-events-none transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]"
+                    >
+                      <ChevronLeft className="w-4 h-4 shrink-0" aria-hidden="true" />
+                      <span className="hidden sm:inline ml-1 whitespace-nowrap">Trang trước</span>
+                    </button>
+
+                    <div className="flex items-center gap-1">
+                      {getPaginationItems(safeCurrentPage, totalPages).map((item, idx) =>
+                        item === 'ellipsis' ? (
+                          <span
+                            key={`ellipsis-${idx}`}
+                            aria-hidden="true"
+                            className="px-1.5 text-xs text-[#8E877A] select-none"
+                          >
+                            …
+                          </span>
+                        ) : (
+                          <button
+                            key={item}
+                            type="button"
+                            onClick={() => handlePageChange(item)}
+                            aria-current={item === safeCurrentPage ? 'page' : undefined}
+                            aria-label={`Trang ${item}`}
+                            className={`min-w-[36px] min-h-[36px] px-2.5 rounded-xl text-xs sm:text-sm tabular-nums transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] ${
+                              item === safeCurrentPage
+                                ? 'bg-gradient-to-br from-[#D4AF37] to-[#E6C86E] text-[#0B0B0F] font-semibold shadow-[0_0_16px_rgba(212,175,55,0.32)]'
+                                : 'text-[#DCD4C6] hover:text-[#F3E5AB] hover:bg-[#D4AF37]/12'
+                            }`}
+                          >
+                            {item}
+                          </button>
+                        )
+                      )}
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => handlePageChange(safeCurrentPage + 1)}
+                      disabled={safeCurrentPage === totalPages}
+                      aria-label="Trang sau"
+                      className="inline-flex items-center justify-center min-w-[38px] min-h-[38px] sm:px-3 rounded-xl border border-transparent text-xs font-medium text-[#F3E5AB] hover:border-[#D4AF37]/45 hover:bg-[#D4AF37]/10 disabled:opacity-35 disabled:pointer-events-none transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]"
+                    >
+                      <span className="hidden sm:inline mr-1 whitespace-nowrap">Trang sau</span>
+                      <ChevronRight className="w-4 h-4 shrink-0" aria-hidden="true" />
+                    </button>
+                  </div>
+
+                  <p className="text-xs text-[#B8B0A0] tabular-nums">
+                    Trang <strong className="text-[#F3E5AB] font-medium">{safeCurrentPage}</strong> / {totalPages}
+                    <span aria-hidden="true" className="mx-2 text-[#D4AF37]/60">·</span>
+                    Hiển thị {pageRangeStart}–{pageRangeEnd} trên {filteredCharacters.length} nhân vật
+                  </p>
+                </nav>
+              )}
+            </>
           ) : (
             /* Trạng thái trống hoặc không tìm thấy nhân vật */
             <section className="py-16 px-6 rounded-2xl bg-[#121218] border border-[#D4AF37]/20 text-center flex flex-col items-center">

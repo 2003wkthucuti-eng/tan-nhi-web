@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { ArrowUpRight, RotateCcw, Sparkles, X } from 'lucide-react';
 import type { CharacterItem } from '../App';
 import { BlackCatMascot } from './BlackCatMascot';
+import { HolographicTiltCard } from './HolographicTiltCard';
 import { playDestinyChime, playSoftTap } from '../utils/soundEffects';
 
 interface DestinyTarotModalProps {
@@ -211,39 +212,44 @@ export const DestinyTarotModal: React.FC<DestinyTarotModalProps> = ({
                       whileTap={{ scale: 0.96 }}
                       onClick={() => handlePickCard(idx)}
                       aria-label={`Chọn lá bài Tarot số ${idx + 1}`}
-                      className="group relative w-[94px] sm:w-[122px] md:w-[132px] aspect-[2/3] rounded-2xl bg-gradient-to-b from-[#171622] via-[#0D0D14] to-[#15131E] border border-[#D4AF37]/65 hover:border-[#F3E5AB] shadow-[0_12px_28px_rgba(0,0,0,0.75),0_0_16px_rgba(212,175,55,0.16)] hover:shadow-[0_18px_36px_rgba(0,0,0,0.85),0_0_28px_rgba(243,229,171,0.42)] flex flex-col items-center justify-between p-2.5 sm:p-3 transition-colors duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3E5AB]"
+                      className="group relative w-[94px] sm:w-[122px] md:w-[132px] aspect-[2/3] rounded-2xl cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3E5AB]"
                     >
-                      {/* Viền mảnh trang trí mặt lưng Tarot */}
-                      <span
-                        aria-hidden="true"
-                        className="pointer-events-none absolute inset-1.5 rounded-xl border border-[#D4AF37]/35 group-hover:border-[#F3E5AB]/70 transition-colors"
-                      />
-                      {/* Số La Mã & sao nhỏ trên đỉnh */}
-                      <div className="relative z-10 flex items-center gap-1 text-[10px] sm:text-[11px] font-display tracking-widest text-[#D4AF37] group-hover:text-[#F3E5AB]">
-                        <span>✦</span>
-                        <span>{numeral}</span>
-                        <span>✦</span>
-                      </div>
-
-                      {/* Mèo đen & vầng hào quang lấp lánh giữa lá bài */}
-                      <div className="relative z-10 flex items-center justify-center">
-                        <div
+                      <HolographicTiltCard
+                        maxTilt={10}
+                        className="w-full h-full rounded-2xl bg-gradient-to-b from-[#171622] via-[#0D0D14] to-[#15131E] border border-[#D4AF37]/65 group-hover:border-[#F3E5AB] shadow-[0_12px_28px_rgba(0,0,0,0.75),0_0_16px_rgba(212,175,55,0.16)] group-hover:shadow-[0_18px_36px_rgba(0,0,0,0.85),0_0_28px_rgba(243,229,171,0.42)] flex flex-col items-center justify-between p-2.5 sm:p-3 transition-colors duration-200"
+                      >
+                        {/* Viền mảnh trang trí mặt lưng Tarot */}
+                        <span
                           aria-hidden="true"
-                          className="absolute inset-0 rounded-full bg-[#D4AF37]/12 blur-md group-hover:bg-[#F3E5AB]/25 transition-colors"
+                          className="pointer-events-none absolute inset-1.5 rounded-xl border border-[#D4AF37]/35 group-hover:border-[#F3E5AB]/70 transition-colors"
                         />
-                        <BlackCatMascot
-                          size={58}
-                          variant="companion"
-                          className="relative drop-shadow-[0_0_10px_rgba(212,175,55,0.45)] group-hover:scale-105 transition-transform duration-200"
-                        />
-                      </div>
+                        {/* Số La Mã & sao nhỏ trên đỉnh */}
+                        <div className="relative z-10 flex items-center gap-1 text-[10px] sm:text-[11px] font-display tracking-widest text-[#D4AF37] group-hover:text-[#F3E5AB]">
+                          <span>✦</span>
+                          <span>{numeral}</span>
+                          <span>✦</span>
+                        </div>
 
-                      {/* Mặt trăng khuyết nhỏ ở đáy lá bài */}
-                      <div className="relative z-10 flex items-center gap-1.5 text-[9px] sm:text-[10px] tracking-widest uppercase text-[#D4AF37]/80 group-hover:text-[#F3E5AB]">
-                        <span>✧</span>
-                        <span>Tarot</span>
-                        <span>✧</span>
-                      </div>
+                        {/* Mèo đen & vầng hào quang lấp lánh giữa lá bài */}
+                        <div className="relative z-10 flex items-center justify-center">
+                          <div
+                            aria-hidden="true"
+                            className="absolute inset-0 rounded-full bg-[#D4AF37]/12 blur-md group-hover:bg-[#F3E5AB]/25 transition-colors"
+                          />
+                          <BlackCatMascot
+                            size={58}
+                            variant="companion"
+                            className="relative drop-shadow-[0_0_10px_rgba(212,175,55,0.45)] group-hover:scale-105 transition-transform duration-200"
+                          />
+                        </div>
+
+                        {/* Mặt trăng khuyết nhỏ ở đáy lá bài */}
+                        <div className="relative z-10 flex items-center gap-1.5 text-[9px] sm:text-[10px] tracking-widest uppercase text-[#D4AF37]/80 group-hover:text-[#F3E5AB]">
+                          <span>✧</span>
+                          <span>Tarot</span>
+                          <span>✧</span>
+                        </div>
+                      </HolographicTiltCard>
                     </motion.button>
                   ))}
                 </div>
@@ -312,9 +318,12 @@ export const DestinyTarotModal: React.FC<DestinyTarotModalProps> = ({
                   transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
                   className="w-full max-w-sm mx-auto [perspective:1200px]"
                 >
-                  <div className="destiny-card-glow shimmer-card-border bg-[#121218]/96 border border-[#F3E5AB]/85 rounded-2xl p-4 sm:p-5 flex flex-col">
+                  <HolographicTiltCard
+                    maxTilt={7}
+                    className="destiny-card-glow shimmer-card-border bg-[#121218]/96 border border-[#F3E5AB]/85 rounded-2xl p-4 sm:p-5 flex flex-col"
+                  >
                     {/* Huy hiệu lá bài Tarot trên cùng */}
-                    <div className="flex items-center justify-between gap-2 mb-3">
+                    <div className="relative z-10 flex items-center justify-between gap-2 mb-3">
                       <span className="inline-flex items-center gap-1 text-[11px] font-medium tracking-wider text-[#F3E5AB]">
                         <Sparkles className="w-3 h-3 text-[#F3E5AB]" aria-hidden="true" />
                         Lá bài {selectedIndex !== null ? ROMAN_NUMERALS[selectedIndex] : 'Định Mệnh'}
@@ -325,7 +334,7 @@ export const DestinyTarotModal: React.FC<DestinyTarotModalProps> = ({
                     </div>
 
                     {/* Ảnh đại diện nhân vật */}
-                    <div className="relative aspect-square max-h-[220px] sm:max-h-[245px] w-full mx-auto rounded-xl overflow-hidden bg-[#0B0B0F] border border-[#D4AF37]/50 shadow-[0_0_24px_rgba(212,175,55,0.28)]">
+                    <div className="relative z-10 aspect-square max-h-[220px] sm:max-h-[245px] w-full mx-auto rounded-xl overflow-hidden bg-[#0B0B0F] border border-[#D4AF37]/50 shadow-[0_0_24px_rgba(212,175,55,0.28)]">
                       {!avatarFailed && drawnCharacter.avatar.trim() !== '' ? (
                         <img
                           src={drawnCharacter.avatar}
@@ -350,7 +359,7 @@ export const DestinyTarotModal: React.FC<DestinyTarotModalProps> = ({
                     </div>
 
                     {/* Tên & câu thoại */}
-                    <div className="mt-3.5 text-center">
+                    <div className="relative z-10 mt-3.5 text-center">
                       <h3 className="font-display text-2xl font-semibold text-[#F3E5AB] tracking-tight leading-snug">
                         {primaryName}
                       </h3>
@@ -366,7 +375,7 @@ export const DestinyTarotModal: React.FC<DestinyTarotModalProps> = ({
 
                     {/* Tag thể loại */}
                     {drawnCharacter.tags.length > 0 && (
-                      <div className="mt-3 flex flex-wrap justify-center gap-1.5">
+                      <div className="relative z-10 mt-3 flex flex-wrap justify-center gap-1.5">
                         {drawnCharacter.tags.map((tag) => (
                           <span
                             key={tag}
@@ -381,7 +390,7 @@ export const DestinyTarotModal: React.FC<DestinyTarotModalProps> = ({
                     {/* Nút dẫn link Chat trực tiếp */}
                     {(hasDoki || hasGgai) && (
                       <div
-                        className={`mt-4 pt-3.5 border-t border-[#D4AF37]/20 ${
+                        className={`relative z-10 mt-4 pt-3.5 border-t border-[#D4AF37]/20 ${
                           hasBothLinks ? 'grid grid-cols-2 gap-2.5' : 'flex'
                         }`}
                       >
@@ -416,7 +425,7 @@ export const DestinyTarotModal: React.FC<DestinyTarotModalProps> = ({
                         )}
                       </div>
                     )}
-                  </div>
+                  </HolographicTiltCard>
 
                   {/* Nút Bốc lại & Đóng bên dưới thẻ kết quả */}
                   <div className="mt-4 flex items-center justify-center gap-3">

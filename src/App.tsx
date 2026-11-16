@@ -5,10 +5,15 @@
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { ArrowUpRight, ChevronDown, ChevronLeft, ChevronRight, DoorOpen, Music, Pause, Play, Search, SkipForward, SlidersHorizontal, Sparkles, X } from 'lucide-react';
+import { ArrowUpRight, ChevronDown, ChevronLeft, ChevronRight, Music, Pause, Play, Search, SkipForward, SlidersHorizontal, Sparkles, X } from 'lucide-react';
 import { BlackCatMascot } from './components/BlackCatMascot';
+import { CharacterDetailTarotModal } from './components/CharacterDetailTarotModal';
 import { DestinyTarotModal } from './components/DestinyTarotModal';
+import { GoldenSparkleTrail } from './components/GoldenSparkleTrail';
 import { GoldenStardust } from './components/GoldenStardust';
+import { HolographicTiltCard } from './components/HolographicTiltCard';
+import { IntroSealDoors, type IntroPhase } from './components/IntroSealDoors';
+import { MysticalFogOverlay } from './components/MysticalFogOverlay';
 import { playCatMeowChime, playDoorChime, playSoftTap } from './utils/soundEffects';
 
 export type GenreTag = string;
@@ -310,24 +315,6 @@ const HOST_CAT_GREETINGS: string[] = [
   'Mong rằng có một ánh mắt nơi đây khiến lòng cậu dịu lại.',
 ];
 
-const ArtDecoCorner: React.FC<{ className?: string }> = ({ className = '' }) => (
-  <svg
-    viewBox="0 0 64 64"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    aria-hidden="true"
-    className={`pointer-events-none w-10 h-10 sm:w-14 sm:h-14 text-[#D4AF37] ${className}`}
-  >
-    <path d="M4 44V10C4 6.686 6.686 4 10 4H44" stroke="currentColor" strokeWidth="1.2" strokeOpacity="0.85" />
-    <path d="M10 34V14C10 11.791 11.791 10 14 10H34" stroke="currentColor" strokeWidth="0.9" strokeOpacity="0.55" />
-    <path d="M4 22H14V4" stroke="currentColor" strokeWidth="0.9" strokeOpacity="0.5" />
-    <path d="M22 4V14H4" stroke="currentColor" strokeWidth="0.9" strokeOpacity="0.5" />
-    <path d="M19 15L20.3 17.7L23 19L20.3 20.3L19 23L17.7 20.3L15 19L17.7 17.7Z" fill="#F3E5AB" fillOpacity="0.85" />
-    <circle cx="48" cy="4" r="1.4" fill="currentColor" fillOpacity="0.7" />
-    <circle cx="4" cy="48" r="1.4" fill="currentColor" fillOpacity="0.7" />
-  </svg>
-);
-
 const TarotDivider: React.FC = () => (
   <div aria-hidden="true" className="my-5 sm:my-7 flex items-center justify-center gap-3 sm:gap-4">
     <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#D4AF37]/35 to-[#D4AF37]/75" />
@@ -394,7 +381,7 @@ function getPaginationItems(current: number, total: number): Array<number | 'ell
 }
 
 export default function App() {
-  const [hasEntered, setHasEntered] = useState(false);
+  const [introPhase, setIntroPhase] = useState<IntroPhase>('idle');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedGenre, setSelectedGenre] = useState<'Tất cả' | GenreTag>('Tất cả');
   const [showAllTags, setShowAllTags] = useState(false);
@@ -402,20 +389,24 @@ export default function App() {
   const [catGreetingOpen, setCatGreetingOpen] = useState(false);
   const [headerCatMessage, setHeaderCatMessage] = useState<string | null>(null);
   const [isDestinyModalOpen, setIsDestinyModalOpen] = useState(false);
+  const [selectedCharacter, setSelectedCharacter] = useState<CharacterItem | null>(null);
   const [failedAvatars, setFailedAvatars] = useState<Record<string, boolean>>({});
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const shouldPlayRef = useRef(false);
   const errorStreakRef = useRef(0);
   const headerCatTimerRef = useRef<number | null>(null);
+  const introTimerRef = useRef<number | null>(null);
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
 
+  const hasEntered = introPhase !== 'idle';
   const currentTrack = PLAYLIST[currentTrackIndex];
 
   useEffect(() => {
     return () => {
       if (headerCatTimerRef.current) window.clearTimeout(headerCatTimerRef.current);
+      if (introTimerRef.current) window.clearTimeout(introTimerRef.current);
     };
   }, []);
 
@@ -441,8 +432,17 @@ export default function App() {
   }, [currentTrackIndex, currentTrack]);
 
   const handleEnterHouse = () => {
+    if (introPhase !== 'idle') return;
     playDoorChime();
-    setHasEntered(true);
+    setIntroPhase('opening');
+
+    if (introTimerRef.current) {
+      window.clearTimeout(introTimerRef.current);
+    }
+    introTimerRef.current = window.setTimeout(() => {
+      setIntroPhase('entered');
+    }, 1150);
+
     const audio = audioRef.current;
     if (audio && PLAYLIST.length > 0) {
       shouldPlayRef.current = true;
@@ -614,101 +614,11 @@ export default function App() {
           onError={handleTrackError}
         />
       )}
-      {/* Màn hình Intro (Trang chào đầu tiên) */}
-      <AnimatePresence>
-        {!hasEntered && (
-          <motion.section
-            key="intro-screen"
-            initial={{ opacity: 1 }}
-            exit={{ opacity: 0, scale: 1.02 }}
-            transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-0 z-50 flex flex-col items-center justify-center px-6 py-10 bg-[#0B0B0F] overflow-hidden"
-            aria-label="Màn hình chào Ngôi Nhà Nhỏ Của Tần Nhi"
-          >
-            {/* Ánh sáng đèn vàng ấm áp ở trung tâm */}
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-0"
-              style={{
-                background:
-                  'radial-gradient(circle at 50% 42%, rgba(212, 175, 55, 0.12) 0%, rgba(18, 18, 24, 0.45) 45%, rgba(11, 11, 15, 0.98) 78%)',
-              }}
-            />
+      {/* Màn hình Intro Con dấu sáp & Cánh cửa ánh sáng */}
+      <IntroSealDoors phase={introPhase} onOpenDoor={handleEnterHouse} />
 
-            {/* Bụi vàng & sao 4 cánh lấp lánh ở nền Intro */}
-            <GoldenStardust className="z-0" />
-
-            {/* Khung viền ánh kim mảnh + Họa tiết hoa văn Art Deco / Tarot 4 góc */}
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-4 sm:inset-8 rounded-3xl border border-[#D4AF37]/25"
-            >
-              <ArtDecoCorner className="absolute -top-0.5 -left-0.5" />
-              <ArtDecoCorner className="absolute -top-0.5 -right-0.5 rotate-90" />
-              <ArtDecoCorner className="absolute -bottom-0.5 -right-0.5 rotate-180" />
-              <ArtDecoCorner className="absolute -bottom-0.5 -left-0.5 -rotate-90" />
-            </div>
-
-            <div className="relative z-10 flex flex-col items-center text-center max-w-xl mx-auto">
-              <motion.div
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                className="animate-cat-float mb-5 drop-shadow-[0_0_24px_rgba(212,175,55,0.32)]"
-              >
-                <BlackCatMascot size={126} variant="hero" />
-              </motion.div>
-
-              <motion.p
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-                className="text-xs sm:text-sm font-medium tracking-widest text-[#D4AF37] mb-3"
-              >
-                Chốn nhỏ bình yên giữa màn đêm
-              </motion.p>
-
-              <motion.h1
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.75, delay: 0.18, ease: [0.16, 1, 0.3, 1] }}
-                className="font-display text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight leading-[1.12] [text-wrap:balance] gold-shimmer-text"
-              >
-                Ngôi Nhà Nhỏ Của Tần Nhi
-              </motion.h1>
-
-              <motion.div
-                initial={{ opacity: 0, scaleX: 0.6 }}
-                animate={{ opacity: 1, scaleX: 1 }}
-                transition={{ duration: 0.7, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
-                className="w-24 h-px bg-gradient-to-r from-transparent via-[#D4AF37]/70 to-transparent my-5"
-                aria-hidden="true"
-              />
-
-              <motion.p
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                className="text-sm sm:text-base text-[#C4BCB0] leading-relaxed max-w-md mb-9"
-              >
-                Nơi lưu giữ những nhân vật AI Chatbot dịu dàng và bí ẩn, luôn đợi bạn ghé thăm sau một ngày dài.
-              </motion.p>
-
-              <motion.button
-                type="button"
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.38, ease: [0.16, 1, 0.3, 1] }}
-                onClick={handleEnterHouse}
-                className="shimmer-gold-btn group inline-flex items-center justify-center gap-2.5 min-h-[48px] px-8 py-3 rounded-full bg-[#121218] border border-[#D4AF37] text-[#F3E5AB] text-base font-medium tracking-wide shadow-[0_0_24px_rgba(212,175,55,0.22)] hover:bg-[#D4AF37] hover:text-[#0B0B0F] hover:shadow-[0_0_32px_rgba(212,175,55,0.45)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3E5AB] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0B0B0F] transition-all duration-200 cursor-pointer whitespace-nowrap"
-              >
-                <DoorOpen className="w-4 h-4 transition-transform duration-200 group-hover:-translate-x-0.5" />
-                <span>Gõ cửa nhà nhỏ</span>
-              </motion.button>
-            </div>
-          </motion.section>
-        )}
-      </AnimatePresence>
+      {/* Vệt bụi sao vàng Gold khi chạm/di chuột trên màn hình */}
+      <GoldenSparkleTrail />
 
       {/* Giao diện Trang chủ */}
       <div
@@ -717,6 +627,9 @@ export default function App() {
           hasEntered ? 'opacity-100' : 'opacity-0 pointer-events-none h-screen overflow-hidden'
         }`}
       >
+        {/* Lớp sương mù vàng Gold huyền ảo chuyển động chậm */}
+        <MysticalFogOverlay />
+
         {/* Bụi vàng lấp lánh ở nền Trang chủ */}
         <GoldenStardust className="fixed inset-0 z-0 opacity-85" />
 
@@ -805,7 +718,10 @@ export default function App() {
                 type="button"
                 onClick={() => {
                   playSoftTap('nav');
-                  setHasEntered(false);
+                  if (introTimerRef.current) {
+                    window.clearTimeout(introTimerRef.current);
+                  }
+                  setIntroPhase('idle');
                 }}
                 className="min-h-[40px] px-4 py-2 rounded-lg border border-[#D4AF37]/45 bg-[#121218] text-xs sm:text-sm font-medium text-[#F3E5AB] hover:bg-[#D4AF37]/15 hover:border-[#D4AF37] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] transition-colors duration-150 whitespace-nowrap shrink-0 cursor-pointer"
               >
@@ -1013,9 +929,15 @@ export default function App() {
                         delay: hasEntered ? 0.08 + Math.min(index * 0.05, 0.35) : 0,
                         ease: [0.16, 1, 0.3, 1],
                       }}
-                      onClick={() => playSoftTap('card')}
-                      className="shimmer-card-border group bg-[#121218]/92 backdrop-blur-sm border border-[#D4AF37]/25 hover:border-[#D4AF37]/70 rounded-xl sm:rounded-2xl p-2.5 sm:p-4 lg:p-5 flex flex-col justify-between transition-all duration-200 hover:shadow-[0_0_32px_-6px_rgba(212,175,55,0.32)] cursor-pointer"
                     >
+                      <HolographicTiltCard
+                        maxTilt={6.5}
+                        onClick={() => {
+                          playSoftTap('card');
+                          setSelectedCharacter(char);
+                        }}
+                        className="shimmer-card-border group h-full bg-[#121218]/92 backdrop-blur-sm border border-[#D4AF37]/25 hover:border-[#D4AF37]/70 rounded-xl sm:rounded-2xl p-2.5 sm:p-4 lg:p-5 flex flex-col justify-between transition-colors duration-200 hover:shadow-[0_0_32px_-6px_rgba(212,175,55,0.32)] cursor-pointer"
+                      >
                     <div>
                       {/* 1. Ảnh đại diện vuông bo góc tinh tế trên cùng */}
                       <div className="relative aspect-square w-full rounded-lg sm:rounded-xl overflow-hidden bg-[#0B0B0F] border border-[#D4AF37]/35 group-hover:border-[#F3E5AB]/75 group-hover:shadow-[0_0_22px_rgba(212,175,55,0.28)] transition-all duration-200">
@@ -1145,6 +1067,7 @@ export default function App() {
                         )}
                       </div>
                     )}
+                      </HolographicTiltCard>
                     </motion.article>
                   );
                 })}
@@ -1345,6 +1268,12 @@ export default function App() {
         isOpen={isDestinyModalOpen}
         characters={CHARACTERS}
         onClose={() => setIsDestinyModalOpen(false)}
+      />
+
+      {/* Lá bài Tarot khổng lồ xem chi tiết nhân vật */}
+      <CharacterDetailTarotModal
+        character={selectedCharacter}
+        onClose={() => setSelectedCharacter(null)}
       />
     </div>
   );

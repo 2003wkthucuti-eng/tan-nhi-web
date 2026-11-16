@@ -278,12 +278,98 @@
   background-position: -60% 0;
 }
 
+/* Lớp sương mù huyền ảo chuyển động cực chậm (GPU transform + opacity) */
+@keyframes fog-drift-a {
+  0% {
+    transform: translate3d(-6%, -3%, 0) scale(1);
+    opacity: 0.55;
+  }
+  50% {
+    transform: translate3d(6%, 4%, 0) scale(1.08);
+    opacity: 0.85;
+  }
+  100% {
+    transform: translate3d(-4%, 6%, 0) scale(1.02);
+    opacity: 0.6;
+  }
+}
+
+@keyframes fog-drift-b {
+  0% {
+    transform: translate3d(5%, 3%, 0) scale(1.04);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translate3d(-7%, -4%, 0) scale(1);
+    opacity: 0.78;
+  }
+  100% {
+    transform: translate3d(4%, -2%, 0) scale(1.07);
+    opacity: 0.55;
+  }
+}
+
+.animate-fog-a {
+  will-change: transform, opacity;
+  animation: fog-drift-a 32s ease-in-out infinite alternate;
+}
+
+.animate-fog-b {
+  will-change: transform, opacity;
+  animation: fog-drift-b 40s ease-in-out infinite alternate;
+}
+
+/* Hiệu ứng nghiêng thẻ 3D & Phản chiếu ánh kim (Holographic Foil) */
+.tilt-3d-card {
+  --tilt-rx: 0deg;
+  --tilt-ry: 0deg;
+  --foil-x: 50%;
+  --foil-y: 50%;
+  --foil-opacity: 0;
+  transform: perspective(950px) rotateX(var(--tilt-rx)) rotateY(var(--tilt-ry));
+  transition: transform 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.tilt-3d-card[data-tilting='true'] {
+  transition: transform 0.08s ease-out;
+}
+
+.holo-foil-layer {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: var(--foil-opacity);
+  transition: opacity 0.32s ease;
+  background:
+    radial-gradient(
+      circle 220px at var(--foil-x) var(--foil-y),
+      rgba(255, 248, 214, 0.24) 0%,
+      rgba(212, 175, 55, 0.14) 36%,
+      transparent 72%
+    ),
+    linear-gradient(
+      125deg,
+      transparent 20%,
+      rgba(243, 229, 171, 0.16) 44%,
+      rgba(255, 215, 130, 0.22) 50%,
+      rgba(212, 175, 55, 0.14) 56%,
+      transparent 80%
+    );
+  background-position: var(--foil-x) var(--foil-y);
+  mix-blend-mode: screen;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-cat-tail,
   .animate-cat-float,
   .animate-cat-eye,
   .destiny-card-glow,
   .destiny-card-glow::before,
+  .animate-fog-a,
+  .animate-fog-b,
   .stardust-drift,
   .stardust-twinkle,
   .animate-cat-star-1,
@@ -291,6 +377,13 @@
   .animate-cat-star-3,
   .gold-shimmer-text {
     animation: none;
+  }
+  .tilt-3d-card {
+    transform: none !important;
+    transition: none;
+  }
+  .holo-foil-layer {
+    display: none;
   }
   .shimmer-gold-btn::after,
   .shimmer-card-border::before {

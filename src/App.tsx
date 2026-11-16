@@ -39,7 +39,7 @@ const CHARACTERS: CharacterItem[] = [
   {
     id: 'dong-hoang',
     name: 'Đông Hoàng',
-    avatar: 'https://files.catbox.moe/61y6jv.jpg',
+    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/0IQE0ulX.jpg',
     description: '“Anh xin lỗi em, là anh không mang lại cho em được hạnh phúc.”',
     tags: ['Boygirl', 'Dịu dàng', 'Chung Thủy', 'Chủ Tịch'],
     dokiLink: 'https://www.dokichat.club/vi/role/16cbe7e1-6f2e-43d6-ae86-1f4f9c4f2828?isShare=true',
@@ -85,6 +85,44 @@ const CHARACTERS: CharacterItem[] = [
     ggaiLink:
       'https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%2219-4XYQPLCM5GISIbtpbaVFwythrU9Fjj%22%5D,%22action%22:%22open%22,%22userId%22:%22111559786295807256713%22,%22resourceKeys%22:%7B%7D%7D&usp=sharing',
   },
+  {
+    id: 'chu-sat',
+    name: 'Chu Sát',
+    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/2ApziP5r.png',
+    description: '“Em là lý do tôi không mất kiểm soát, và cũng là lý do duy nhất khiến tôi muốn được sống”',
+    tags: ['Boygirl', 'Tâm thần', 'Yếu đuối', 'Cún con', 'Thời đại 5.0'],
+    dokiLink: 'https://www.dokichat.club/vi/role/e578f062-0e3b-4eb2-9f63-de9da22c14c9?isShare=true',
+    ggaiLink:
+      'https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%221zhKTL1eSQBiM0vMzus2ouYh6699lb0uQ%22%5D,%22action%22:%22open%22,%22userId%22:%22111559786295807256713%22,%22resourceKeys%22:%7B%7D%7D&usp=sharing',
+  },
+  {
+    id: 'chu-canh-duong',
+    name: 'Chu Cảnh Dương — 周景阳',
+    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/AjjspPPR.jpg',
+    description:
+      '“Em ôm anh một cái đi mà, con mẹ nó vợ ơi, tự nhiên thấy thiếu hơi em làm anh khó chịu chết đi được.”',
+    tags: ['Boygirl', 'Boylove', 'Nghiện vợ', 'Hài hước', 'Mít ướt'],
+    dokiLink: 'https://www.dokichat.club/vi/role/2a94cff1-f7c3-4836-93a4-50ca6cfdbdc9?isShare=true',
+    ggaiLink: '',
+  },
+  {
+    id: 'chu-dich-an',
+    name: 'Chu Dịch An — 周亦安',
+    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/1aOpJkpX3.jpg',
+    description: '“Đừng có chạy lung tung, anh bận vô địch rồi, không rảnh đi tìm em đâu.”',
+    tags: [
+      'Boygirl',
+      'Game thủ',
+      'Idol Esport',
+      'Ngọt',
+      'Hài hước',
+      'Cưng chiều',
+      'Dễ ghen',
+      'Yêu nhiều khó tính',
+    ],
+    dokiLink: 'https://www.dokichat.club/vi/role/7c933a41-fec8-4b79-8942-a950a84fed8a?isShare=true',
+    ggaiLink: '',
+  },
 ];
 
 export interface PlaylistTrack {
@@ -120,9 +158,18 @@ const BASE_GENRES: GenreTag[] = [
   'Chữa lành',
 ];
 
-const GENRE_FILTERS: GenreTag[] = Array.from(
-  new Set([...BASE_GENRES, ...CHARACTERS.flatMap((char) => char.tags)])
-);
+const GENRE_FILTERS: GenreTag[] = (() => {
+  const seen = new Set<string>();
+  const result: GenreTag[] = [];
+  for (const tag of [...BASE_GENRES, ...CHARACTERS.flatMap((char) => char.tags)]) {
+    const key = tag.trim().toLowerCase();
+    if (!seen.has(key)) {
+      seen.add(key);
+      result.push(tag.trim());
+    }
+  }
+  return result;
+})();
 
 function normalizeText(value: string): string {
   return value
@@ -139,6 +186,7 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedGenre, setSelectedGenre] = useState<'Tất cả' | GenreTag>('Tất cả');
   const [catGreetingOpen, setCatGreetingOpen] = useState(false);
+  const [failedAvatars, setFailedAvatars] = useState<Record<string, boolean>>({});
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const shouldPlayRef = useRef(false);
@@ -260,7 +308,8 @@ export default function App() {
     const normalizedQuery = normalizeText(searchQuery);
     return CHARACTERS.filter((char) => {
       const matchesGenre =
-        selectedGenre === 'Tất cả' || char.tags.includes(selectedGenre);
+        selectedGenre === 'Tất cả' ||
+        char.tags.some((t) => t.trim().toLowerCase() === selectedGenre.toLowerCase());
       const matchesSearch =
         normalizedQuery === '' ||
         normalizeText(char.name).includes(normalizedQuery);
@@ -562,29 +611,32 @@ export default function App() {
                     <div>
                       {/* Ảnh đại diện bo góc, viền mảnh ánh vàng Gold phát sáng nhẹ khi hover */}
                       <div className="relative aspect-square w-full rounded-xl overflow-hidden bg-[#0B0B0F] border border-[#D4AF37]/35 group-hover:border-[#F3E5AB]/75 group-hover:shadow-[0_0_22px_rgba(212,175,55,0.28)] transition-all duration-200">
-                        <img
-                          src={char.avatar}
-                          alt={`Ảnh đại diện nhân vật ${char.name}`}
-                          referrerPolicy="no-referrer"
-                          loading="lazy"
-                          className="w-full h-full object-cover object-top transition-transform duration-300 group-hover:scale-[1.03]"
-                          onError={(e) => {
-                            const target = e.currentTarget;
-                            target.style.display = 'none';
-                            const fallback = target.nextElementSibling as HTMLElement | null;
-                            if (fallback) fallback.style.display = 'flex';
-                          }}
-                        />
-                        {/* Fallback container khi ảnh lỗi */}
-                        <div
-                          style={{ display: 'none' }}
-                          className="absolute inset-0 flex-col items-center justify-center gap-2 bg-gradient-to-b from-[#16161F] to-[#0B0B0F] p-4 text-center"
-                        >
-                          <BlackCatMascot size={56} variant="badge" />
-                          <span className="font-display text-lg text-[#F3E5AB]">
-                            {char.name}
-                          </span>
-                        </div>
+                        {!failedAvatars[char.id] && char.avatar.trim() !== '' ? (
+                          <img
+                            src={char.avatar}
+                            alt={`Ảnh đại diện nhân vật ${char.name}`}
+                            referrerPolicy="no-referrer"
+                            className="w-full h-full object-cover object-top transition-transform duration-300 group-hover:scale-[1.03]"
+                            onLoad={(e) => {
+                              if (e.currentTarget.naturalWidth === 0) {
+                                setFailedAvatars((prev) => ({ ...prev, [char.id]: true }));
+                              }
+                            }}
+                            onError={() => {
+                              setFailedAvatars((prev) => ({ ...prev, [char.id]: true }));
+                            }}
+                          />
+                        ) : (
+                          <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-gradient-to-b from-[#16161F] to-[#0B0B0F] p-4 text-center">
+                            <BlackCatMascot size={62} variant="companion" />
+                            <span className="font-display text-lg text-[#F3E5AB]">
+                              {char.name}
+                            </span>
+                            <span className="text-[11px] text-[#B8B0A0]">
+                              Link ảnh đang trống hoặc bị lỗi
+                            </span>
+                          </div>
+                        )}
                       </div>
 
                       {/* Tên nhân vật & Tag thể loại gọn gàng */}

@@ -8,6 +8,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { ArrowUpRight, ChevronDown, ChevronLeft, ChevronRight, DoorOpen, Music, Pause, Play, Search, SkipForward, SlidersHorizontal, X } from 'lucide-react';
 import { BlackCatMascot } from './components/BlackCatMascot';
 import { GoldenStardust } from './components/GoldenStardust';
+import { playDoorChime, playSoftTap } from './utils/soundEffects';
 
 export type GenreTag = string;
 
@@ -374,6 +375,7 @@ export default function App() {
   }, [currentTrackIndex, currentTrack]);
 
   const handleEnterHouse = () => {
+    playDoorChime();
     setHasEntered(true);
     const audio = audioRef.current;
     if (audio && PLAYLIST.length > 0) {
@@ -397,6 +399,7 @@ export default function App() {
   };
 
   const handleTogglePlay = () => {
+    playSoftTap('music');
     const audio = audioRef.current;
     if (!audio || PLAYLIST.length === 0) return;
 
@@ -413,6 +416,7 @@ export default function App() {
   };
 
   const handleNextTrack = () => {
+    playSoftTap('music');
     if (PLAYLIST.length === 0) return;
     shouldPlayRef.current = true;
     errorStreakRef.current = 0;
@@ -495,6 +499,7 @@ export default function App() {
   const handlePageChange = (nextPage: number) => {
     const clamped = Math.max(1, Math.min(nextPage, totalPages));
     if (clamped === safeCurrentPage) return;
+    playSoftTap('nav');
     setCurrentPage(clamped);
     const galleryEl = document.getElementById('bo-suu-tap');
     if (galleryEl) {
@@ -503,6 +508,7 @@ export default function App() {
   };
 
   const handleSelectGenreFromHeader = (genre: 'Tất cả' | GenreTag) => {
+    playSoftTap('tap');
     setSelectedGenre(genre);
     const galleryEl = document.getElementById('bo-suu-tap');
     if (galleryEl) {
@@ -633,6 +639,7 @@ export default function App() {
               href="#top"
               onClick={(e) => {
                 e.preventDefault();
+                playSoftTap('nav');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
               className="flex items-center gap-2.5 whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] rounded-lg py-1"
@@ -673,7 +680,10 @@ export default function App() {
             <div className="flex items-center shrink-0">
               <button
                 type="button"
-                onClick={() => setHasEntered(false)}
+                onClick={() => {
+                  playSoftTap('nav');
+                  setHasEntered(false);
+                }}
                 className="min-h-[40px] px-4 py-2 rounded-lg border border-[#D4AF37]/45 bg-[#121218] text-xs sm:text-sm font-medium text-[#F3E5AB] hover:bg-[#D4AF37]/15 hover:border-[#D4AF37] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] transition-colors duration-150 whitespace-nowrap shrink-0 cursor-pointer"
               >
                 Màn chào
@@ -735,7 +745,10 @@ export default function App() {
                 {searchQuery && (
                   <button
                     type="button"
-                    onClick={() => setSearchQuery('')}
+                    onClick={() => {
+                      playSoftTap('tap');
+                      setSearchQuery('');
+                    }}
                     aria-label="Xóa từ khóa tìm kiếm"
                     className="absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded-md text-[#B8B0A0] hover:text-[#F3E5AB] cursor-pointer"
                   >
@@ -746,7 +759,10 @@ export default function App() {
 
               <button
                 type="button"
-                onClick={() => setShowAllTags((prev) => !prev)}
+                onClick={() => {
+                  playSoftTap('tap');
+                  setShowAllTags((prev) => !prev);
+                }}
                 aria-expanded={showAllTags}
                 className={`inline-flex items-center gap-1.5 min-h-[40px] px-3 sm:px-3.5 py-2 rounded-xl border text-xs font-medium whitespace-nowrap shrink-0 transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] ${
                   showAllTags || selectedGenre !== 'Tất cả'
@@ -779,7 +795,10 @@ export default function App() {
                       <button
                         key={genre}
                         type="button"
-                        onClick={() => setSelectedGenre(genre)}
+                        onClick={() => {
+                          playSoftTap('tap');
+                          setSelectedGenre(genre);
+                        }}
                         aria-pressed={isActive}
                         className={`min-h-[32px] px-2.5 sm:px-3 py-1 rounded-lg text-[11px] sm:text-xs font-medium whitespace-nowrap shrink-0 transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] ${
                           isActive
@@ -806,6 +825,7 @@ export default function App() {
                       key={genre}
                       type="button"
                       onClick={() => {
+                        playSoftTap('tap');
                         setSelectedGenre(genre);
                         setShowAllTags(false);
                       }}
@@ -850,8 +870,9 @@ export default function App() {
                         delay: hasEntered ? 0.08 + Math.min(index * 0.05, 0.35) : 0,
                         ease: [0.16, 1, 0.3, 1],
                       }}
-                    className="shimmer-card-border group bg-[#121218]/92 backdrop-blur-sm border border-[#D4AF37]/25 hover:border-[#D4AF37]/70 rounded-xl sm:rounded-2xl p-2.5 sm:p-4 lg:p-5 flex flex-col justify-between transition-all duration-200 hover:shadow-[0_0_32px_-6px_rgba(212,175,55,0.32)]"
-                  >
+                      onClick={() => playSoftTap('card')}
+                      className="shimmer-card-border group bg-[#121218]/92 backdrop-blur-sm border border-[#D4AF37]/25 hover:border-[#D4AF37]/70 rounded-xl sm:rounded-2xl p-2.5 sm:p-4 lg:p-5 flex flex-col justify-between transition-all duration-200 hover:shadow-[0_0_32px_-6px_rgba(212,175,55,0.32)] cursor-pointer"
+                    >
                     <div>
                       {/* 1. Ảnh đại diện vuông bo góc tinh tế trên cùng */}
                       <div className="relative aspect-square w-full rounded-lg sm:rounded-xl overflow-hidden bg-[#0B0B0F] border border-[#D4AF37]/35 group-hover:border-[#F3E5AB]/75 group-hover:shadow-[0_0_22px_rgba(212,175,55,0.28)] transition-all duration-200">
@@ -925,6 +946,10 @@ export default function App() {
                             href={char.dokiLink}
                             target="_blank"
                             rel="noopener noreferrer"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              playSoftTap('card');
+                            }}
                             className={`shimmer-gold-btn inline-flex items-center justify-center gap-1 min-h-[36px] sm:min-h-[40px] px-1.5 sm:px-3 py-1.5 rounded-lg bg-gradient-to-r from-[#D4AF37] to-[#E6C86E] text-[#0B0B0F] text-[11px] sm:text-xs font-semibold whitespace-nowrap hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3E5AB] transition-all duration-150 ${
                               !hasBothLinks ? 'w-full' : ''
                             }`}
@@ -951,6 +976,10 @@ export default function App() {
                             href={char.ggaiLink}
                             target="_blank"
                             rel="noopener noreferrer"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              playSoftTap('card');
+                            }}
                             className={`inline-flex items-center justify-center gap-1 min-h-[36px] sm:min-h-[40px] px-1.5 sm:px-3 py-1.5 rounded-lg bg-[#0B0B0F] border border-[#D4AF37]/60 text-[#F3E5AB] text-[11px] sm:text-xs font-medium whitespace-nowrap hover:bg-[#D4AF37]/15 hover:border-[#F3E5AB] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] transition-all duration-150 ${
                               !hasBothLinks ? 'w-full' : ''
                             }`}
@@ -1063,6 +1092,7 @@ export default function App() {
                 <button
                   type="button"
                   onClick={() => {
+                    playSoftTap('tap');
                     setSearchQuery('');
                     setSelectedGenre('Tất cả');
                   }}
@@ -1110,7 +1140,10 @@ export default function App() {
             {/* Mèo đen đồng hành */}
             <button
               type="button"
-              onClick={() => setCatGreetingOpen((prev) => !prev)}
+              onClick={() => {
+                playSoftTap('music');
+                setCatGreetingOpen((prev) => !prev);
+              }}
               aria-label="Chú mèo đen đồng hành"
               title="Chú mèo đen đồng hành"
               className="relative w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-[#0B0B0F] border border-[#D4AF37]/35 hover:border-[#F3E5AB] flex items-center justify-center shrink-0 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]"

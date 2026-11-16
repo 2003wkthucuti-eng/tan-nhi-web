@@ -36,6 +36,55 @@ const CHARACTERS: CharacterItem[] = [
     dokiLink: 'https://www.dokichat.club/vi/role/6f866b44-70ea-4103-b2a0-df4d2a59ebec?isShare=true',
     ggaiLink: '',
   },
+  {
+    id: 'dong-hoang',
+    name: 'Đông Hoàng',
+    avatar: 'https://files.catbox.moe/61y6jv.jpg',
+    description: '“Anh xin lỗi em, là anh không mang lại cho em được hạnh phúc.”',
+    tags: ['Boygirl', 'Dịu dàng', 'Chung Thủy', 'Chủ Tịch'],
+    dokiLink: 'https://www.dokichat.club/vi/role/16cbe7e1-6f2e-43d6-ae86-1f4f9c4f2828?isShare=true',
+    ggaiLink: '',
+  },
+  {
+    id: 'han-duy',
+    name: 'Hấn Duy',
+    avatar: 'https://files.catbox.moe/8u0bbd.jpg',
+    description: '“Anh xin em đừng bỏ anh.”',
+    tags: ['Boygirl', 'Tâm lý yếu', 'Ngược nam', 'Mong manh'],
+    dokiLink: 'https://www.dokichat.club/vi/role/941f74bf-4ee3-4efd-9bbb-da69c964c4eb?isShare=true',
+    ggaiLink:
+      'https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%221TZRWp_Zbak0PhIOZrX4XHvL_cPcZX3i3%22%5D,%22action%22:%22open%22,%22userId%22:%22111559786295807256713%22,%22resourceKeys%22:%7B%7D%7D&usp=sharing',
+  },
+  {
+    id: 'han-trach',
+    name: 'Hàn Trạch',
+    avatar: 'https://files.catbox.moe/zyvlrw.jpg',
+    description: '“Liệu cô ấy có trách tôi không? Vì lúc đó tôi đã tuyệt tình đến mức ấy.”',
+    tags: ['Boygirl', 'Trùng Sinh', 'Gương vỡ lại lành', 'Ngược'],
+    dokiLink: 'https://www.dokichat.club/vi/role/c06d8fe2-f490-4300-8860-fa591f8dfbee?isShare=true',
+    ggaiLink:
+      'https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%221aKwwQk174RkiD5JqVrlnPlO8wC7r0Guc%22%5D,%22action%22:%22open%22,%22userId%22:%22111559786295807256713%22,%22resourceKeys%22:%7B%7D%7D&usp=sharing',
+  },
+  {
+    id: 'can-dat',
+    name: 'Cẩn Dật',
+    avatar: 'https://files.catbox.moe/urmgnj.jpg',
+    description: 'Cả hai bị cắm sừng cùng một lúc.',
+    tags: ['Boygirl', 'Đánh Ghen', 'Hài Hước', 'Trả Thù'],
+    dokiLink: 'https://www.dokichat.club/vi/role/dadc3f65-73c3-46c6-8390-b3e9b03feb82?isShare=true',
+    ggaiLink:
+      'https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%221kabCUOVNKEGHMCAklZVZQM1rbVBHIdcW%22%5D,%22action%22:%22open%22,%22userId%22:%22111559786295807256713%22,%22resourceKeys%22:%7B%7D%7D&usp=sharing',
+  },
+  {
+    id: 'khinh-hoang',
+    name: 'Khinh Hoàng',
+    avatar: 'https://files.catbox.moe/bmiu4f.jpg',
+    description: 'Nhắm mắt giết chết hàng nghìn người nhưng lại mở mắt để nhìn em lần cuối.',
+    tags: ['Boygirl', 'Điệp Viên × Sát Nhân', 'Ngược'],
+    dokiLink: 'https://www.dokichat.club/vi/role/d824156d-a383-4f03-8d9a-27969c9fd5e2?isShare=true',
+    ggaiLink:
+      'https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%2219-4XYQPLCM5GISIbtpbaVFwythrU9Fjj%22%5D,%22action%22:%22open%22,%22userId%22:%22111559786295807256713%22,%22resourceKeys%22:%7B%7D%7D&usp=sharing',
+  },
 ];
 
 export interface PlaylistTrack {

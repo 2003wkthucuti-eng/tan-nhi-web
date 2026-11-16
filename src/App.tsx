@@ -5,10 +5,11 @@
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { ArrowUpRight, ChevronDown, ChevronLeft, ChevronRight, DoorOpen, Music, Pause, Play, Search, SkipForward, SlidersHorizontal, X } from 'lucide-react';
+import { ArrowUpRight, ChevronDown, ChevronLeft, ChevronRight, DoorOpen, Music, Pause, Play, Search, SkipForward, SlidersHorizontal, Sparkles, X } from 'lucide-react';
 import { BlackCatMascot } from './components/BlackCatMascot';
+import { DestinyTarotModal } from './components/DestinyTarotModal';
 import { GoldenStardust } from './components/GoldenStardust';
-import { playDoorChime, playSoftTap } from './utils/soundEffects';
+import { playCatMeowChime, playDoorChime, playSoftTap } from './utils/soundEffects';
 
 export type GenreTag = string;
 
@@ -300,6 +301,62 @@ const GENRE_FILTERS: GenreTag[] = (() => {
 
 const ITEMS_PER_PAGE = 12;
 
+const HOST_CAT_GREETINGS: string[] = [
+  'Hôm nay cậu mệt không? Chọn một người trò chuyện nhé~',
+  'Chào mừng ghé thăm nhà nhỏ của Tần Nhi!',
+  'Gặp được nhau giữa thế gian này đều là duyên phận...',
+  'Đêm nay gió nhẹ lắm, vào sưởi ấm cùng tách trà nhé~',
+  'Meow~ Chuyện vui hay buồn đều có thể kể ở đây nè.',
+  'Mong rằng có một ánh mắt nơi đây khiến lòng cậu dịu lại.',
+];
+
+const ArtDecoCorner: React.FC<{ className?: string }> = ({ className = '' }) => (
+  <svg
+    viewBox="0 0 64 64"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+    className={`pointer-events-none w-10 h-10 sm:w-14 sm:h-14 text-[#D4AF37] ${className}`}
+  >
+    <path d="M4 44V10C4 6.686 6.686 4 10 4H44" stroke="currentColor" strokeWidth="1.2" strokeOpacity="0.85" />
+    <path d="M10 34V14C10 11.791 11.791 10 14 10H34" stroke="currentColor" strokeWidth="0.9" strokeOpacity="0.55" />
+    <path d="M4 22H14V4" stroke="currentColor" strokeWidth="0.9" strokeOpacity="0.5" />
+    <path d="M22 4V14H4" stroke="currentColor" strokeWidth="0.9" strokeOpacity="0.5" />
+    <path d="M19 15L20.3 17.7L23 19L20.3 20.3L19 23L17.7 20.3L15 19L17.7 17.7Z" fill="#F3E5AB" fillOpacity="0.85" />
+    <circle cx="48" cy="4" r="1.4" fill="currentColor" fillOpacity="0.7" />
+    <circle cx="4" cy="48" r="1.4" fill="currentColor" fillOpacity="0.7" />
+  </svg>
+);
+
+const TarotDivider: React.FC = () => (
+  <div aria-hidden="true" className="my-5 sm:my-7 flex items-center justify-center gap-3 sm:gap-4">
+    <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#D4AF37]/35 to-[#D4AF37]/75" />
+    <div className="flex items-center gap-2.5 text-[#D4AF37]">
+      <span className="w-1.5 h-1.5 rotate-45 bg-[#D4AF37]/70" />
+      <svg viewBox="0 0 64 24" fill="none" className="w-14 h-5 sm:w-16 sm:h-6">
+        {/* Mặt trăng khuyết mảnh */}
+        <path
+          d="M23 5.5C19.2 6.1 16.5 9.2 16.5 12.8C16.5 16.7 19.6 19.8 23.5 19.8C25.1 19.8 26.6 19.2 27.8 18.3C25.4 18.4 23.2 16.6 22.8 14.1C22.4 11.4 23.8 8.8 26.1 7.6C25.2 6.4 24.1 5.7 23 5.5Z"
+          stroke="#D4AF37"
+          strokeWidth="1.25"
+          fill="#D4AF37"
+          fillOpacity="0.16"
+        />
+        {/* Ngôi sao 4 cánh lấp lánh ở trung tâm */}
+        <path
+          d="M36 4L37.8 10.2L44 12L37.8 13.8L36 20L34.2 13.8L28 12L34.2 10.2Z"
+          fill="#F3E5AB"
+          stroke="#D4AF37"
+          strokeWidth="0.7"
+        />
+        <circle cx="48.5" cy="12" r="1.2" fill="#D4AF37" fillOpacity="0.8" />
+      </svg>
+      <span className="w-1.5 h-1.5 rotate-45 bg-[#D4AF37]/70" />
+    </div>
+    <div className="h-px flex-1 bg-gradient-to-l from-transparent via-[#D4AF37]/35 to-[#D4AF37]/75" />
+  </div>
+);
+
 function normalizeText(value: string): string {
   return value
     .normalize('NFD')
@@ -343,15 +400,24 @@ export default function App() {
   const [showAllTags, setShowAllTags] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [catGreetingOpen, setCatGreetingOpen] = useState(false);
+  const [headerCatMessage, setHeaderCatMessage] = useState<string | null>(null);
+  const [isDestinyModalOpen, setIsDestinyModalOpen] = useState(false);
   const [failedAvatars, setFailedAvatars] = useState<Record<string, boolean>>({});
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const shouldPlayRef = useRef(false);
   const errorStreakRef = useRef(0);
+  const headerCatTimerRef = useRef<number | null>(null);
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
 
   const currentTrack = PLAYLIST[currentTrackIndex];
+
+  useEffect(() => {
+    return () => {
+      if (headerCatTimerRef.current) window.clearTimeout(headerCatTimerRef.current);
+    };
+  }, []);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -477,10 +543,6 @@ export default function App() {
     });
   }, [searchQuery, selectedGenre]);
 
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchQuery, selectedGenre]);
-
   const totalPages = Math.max(1, Math.ceil(filteredCharacters.length / ITEMS_PER_PAGE));
   const safeCurrentPage = Math.min(currentPage, totalPages);
 
@@ -510,10 +572,32 @@ export default function App() {
   const handleSelectGenreFromHeader = (genre: 'Tất cả' | GenreTag) => {
     playSoftTap('tap');
     setSelectedGenre(genre);
+    setCurrentPage(1);
     const galleryEl = document.getElementById('bo-suu-tap');
     if (galleryEl) {
       galleryEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+  };
+
+  const handleHeaderCatClick = () => {
+    playCatMeowChime();
+    const candidates = HOST_CAT_GREETINGS.filter((msg) => msg !== headerCatMessage);
+    const pool = candidates.length > 0 ? candidates : HOST_CAT_GREETINGS;
+    const nextMsg = pool[Math.floor(Math.random() * pool.length)];
+    setHeaderCatMessage(nextMsg);
+
+    if (headerCatTimerRef.current) {
+      window.clearTimeout(headerCatTimerRef.current);
+    }
+    headerCatTimerRef.current = window.setTimeout(() => {
+      setHeaderCatMessage(null);
+    }, 4500);
+  };
+
+  const handleOpenDestinyModal = () => {
+    if (CHARACTERS.length === 0) return;
+    playSoftTap('nav');
+    setIsDestinyModalOpen(true);
   };
 
   return (
@@ -554,11 +638,16 @@ export default function App() {
             {/* Bụi vàng & sao 4 cánh lấp lánh ở nền Intro */}
             <GoldenStardust className="z-0" />
 
-            {/* Khung viền ánh kim mảnh bao quanh màn chào */}
+            {/* Khung viền ánh kim mảnh + Họa tiết hoa văn Art Deco / Tarot 4 góc */}
             <div
               aria-hidden="true"
               className="pointer-events-none absolute inset-4 sm:inset-8 rounded-3xl border border-[#D4AF37]/25"
-            />
+            >
+              <ArtDecoCorner className="absolute -top-0.5 -left-0.5" />
+              <ArtDecoCorner className="absolute -top-0.5 -right-0.5 rotate-90" />
+              <ArtDecoCorner className="absolute -bottom-0.5 -right-0.5 rotate-180" />
+              <ArtDecoCorner className="absolute -bottom-0.5 -left-0.5 -rotate-90" />
+            </div>
 
             <div className="relative z-10 flex flex-col items-center text-center max-w-xl mx-auto">
               <motion.div
@@ -634,21 +723,55 @@ export default function App() {
         {/* Top Bar 3 vùng rõ ràng */}
         <header className="sticky top-0 z-30 bg-[#0B0B0F]/90 backdrop-blur-md border-b border-[#D4AF37]/20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-4 sm:gap-8">
-            {/* Zone 1: Brand Title + Linh vật mèo đen */}
-            <a
-              href="#top"
-              onClick={(e) => {
-                e.preventDefault();
-                playSoftTap('nav');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-              className="flex items-center gap-2.5 whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] rounded-lg py-1"
-            >
-              <BlackCatMascot size={34} variant="badge" className="shrink-0 drop-shadow-[0_0_10px_rgba(212,175,55,0.35)]" />
-              <span className="font-display text-xl sm:text-2xl font-semibold tracking-tight gold-shimmer-text">
-                Ngôi Nhà Nhỏ Của Tần Nhi
-              </span>
-            </a>
+            {/* Zone 1: Linh vật mèo đen tương tác + Brand Title */}
+            <div className="relative flex items-center gap-2 sm:gap-2.5 shrink-0">
+              <button
+                type="button"
+                onClick={handleHeaderCatClick}
+                aria-label="Chạm vào chú mèo đen để nhận lời chào"
+                title="Meow~ Chạm vào mình đi!"
+                className="relative p-0.5 rounded-xl hover:bg-[#D4AF37]/10 active:scale-95 transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]"
+              >
+                <BlackCatMascot
+                  size={36}
+                  variant="badge"
+                  className="shrink-0 drop-shadow-[0_0_10px_rgba(212,175,55,0.4)]"
+                />
+              </button>
+
+              <a
+                href="#top"
+                onClick={(e) => {
+                  e.preventDefault();
+                  playSoftTap('nav');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className="whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] rounded-lg py-1"
+              >
+                <span className="font-display text-lg sm:text-2xl font-semibold tracking-tight gold-shimmer-text">
+                  Ngôi Nhà Nhỏ Của Tần Nhi
+                </span>
+              </a>
+
+              <AnimatePresence>
+                {headerCatMessage && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -4, scale: 0.96 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -4, scale: 0.96 }}
+                    transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                    role="status"
+                    className="absolute left-0 top-full mt-2.5 z-50 w-64 sm:w-72 rounded-xl bg-[#0B0B0F]/95 backdrop-blur-md border border-[#D4AF37]/75 px-3.5 py-2.5 text-xs leading-relaxed text-[#F3E5AB] shadow-[0_12px_30px_rgba(0,0,0,0.85),0_0_20px_rgba(212,175,55,0.22)]"
+                  >
+                    <span
+                      aria-hidden="true"
+                      className="absolute -top-1.5 left-4 w-3 h-3 rotate-45 bg-[#0B0B0F] border-l border-t border-[#D4AF37]/75"
+                    />
+                    <p className="relative z-10">{headerCatMessage}</p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
 
             {/* Zone 2: Nav links lọc nhanh thể loại */}
             <nav
@@ -694,8 +817,8 @@ export default function App() {
 
         {/* Nội dung chính */}
         <main id="top" className="relative z-10 flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-10">
-          {/* Phần giới thiệu ngắn đầu trang (gọn gàng nhường không gian cho danh sách nhân vật) */}
-          <section className="mb-5 sm:mb-7 pb-5 sm:pb-6 border-b border-[#D4AF37]/15">
+          {/* Phần giới thiệu ngắn đầu trang */}
+          <section>
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
               <div className="max-w-2xl">
                 <p className="text-[11px] sm:text-xs font-medium tracking-widest text-[#D4AF37] mb-1.5">
@@ -721,15 +844,18 @@ export default function App() {
             </div>
           </section>
 
-          {/* Thanh tìm kiếm & Bộ lọc thể loại thu gọn */}
+          {/* Đường kẻ phân cách Tarot mặt trăng khuyết & ngôi sao 4 cánh */}
+          <TarotDivider />
+
+          {/* Thanh tìm kiếm, Gặp gỡ định mệnh & Bộ lọc thể loại thu gọn */}
           <section
             id="bo-suu-tap"
             aria-label="Tìm kiếm và lọc nhân vật"
             className="scroll-mt-20 mb-5 sm:mb-7 flex flex-col gap-3"
           >
-            {/* Hàng trên: Thanh tìm kiếm + Nút mở rộng/thu gọn bộ lọc Tag */}
-            <div className="flex items-center gap-2 sm:gap-3">
-              <div className="relative flex-1 sm:max-w-sm">
+            {/* Hàng trên: Thanh tìm kiếm + Xem thêm Tag + Gặp gỡ định mệnh */}
+            <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 sm:gap-3">
+              <div className="relative w-full sm:w-auto sm:flex-1 sm:max-w-sm">
                 <Search
                   aria-hidden="true"
                   className="w-4 h-4 text-[#D4AF37]/80 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
@@ -737,7 +863,10 @@ export default function App() {
                 <input
                   type="search"
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                    setCurrentPage(1);
+                  }}
                   placeholder="Tìm theo tên nhân vật..."
                   aria-label="Tìm kiếm theo tên nhân vật"
                   className="w-full min-h-[40px] pl-9 pr-9 py-2 rounded-xl bg-[#121218] border border-[#D4AF37]/25 text-xs sm:text-sm text-[#F5EFE0] placeholder:text-[#8E877A] focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/60 transition-colors"
@@ -748,6 +877,7 @@ export default function App() {
                     onClick={() => {
                       playSoftTap('tap');
                       setSearchQuery('');
+                      setCurrentPage(1);
                     }}
                     aria-label="Xóa từ khóa tìm kiếm"
                     className="absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded-md text-[#B8B0A0] hover:text-[#F3E5AB] cursor-pointer"
@@ -757,28 +887,39 @@ export default function App() {
                 )}
               </div>
 
-              <button
-                type="button"
-                onClick={() => {
-                  playSoftTap('tap');
-                  setShowAllTags((prev) => !prev);
-                }}
-                aria-expanded={showAllTags}
-                className={`inline-flex items-center gap-1.5 min-h-[40px] px-3 sm:px-3.5 py-2 rounded-xl border text-xs font-medium whitespace-nowrap shrink-0 transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] ${
-                  showAllTags || selectedGenre !== 'Tất cả'
-                    ? 'bg-[#D4AF37]/15 border-[#D4AF37]/65 text-[#F3E5AB]'
-                    : 'bg-[#121218] border-[#D4AF37]/25 text-[#DCD4C6] hover:border-[#D4AF37]/60 hover:text-[#F3E5AB]'
-                }`}
-              >
-                <SlidersHorizontal className="w-3.5 h-3.5 text-[#D4AF37] shrink-0" aria-hidden="true" />
-                <span>{showAllTags ? 'Thu gọn' : 'Xem thêm Tag'}</span>
-                <ChevronDown
-                  className={`w-3.5 h-3.5 text-[#D4AF37] transition-transform duration-200 ${
-                    showAllTags ? 'rotate-180' : ''
+              <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto justify-between sm:justify-start">
+                <button
+                  type="button"
+                  onClick={() => {
+                    playSoftTap('tap');
+                    setShowAllTags((prev) => !prev);
+                  }}
+                  aria-expanded={showAllTags}
+                  className={`inline-flex items-center gap-1.5 min-h-[40px] px-3 sm:px-3.5 py-2 rounded-xl border text-xs font-medium whitespace-nowrap shrink-0 transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] ${
+                    showAllTags || selectedGenre !== 'Tất cả'
+                      ? 'bg-[#D4AF37]/15 border-[#D4AF37]/65 text-[#F3E5AB]'
+                      : 'bg-[#121218] border-[#D4AF37]/25 text-[#DCD4C6] hover:border-[#D4AF37]/60 hover:text-[#F3E5AB]'
                   }`}
-                  aria-hidden="true"
-                />
-              </button>
+                >
+                  <SlidersHorizontal className="w-3.5 h-3.5 text-[#D4AF37] shrink-0" aria-hidden="true" />
+                  <span>{showAllTags ? 'Thu gọn' : 'Xem thêm Tag'}</span>
+                  <ChevronDown
+                    className={`w-3.5 h-3.5 text-[#D4AF37] transition-transform duration-200 ${
+                      showAllTags ? 'rotate-180' : ''
+                    }`}
+                    aria-hidden="true"
+                  />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleOpenDestinyModal}
+                  className="shimmer-gold-btn inline-flex items-center justify-center gap-1.5 min-h-[40px] px-3 sm:px-3.5 py-2 rounded-xl border border-[#D4AF37]/75 bg-gradient-to-r from-[#19150A] via-[#271F0A] to-[#19150A] text-xs font-medium text-[#F3E5AB] shadow-[0_0_16px_rgba(212,175,55,0.2)] hover:border-[#F3E5AB] hover:shadow-[0_0_24px_rgba(212,175,55,0.4)] active:scale-95 transition-all duration-150 whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3E5AB]"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-[#F3E5AB] shrink-0" aria-hidden="true" />
+                  <span>Gặp gỡ định mệnh</span>
+                </button>
+              </div>
             </div>
 
             {/* Danh sách Tag: Mặc định 1 hàng ngang vuốt trượt mượt, bấm nút sẽ xổ gọn toàn bộ */}
@@ -798,6 +939,7 @@ export default function App() {
                         onClick={() => {
                           playSoftTap('tap');
                           setSelectedGenre(genre);
+                          setCurrentPage(1);
                         }}
                         aria-pressed={isActive}
                         className={`min-h-[32px] px-2.5 sm:px-3 py-1 rounded-lg text-[11px] sm:text-xs font-medium whitespace-nowrap shrink-0 transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] ${
@@ -827,6 +969,7 @@ export default function App() {
                       onClick={() => {
                         playSoftTap('tap');
                         setSelectedGenre(genre);
+                        setCurrentPage(1);
                         setShowAllTags(false);
                       }}
                       aria-pressed={isActive}
@@ -1095,6 +1238,7 @@ export default function App() {
                     playSoftTap('tap');
                     setSearchQuery('');
                     setSelectedGenre('Tất cả');
+                    setCurrentPage(1);
                   }}
                   className="mt-6 min-h-[42px] px-5 py-2 rounded-lg bg-[#D4AF37] text-[#0B0B0F] text-sm font-semibold hover:brightness-110 transition-all cursor-pointer"
                 >
@@ -1196,6 +1340,12 @@ export default function App() {
           </aside>
         </div>
       )}
+      {/* Bàn bốc bài Tarot Gặp Gỡ Định Mệnh */}
+      <DestinyTarotModal
+        isOpen={isDestinyModalOpen}
+        characters={CHARACTERS}
+        onClose={() => setIsDestinyModalOpen(false)}
+      />
     </div>
   );
 }

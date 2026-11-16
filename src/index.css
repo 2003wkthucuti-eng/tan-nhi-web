@@ -60,6 +60,64 @@
   animation: cat-float 5s ease-in-out infinite;
 }
 
+@keyframes cat-eye-blink {
+  0%, 90%, 100% {
+    transform: scaleY(1);
+  }
+  94% {
+    transform: scaleY(0.12);
+  }
+}
+
+.animate-cat-eye {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: cat-eye-blink 4.6s ease-in-out infinite;
+}
+
+/* Hiệu ứng tỏa sáng lấp lánh cho thẻ nhân vật "Gặp gỡ định mệnh" */
+@keyframes destiny-aura-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 20px rgba(212, 175, 55, 0.42),
+      0 0 42px rgba(243, 229, 171, 0.24),
+      inset 0 0 18px rgba(212, 175, 55, 0.16);
+  }
+  50% {
+    box-shadow:
+      0 0 32px rgba(243, 229, 171, 0.72),
+      0 0 64px rgba(212, 175, 55, 0.42),
+      inset 0 0 26px rgba(243, 229, 171, 0.28);
+  }
+}
+
+@keyframes destiny-border-sweep {
+  0% {
+    background-position: 160% 0;
+  }
+  100% {
+    background-position: -60% 0;
+  }
+}
+
+.destiny-card-glow {
+  border-color: rgba(243, 229, 171, 0.95) !important;
+  animation: destiny-aura-pulse 1.6s ease-in-out infinite;
+}
+
+.destiny-card-glow::before {
+  opacity: 1 !important;
+  padding: 2px;
+  background: linear-gradient(
+    115deg,
+    rgba(212, 175, 55, 0.35) 18%,
+    rgba(255, 248, 220, 0.98) 50%,
+    rgba(212, 175, 55, 0.35) 82%
+  );
+  background-size: 240% 100%;
+  animation: destiny-border-sweep 1.8s linear infinite;
+}
+
 /* Bụi vàng & ngôi sao lấp lánh thuần CSS (chỉ transform & opacity) */
 @keyframes stardust-drift {
   0%, 100% {
@@ -223,6 +281,9 @@
 @media (prefers-reduced-motion: reduce) {
   .animate-cat-tail,
   .animate-cat-float,
+  .animate-cat-eye,
+  .destiny-card-glow,
+  .destiny-card-glow::before,
   .stardust-drift,
   .stardust-twinkle,
   .animate-cat-star-1,

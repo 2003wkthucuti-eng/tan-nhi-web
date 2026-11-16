@@ -81,13 +81,13 @@ export const BlackCatMascot: React.FC<BlackCatMascotProps> = ({
         />
       )}
 
-      {/* Đuôi mèo uốn cong mềm mại */}
+      {/* Đuôi mèo uốn cong đung đưa mềm mại */}
       <path
         d="M77 95C91 95 101 86 101 75C101 66 93 62 90 67C88 71 92 75 93 78"
         stroke={`url(#${strokeId})`}
         strokeWidth="3.2"
         strokeLinecap="round"
-        className={variant !== 'badge' ? 'animate-cat-tail' : undefined}
+        className="animate-cat-tail"
       />
 
       {/* Thân mèo ngồi */}
@@ -130,13 +130,17 @@ export const BlackCatMascot: React.FC<BlackCatMascotProps> = ({
       <path d="M40 40L39.5 31L46.5 36.5" stroke="#D4AF37" strokeWidth="1.2" strokeOpacity="0.65" strokeLinecap="round" strokeLinejoin="round" />
       <path d="M80 40L80.5 31L73.5 36.5" stroke="#D4AF37" strokeWidth="1.2" strokeOpacity="0.65" strokeLinecap="round" strokeLinejoin="round" />
 
-      {/* Đôi mắt vàng ánh kim bí ẩn */}
-      <ellipse cx="50.5" cy="48" rx="3.4" ry="4.2" fill="#F3E5AB" />
-      <ellipse cx="69.5" cy="48" rx="3.4" ry="4.2" fill="#F3E5AB" />
-      <ellipse cx="50.8" cy="48" rx="1.1" ry="2.8" fill="#0B0B0F" />
-      <ellipse cx="69.8" cy="48" rx="1.1" ry="2.8" fill="#0B0B0F" />
-      <circle cx="49.5" cy="46.5" r="0.9" fill="#FFFFFF" fillOpacity="0.9" />
-      <circle cx="68.5" cy="46.5" r="0.9" fill="#FFFFFF" fillOpacity="0.9" />
+      {/* Đôi mắt vàng ánh kim bí ẩn chớp nhẹ */}
+      <g className="animate-cat-eye">
+        <ellipse cx="50.5" cy="48" rx="3.4" ry="4.2" fill="#F3E5AB" />
+        <ellipse cx="50.8" cy="48" rx="1.1" ry="2.8" fill="#0B0B0F" />
+        <circle cx="49.5" cy="46.5" r="0.9" fill="#FFFFFF" fillOpacity="0.9" />
+      </g>
+      <g className="animate-cat-eye">
+        <ellipse cx="69.5" cy="48" rx="3.4" ry="4.2" fill="#F3E5AB" />
+        <ellipse cx="69.8" cy="48" rx="1.1" ry="2.8" fill="#0B0B0F" />
+        <circle cx="68.5" cy="46.5" r="0.9" fill="#FFFFFF" fillOpacity="0.9" />
+      </g>
 
       {/* Mũi nhỏ & nét miệng mỉm */}
       <path d="M58.5 53.5H61.5L60 55.2L58.5 53.5Z" fill="#D4AF37" />

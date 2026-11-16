@@ -207,3 +207,129 @@ export function playSoftTap(variant: SoftTapVariant = 'tap'): void {
     // An toàn nếu trình duyệt chặn audio context
   }
 }
+
+/**
+ * Tiếng chuông vòng cổ hòa nhẹ tiếng "meo" trong trẻo khi chạm vào chú mèo đen.
+ */
+export function playCatMeowChime(): void {
+  try {
+    const chain = getAudioChain();
+    if (!chain) return;
+
+    const { ctx, destination } = chain;
+    const now = ctx.currentTime;
+
+    const masterGain = ctx.createGain();
+    masterGain.gain.setValueAtTime(0.86, now);
+    masterGain.connect(destination);
+
+    // 1. Tiếng chuông cổ mèo mảnh mai, trong vắt
+    const bellOsc = ctx.createOscillator();
+    const bellGain = ctx.createGain();
+    bellOsc.type = 'sine';
+    bellOsc.frequency.setValueAtTime(1760.0, now);
+
+    bellGain.gain.setValueAtTime(0.0001, now);
+    bellGain.gain.linearRampToValueAtTime(0.32, now + 0.004);
+    bellGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.65);
+
+    // 2. Đường cong âm sắc "meo~" nhẹ nhàng, thanh thoát bằng sóng sine mượt
+    const meowOsc = ctx.createOscillator();
+    const meowHarmonic = ctx.createOscillator();
+    const meowGain = ctx.createGain();
+    const meowHarmonicGain = ctx.createGain();
+
+    meowOsc.type = 'sine';
+    meowOsc.frequency.setValueAtTime(880.0, now + 0.025);
+    meowOsc.frequency.exponentialRampToValueAtTime(1174.66, now + 0.11);
+    meowOsc.frequency.exponentialRampToValueAtTime(987.77, now + 0.34);
+
+    meowHarmonic.type = 'sine';
+    meowHarmonic.frequency.setValueAtTime(1760.0, now + 0.025);
+    meowHarmonic.frequency.exponentialRampToValueAtTime(2349.32, now + 0.11);
+    meowHarmonic.frequency.exponentialRampToValueAtTime(1975.53, now + 0.34);
+
+    meowGain.gain.setValueAtTime(0.0001, now + 0.025);
+    meowGain.gain.linearRampToValueAtTime(0.34, now + 0.09);
+    meowGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.42);
+
+    meowHarmonicGain.gain.setValueAtTime(0.0001, now + 0.025);
+    meowHarmonicGain.gain.linearRampToValueAtTime(0.1, now + 0.09);
+    meowHarmonicGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.32);
+
+    bellOsc.connect(bellGain);
+    meowOsc.connect(meowGain);
+    meowHarmonic.connect(meowHarmonicGain);
+
+    bellGain.connect(masterGain);
+    meowGain.connect(masterGain);
+    meowHarmonicGain.connect(masterGain);
+
+    bellOsc.start(now);
+    meowOsc.start(now + 0.025);
+    meowHarmonic.start(now + 0.025);
+
+    bellOsc.stop(now + 0.68);
+    meowOsc.stop(now + 0.46);
+    meowHarmonic.stop(now + 0.36);
+  } catch {
+    // An toàn nếu trình duyệt chặn audio context
+  }
+}
+
+/**
+ * Chuỗi chuông pha lê ngân dài huyền bí khi bấm "Gặp gỡ định mệnh".
+ */
+export function playDestinyChime(): void {
+  try {
+    const chain = getAudioChain();
+    if (!chain) return;
+
+    const { ctx, destination } = chain;
+    const now = ctx.currentTime;
+
+    const masterGain = ctx.createGain();
+    masterGain.gain.setValueAtTime(0.9, now);
+    masterGain.connect(destination);
+
+    // Hợp âm Tarot ánh sao ngân vang (F#5 - A5 - C#6 - E6 - G#6 - B6)
+    const notes = [739.99, 880.0, 1108.73, 1318.51, 1661.22, 1975.53];
+
+    notes.forEach((freq, idx) => {
+      const startTime = now + idx * 0.065;
+      const tailDuration = 2.35 - idx * 0.06;
+
+      const fundamentalOsc = ctx.createOscillator();
+      const fundamentalGain = ctx.createGain();
+      fundamentalOsc.type = 'sine';
+      fundamentalOsc.frequency.setValueAtTime(freq, startTime);
+
+      fundamentalGain.gain.setValueAtTime(0.0001, startTime);
+      fundamentalGain.gain.linearRampToValueAtTime(0.35, startTime + 0.006);
+      fundamentalGain.gain.exponentialRampToValueAtTime(0.0001, startTime + tailDuration);
+
+      const octaveOsc = ctx.createOscillator();
+      const octaveGain = ctx.createGain();
+      octaveOsc.type = 'sine';
+      octaveOsc.frequency.setValueAtTime(freq * 2, startTime);
+
+      octaveGain.gain.setValueAtTime(0.0001, startTime);
+      octaveGain.gain.linearRampToValueAtTime(0.13, startTime + 0.005);
+      octaveGain.gain.exponentialRampToValueAtTime(0.0001, startTime + tailDuration * 0.5);
+
+      fundamentalOsc.connect(fundamentalGain);
+      octaveOsc.connect(octaveGain);
+
+      fundamentalGain.connect(masterGain);
+      octaveGain.connect(masterGain);
+
+      fundamentalOsc.start(startTime);
+      octaveOsc.start(startTime);
+
+      fundamentalOsc.stop(startTime + tailDuration + 0.05);
+      octaveOsc.stop(startTime + tailDuration * 0.54);
+    });
+  } catch {
+    // An toàn nếu trình duyệt chặn audio context
+  }
+}

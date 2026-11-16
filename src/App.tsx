@@ -258,6 +258,16 @@ function normalizeText(value: string): string {
     .trim();
 }
 
+function ensureQuoted(text: string): string {
+  const trimmed = text.trim();
+  if (!trimmed) return '';
+  const startsWithQuote = /^["“'‘]/.test(trimmed);
+  const endsWithQuote = /["”'’]$/.test(trimmed);
+  if (startsWithQuote && endsWithQuote) return trimmed;
+  const cleaned = trimmed.replace(/^["“]+|["”]+$/g, '');
+  return `“${cleaned}”`;
+}
+
 export default function App() {
   const [hasEntered, setHasEntered] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -575,7 +585,7 @@ export default function App() {
         </header>
 
         {/* Nội dung chính */}
-        <main id="top" className="relative z-10 flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <main id="top" className="relative z-10 flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-10">
           {/* Phần giới thiệu ngắn đầu trang */}
           <section className="mb-8 sm:mb-10 pb-8 border-b border-[#D4AF37]/15">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -662,16 +672,20 @@ export default function App() {
             </div>
           </section>
 
-          {/* Lưới hiển thị các thẻ nhân vật */}
+          {/* Lưới hiển thị các thẻ nhân vật (2 cột trên điện thoại, 3-4 cột trên màn lớn) */}
           {filteredCharacters.length > 0 ? (
             <section
               aria-label="Danh sách nhân vật"
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+              className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 lg:gap-6"
             >
               {filteredCharacters.map((char, index) => {
                 const hasDoki = Boolean(char.dokiLink && char.dokiLink.trim() !== '');
                 const hasGgai = Boolean(char.ggaiLink && char.ggaiLink.trim() !== '');
                 const hasBothLinks = hasDoki && hasGgai;
+
+                const nameParts = char.name.split(/\s+[—-]\s+/);
+                const primaryName = nameParts[0];
+                const secondaryName = nameParts.length > 1 ? nameParts.slice(1).join(' · ') : '';
 
                 return (
                   <motion.article
@@ -679,15 +693,15 @@ export default function App() {
                     initial={{ opacity: 0, y: 18 }}
                     animate={hasEntered ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
                     transition={{
-                      duration: 0.5,
-                      delay: hasEntered ? 0.14 + Math.min(index * 0.09, 0.54) : 0,
+                      duration: 0.48,
+                      delay: hasEntered ? 0.12 + Math.min(index * 0.07, 0.49) : 0,
                       ease: [0.16, 1, 0.3, 1],
                     }}
-                    className="shimmer-card-border group bg-[#121218]/92 backdrop-blur-sm border border-[#D4AF37]/25 hover:border-[#D4AF37]/70 rounded-2xl p-4 sm:p-5 flex flex-col justify-between transition-all duration-200 hover:shadow-[0_0_32px_-6px_rgba(212,175,55,0.32)]"
+                    className="shimmer-card-border group bg-[#121218]/92 backdrop-blur-sm border border-[#D4AF37]/25 hover:border-[#D4AF37]/70 rounded-xl sm:rounded-2xl p-2.5 sm:p-4 lg:p-5 flex flex-col justify-between transition-all duration-200 hover:shadow-[0_0_32px_-6px_rgba(212,175,55,0.32)]"
                   >
                     <div>
-                      {/* Ảnh đại diện bo góc, viền mảnh ánh vàng Gold phát sáng nhẹ khi hover */}
-                      <div className="relative aspect-square w-full rounded-xl overflow-hidden bg-[#0B0B0F] border border-[#D4AF37]/35 group-hover:border-[#F3E5AB]/75 group-hover:shadow-[0_0_22px_rgba(212,175,55,0.28)] transition-all duration-200">
+                      {/* 1. Ảnh đại diện vuông bo góc tinh tế trên cùng */}
+                      <div className="relative aspect-square w-full rounded-lg sm:rounded-xl overflow-hidden bg-[#0B0B0F] border border-[#D4AF37]/35 group-hover:border-[#F3E5AB]/75 group-hover:shadow-[0_0_22px_rgba(212,175,55,0.28)] transition-all duration-200">
                         {!failedAvatars[char.id] && char.avatar.trim() !== '' ? (
                           <img
                             src={char.avatar}
@@ -704,39 +718,53 @@ export default function App() {
                             }}
                           />
                         ) : (
-                          <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-gradient-to-b from-[#16161F] to-[#0B0B0F] p-4 text-center">
-                            <BlackCatMascot size={62} variant="companion" />
-                            <span className="font-display text-lg text-[#F3E5AB]">
-                              {char.name}
+                          <div className="absolute inset-0 flex flex-col items-center justify-center gap-1.5 bg-gradient-to-b from-[#16161F] to-[#0B0B0F] p-3 text-center">
+                            <BlackCatMascot size={50} variant="companion" />
+                            <span className="font-display text-sm sm:text-lg text-[#F3E5AB]">
+                              {primaryName}
                             </span>
-                            <span className="text-[11px] text-[#B8B0A0]">
-                              Link ảnh đang trống hoặc bị lỗi
+                            <span className="text-[10px] sm:text-[11px] text-[#B8B0A0]">
+                              Chưa tải được ảnh
                             </span>
                           </div>
                         )}
                       </div>
 
-                      {/* Tên nhân vật & Tag thể loại gọn gàng */}
-                      <div className="mt-4">
-                        <h3 className="font-display text-2xl font-semibold text-[#F3E5AB] tracking-tight leading-snug">
-                          {char.name}
+                      {/* 2. Tên nhân vật nổi bật, thông tin phụ & câu thoại ngắn đặt trong ngoặc kép */}
+                      <div className="mt-2.5 sm:mt-3.5">
+                        <h3 className="font-display text-[17px] sm:text-xl lg:text-2xl font-semibold text-[#F3E5AB] tracking-tight leading-snug">
+                          {primaryName}
                         </h3>
-                        <p className="mt-1 text-xs font-medium tracking-wide text-[#D4AF37]/90">
-                          {char.tags.join(' · ')}
+                        {secondaryName && (
+                          <p className="text-[11px] sm:text-xs font-medium text-[#D4AF37]/85 mt-0.5 truncate">
+                            {secondaryName}
+                          </p>
+                        )}
+                        <p className="mt-1.5 text-[11px] sm:text-[13px] text-[#C7C0B2] italic leading-snug sm:leading-relaxed line-clamp-3">
+                          {ensureQuoted(char.description)}
                         </p>
                       </div>
 
-                      {/* Đoạn mô tả / lời thoại giới thiệu ngắn */}
-                      <p className="mt-3 text-sm text-[#C7C0B2] leading-relaxed">
-                        {char.description}
-                      </p>
+                      {/* 3. Các tag thể loại xếp thành các viên nhỏ (badge) nối tiếp nhau ở phần giữa thẻ */}
+                      {char.tags.length > 0 && (
+                        <div className="mt-2.5 sm:mt-3 flex flex-wrap gap-1 sm:gap-1.5">
+                          {char.tags.map((tag) => (
+                            <span
+                              key={tag}
+                              className="inline-flex items-center px-1.5 sm:px-2 py-0.5 rounded-md bg-[#0B0B0F]/90 border border-[#D4AF37]/30 text-[10px] sm:text-[11px] font-medium text-[#E6CD82] leading-tight"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      )}
                     </div>
 
-                    {/* Hai nút hành động mở link trực tiếp ở tab mới */}
+                    {/* 4. Hai nút bấm liên kết nằm gọn gàng ở đáy thẻ */}
                     {(hasDoki || hasGgai) && (
                       <div
-                        className={`mt-5 pt-4 border-t border-[#D4AF37]/15 ${
-                          hasBothLinks ? 'grid grid-cols-2 gap-2.5' : 'flex'
+                        className={`mt-3 sm:mt-4 pt-2.5 sm:pt-3.5 border-t border-[#D4AF37]/15 ${
+                          hasBothLinks ? 'grid grid-cols-2 gap-1.5 sm:gap-2.5' : 'flex'
                         }`}
                       >
                         {hasDoki && (
@@ -744,12 +772,24 @@ export default function App() {
                             href={char.dokiLink}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className={`shimmer-gold-btn inline-flex items-center justify-center gap-1.5 min-h-[42px] px-3 py-2 rounded-lg bg-gradient-to-r from-[#D4AF37] to-[#E6C86E] text-[#0B0B0F] text-[13px] font-semibold whitespace-nowrap hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3E5AB] transition-all duration-150 ${
+                            className={`shimmer-gold-btn inline-flex items-center justify-center gap-1 min-h-[36px] sm:min-h-[40px] px-1.5 sm:px-3 py-1.5 rounded-lg bg-gradient-to-r from-[#D4AF37] to-[#E6C86E] text-[#0B0B0F] text-[11px] sm:text-xs font-semibold whitespace-nowrap hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3E5AB] transition-all duration-150 ${
                               !hasBothLinks ? 'w-full' : ''
                             }`}
                           >
-                            <span>Link DokiChat</span>
-                            <ArrowUpRight className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+                            {hasBothLinks ? (
+                              <>
+                                <span className="sm:hidden">DokiChat</span>
+                                <span className="hidden sm:inline">Link DokiChat</span>
+                              </>
+                            ) : (
+                              <span>Link DokiChat</span>
+                            )}
+                            <ArrowUpRight
+                              className={`w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0 ${
+                                hasBothLinks ? 'hidden sm:inline-block' : ''
+                              }`}
+                              aria-hidden="true"
+                            />
                           </a>
                         )}
 
@@ -758,12 +798,24 @@ export default function App() {
                             href={char.ggaiLink}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className={`inline-flex items-center justify-center gap-1.5 min-h-[42px] px-3 py-2 rounded-lg bg-[#0B0B0F] border border-[#D4AF37]/60 text-[#F3E5AB] text-[13px] font-medium whitespace-nowrap hover:bg-[#D4AF37]/15 hover:border-[#F3E5AB] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] transition-all duration-150 ${
+                            className={`inline-flex items-center justify-center gap-1 min-h-[36px] sm:min-h-[40px] px-1.5 sm:px-3 py-1.5 rounded-lg bg-[#0B0B0F] border border-[#D4AF37]/60 text-[#F3E5AB] text-[11px] sm:text-xs font-medium whitespace-nowrap hover:bg-[#D4AF37]/15 hover:border-[#F3E5AB] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] transition-all duration-150 ${
                               !hasBothLinks ? 'w-full' : ''
                             }`}
                           >
-                            <span>Link GGAI</span>
-                            <ArrowUpRight className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+                            {hasBothLinks ? (
+                              <>
+                                <span className="sm:hidden">GGAI</span>
+                                <span className="hidden sm:inline">Link GGAI</span>
+                              </>
+                            ) : (
+                              <span>Link GGAI</span>
+                            )}
+                            <ArrowUpRight
+                              className={`w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0 ${
+                                hasBothLinks ? 'hidden sm:inline-block' : ''
+                              }`}
+                              aria-hidden="true"
+                            />
                           </a>
                         )}
                       </div>

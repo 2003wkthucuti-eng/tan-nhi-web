@@ -5,7 +5,7 @@
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { ArrowUpRight, DoorOpen, Music, Pause, Play, Search, SkipForward, X } from 'lucide-react';
+import { ArrowUpRight, ChevronDown, DoorOpen, Music, Pause, Play, Search, SkipForward, SlidersHorizontal, X } from 'lucide-react';
 import { BlackCatMascot } from './components/BlackCatMascot';
 import { GoldenStardust } from './components/GoldenStardust';
 
@@ -282,6 +282,7 @@ export default function App() {
   const [hasEntered, setHasEntered] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedGenre, setSelectedGenre] = useState<'Tất cả' | GenreTag>('Tất cả');
+  const [showAllTags, setShowAllTags] = useState(false);
   const [catGreetingOpen, setCatGreetingOpen] = useState(false);
   const [failedAvatars, setFailedAvatars] = useState<Record<string, boolean>>({});
 
@@ -596,17 +597,17 @@ export default function App() {
 
         {/* Nội dung chính */}
         <main id="top" className="relative z-10 flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-10">
-          {/* Phần giới thiệu ngắn đầu trang */}
-          <section className="mb-8 sm:mb-10 pb-8 border-b border-[#D4AF37]/15">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+          {/* Phần giới thiệu ngắn đầu trang (gọn gàng nhường không gian cho danh sách nhân vật) */}
+          <section className="mb-5 sm:mb-7 pb-5 sm:pb-6 border-b border-[#D4AF37]/15">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
               <div className="max-w-2xl">
-                <p className="text-xs font-medium tracking-widest text-[#D4AF37] mb-2">
+                <p className="text-[11px] sm:text-xs font-medium tracking-widest text-[#D4AF37] mb-1.5">
                   Bộ sưu tập nhân vật AI Chatbot
                 </p>
-                <h2 className="font-display text-3xl sm:text-4xl lg:text-[42px] font-semibold text-[#F5EFE0] leading-[1.15] [text-wrap:balance]">
+                <h2 className="font-display text-2xl sm:text-3xl lg:text-[40px] font-semibold text-[#F5EFE0] leading-[1.15] [text-wrap:balance]">
                   Những tâm hồn đang đợi bạn trò chuyện đêm nay
                 </h2>
-                <p className="mt-3 text-sm sm:text-base text-[#B8B0A0] leading-relaxed">
+                <p className="mt-2 text-xs sm:text-sm text-[#B8B0A0] leading-relaxed">
                   Chọn một nhân vật hợp tâm trạng để bước vào câu chuyện riêng tư trên DokiChat hoặc GGAI.
                 </p>
               </div>
@@ -623,63 +624,117 @@ export default function App() {
             </div>
           </section>
 
-          {/* Thanh tìm kiếm & Bộ lọc thể loại */}
+          {/* Thanh tìm kiếm & Bộ lọc thể loại thu gọn */}
           <section
             id="bo-suu-tap"
             aria-label="Tìm kiếm và lọc nhân vật"
-            className="mb-8 sm:mb-10 flex flex-col lg:flex-row lg:items-center justify-between gap-4"
+            className="mb-5 sm:mb-7 flex flex-col gap-3"
           >
-            {/* Thanh tìm kiếm theo tên */}
-            <div className="relative w-full lg:max-w-sm">
-              <Search
-                aria-hidden="true"
-                className="w-4 h-4 text-[#D4AF37]/80 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
-              />
-              <input
-                type="search"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Tìm theo tên nhân vật..."
-                aria-label="Tìm kiếm theo tên nhân vật"
-                className="w-full min-h-[44px] pl-10 pr-10 py-2.5 rounded-xl bg-[#121218] border border-[#D4AF37]/25 text-sm text-[#F5EFE0] placeholder:text-[#8E877A] focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/60 transition-colors"
-              />
-              {searchQuery && (
-                <button
-                  type="button"
-                  onClick={() => setSearchQuery('')}
-                  aria-label="Xóa từ khóa tìm kiếm"
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1.5 rounded-md text-[#B8B0A0] hover:text-[#F3E5AB] cursor-pointer"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              )}
+            {/* Hàng trên: Thanh tìm kiếm + Nút mở rộng/thu gọn bộ lọc Tag */}
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="relative flex-1 sm:max-w-sm">
+                <Search
+                  aria-hidden="true"
+                  className="w-4 h-4 text-[#D4AF37]/80 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
+                />
+                <input
+                  type="search"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Tìm theo tên nhân vật..."
+                  aria-label="Tìm kiếm theo tên nhân vật"
+                  className="w-full min-h-[40px] pl-9 pr-9 py-2 rounded-xl bg-[#121218] border border-[#D4AF37]/25 text-xs sm:text-sm text-[#F5EFE0] placeholder:text-[#8E877A] focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/60 transition-colors"
+                />
+                {searchQuery && (
+                  <button
+                    type="button"
+                    onClick={() => setSearchQuery('')}
+                    aria-label="Xóa từ khóa tìm kiếm"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded-md text-[#B8B0A0] hover:text-[#F3E5AB] cursor-pointer"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                )}
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setShowAllTags((prev) => !prev)}
+                aria-expanded={showAllTags}
+                className={`inline-flex items-center gap-1.5 min-h-[40px] px-3 sm:px-3.5 py-2 rounded-xl border text-xs font-medium whitespace-nowrap shrink-0 transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] ${
+                  showAllTags || selectedGenre !== 'Tất cả'
+                    ? 'bg-[#D4AF37]/15 border-[#D4AF37]/65 text-[#F3E5AB]'
+                    : 'bg-[#121218] border-[#D4AF37]/25 text-[#DCD4C6] hover:border-[#D4AF37]/60 hover:text-[#F3E5AB]'
+                }`}
+              >
+                <SlidersHorizontal className="w-3.5 h-3.5 text-[#D4AF37] shrink-0" aria-hidden="true" />
+                <span>{showAllTags ? 'Thu gọn' : 'Xem thêm Tag'}</span>
+                <ChevronDown
+                  className={`w-3.5 h-3.5 text-[#D4AF37] transition-transform duration-200 ${
+                    showAllTags ? 'rotate-180' : ''
+                  }`}
+                  aria-hidden="true"
+                />
+              </button>
             </div>
 
-            {/* Các nút lọc nhanh theo Tag thể loại */}
-            <div
-              role="group"
-              aria-label="Lọc theo thể loại"
-              className="flex items-center gap-2 flex-wrap"
-            >
-              {GENRE_FILTERS.map((genre) => {
-                const isActive = selectedGenre === genre;
-                return (
-                  <button
-                    key={genre}
-                    type="button"
-                    onClick={() => setSelectedGenre(genre)}
-                    aria-pressed={isActive}
-                    className={`min-h-[40px] px-4 py-2 rounded-lg text-xs sm:text-sm font-medium whitespace-nowrap shrink-0 transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] ${
-                      isActive
-                        ? 'bg-[#D4AF37] text-[#0B0B0F] font-semibold shadow-[0_0_16px_rgba(212,175,55,0.28)]'
-                        : 'bg-[#121218] border border-[#D4AF37]/25 text-[#DCD4C6] hover:border-[#D4AF37]/65 hover:text-[#F3E5AB]'
-                    }`}
-                  >
-                    {genre}
-                  </button>
-                );
-              })}
-            </div>
+            {/* Danh sách Tag: Mặc định 1 hàng ngang vuốt trượt mượt, bấm nút sẽ xổ gọn toàn bộ */}
+            {!showAllTags ? (
+              <div className="relative">
+                <div
+                  role="group"
+                  aria-label="Lọc nhanh theo thể loại"
+                  className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 pr-4"
+                >
+                  {GENRE_FILTERS.map((genre) => {
+                    const isActive = selectedGenre === genre;
+                    return (
+                      <button
+                        key={genre}
+                        type="button"
+                        onClick={() => setSelectedGenre(genre)}
+                        aria-pressed={isActive}
+                        className={`min-h-[32px] px-2.5 sm:px-3 py-1 rounded-lg text-[11px] sm:text-xs font-medium whitespace-nowrap shrink-0 transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] ${
+                          isActive
+                            ? 'bg-[#D4AF37] text-[#0B0B0F] font-semibold shadow-[0_0_12px_rgba(212,175,55,0.28)]'
+                            : 'bg-[#121218] border border-[#D4AF37]/25 text-[#DCD4C6] hover:border-[#D4AF37]/65 hover:text-[#F3E5AB]'
+                        }`}
+                      >
+                        {genre}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            ) : (
+              <div
+                role="group"
+                aria-label="Tất cả thể loại"
+                className="p-3 rounded-xl bg-[#121218]/90 border border-[#D4AF37]/25 flex flex-wrap items-center gap-1.5"
+              >
+                {GENRE_FILTERS.map((genre) => {
+                  const isActive = selectedGenre === genre;
+                  return (
+                    <button
+                      key={genre}
+                      type="button"
+                      onClick={() => {
+                        setSelectedGenre(genre);
+                        setShowAllTags(false);
+                      }}
+                      aria-pressed={isActive}
+                      className={`min-h-[32px] px-2.5 sm:px-3 py-1 rounded-lg text-[11px] sm:text-xs font-medium whitespace-nowrap shrink-0 transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] ${
+                        isActive
+                          ? 'bg-[#D4AF37] text-[#0B0B0F] font-semibold shadow-[0_0_12px_rgba(212,175,55,0.28)]'
+                          : 'bg-[#0B0B0F] border border-[#D4AF37]/25 text-[#DCD4C6] hover:border-[#D4AF37]/65 hover:text-[#F3E5AB]'
+                      }`}
+                    >
+                      {genre}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
           </section>
 
           {/* Lưới hiển thị các thẻ nhân vật (2 cột trên điện thoại, 3-4 cột trên màn lớn) */}

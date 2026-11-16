@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { ArrowUpRight, DoorOpen, Search, X } from 'lucide-react';
+import { ArrowUpRight, DoorOpen, Music, Pause, Play, Search, SkipForward, X } from 'lucide-react';
 import { BlackCatMascot } from './components/BlackCatMascot';
 
 export type GenreTag = string;
@@ -34,6 +34,30 @@ const CHARACTERS: CharacterItem[] = [
     tags: ['Boygirl', 'Lạnh Lùng', 'Thống Trị', 'Mafia'],
     dokiLink: 'https://www.dokichat.club/vi/role/6f866b44-70ea-4103-b2a0-df4d2a59ebec?isShare=true',
     ggaiLink: '',
+  },
+];
+
+export interface PlaylistTrack {
+  id: string;
+  title: string;
+  url: string;
+}
+
+/**
+ * DANH SÁCH NHẠC NỀN (PLAYLIST)
+ * - Phát tự động liên tục và lặp vòng khi hết danh sách.
+ * - Có thể thêm bài hát thứ 3 bằng cách bổ sung 1 object { id, title, url } vào mảng bên dưới.
+ */
+const PLAYLIST: PlaylistTrack[] = [
+  {
+    id: 'tham-co-tri',
+    title: 'Thăm Cố Tri',
+    url: 'https://files.catbox.moe/wkmnw5.mp3',
+  },
+  {
+    id: 'du-tinh',
+    title: 'Dự Tính',
+    url: 'https://files.catbox.moe/uebzvi.mp3',
   },
 ];
 
@@ -66,6 +90,122 @@ export default function App() {
   const [selectedGenre, setSelectedGenre] = useState<'Tất cả' | GenreTag>('Tất cả');
   const [catGreetingOpen, setCatGreetingOpen] = useState(false);
 
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const shouldPlayRef = useRef(false);
+  const errorStreakRef = useRef(0);
+  const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const currentTrack = PLAYLIST[currentTrackIndex];
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio || !currentTrack) return;
+    audio.volume = 0.65;
+    if (shouldPlayRef.current) {
+      audio.load();
+      const playPromise = audio.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            errorStreakRef.current = 0;
+            setIsPlaying(true);
+          })
+          .catch(() => {
+            setIsPlaying(false);
+            shouldPlayRef.current = false;
+          });
+      }
+    }
+  }, [currentTrackIndex, currentTrack]);
+
+  const handleEnterHouse = () => {
+    setHasEntered(true);
+    const audio = audioRef.current;
+    if (audio && PLAYLIST.length > 0) {
+      shouldPlayRef.current = true;
+      if (audio.paused) {
+        audio.volume = 0.65;
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+          playPromise
+            .then(() => {
+              errorStreakRef.current = 0;
+              setIsPlaying(true);
+            })
+            .catch(() => {
+              setIsPlaying(false);
+              shouldPlayRef.current = false;
+            });
+        }
+      }
+    }
+  };
+
+  const handleTogglePlay = () => {
+    const audio = audioRef.current;
+    if (!audio || PLAYLIST.length === 0) return;
+
+    if (audio.paused) {
+      shouldPlayRef.current = true;
+      audio.play().catch(() => {
+        setIsPlaying(false);
+        shouldPlayRef.current = false;
+      });
+    } else {
+      shouldPlayRef.current = false;
+      audio.pause();
+    }
+  };
+
+  const handleNextTrack = () => {
+    if (PLAYLIST.length === 0) return;
+    shouldPlayRef.current = true;
+    errorStreakRef.current = 0;
+
+    if (PLAYLIST.length === 1 && audioRef.current) {
+      audioRef.current.currentTime = 0;
+      audioRef.current.play().catch(() => {
+        setIsPlaying(false);
+        shouldPlayRef.current = false;
+      });
+      return;
+    }
+
+    setCurrentTrackIndex((prev) => (prev + 1) % PLAYLIST.length);
+  };
+
+  const handleTrackEnded = () => {
+    if (PLAYLIST.length === 0) return;
+    shouldPlayRef.current = true;
+
+    if (PLAYLIST.length === 1 && audioRef.current) {
+      audioRef.current.currentTime = 0;
+      audioRef.current.play().catch(() => {
+        setIsPlaying(false);
+        shouldPlayRef.current = false;
+      });
+      return;
+    }
+
+    setCurrentTrackIndex((prev) => (prev + 1) % PLAYLIST.length);
+  };
+
+  const handleTrackError = () => {
+    if (PLAYLIST.length <= 1) {
+      setIsPlaying(false);
+      shouldPlayRef.current = false;
+      return;
+    }
+    errorStreakRef.current += 1;
+    if (errorStreakRef.current < PLAYLIST.length && shouldPlayRef.current) {
+      setCurrentTrackIndex((prev) => (prev + 1) % PLAYLIST.length);
+    } else {
+      setIsPlaying(false);
+      shouldPlayRef.current = false;
+    }
+  };
+
   const filteredCharacters = useMemo(() => {
     const normalizedQuery = normalizeText(searchQuery);
     return CHARACTERS.filter((char) => {
@@ -88,6 +228,18 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#0B0B0F] text-[#F5EFE0] relative selection:bg-[#D4AF37]/30 selection:text-[#F3E5AB]">
+      {/* Audio phát nhạc nền liên tục */}
+      {currentTrack && (
+        <audio
+          ref={audioRef}
+          src={currentTrack.url}
+          preload="metadata"
+          onEnded={handleTrackEnded}
+          onPlay={() => setIsPlaying(true)}
+          onPause={() => setIsPlaying(false)}
+          onError={handleTrackError}
+        />
+      )}
       {/* Màn hình Intro (Trang chào đầu tiên) */}
       <AnimatePresence>
         {!hasEntered && (
@@ -165,7 +317,7 @@ export default function App() {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 0.38, ease: [0.16, 1, 0.3, 1] }}
-                onClick={() => setHasEntered(true)}
+                onClick={handleEnterHouse}
                 className="group inline-flex items-center justify-center gap-2.5 min-h-[48px] px-8 py-3 rounded-full bg-[#121218] border border-[#D4AF37] text-[#F3E5AB] text-base font-medium tracking-wide shadow-[0_0_24px_rgba(212,175,55,0.18)] hover:bg-[#D4AF37] hover:text-[#0B0B0F] hover:shadow-[0_0_32px_rgba(212,175,55,0.4)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3E5AB] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0B0B0F] transition-all duration-200 cursor-pointer whitespace-nowrap"
               >
                 <DoorOpen className="w-4 h-4 transition-transform duration-200 group-hover:-translate-x-0.5" />
@@ -185,7 +337,7 @@ export default function App() {
       >
         {/* Top Bar 3 vùng rõ ràng */}
         <header className="sticky top-0 z-30 bg-[#0B0B0F]/92 backdrop-blur-md border-b border-[#D4AF37]/20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4 sm:gap-8">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-4 sm:gap-8">
             {/* Zone 1: Brand Title + Linh vật mèo đen */}
             <a
               href="#top"
@@ -469,9 +621,9 @@ export default function App() {
         </footer>
       </div>
 
-      {/* Linh vật mèo đen đồng hành ở góc dưới màn hình */}
-      {hasEntered && (
-        <div className="fixed bottom-4 right-4 z-30 hidden sm:flex flex-col items-end gap-2">
+      {/* Trình phát nhạc mini & Linh vật mèo đen ở góc dưới màn hình */}
+      {hasEntered && currentTrack && (
+        <div className="fixed bottom-3 right-3 sm:bottom-5 sm:right-5 z-30 flex flex-col items-end gap-2 max-w-[calc(100vw-1.5rem)]">
           <AnimatePresence>
             {catGreetingOpen && (
               <motion.div
@@ -479,21 +631,71 @@ export default function App() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 6 }}
                 transition={{ duration: 0.18 }}
-                className="max-w-[220px] rounded-xl bg-[#121218] border border-[#D4AF37]/45 px-3.5 py-2.5 text-xs text-[#F3E5AB] shadow-lg"
+                className="max-w-[230px] rounded-xl bg-[#121218] border border-[#D4AF37]/45 px-3.5 py-2.5 text-xs text-[#F3E5AB] shadow-lg"
               >
                 Meow~ Chào mừng bạn ghé thăm Ngôi Nhà Nhỏ Của Tần Nhi.
               </motion.div>
             )}
           </AnimatePresence>
-          <button
-            type="button"
-            onClick={() => setCatGreetingOpen((prev) => !prev)}
-            aria-label="Chú mèo đen đồng hành"
-            title="Chú mèo đen đồng hành"
-            className="w-14 h-14 rounded-full bg-[#121218]/95 border border-[#D4AF37]/40 hover:border-[#F3E5AB] shadow-[0_6px_24px_rgba(0,0,0,0.6)] flex items-center justify-center transition-all duration-200 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] cursor-pointer"
+
+          <aside
+            aria-label="Trình phát nhạc nền"
+            className="flex items-center gap-2.5 sm:gap-3 rounded-2xl bg-[#121218]/95 backdrop-blur-md border border-[#D4AF37]/45 px-2.5 py-2 sm:px-3.5 sm:py-2.5 shadow-[0_10px_30px_rgba(0,0,0,0.7),0_0_20px_rgba(212,175,55,0.12)]"
           >
-            <BlackCatMascot size={44} variant="companion" />
-          </button>
+            {/* Mèo đen đồng hành */}
+            <button
+              type="button"
+              onClick={() => setCatGreetingOpen((prev) => !prev)}
+              aria-label="Chú mèo đen đồng hành"
+              title="Chú mèo đen đồng hành"
+              className="relative w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-[#0B0B0F] border border-[#D4AF37]/35 hover:border-[#F3E5AB] flex items-center justify-center shrink-0 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]"
+            >
+              <BlackCatMascot size={34} variant="companion" />
+            </button>
+
+            {/* Thông tin bài hát hiện tại */}
+            <div className="min-w-0 pr-1">
+              <div className="flex items-center gap-1.5 text-[11px] font-medium text-[#D4AF37] tabular-nums">
+                <Music className="w-3 h-3 shrink-0" aria-hidden="true" />
+                <span className="whitespace-nowrap">
+                  Bài {currentTrackIndex + 1}/{PLAYLIST.length}
+                </span>
+              </div>
+              <p
+                title={currentTrack.title}
+                className="text-xs sm:text-[13px] font-semibold text-[#F3E5AB] truncate max-w-[120px] sm:max-w-[160px]"
+              >
+                {currentTrack.title}
+              </p>
+            </div>
+
+            {/* Nút điều khiển Phát / Tạm dừng & Chuyển bài */}
+            <div className="flex items-center gap-1.5 shrink-0">
+              <button
+                type="button"
+                onClick={handleTogglePlay}
+                aria-label={isPlaying ? 'Tạm dừng nhạc' : 'Phát nhạc'}
+                title={isPlaying ? 'Tạm dừng' : 'Phát nhạc'}
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-[#D4AF37] to-[#E6C86E] text-[#0B0B0F] flex items-center justify-center hover:brightness-110 active:scale-95 transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3E5AB]"
+              >
+                {isPlaying ? (
+                  <Pause className="w-4 h-4 fill-current" aria-hidden="true" />
+                ) : (
+                  <Play className="w-4 h-4 fill-current translate-x-[1px]" aria-hidden="true" />
+                )}
+              </button>
+
+              <button
+                type="button"
+                onClick={handleNextTrack}
+                aria-label="Chuyển sang bài tiếp theo"
+                title="Bài tiếp theo"
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#0B0B0F] border border-[#D4AF37]/45 text-[#F3E5AB] flex items-center justify-center hover:bg-[#D4AF37]/15 hover:border-[#F3E5AB] active:scale-95 transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]"
+              >
+                <SkipForward className="w-4 h-4" aria-hidden="true" />
+              </button>
+            </div>
+          </aside>
         </div>
       )}
     </div>

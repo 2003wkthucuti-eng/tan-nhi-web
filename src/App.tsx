@@ -210,6 +210,35 @@ const CHARACTERS: CharacterItem[] = [
     ggaiLink:
       'https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%221JoALLn3EJRpnS6yxeR22Uh43XgzX2waO%22%5D,%22action%22:%22open%22,%22userId%22:%22111559786295807256713%22,%22resourceKeys%22:%7B%7D%7D&usp=sharing',
   },
+  {
+    id: 'luc-tu-han',
+    name: 'Lục Tư Hàn — 陆司寒',
+    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/EOrjtmEx.png',
+    description: '“Đừng để tao phải cướp mày khỏi tay anh ta.”',
+    tags: ['BG', 'BL', 'Ham muốn cao', 'Tình tay ba', 'CEO', 'Bạn Thân'],
+    dokiLink: 'https://www.dokichat.club/vi/role/098493ed-3613-47d7-93e6-8352ef869c52?isShare=true',
+    ggaiLink:
+      'https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%221YuKaV9F-F7gKKCpOD3XelZFhLLNHCMwD%22%5D,%22action%22:%22open%22,%22userId%22:%22111559786295807256713%22,%22resourceKeys%22:%7B%7D%7D&usp=sharing',
+  },
+  {
+    id: 'luc-canh-vien',
+    name: 'Lục Cảnh Viên — 陆景渊',
+    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/Q2yPh12H.jpg',
+    description: '“Nếu em sợ anh rồi… vậy anh nên buông tay, hay giữ em lại?”',
+    tags: [
+      'BG',
+      'TXVT',
+      'Hiểu lầm',
+      'Ngược nhẹ',
+      'Yêu thầm',
+      'Cá biệt',
+      'Sáng học bá',
+      'Tối du côn',
+    ],
+    dokiLink: 'https://www.dokichat.club/vi/role/7220c670-bdec-4e5c-9fbb-e3c364dd9307?isShare=true',
+    ggaiLink:
+      'https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%221Svn6DDhK3iSnXYbEmfAesMii16dUckDX%22%5D,%22action%22:%22open%22,%22userId%22:%22111559786295807256713%22,%22resourceKeys%22:%7B%7D%7D&usp=sharing',
+  },
 ];
 
 export interface PlaylistTrack {

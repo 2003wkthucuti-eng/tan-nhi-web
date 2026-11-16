@@ -200,6 +200,16 @@ const CHARACTERS: CharacterItem[] = [
     dokiLink: 'https://www.dokichat.club/vi/role/019feda1-2d09-7e02-b542-2c060383f400?isShare=true',
     ggaiLink: '',
   },
+  {
+    id: 'tram-uyen',
+    name: 'Trầm Uyên',
+    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/sVMN9OOv.png',
+    description: '“Em đừng có suy nghĩ linh tinh, em chẳng hiểu cái mẹ gì đâu.”',
+    tags: ['BG', 'BL', 'Ngược', 'User Ngốc', 'Ngoại tình'],
+    dokiLink: 'https://www.dokichat.club/vi/role/c30f1ea7-bc60-4d1d-96d3-983564a7d652?isShare=true',
+    ggaiLink:
+      'https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%221JoALLn3EJRpnS6yxeR22Uh43XgzX2waO%22%5D,%22action%22:%22open%22,%22userId%22:%22111559786295807256713%22,%22resourceKeys%22:%7B%7D%7D&usp=sharing',
+  },
 ];
 
 export interface PlaylistTrack {

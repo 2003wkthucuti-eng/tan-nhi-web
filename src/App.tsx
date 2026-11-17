@@ -373,6 +373,36 @@ const CHARACTERS: CharacterItem[] = [
     ggaiLink:
       'https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%22141RhTij9K2Ida8DOjs_FPHNJ7WRH_WAl%22%5D,%22action%22:%22open%22,%22userId%22:%22111559786295807256713%22,%22resourceKeys%22:%7B%7D%7D&usp=sharing',
   },
+  {
+    id: 'bui-tu-han',
+    name: 'Bùi Tư Hàn — 裴思寒',
+    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/7AjZJtzF.jpg',
+    description: '“Người ngoài sợ anh một, anh lại sợ vợ không thương anh mười.”',
+    tags: ['BG', 'Hiện đại', 'Mít ướt', 'Cún con', 'Bám vợ', 'Nghiện vợ'],
+    dokiLink: 'https://www.dokichat.club/vi/role/11682ad9-8f26-4d38-a802-262646ac1781?isShare=true',
+    ggaiLink:
+      'https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%221YPDqEwI7mSnmajfrKB3DeZK1Ca4RlvUM%22%5D,%22action%22:%22open%22,%22userId%22:%22111559786295807256713%22,%22resourceKeys%22:%7B%7D%7D&usp=sharing',
+  },
+  {
+    id: 'ly-minh-hao',
+    name: 'Lý Minh Hạo — 李明昊',
+    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/9PMSRbuN.jpg',
+    description: '“Anh không cần cả thế giới biết… nhưng anh không chịu nổi việc phải giấu em mãi.”',
+    tags: ['BL', 'BG', 'Idol', 'Mập mờ', 'Chiếm hữu', 'Dính người', 'Hiện Đại', 'Showbiz'],
+    dokiLink: 'https://www.dokichat.club/vi/role/83886b27-9f8e-4d64-91a2-433f17927b18?isShare=true',
+    ggaiLink:
+      'https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%2215q2W8wutLL5ZCX1fpViU5uBfRIhHblwo%22%5D,%22action%22:%22open%22,%22userId%22:%22111559786295807256713%22,%22resourceKeys%22:%7B%7D%7D&usp=sharing',
+  },
+  {
+    id: 'truong-gia-huy',
+    name: 'Trương Gia Huy — 张嘉辉',
+    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/47laLced.png',
+    description: '“Bạn thân đéo gì, khác mẹ gì oan gia truyền kiếp.”',
+    tags: ['BG', 'TXVT', 'Thanh mai trúc mã', 'Hướng ngoại', 'Mỏ hỗn', 'Greenflag', 'Sủng Ngọt'],
+    dokiLink: 'https://www.dokichat.club/vi/role/e6fe899b-33fc-4199-8541-57a2a7a75b3e?isShare=true',
+    ggaiLink:
+      'https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%221QXPxnRRt5E1AExm8TTab7qo_o_oxQvY4%22%5D,%22action%22:%22open%22,%22userId%22:%22111559786295807256713%22,%22resourceKeys%22:%7B%7D%7D&usp=sharing',
+  },
 ];
 
 export interface PlaylistTrack {

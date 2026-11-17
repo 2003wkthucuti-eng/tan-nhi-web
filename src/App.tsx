@@ -461,6 +461,44 @@ const CHARACTERS: CharacterItem[] = [
     ggaiLink:
       'https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%221R3KfW-QEEh9Uu0TqEcbhj7B-UVeENF0l%22%5D,%22action%22:%22open%22,%22userId%22:%22111559786295807256713%22,%22resourceKeys%22:%7B%7D%7D',
   },
+  {
+    id: 'lucien-devereux',
+    name: 'Lucien Devereux',
+    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/NpV0tbTC.jpg',
+    description: '“Ta cưới em không phải vì trách nhiệm… mà vì từ lâu, ta đã chờ đúng gương mặt này xuất hiện.”',
+    tags: ['BG', 'Âu Cổ', 'Sủng', 'Chiếm hữu', 'Bí ẩn', 'Ma mị'],
+    dokiLink: 'https://www.dokichat.club/vi/role/4806520d-6f58-4b66-8363-7135c69c6f5e?isShare=true',
+    ggaiLink: '',
+  },
+  {
+    id: 'theodore-dartois',
+    name: "Théodore D'Artois",
+    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/occqOWcG.jpg',
+    description: '“Ngoan nào, tiểu nữ hoàng, đừng chết trước khi ta giết hết bọn chúng.”',
+    tags: ['BG', 'Hoàng gia', 'Điên', 'Chiếm hữu', 'Thằng Hề', 'Công chúa hoàng gia'],
+    dokiLink: 'https://www.dokichat.club/vi/role/8b8f28b1-389d-45ac-a5b1-e09b3952ce93?isShare=true',
+    ggaiLink: '',
+  },
+  {
+    id: 'lucien-alexandre-valmont',
+    name: 'Lucien Alexandre Valmont',
+    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/9AiWVtim.png',
+    description: '“Nếu số phận đã viết sẵn kết cục cho nàng, ta sẽ là kẻ đầu tiên xé bỏ trang cuối cùng.”',
+    tags: ['Âu Cổ', 'BG', 'Xuyên Không', 'Đại Công Tước', 'Quý Tộc', 'Fantasy', 'Hôn Ước Chính Trị', 'Chậm Nhiệt', 'Định Mệnh'],
+    dokiLink: 'https://www.dokichat.club/vi/role/01a1cbf6-b229-74bb-989a-cad7c034a01b?isShare=true',
+    ggaiLink:
+      'https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%221s8KgfRNFWlBwV3KTEbcRHIqMjhgut7jm%22%5D,%22action%22:%22open%22,%22userId%22:%22111559786295807256713%22,%22resourceKeys%22:%7B%7D%7D',
+  },
+  {
+    id: 'thua-da-giang-dat-nhat-duy-minh-triet',
+    name: 'Thừa Dạ-Giang Dật-Nhất Duy-Minh Triết',
+    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/okUerCvG.jpg',
+    description: '“Tụi tao không là gì của mày… nhưng cũng chưa từng để mày thuộc về người khác.”',
+    tags: ['BG', '4in1', 'Không danh phận', 'TXVT'],
+    dokiLink: 'https://www.dokichat.club/vi/role/6b5d33b1-76b7-41bc-956e-9c96ae4d3d0d?isShare=true',
+    ggaiLink:
+      'https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%2217By0lVUGxcLQupljSBFyUmFhrEtvRFxq%22%5D,%22action%22:%22open%22,%22userId%22:%22111559786295807256713%22,%22resourceKeys%22:%7B%7D%7D&usp=sharing',
+  },
 ];
 
 export interface PlaylistTrack {

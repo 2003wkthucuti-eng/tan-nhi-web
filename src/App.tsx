@@ -524,6 +524,31 @@ const PLAYLIST: PlaylistTrack[] = [
     title: 'Dự Tính',
     url: 'https://files.catbox.moe/uebzvi.mp3',
   },
+  {
+    id: 'quen-roi-kasber-remix',
+    title: 'Quên Rồi (忘了) - Kasber Remix',
+    url: '/assets/aistudio/Qu_n_R_i______-_Kasber_Remix___Nh_c_Trung_Qu_c_Suy_Remix_Hot_TikTok_2026_128k_2c49402a.mp3',
+  },
+  {
+    id: 'son-thuy-trung-may-remix',
+    title: 'Sơn Thủy Trùng Mây x Thủy Chung x Yến Vô Hiết (Remix)',
+    url: '/assets/aistudio/S_N_THU__TR_NG_M_Y_x_THU__CHUNG_x_Y_N_V__HI_T__VIETZ_x_WI._REMIX__-_JENA__ANH_R_NG_TH__NG_V__M_Y_BAE_128k_7e921082.mp3',
+  },
+  {
+    id: 'nua-trai-tim-dj-hot-tiktok-remix',
+    title: 'Nửa Trái Tim (半点心) - DJ Hot TikTok Remix',
+    url: '/assets/aistudio/____-_N_a_Tr_i_Tim_____DJ______-_____BGM_-__DJ______2026__________________Hot_TikTok_Douyin_2026__320k_dc75b44f.mp3',
+  },
+  {
+    id: 'bien-dao-va-em-dj-v2-crabbit-remix',
+    title: 'Biển, Đảo Và Em (海屿你) - DJ V2 Crabbit Remix',
+    url: '/assets/aistudio/___DJ_V2__Crabbit____Bi_n____o_V__Em_Remix_-_DJ___Remix___Hot_TikTok_-_Douyin_128k_dc9bb242.mp3',
+  },
+  {
+    id: 'tinh-ve-dj-2026-remix',
+    title: 'Tinh Vệ (精卫) - DJ 2026 Remix',
+    url: '/assets/aistudio/__DJ_2026__________Tinh_V__Remix_2026_-_DJ___Remix___Hot_TikTok_-_Douyin__128k_a290b9cc.mp3',
+  },
 ];
 
 const BASE_GENRES: GenreTag[] = [

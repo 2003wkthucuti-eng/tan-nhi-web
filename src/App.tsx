@@ -344,6 +344,35 @@ const CHARACTERS: CharacterItem[] = [
     dokiLink: 'https://www.dokichat.club/vi/role/99b4c80b-234d-4c00-b40b-05999e4fff6c?isShare=true',
     ggaiLink: '',
   },
+  {
+    id: 'tran-cong-vien',
+    name: 'Trần Công Viễn',
+    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/0O3IHrPI.png',
+    description: '“Có tiền giữ được thiên hạ mà không giữ nổi một người”',
+    tags: ['BG', 'Nam bộ xưa', 'Chờ đợi', 'Chung tình'],
+    dokiLink: 'https://www.dokichat.club/vi/role/2dba0be1-855b-4033-b981-0b844a569d03?isShare=true',
+    ggaiLink: '',
+  },
+  {
+    id: 'tran-dat-phong',
+    name: 'Trần Dật Phong — 陈逸风',
+    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/5NygFR8l.jpg',
+    description: '“Ngoài mặt tao dữ vậy thôi…chứ em khóc một cái là tao thua rồi.”',
+    tags: ['BG', 'TXVT', 'Thiên kim giả', 'Thanh mai trúc mã', 'Bảo vệ', 'Đội vợ lên đầu', 'Hiện đại', 'Drama'],
+    dokiLink: 'https://www.dokichat.club/vi/role/a57705d1-d9bf-4486-9981-4867fbf9f781?isShare=true',
+    ggaiLink:
+      'https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%221pLj5JAUrepuPh-NyxDD7U8ngQeExzQxM%22%5D,%22action%22:%22open%22,%22userId%22:%22111559786295807256713%22,%22resourceKeys%22:%7B%7D%7D&usp=sharing',
+  },
+  {
+    id: 'giang-ngon-trach',
+    name: 'Giang Ngôn Trạch - 江言泽',
+    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/DQpgGXF6.jpg',
+    description: '“Con đĩ nhỏ, đợi tao chơi nát mày đi”',
+    tags: ['BG', 'TXVT', 'Toxic', 'R19', 'Kẻ thù thành người yêu'],
+    dokiLink: 'https://www.dokichat.club/vi/role/796af688-62e7-4b06-a036-0d92631453dc?isShare=true',
+    ggaiLink:
+      'https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%22141RhTij9K2Ida8DOjs_FPHNJ7WRH_WAl%22%5D,%22action%22:%22open%22,%22userId%22:%22111559786295807256713%22,%22resourceKeys%22:%7B%7D%7D&usp=sharing',
+  },
 ];
 
 export interface PlaylistTrack {

@@ -403,6 +403,35 @@ const CHARACTERS: CharacterItem[] = [
     ggaiLink:
       'https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%221QXPxnRRt5E1AExm8TTab7qo_o_oxQvY4%22%5D,%22action%22:%22open%22,%22userId%22:%22111559786295807256713%22,%22resourceKeys%22:%7B%7D%7D&usp=sharing',
   },
+  {
+    id: 'pho-can-du',
+    name: 'Phó Cẩn Du — 傅谨瑜',
+    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/182nmZFDd.jpg',
+    description: '“Địa vị của anh trong nhà không cao, chỉ cao hơn con robot hút bụi một chút.”',
+    tags: ['BG', 'Hiện Đại', 'User CEO', 'Char thái tử gia', 'Nghiện vợ', 'Mê vợ', 'Dị ứng gái ngoài', 'Mít ướt với vợ'],
+    dokiLink: 'https://www.dokichat.club/vi/role/3fdafbcf-e1ce-47f6-b31e-4234101ef15d?isShare=true',
+    ggaiLink: '',
+  },
+  {
+    id: 'pho-dinh-chau',
+    name: 'Phó Đình Châu — 傅庭洲',
+    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/UBW8YWg5.jpg',
+    description: '“Chị có thể không yêu em, nhưng đừng mong em dễ dàng bỏ cuộc.”',
+    tags: ['BG', 'Hồng Hài Nhi', 'Nhỏ tuổi', 'Theo Đuổi lại', 'Hối hận', 'Ghen ngầm', 'Chiếm hữu', 'Mỏ hỗn', 'Thích cà khịa', 'Tự vả'],
+    dokiLink: 'https://www.dokichat.club/vi/role/01a124ec-2ae4-7ee4-9444-42e8250295f1?isShare=true',
+    ggaiLink:
+      'https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%221HwQDzBzOOAkw1v3jKUdQQglx4XKvhd59%22%5D,%22action%22:%22open%22,%22userId%22:%22111559786295807256713%22,%22resourceKeys%22:%7B%7D%7D&usp=sharing',
+  },
+  {
+    id: 'tong-da-nhien',
+    name: 'Tống Dạ Nhiên — 宋夜然',
+    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/16wh9semK.jpg',
+    description: '“Em dỗ tao coi...”',
+    tags: ['BG', 'TXVT', 'Bám vợ', 'Hay dỗi', 'Dễ ghen', 'Ngọt', 'Mỏ hỗn', 'Cún lớn'],
+    dokiLink: 'https://www.dokichat.club/vi/role/d9ff349f-decf-4a15-84d5-c92a78ffc6ea?isShare=true',
+    ggaiLink:
+      'https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%221Z4D8P53938IerO2w1ecBKk1BsrykWsgt%22%5D,%22action%22:%22open%22,%22userId%22:%22111559786295807256713%22,%22resourceKeys%22:%7B%7D%7D&usp=sharing',
+  },
 ];
 
 export interface PlaylistTrack {

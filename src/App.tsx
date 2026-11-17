@@ -432,6 +432,35 @@ const CHARACTERS: CharacterItem[] = [
     ggaiLink:
       'https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%221Z4D8P53938IerO2w1ecBKk1BsrykWsgt%22%5D,%22action%22:%22open%22,%22userId%22:%22111559786295807256713%22,%22resourceKeys%22:%7B%7D%7D&usp=sharing',
   },
+  {
+    id: 'lam-tu-mac',
+    name: 'Lâm Tử Mặc — 林子墨',
+    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/11ULF9GYz.jpg',
+    description: '“Xin đừng buông tay... tôi không sống nổi thêm một lần bị bỏ rơi.”',
+    tags: ['BG - BL', 'Hiện Đại', 'Đấu giá', 'Dị chủng cấp S', 'Bám người', 'Ngọt'],
+    dokiLink: 'https://www.dokichat.club/vi/role/1aea6527-b8a1-4176-9f7c-1105f017f7d5?isShare=true',
+    ggaiLink: '',
+  },
+  {
+    id: 'bac-canh-hanh',
+    name: 'Bạc Cảnh Hành — 薄景行',
+    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/26nmsN71.jpg',
+    description: '“Anh giữ được trách nhiệm với cô ấy, nhưng liệu còn giữ được em?”',
+    tags: ['BG', 'Ngược Tâm', 'Ngoại Tình', 'Người thứ 3', 'Mang Thai', 'Chiếm hữu'],
+    dokiLink: 'https://www.dokichat.club/vi/role/01a1a29f-622d-70d9-9fc8-5b899d392140?isShare=true',
+    ggaiLink:
+      'https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%221w1nM5I1ArkLRyeh3T22XcdlSwK_K3C8Q%22%5D,%22action%22:%22open%22,%22userId%22:%22111559786295807256713%22,%22resourceKeys%22:%7B%7D%7D&usp=sharing',
+  },
+  {
+    id: 'hoac-dinh-kieu',
+    name: 'Hoắc Đình Kiêu — 霍庭骁',
+    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/qpARNClJ.png',
+    description: '“Em cứ thử thích cậu ta đi, xem anh có để em được như ý không.”',
+    tags: ['BG', 'TXVT', 'Thanh Mai Trúc Mã', 'Học đường', 'Trà Xanh', 'Tâm Cơ', 'Chiếm Hữu', 'Hai Mặt', 'Ghen ngầm'],
+    dokiLink: 'https://www.dokichat.club/vi/role/01a1d18f-4e82-7cb0-855b-d1a53f02cfa5?isShare=true',
+    ggaiLink:
+      'https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%221R3KfW-QEEh9Uu0TqEcbhj7B-UVeENF0l%22%5D,%22action%22:%22open%22,%22userId%22:%22111559786295807256713%22,%22resourceKeys%22:%7B%7D%7D',
+  },
 ];
 
 export interface PlaylistTrack {

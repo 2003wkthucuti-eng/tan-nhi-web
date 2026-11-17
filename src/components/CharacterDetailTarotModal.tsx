@@ -359,7 +359,7 @@ export const CharacterDetailTarotModal: React.FC<CharacterDetailTarotModalProps>
                   </div>
 
                   {activeTab === 'profile' ? (
-                    <div className="space-y-4">
+                    <div className="space-y-3.5">
                       {/* Mục 1: Câu chuyện nền (Backstory) */}
                       <section className="rounded-2xl bg-[#0B0B0F]/75 border border-[#D4AF37]/25 p-3.5 sm:p-4">
                         <div className="flex items-center gap-2 mb-2">
@@ -368,9 +368,9 @@ export const CharacterDetailTarotModal: React.FC<CharacterDetailTarotModalProps>
                             Câu chuyện nền (Backstory)
                           </h4>
                         </div>
-                        <p className="text-xs sm:text-[13.5px] text-[#DED7C8] leading-relaxed whitespace-pre-line">
+                        <div className="max-h-[210px] sm:max-h-[230px] overflow-y-auto pr-2 text-xs sm:text-[13.5px] text-[#DED7C8] leading-relaxed whitespace-pre-line">
                           {storyProfile.backstory}
-                        </p>
+                        </div>
                       </section>
 
                       {/* Mục 2: Lời thoại mở đầu (First Message) + Copy nhanh */}
@@ -409,7 +409,7 @@ export const CharacterDetailTarotModal: React.FC<CharacterDetailTarotModalProps>
                           </button>
                         </div>
 
-                        <div className="rounded-xl bg-[#12121A]/90 border border-[#D4AF37]/18 p-3 text-xs sm:text-[13.5px] text-[#EDE6D6] leading-relaxed whitespace-pre-line italic">
+                        <div className="rounded-xl bg-[#12121A]/90 border border-[#D4AF37]/18 p-3 max-h-[220px] sm:max-h-[245px] overflow-y-auto pr-2 text-xs sm:text-[13.5px] text-[#EDE6D6] leading-relaxed whitespace-pre-line italic">
                           {storyProfile.firstMessage}
                         </div>
                       </section>

@@ -10,6 +10,7 @@ import { playDestinyChime, playSoftTap, playTarotSpreadChime } from '../utils/so
 interface DestinyTarotModalProps {
   isOpen: boolean;
   characters: CharacterItem[];
+  onInspectCharacter: (character: CharacterItem) => void;
   onClose: () => void;
 }
 
@@ -38,6 +39,7 @@ function formatQuotedDescription(text: string): string {
 export const DestinyTarotModal: React.FC<DestinyTarotModalProps> = ({
   isOpen,
   characters,
+  onInspectCharacter,
   onClose,
 }) => {
   const [phase, setPhase] = useState<DrawPhase>('choosing');
@@ -121,9 +123,18 @@ export const DestinyTarotModal: React.FC<DestinyTarotModalProps> = ({
     onClose();
   };
 
+  const handleInspectProfile = () => {
+    if (!drawnCharacter) return;
+    playSoftTap('card');
+    clearTimers();
+    onInspectCharacter(drawnCharacter);
+  };
+
   const hasDoki = Boolean(drawnCharacter?.dokiLink && drawnCharacter.dokiLink.trim() !== '');
   const hasGgai = Boolean(drawnCharacter?.ggaiLink && drawnCharacter.ggaiLink.trim() !== '');
   const hasBothLinks = hasDoki && hasGgai;
+  const primaryChatLink =
+    drawnCharacter?.dokiLink?.trim() || drawnCharacter?.ggaiLink?.trim() || '';
 
   const nameParts = drawnCharacter ? drawnCharacter.name.split(/\s+[—-]\s+/) : [];
   const primaryName = nameParts[0] || '';
@@ -352,131 +363,175 @@ export const DestinyTarotModal: React.FC<DestinyTarotModalProps> = ({
               {phase === 'revealed' && drawnCharacter && (
                 <motion.div
                   key={`revealed-${drawnCharacter.id}`}
-                  initial={{ opacity: 0, scale: 0.92, rotateY: -75 }}
+                  initial={{ opacity: 0, scale: 0.92, rotateY: -82 }}
                   animate={{ opacity: 1, scale: 1, rotateY: 0 }}
-                  transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-                  className="w-full max-w-sm mx-auto [perspective:1200px]"
+                  transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                  className="relative w-full max-w-[470px] mx-auto [perspective:1200px]"
                 >
-                  <HolographicTiltCard
-                    maxTilt={7}
-                    className="destiny-card-glow shimmer-card-border bg-[#121218]/96 border border-[#F3E5AB]/85 rounded-2xl p-4 sm:p-5 flex flex-col"
-                  >
-                    {/* Huy hiệu lá bài Tarot trên cùng */}
-                    <div className="relative z-10 flex items-center justify-between gap-2 mb-3">
-                      <span className="inline-flex items-center gap-1 text-[11px] font-medium tracking-wider text-[#F3E5AB]">
-                        <Sparkles className="w-3 h-3 text-[#F3E5AB]" aria-hidden="true" />
-                        Lá bài {selectedIndex !== null ? ROMAN_NUMERALS[selectedIndex] : 'Định Mệnh'}
-                      </span>
-                      <span className="text-[11px] text-[#D4AF37] font-display italic">
-                        Hữu duyên tương ngộ
-                      </span>
-                    </div>
+                  {/* Vầng sáng rực rỡ bừng nở khi lá bài lật ngửa */}
+                  <motion.div
+                    aria-hidden="true"
+                    initial={{ opacity: 0, scale: 0.7 }}
+                    animate={{ opacity: [0, 0.9, 0.5], scale: [0.75, 1.12, 1] }}
+                    transition={{ duration: 1.05, ease: [0.16, 1, 0.3, 1] }}
+                    className="pointer-events-none absolute -inset-4 sm:-inset-6 rounded-[36px] blur-2xl"
+                    style={{
+                      background:
+                        'radial-gradient(circle at 50% 42%, rgba(255, 244, 196, 0.36) 0%, rgba(212, 175, 55, 0.2) 44%, transparent 72%)',
+                    }}
+                  />
 
-                    {/* Ảnh đại diện nhân vật */}
-                    <div className="relative z-10 aspect-square max-h-[220px] sm:max-h-[245px] w-full mx-auto rounded-xl overflow-hidden bg-[#0B0B0F] border border-[#D4AF37]/50 shadow-[0_0_24px_rgba(212,175,55,0.28)]">
-                      {!avatarFailed && drawnCharacter.avatar.trim() !== '' ? (
-                        <img
-                          src={drawnCharacter.avatar}
-                          alt={`Ảnh đại diện nhân vật ${drawnCharacter.name}`}
-                          referrerPolicy="no-referrer"
-                          className="w-full h-full object-cover object-top"
-                          onLoad={(e) => {
-                            if (e.currentTarget.naturalWidth === 0) {
-                              setAvatarFailed(true);
-                            }
-                          }}
-                          onError={() => setAvatarFailed(true)}
-                        />
-                      ) : (
-                        <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-gradient-to-b from-[#16161F] to-[#0B0B0F] p-4 text-center">
-                          <BlackCatMascot size={64} variant="companion" />
-                          <span className="font-display text-lg text-[#F3E5AB]">
-                            {primaryName}
-                          </span>
+                  {/* Lá bài Tarot lật ngửa */}
+                  <div className="relative z-10 max-w-[350px] sm:max-w-[376px] mx-auto">
+                    <HolographicTiltCard
+                      maxTilt={7}
+                      className="destiny-card-glow shimmer-card-border bg-[#121218]/96 border-2 border-[#F3E5AB]/85 rounded-2xl p-4 sm:p-5 flex flex-col"
+                    >
+                      {/* Huy hiệu lá bài Tarot trên cùng */}
+                      <div className="relative z-10 flex items-center justify-between gap-2 mb-3">
+                        <span className="inline-flex items-center gap-1 text-[11px] font-medium tracking-wider text-[#F3E5AB]">
+                          <Sparkles className="w-3 h-3 text-[#F3E5AB]" aria-hidden="true" />
+                          Lá bài {selectedIndex !== null ? ROMAN_NUMERALS[selectedIndex] : 'Định Mệnh'}
+                        </span>
+                        <span className="text-[11px] text-[#D4AF37] font-display italic">
+                          Hữu duyên tương ngộ
+                        </span>
+                      </div>
+
+                      {/* Ảnh đại diện nhân vật tỉ lệ vuông cân đối */}
+                      <div className="relative z-10 w-[184px] sm:w-[216px] aspect-square mx-auto rounded-xl overflow-hidden bg-[#0B0B0F] border border-[#D4AF37]/60 shadow-[0_0_28px_rgba(212,175,55,0.34)]">
+                        {!avatarFailed && drawnCharacter.avatar.trim() !== '' ? (
+                          <img
+                            src={drawnCharacter.avatar}
+                            alt={`Ảnh đại diện nhân vật ${drawnCharacter.name}`}
+                            referrerPolicy="no-referrer"
+                            className="w-full h-full object-cover object-top"
+                            onLoad={(e) => {
+                              if (e.currentTarget.naturalWidth === 0) {
+                                setAvatarFailed(true);
+                              }
+                            }}
+                            onError={() => setAvatarFailed(true)}
+                          />
+                        ) : (
+                          <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-gradient-to-b from-[#16161F] to-[#0B0B0F] p-4 text-center">
+                            <BlackCatMascot size={64} variant="companion" />
+                            <span className="font-display text-lg text-[#F3E5AB]">
+                              {primaryName}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Tên & câu thoại */}
+                      <div className="relative z-10 mt-3.5 text-center">
+                        <h3 className="font-display text-2xl font-semibold text-[#F3E5AB] tracking-tight leading-snug">
+                          {primaryName}
+                        </h3>
+                        {secondaryName && (
+                          <p className="text-xs font-medium text-[#D4AF37]/90 mt-0.5">
+                            {secondaryName}
+                          </p>
+                        )}
+                        <p className="mt-2 text-xs sm:text-[13px] text-[#DCD4C6] italic leading-relaxed line-clamp-3">
+                          {formatQuotedDescription(drawnCharacter.description)}
+                        </p>
+                      </div>
+
+                      {/* Tag thể loại */}
+                      {drawnCharacter.tags.length > 0 && (
+                        <div className="relative z-10 mt-3 flex flex-wrap justify-center gap-1.5">
+                          {drawnCharacter.tags.map((tag) => (
+                            <span
+                              key={tag}
+                              className="inline-flex items-center px-2 py-0.5 rounded-md bg-[#0B0B0F]/90 border border-[#D4AF37]/35 text-[11px] font-medium text-[#E6CD82]"
+                            >
+                              {tag}
+                            </span>
+                          ))}
                         </div>
                       )}
-                    </div>
-
-                    {/* Tên & câu thoại */}
-                    <div className="relative z-10 mt-3.5 text-center">
-                      <h3 className="font-display text-2xl font-semibold text-[#F3E5AB] tracking-tight leading-snug">
-                        {primaryName}
-                      </h3>
-                      {secondaryName && (
-                        <p className="text-xs font-medium text-[#D4AF37]/90 mt-0.5">
-                          {secondaryName}
-                        </p>
-                      )}
-                      <p className="mt-2 text-xs sm:text-[13px] text-[#DCD4C6] italic leading-relaxed">
-                        {formatQuotedDescription(drawnCharacter.description)}
-                      </p>
-                    </div>
-
-                    {/* Tag thể loại */}
-                    {drawnCharacter.tags.length > 0 && (
-                      <div className="relative z-10 mt-3 flex flex-wrap justify-center gap-1.5">
-                        {drawnCharacter.tags.map((tag) => (
-                          <span
-                            key={tag}
-                            className="inline-flex items-center px-2 py-0.5 rounded-md bg-[#0B0B0F]/90 border border-[#D4AF37]/35 text-[11px] font-medium text-[#E6CD82]"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-
-                    {/* Nút dẫn link Chat trực tiếp */}
-                    {(hasDoki || hasGgai) && (
-                      <div
-                        className={`relative z-10 mt-4 pt-3.5 border-t border-[#D4AF37]/20 ${
-                          hasBothLinks ? 'grid grid-cols-2 gap-2.5' : 'flex'
-                        }`}
-                      >
-                        {hasDoki && (
-                          <a
-                            href={drawnCharacter.dokiLink}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={() => playSoftTap('card')}
-                            className={`shimmer-gold-btn inline-flex items-center justify-center gap-1.5 min-h-[40px] px-3 py-2 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#E6C86E] text-[#0B0B0F] text-xs font-semibold whitespace-nowrap hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3E5AB] transition-all ${
-                              !hasBothLinks ? 'w-full' : ''
-                            }`}
-                          >
-                            <span>Link DokiChat</span>
-                            <ArrowUpRight className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
-                          </a>
-                        )}
-
-                        {hasGgai && (
-                          <a
-                            href={drawnCharacter.ggaiLink}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={() => playSoftTap('card')}
-                            className={`inline-flex items-center justify-center gap-1.5 min-h-[40px] px-3 py-2 rounded-xl bg-[#0B0B0F] border border-[#D4AF37]/65 text-[#F3E5AB] text-xs font-medium whitespace-nowrap hover:bg-[#D4AF37]/15 hover:border-[#F3E5AB] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] transition-all ${
-                              !hasBothLinks ? 'w-full' : ''
-                            }`}
-                          >
-                            <span>Link GGAI</span>
-                            <ArrowUpRight className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
-                          </a>
-                        )}
-                      </div>
-                    )}
-                  </HolographicTiltCard>
-
-                  {/* Nút Bốc lại & Đóng bên dưới thẻ kết quả */}
-                  <div className="mt-4 flex items-center justify-center gap-3">
-                    <button
-                      type="button"
-                      onClick={handleRedraw}
-                      className="inline-flex items-center justify-center gap-1.5 min-h-[40px] px-4 py-2 rounded-xl border border-[#D4AF37]/65 bg-[#121218] text-xs sm:text-sm font-medium text-[#F3E5AB] hover:bg-[#D4AF37]/15 hover:border-[#F3E5AB] active:scale-95 transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]"
-                    >
-                      <RotateCcw className="w-3.5 h-3.5 text-[#D4AF37]" aria-hidden="true" />
-                      <span>Bốc lại</span>
-                    </button>
+                    </HolographicTiltCard>
                   </div>
+
+                  {/* 2 nút hành động chính ngay bên dưới lá bài Tarot */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.18, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                    className="relative z-10 mt-4 sm:mt-5 w-full space-y-3"
+                  >
+                    <div
+                      className={`grid gap-2.5 sm:gap-3 ${
+                        primaryChatLink ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1 max-w-xs mx-auto'
+                      }`}
+                    >
+                      {/* Nút 1: Xem hồ sơ định mệnh */}
+                      <button
+                        type="button"
+                        onClick={handleInspectProfile}
+                        className="inline-flex items-center justify-center gap-2 min-h-[44px] px-4 py-2.5 rounded-xl bg-[#161320]/95 border border-[#D4AF37]/80 text-[#F3E5AB] text-xs sm:text-[13px] font-semibold whitespace-nowrap shadow-[0_0_22px_rgba(212,175,55,0.2)] hover:bg-[#D4AF37]/18 hover:border-[#FFF4C4] hover:shadow-[0_0_28px_rgba(243,229,171,0.38)] active:scale-[0.98] transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3E5AB]"
+                      >
+                        <span>📜 Xem hồ sơ định mệnh</span>
+                      </button>
+
+                      {/* Nút 2: Vào phòng chat ngay */}
+                      {primaryChatLink && (
+                        <a
+                          href={primaryChatLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={() => playSoftTap('card')}
+                          className="shimmer-gold-btn inline-flex items-center justify-center gap-1.5 min-h-[44px] px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#D4AF37] via-[#ECCD72] to-[#D4AF37] text-[#0B0B0F] text-xs sm:text-[13px] font-semibold whitespace-nowrap shadow-[0_0_24px_rgba(212,175,55,0.38)] hover:brightness-110 active:scale-[0.98] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFF4C4]"
+                        >
+                          <span>💬 Vào phòng chat ngay</span>
+                          <ArrowUpRight className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+                        </a>
+                      )}
+                    </div>
+
+                    {/* Chọn nhanh nền tảng nếu nhân vật có cả DokiChat & GGAI */}
+                    {hasBothLinks && (
+                      <div className="flex flex-wrap items-center justify-center gap-2 text-[11px] sm:text-xs text-[#B8B0A0]">
+                        <span>Mở trực tiếp trên:</span>
+                        <a
+                          href={drawnCharacter.dokiLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={() => playSoftTap('card')}
+                          className="inline-flex items-center gap-0.5 text-[#F3E5AB] hover:text-[#FFF4C4] underline underline-offset-4 decoration-[#D4AF37]/60 transition-colors"
+                        >
+                          <span>DokiChat</span>
+                          <ArrowUpRight className="w-3 h-3" aria-hidden="true" />
+                        </a>
+                        <span aria-hidden="true" className="text-[#D4AF37]/50">
+                          ·
+                        </span>
+                        <a
+                          href={drawnCharacter.ggaiLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={() => playSoftTap('card')}
+                          className="inline-flex items-center gap-0.5 text-[#F3E5AB] hover:text-[#FFF4C4] underline underline-offset-4 decoration-[#D4AF37]/60 transition-colors"
+                        >
+                          <span>GGAI</span>
+                          <ArrowUpRight className="w-3 h-3" aria-hidden="true" />
+                        </a>
+                      </div>
+                    )}
+
+                    {/* Nút Bốc lại */}
+                    <div className="flex items-center justify-center pt-0.5">
+                      <button
+                        type="button"
+                        onClick={handleRedraw}
+                        className="inline-flex items-center justify-center gap-1.5 min-h-[38px] px-4 py-1.5 rounded-xl border border-[#D4AF37]/45 bg-[#121218]/90 text-xs font-medium text-[#DCD4C6] hover:text-[#F3E5AB] hover:bg-[#D4AF37]/12 hover:border-[#D4AF37] active:scale-95 transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]"
+                      >
+                        <RotateCcw className="w-3.5 h-3.5 text-[#D4AF37]" aria-hidden="true" />
+                        <span>Bốc lại lá khác</span>
+                      </button>
+                    </div>
+                  </motion.div>
                 </motion.div>
               )}
             </div>

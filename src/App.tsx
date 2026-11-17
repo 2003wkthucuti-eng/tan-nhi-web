@@ -633,6 +633,7 @@ export default function App() {
   const [headerCatMessage, setHeaderCatMessage] = useState<string | null>(null);
   const [isDestinyModalOpen, setIsDestinyModalOpen] = useState(false);
   const [selectedCharacter, setSelectedCharacter] = useState<CharacterItem | null>(null);
+  const [openedDetailFromTarot, setOpenedDetailFromTarot] = useState(false);
   const [isSecretBadgeOpen, setIsSecretBadgeOpen] = useState(false);
   const [hasUnlockedSoulmateBadge, setHasUnlockedSoulmateBadge] = useState<boolean>(() =>
     loadSoulmateUnlocked()
@@ -949,6 +950,19 @@ export default function App() {
 
   const handleOpenDestinyModal = () => {
     if (CHARACTERS.length === 0) return;
+    playTarotSpreadChime();
+    setIsDestinyModalOpen(true);
+  };
+
+  const handleInspectCharacterFromTarot = (char: CharacterItem) => {
+    setIsDestinyModalOpen(false);
+    setOpenedDetailFromTarot(true);
+    setSelectedCharacter(char);
+  };
+
+  const handleBackToTarotFromDetail = () => {
+    setSelectedCharacter(null);
+    setOpenedDetailFromTarot(false);
     playTarotSpreadChime();
     setIsDestinyModalOpen(true);
   };
@@ -1329,6 +1343,7 @@ export default function App() {
                         maxTilt={6.5}
                         onClick={() => {
                           playSoftTap('card');
+                          setOpenedDetailFromTarot(false);
                           setSelectedCharacter(char);
                         }}
                         className="shimmer-card-border group h-full bg-[#121218]/92 backdrop-blur-sm border border-[#D4AF37]/25 hover:border-[#D4AF37]/70 rounded-xl sm:rounded-2xl p-2.5 sm:p-4 lg:p-5 flex flex-col justify-between transition-colors duration-200 hover:shadow-[0_0_32px_-6px_rgba(212,175,55,0.32)] cursor-pointer"
@@ -1683,6 +1698,7 @@ export default function App() {
       <DestinyTarotModal
         isOpen={isDestinyModalOpen}
         characters={CHARACTERS}
+        onInspectCharacter={handleInspectCharacterFromTarot}
         onClose={() => setIsDestinyModalOpen(false)}
       />
 
@@ -1692,10 +1708,15 @@ export default function App() {
         userProfile={userProfile}
         hasSoulmateBadge={hasUnlockedSoulmateBadge}
         letters={selectedCharacter ? lettersByChar[selectedCharacter.id] || [] : []}
+        openedFromTarot={openedDetailFromTarot}
+        onBackToTarot={handleBackToTarotFromDetail}
         onSendLetter={handleSendHeartfeltLetter}
         onDeleteLetter={handleDeleteHeartfeltLetter}
         onOpenProfileModal={() => setIsProfileModalOpen(true)}
-        onClose={() => setSelectedCharacter(null)}
+        onClose={() => {
+          setSelectedCharacter(null);
+          setOpenedDetailFromTarot(false);
+        }}
       />
 
       {/* Modal Góc Tri Kỷ: Tạo / chỉnh sửa tài khoản cục bộ */}

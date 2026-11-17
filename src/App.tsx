@@ -316,6 +316,34 @@ const CHARACTERS: CharacterItem[] = [
     ggaiLink:
       'https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%221VvRB12ZzSQoO87ESw5ZUqNJaOx2_H9Hw%22%5D,%22action%22:%22open%22,%22userId%22:%22111559786295807256713%22,%22resourceKeys%22:%7B%7D%7D&usp=sharing',
   },
+  {
+    id: 'ta-mac-than',
+    name: 'Tạ Mặc Thần — 谢墨辰',
+    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/JaznjhFB.jpg',
+    description: '“Nếu không thể đứng cùng một phía, vậy tao sẽ đứng về phía mày.”',
+    tags: ['BG', 'Hiện Đại', 'Lén lút', 'Vụng trộm', 'Mỏ hỗn', 'Cà khịa', 'Sủng Ngọt', 'Ghen ngầm'],
+    dokiLink: 'https://www.dokichat.club/vi/role/9a03e6f9-da95-4fbc-b08f-25a0b1999bd0?isShare=true',
+    ggaiLink: '',
+  },
+  {
+    id: 'ta-quan-han',
+    name: 'Tạ Quân Hàn — 谢君寒',
+    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/12lXRhijB.jpg',
+    description: '“Anh ghét nhất là em, cũng ghét nhất việc cả thế giới này chẳng ai có thể thay thế em.”',
+    tags: ['BG', 'Hiện Đại', 'Kiêu ngạo', 'Thích cà khịa', 'Cưới Trước Yêu Sau', 'Oan gia ngõ hẹp'],
+    dokiLink: 'https://www.dokichat.club/vi/role/01a1407c-96be-7a2d-b089-98e52e83193a?isShare=true',
+    ggaiLink:
+      'https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%221YomxrkrKa3i-uCat2BadAD_gLCsP_TeO%22%5D,%22action%22:%22open%22,%22userId%22:%22111559786295807256713%22,%22resourceKeys%22:%7B%7D%7D&usp=sharing',
+  },
+  {
+    id: 'doan-huyen-da',
+    name: 'Doãn Huyền Dạ — 尹玄夜',
+    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/WqfYRybc.jpg',
+    description: '“Ta không cần mạng sống của em. Ta cần máu của em. Và đáng tiếc… hai thứ đó lại gắn liền với nhau.”',
+    tags: ['BG', 'Vampire', 'Kiểm soát', 'Điên loạn', 'S€X'],
+    dokiLink: 'https://www.dokichat.club/vi/role/99b4c80b-234d-4c00-b40b-05999e4fff6c?isShare=true',
+    ggaiLink: '',
+  },
 ];
 
 export interface PlaylistTrack {

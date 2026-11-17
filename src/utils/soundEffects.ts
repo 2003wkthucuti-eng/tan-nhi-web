@@ -443,3 +443,150 @@ export function playAchievementChime(): void {
     // An toàn nếu trình duyệt chặn audio context
   }
 }
+
+/**
+ * Tiếng giọt pha lê rơi vào vạc vàng khi thả nguyên liệu độc dược.
+ */
+export function playPotionDropChime(stepIndex = 0): void {
+  try {
+    const chain = getAudioChain();
+    if (!chain) return;
+
+    const { ctx, destination } = chain;
+    const now = ctx.currentTime;
+    const basePitches = [659.25, 783.99, 987.77]; // E5, G5, B5
+    const baseFreq = basePitches[stepIndex % basePitches.length];
+
+    const masterGain = ctx.createGain();
+    masterGain.gain.setValueAtTime(0.84, now);
+    masterGain.connect(destination);
+
+    // Giọt nước dâng tần số nhẹ ("bloop" pha lê)
+    const dropOsc = ctx.createOscillator();
+    const dropGain = ctx.createGain();
+    dropOsc.type = 'sine';
+    dropOsc.frequency.setValueAtTime(baseFreq * 0.72, now);
+    dropOsc.frequency.exponentialRampToValueAtTime(baseFreq * 1.35, now + 0.14);
+
+    dropGain.gain.setValueAtTime(0.0001, now);
+    dropGain.gain.linearRampToValueAtTime(0.42, now + 0.01);
+    dropGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.45);
+
+    dropOsc.connect(dropGain);
+    dropGain.connect(masterGain);
+    dropOsc.start(now);
+    dropOsc.stop(now + 0.48);
+  } catch {
+    // An toàn nếu trình duyệt chặn audio context
+  }
+}
+
+/**
+ * Chuỗi âm pha lê xoay vần khi khuấy đũa phép và triệu hồi nhân vật tình duyên.
+ */
+export function playPotionBrewChime(): void {
+  try {
+    const chain = getAudioChain();
+    if (!chain) return;
+
+    const { ctx, destination } = chain;
+    const now = ctx.currentTime;
+
+    const masterGain = ctx.createGain();
+    masterGain.gain.setValueAtTime(0.88, now);
+    masterGain.connect(destination);
+
+    const notes = [587.33, 739.99, 880.0, 1174.66, 1479.98, 1760.0];
+    notes.forEach((freq, idx) => {
+      const startTime = now + idx * 0.095;
+      const duration = 1.45 - idx * 0.06;
+
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, startTime);
+
+      gain.gain.setValueAtTime(0.0001, startTime);
+      gain.gain.linearRampToValueAtTime(0.32, startTime + 0.008);
+      gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+
+      osc.connect(gain);
+      gain.connect(masterGain);
+      osc.start(startTime);
+      osc.stop(startTime + duration + 0.04);
+    });
+  } catch {
+    // An toàn nếu trình duyệt chặn audio context
+  }
+}
+
+/**
+ * Nhịp tim / tiếng khóa khẽ khi đang nhấn giữ nghe lén sau cánh cửa.
+ */
+export function playEavesdropTick(dangerRatio: number): void {
+  try {
+    const chain = getAudioChain();
+    if (!chain) return;
+
+    const { ctx, destination } = chain;
+    const now = ctx.currentTime;
+
+    const masterGain = ctx.createGain();
+    masterGain.gain.setValueAtTime(0.45, now);
+    masterGain.connect(destination);
+
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    const freq = 420 + Math.min(1, Math.max(0, dangerRatio)) * 460;
+    osc.frequency.setValueAtTime(freq, now);
+
+    gain.gain.setValueAtTime(0.0001, now);
+    gain.gain.linearRampToValueAtTime(0.18, now + 0.005);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.14);
+
+    osc.connect(gain);
+    gain.connect(masterGain);
+    osc.start(now);
+    osc.stop(now + 0.16);
+  } catch {
+    // An toàn nếu trình duyệt chặn audio context
+  }
+}
+
+/**
+ * Âm thanh kịch tính khi cánh cửa bật mở bắt quả tang người chơi nghe lén.
+ */
+export function playDoorCaughtChime(): void {
+  try {
+    const chain = getAudioChain();
+    if (!chain) return;
+
+    const { ctx, destination } = chain;
+    const now = ctx.currentTime;
+
+    const masterGain = ctx.createGain();
+    masterGain.gain.setValueAtTime(0.9, now);
+    masterGain.connect(destination);
+
+    const chord = [293.66, 440.0, 523.25, 659.25, 880.0];
+    chord.forEach((freq, idx) => {
+      const startTime = now + idx * 0.025;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = idx === 0 ? 'triangle' : 'sine';
+      osc.frequency.setValueAtTime(freq, startTime);
+
+      gain.gain.setValueAtTime(0.0001, startTime);
+      gain.gain.linearRampToValueAtTime(idx === 0 ? 0.42 : 0.25, startTime + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.0001, startTime + 1.5);
+
+      osc.connect(gain);
+      gain.connect(masterGain);
+      osc.start(startTime);
+      osc.stop(startTime + 1.55);
+    });
+  } catch {
+    // An toàn nếu trình duyệt chặn audio context
+  }
+}

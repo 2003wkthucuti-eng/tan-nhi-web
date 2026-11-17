@@ -29,6 +29,7 @@ import { GoldenSparkleTrail } from './components/GoldenSparkleTrail';
 import { GoldenStardust } from './components/GoldenStardust';
 import { HolographicTiltCard } from './components/HolographicTiltCard';
 import { IntroSealDoors, type IntroPhase } from './components/IntroSealDoors';
+import { MysticCornerModal } from './components/MysticCornerModal';
 import { MysticalFogOverlay } from './components/MysticalFogOverlay';
 import { SecretBadgeModal } from './components/SecretBadgeModal';
 import { SoulmateCornerModal } from './components/SoulmateCornerModal';
@@ -632,8 +633,10 @@ export default function App() {
   const [catGreetingOpen, setCatGreetingOpen] = useState(false);
   const [headerCatMessage, setHeaderCatMessage] = useState<string | null>(null);
   const [isDestinyModalOpen, setIsDestinyModalOpen] = useState(false);
+  const [isMysticCornerOpen, setIsMysticCornerOpen] = useState(false);
   const [selectedCharacter, setSelectedCharacter] = useState<CharacterItem | null>(null);
   const [openedDetailFromTarot, setOpenedDetailFromTarot] = useState(false);
+  const [openedDetailFromMystic, setOpenedDetailFromMystic] = useState(false);
   const [isSecretBadgeOpen, setIsSecretBadgeOpen] = useState(false);
   const [hasUnlockedSoulmateBadge, setHasUnlockedSoulmateBadge] = useState<boolean>(() =>
     loadSoulmateUnlocked()
@@ -956,6 +959,7 @@ export default function App() {
 
   const handleInspectCharacterFromTarot = (char: CharacterItem) => {
     setIsDestinyModalOpen(false);
+    setOpenedDetailFromMystic(false);
     setOpenedDetailFromTarot(true);
     setSelectedCharacter(char);
   };
@@ -965,6 +969,26 @@ export default function App() {
     setOpenedDetailFromTarot(false);
     playTarotSpreadChime();
     setIsDestinyModalOpen(true);
+  };
+
+  const handleOpenMysticCorner = () => {
+    if (CHARACTERS.length === 0) return;
+    playSoftTap('card');
+    setIsMysticCornerOpen(true);
+  };
+
+  const handleInspectCharacterFromMystic = (char: CharacterItem) => {
+    setIsMysticCornerOpen(false);
+    setOpenedDetailFromTarot(false);
+    setOpenedDetailFromMystic(true);
+    setSelectedCharacter(char);
+  };
+
+  const handleBackToMysticFromDetail = () => {
+    setSelectedCharacter(null);
+    setOpenedDetailFromMystic(false);
+    playSoftTap('nav');
+    setIsMysticCornerOpen(true);
   };
 
   return (
@@ -1212,7 +1236,7 @@ export default function App() {
                 )}
               </div>
 
-              <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto justify-between sm:justify-start">
+              <div className="flex flex-wrap items-center gap-2 shrink-0 w-full sm:w-auto justify-between sm:justify-start">
                 <button
                   type="button"
                   onClick={() => {
@@ -1236,14 +1260,24 @@ export default function App() {
                   />
                 </button>
 
-                <button
-                  type="button"
-                  onClick={handleOpenDestinyModal}
-                  className="shimmer-gold-btn inline-flex items-center justify-center gap-1.5 min-h-[40px] px-3 sm:px-3.5 py-2 rounded-xl border border-[#D4AF37]/75 bg-gradient-to-r from-[#19150A] via-[#271F0A] to-[#19150A] text-xs font-medium text-[#F3E5AB] shadow-[0_0_16px_rgba(212,175,55,0.2)] hover:border-[#F3E5AB] hover:shadow-[0_0_24px_rgba(212,175,55,0.4)] active:scale-95 transition-all duration-150 whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3E5AB]"
-                >
-                  <Sparkles className="w-3.5 h-3.5 text-[#F3E5AB] shrink-0" aria-hidden="true" />
-                  <span>Gặp gỡ định mệnh</span>
-                </button>
+                <div className="flex items-center gap-2 shrink-0">
+                  <button
+                    type="button"
+                    onClick={handleOpenDestinyModal}
+                    className="shimmer-gold-btn inline-flex items-center justify-center gap-1.5 min-h-[40px] px-3 sm:px-3.5 py-2 rounded-xl border border-[#D4AF37]/75 bg-gradient-to-r from-[#19150A] via-[#271F0A] to-[#19150A] text-xs font-medium text-[#F3E5AB] shadow-[0_0_16px_rgba(212,175,55,0.2)] hover:border-[#F3E5AB] hover:shadow-[0_0_24px_rgba(212,175,55,0.4)] active:scale-95 transition-all duration-150 whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3E5AB]"
+                  >
+                    <Sparkles className="w-3.5 h-3.5 text-[#F3E5AB] shrink-0" aria-hidden="true" />
+                    <span>Gặp gỡ định mệnh</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleOpenMysticCorner}
+                    className="shimmer-gold-btn inline-flex items-center justify-center gap-1.5 min-h-[40px] px-3 sm:px-3.5 py-2 rounded-xl border border-[#D4AF37]/80 bg-gradient-to-r from-[#1B1422] via-[#281E12] to-[#1A1320] text-xs font-semibold text-[#F3E5AB] shadow-[0_0_18px_rgba(212,175,55,0.24)] hover:border-[#FFF4C4] hover:shadow-[0_0_26px_rgba(243,229,171,0.45)] active:scale-95 transition-all duration-150 whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFF4C4]"
+                  >
+                    <span>🔮 Góc Huyền Bí</span>
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -1344,6 +1378,7 @@ export default function App() {
                         onClick={() => {
                           playSoftTap('card');
                           setOpenedDetailFromTarot(false);
+                          setOpenedDetailFromMystic(false);
                           setSelectedCharacter(char);
                         }}
                         className="shimmer-card-border group h-full bg-[#121218]/92 backdrop-blur-sm border border-[#D4AF37]/25 hover:border-[#D4AF37]/70 rounded-xl sm:rounded-2xl p-2.5 sm:p-4 lg:p-5 flex flex-col justify-between transition-colors duration-200 hover:shadow-[0_0_32px_-6px_rgba(212,175,55,0.32)] cursor-pointer"
@@ -1702,6 +1737,14 @@ export default function App() {
         onClose={() => setIsDestinyModalOpen(false)}
       />
 
+      {/* Khu vực Mini-game 🔮 Góc Huyền Bí */}
+      <MysticCornerModal
+        isOpen={isMysticCornerOpen}
+        characters={CHARACTERS}
+        onOpenCharacterProfile={handleInspectCharacterFromMystic}
+        onClose={() => setIsMysticCornerOpen(false)}
+      />
+
       {/* Lá bài Tarot khổng lồ xem chi tiết nhân vật & Hòm Thư Tâm Tình */}
       <CharacterDetailTarotModal
         character={selectedCharacter}
@@ -1710,12 +1753,15 @@ export default function App() {
         letters={selectedCharacter ? lettersByChar[selectedCharacter.id] || [] : []}
         openedFromTarot={openedDetailFromTarot}
         onBackToTarot={handleBackToTarotFromDetail}
+        openedFromMystic={openedDetailFromMystic}
+        onBackToMystic={handleBackToMysticFromDetail}
         onSendLetter={handleSendHeartfeltLetter}
         onDeleteLetter={handleDeleteHeartfeltLetter}
         onOpenProfileModal={() => setIsProfileModalOpen(true)}
         onClose={() => {
           setSelectedCharacter(null);
           setOpenedDetailFromTarot(false);
+          setOpenedDetailFromMystic(false);
         }}
       />
 

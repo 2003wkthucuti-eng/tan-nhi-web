@@ -287,6 +287,35 @@ const CHARACTERS: CharacterItem[] = [
     ggaiLink:
       'https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%221oTrLh2nKaAFzNN4_ZeYBx-8OXl_U2sB8%22%5D,%22action%22:%22open%22,%22userId%22:%22111559786295807256713%22,%22resourceKeys%22:%7B%7D%7D&usp=sharing',
   },
+  {
+    id: 'diep-trach',
+    name: 'Diệp Trạch',
+    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/MbFMqZEa.jpg',
+    description: '“Em thử ngoan một ngày xem, ta muốn biết cảm giác đó thế nào.”',
+    tags: ['BL', 'BG', 'Cổ trang', 'Hài hước', 'Nghiện vợ', 'Collab'],
+    dokiLink: 'https://www.dokichat.club/vi/role/a6c4a471-0bd7-462e-a0de-586435f75aa2?isShare=true',
+    ggaiLink:
+      'https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%221bQ5kkBmORIW84pc99_oMzqYgBsrWlnNp%22%5D,%22action%22:%22open%22,%22userId%22:%22111559786295807256713%22,%22resourceKeys%22:%7B%7D%7D&usp=sharing',
+  },
+  {
+    id: 'ta-lanh-phong',
+    name: 'Tạ Lãnh Phong — 谢冷枫',
+    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/SZq4vNST.png',
+    description: '“Trách tao cái đéo gì? Do mày tự dạng chân cho tao chơi mà con đĩ.”',
+    tags: ['BL', 'BG', 'Khốn nạn', 'Học đường', 'Redflag'],
+    dokiLink: 'https://www.dokichat.club/vi/role/eace71ef-9bd5-4a53-939f-5667bec4e80b?isShare=true',
+    ggaiLink: '',
+  },
+  {
+    id: 'ta-canh-hanh',
+    name: 'Tạ Cảnh Hành — 谢景行',
+    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/88x2GgDa.jpg',
+    description: '“Chúng ta ngồi cạnh nhau suốt thanh xuân, nhưng chưa từng thuộc về nhau.”',
+    tags: ['BL', 'BG', 'Đơn phương', 'Bạn cùng bàn', 'TXVT'],
+    dokiLink: 'https://www.dokichat.club/vi/role/c20d0efe-4099-4bdd-a62b-fb001d2eb8f9?isShare=true',
+    ggaiLink:
+      'https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%221VvRB12ZzSQoO87ESw5ZUqNJaOx2_H9Hw%22%5D,%22action%22:%22open%22,%22userId%22:%22111559786295807256713%22,%22resourceKeys%22:%7B%7D%7D&usp=sharing',
+  },
 ];
 
 export interface PlaylistTrack {

@@ -590,3 +590,178 @@ export function playDoorCaughtChime(): void {
     // An toàn nếu trình duyệt chặn audio context
   }
 }
+
+/**
+ * Âm thanh vỡ sáp nhẹ + ngân vang pha lê khi mở con dấu sáp đỏ niêm phong bức thư.
+ */
+export function playWaxSealBreakChime(): void {
+  try {
+    const chain = getAudioChain();
+    if (!chain) return;
+
+    const { ctx, destination } = chain;
+    const now = ctx.currentTime;
+
+    const masterGain = ctx.createGain();
+    masterGain.gain.setValueAtTime(0.88, now);
+    masterGain.connect(destination);
+
+    // 1. Tiếng tách giòn nhẹ mô phỏng sáp vỡ
+    const crackOsc = ctx.createOscillator();
+    const crackGain = ctx.createGain();
+    crackOsc.type = 'triangle';
+    crackOsc.frequency.setValueAtTime(340, now);
+    crackOsc.frequency.exponentialRampToValueAtTime(110, now + 0.08);
+    crackGain.gain.setValueAtTime(0.0001, now);
+    crackGain.gain.linearRampToValueAtTime(0.42, now + 0.004);
+    crackGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.11);
+    crackOsc.connect(crackGain);
+    crackGain.connect(masterGain);
+    crackOsc.start(now);
+    crackOsc.stop(now + 0.13);
+
+    // 2. Hợp âm mở thư dịu dàng (E5 - G#5 - B5 - E6 - G#6)
+    const notes = [659.25, 830.61, 987.77, 1318.51, 1661.22];
+    notes.forEach((freq, idx) => {
+      const startTime = now + 0.05 + idx * 0.07;
+      const duration = 1.9 - idx * 0.08;
+
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, startTime);
+
+      gain.gain.setValueAtTime(0.0001, startTime);
+      gain.gain.linearRampToValueAtTime(0.3, startTime + 0.006);
+      gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+
+      osc.connect(gain);
+      gain.connect(masterGain);
+      osc.start(startTime);
+      osc.stop(startTime + duration + 0.04);
+    });
+  } catch {
+    // An toàn nếu trình duyệt chặn audio context
+  }
+}
+
+/**
+ * Âm nhịp đập trầm ấm khẽ vang khi bắt đầu chu kỳ hào quang trong Nhịp Đập Cộng Hưởng.
+ */
+export function playHeartbeatPulseTone(): void {
+  try {
+    const chain = getAudioChain();
+    if (!chain) return;
+
+    const { ctx, destination } = chain;
+    const now = ctx.currentTime;
+
+    const masterGain = ctx.createGain();
+    masterGain.gain.setValueAtTime(0.5, now);
+    masterGain.connect(destination);
+
+    // Hai nhịp "lub-dub" rất êm
+    [0, 0.14].forEach((offset, idx) => {
+      const startTime = now + offset;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(idx === 0 ? 112 : 92, startTime);
+      osc.frequency.exponentialRampToValueAtTime(52, startTime + 0.12);
+
+      gain.gain.setValueAtTime(0.0001, startTime);
+      gain.gain.linearRampToValueAtTime(idx === 0 ? 0.34 : 0.24, startTime + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.0001, startTime + 0.15);
+
+      osc.connect(gain);
+      gain.connect(masterGain);
+      osc.start(startTime);
+      osc.stop(startTime + 0.17);
+    });
+  } catch {
+    // An toàn nếu trình duyệt chặn audio context
+  }
+}
+
+/**
+ * Chuông cộng hưởng dâng cao dần theo 3 bước (1/3 -> 2/3 -> 3/3) khi chạm chuẩn nhịp.
+ */
+export function playResonanceHitChime(stepNumber: number): void {
+  try {
+    const chain = getAudioChain();
+    if (!chain) return;
+
+    const { ctx, destination } = chain;
+    const now = ctx.currentTime;
+    const pitches = [987.77, 1318.51, 1760.0]; // B5 -> E6 -> A6
+    const freq = pitches[Math.max(0, Math.min(2, stepNumber - 1))];
+
+    const masterGain = ctx.createGain();
+    masterGain.gain.setValueAtTime(0.88, now);
+    masterGain.connect(destination);
+
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(freq, now);
+
+    gain.gain.setValueAtTime(0.0001, now);
+    gain.gain.linearRampToValueAtTime(0.45, now + 0.005);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.85);
+
+    const harmonic = ctx.createOscillator();
+    const harmonicGain = ctx.createGain();
+    harmonic.type = 'sine';
+    harmonic.frequency.setValueAtTime(freq * 1.5, now);
+    harmonicGain.gain.setValueAtTime(0.0001, now);
+    harmonicGain.gain.linearRampToValueAtTime(0.18, now + 0.005);
+    harmonicGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.55);
+
+    osc.connect(gain);
+    harmonic.connect(harmonicGain);
+    gain.connect(masterGain);
+    harmonicGain.connect(masterGain);
+
+    osc.start(now);
+    harmonic.start(now);
+    osc.stop(now + 0.9);
+    harmonic.stop(now + 0.6);
+  } catch {
+    // An toàn nếu trình duyệt chặn audio context
+  }
+}
+
+/**
+ * Âm nhẹ báo chạm lệch nhịp trong Nhịp Đập Cộng Hưởng.
+ */
+export function playResonanceMissTone(): void {
+  try {
+    const chain = getAudioChain();
+    if (!chain) return;
+
+    const { ctx, destination } = chain;
+    const now = ctx.currentTime;
+
+    const masterGain = ctx.createGain();
+    masterGain.gain.setValueAtTime(0.55, now);
+    masterGain.connect(destination);
+
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(320, now);
+    osc.frequency.exponentialRampToValueAtTime(210, now + 0.18);
+
+    gain.gain.setValueAtTime(0.0001, now);
+    gain.gain.linearRampToValueAtTime(0.24, now + 0.008);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.22);
+
+    osc.connect(gain);
+    gain.connect(masterGain);
+    osc.start(now);
+    osc.stop(now + 0.25);
+  } catch {
+    // An toàn nếu trình duyệt chặn audio context
+  }
+}
+

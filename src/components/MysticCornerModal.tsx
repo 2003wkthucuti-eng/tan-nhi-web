@@ -5,7 +5,9 @@ import {
   ArrowUpRight,
   DoorOpen,
   FlaskConical,
+  HeartPulse,
   KeyRound,
+  Mail,
   RotateCcw,
   Sparkles,
   Wand2,
@@ -15,7 +17,9 @@ import type { CharacterItem } from '../App';
 import { getCharacterStoryProfile } from '../data/characterProfiles';
 import { BlackCatMascot } from './BlackCatMascot';
 import { GoldenStardust } from './GoldenStardust';
+import { HeartbeatResonanceGame } from './HeartbeatResonanceGame';
 import { HolographicTiltCard } from './HolographicTiltCard';
+import { SealedLetterGame } from './SealedLetterGame';
 import {
   playAchievementChime,
   playDestinyChime,
@@ -33,7 +37,7 @@ interface MysticCornerModalProps {
   onClose: () => void;
 }
 
-type MysticView = 'hub' | 'potion' | 'eavesdrop';
+type MysticView = 'hub' | 'potion' | 'eavesdrop' | 'letter' | 'heartbeat';
 type PotionPhase = 'selecting' | 'brewing' | 'summoned';
 type EavesdropPhase = 'ready' | 'holding' | 'success' | 'caught';
 
@@ -269,6 +273,8 @@ export const MysticCornerModal: React.FC<MysticCornerModalProps> = ({
   onClose,
 }) => {
   const [activeView, setActiveView] = useState<MysticView>('hub');
+  const [letterResetSignal, setLetterResetSignal] = useState(0);
+  const [heartbeatResetSignal, setHeartbeatResetSignal] = useState(0);
 
   // --- State Mini-game 1: Pha Chế Độc Dược Tình Duyên ---
   const [selectedIngredientIds, setSelectedIngredientIds] = useState<string[]>([]);
@@ -354,6 +360,8 @@ export const MysticCornerModal: React.FC<MysticCornerModalProps> = ({
       setActiveView('hub');
       resetPotionGame();
       initEavesdropRound();
+      setLetterResetSignal((prev) => prev + 1);
+      setHeartbeatResetSignal((prev) => prev + 1);
     } else {
       clearPotionTimers();
       clearHoldTimer();
@@ -679,26 +687,26 @@ export const MysticCornerModal: React.FC<MysticCornerModalProps> = ({
               </button>
             </div>
 
-            {/* Thanh chuyển đổi nhanh qua lại giữa 2 mini-game */}
+            {/* Thanh chuyển đổi nhanh qua lại giữa 4 mini-game */}
             {activeView !== 'hub' && (
-              <div className="relative z-20 mt-4 flex flex-wrap items-center justify-between gap-2">
+              <div className="relative z-20 mt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div
                   role="tablist"
-                  aria-label="Chuyển đổi giữa hai mini-game"
-                  className="grid grid-cols-2 gap-1.5 p-1 rounded-xl bg-[#0B0B0F]/92 border border-[#D4AF37]/30 w-full sm:w-auto sm:flex-1 sm:max-w-lg"
+                  aria-label="Chuyển đổi giữa các mini-game"
+                  className="grid grid-cols-2 lg:grid-cols-4 gap-1.5 p-1 rounded-xl bg-[#0B0B0F]/92 border border-[#D4AF37]/30 w-full flex-1"
                 >
                   <button
                     type="button"
                     role="tab"
                     aria-selected={activeView === 'potion'}
                     onClick={() => handleSwitchView('potion')}
-                    className={`inline-flex items-center justify-center gap-1.5 min-h-[38px] px-2.5 sm:px-3.5 py-1.5 rounded-lg text-[11px] sm:text-xs font-medium whitespace-nowrap transition-all cursor-pointer ${
+                    className={`inline-flex items-center justify-center gap-1 min-h-[38px] px-2.5 py-1.5 rounded-lg text-[11px] sm:text-xs font-medium whitespace-nowrap transition-all cursor-pointer ${
                       activeView === 'potion'
                         ? 'bg-gradient-to-r from-[#D4AF37] to-[#E6C86E] text-[#0B0B0F] font-semibold shadow-[0_0_16px_rgba(212,175,55,0.28)]'
                         : 'text-[#CFC8B8] hover:text-[#F3E5AB]'
                     }`}
                   >
-                    <span>🧪 Độc Dược Tình Duyên</span>
+                    <span className="truncate">🧪 Độc Dược</span>
                   </button>
 
                   <button
@@ -706,13 +714,41 @@ export const MysticCornerModal: React.FC<MysticCornerModalProps> = ({
                     role="tab"
                     aria-selected={activeView === 'eavesdrop'}
                     onClick={() => handleSwitchView('eavesdrop')}
-                    className={`inline-flex items-center justify-center gap-1.5 min-h-[38px] px-2.5 sm:px-3.5 py-1.5 rounded-lg text-[11px] sm:text-xs font-medium whitespace-nowrap transition-all cursor-pointer ${
+                    className={`inline-flex items-center justify-center gap-1 min-h-[38px] px-2.5 py-1.5 rounded-lg text-[11px] sm:text-xs font-medium whitespace-nowrap transition-all cursor-pointer ${
                       activeView === 'eavesdrop'
                         ? 'bg-gradient-to-r from-[#D4AF37] to-[#E6C86E] text-[#0B0B0F] font-semibold shadow-[0_0_16px_rgba(212,175,55,0.28)]'
                         : 'text-[#CFC8B8] hover:text-[#F3E5AB]'
                     }`}
                   >
-                    <span>🚪 Nghe Lén Tâm Tư</span>
+                    <span className="truncate">🚪 Nghe Lén</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    role="tab"
+                    aria-selected={activeView === 'letter'}
+                    onClick={() => handleSwitchView('letter')}
+                    className={`inline-flex items-center justify-center gap-1 min-h-[38px] px-2.5 py-1.5 rounded-lg text-[11px] sm:text-xs font-medium whitespace-nowrap transition-all cursor-pointer ${
+                      activeView === 'letter'
+                        ? 'bg-gradient-to-r from-[#D4AF37] to-[#E6C86E] text-[#0B0B0F] font-semibold shadow-[0_0_16px_rgba(212,175,55,0.28)]'
+                        : 'text-[#CFC8B8] hover:text-[#F3E5AB]'
+                    }`}
+                  >
+                    <span className="truncate">💌 Thư Sáp Đỏ</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    role="tab"
+                    aria-selected={activeView === 'heartbeat'}
+                    onClick={() => handleSwitchView('heartbeat')}
+                    className={`inline-flex items-center justify-center gap-1 min-h-[38px] px-2.5 py-1.5 rounded-lg text-[11px] sm:text-xs font-medium whitespace-nowrap transition-all cursor-pointer ${
+                      activeView === 'heartbeat'
+                        ? 'bg-gradient-to-r from-[#D4AF37] to-[#E6C86E] text-[#0B0B0F] font-semibold shadow-[0_0_16px_rgba(212,175,55,0.28)]'
+                        : 'text-[#CFC8B8] hover:text-[#F3E5AB]'
+                    }`}
+                  >
+                    <span className="truncate">💓 Nhịp Cộng Hưởng</span>
                   </button>
                 </div>
 
@@ -721,9 +757,12 @@ export const MysticCornerModal: React.FC<MysticCornerModalProps> = ({
                   onClick={() => {
                     playSoftTap('tap');
                     if (activeView === 'potion') resetPotionGame();
-                    else initEavesdropRound();
+                    else if (activeView === 'eavesdrop') initEavesdropRound();
+                    else if (activeView === 'letter') setLetterResetSignal((prev) => prev + 1);
+                    else if (activeView === 'heartbeat')
+                      setHeartbeatResetSignal((prev) => prev + 1);
                   }}
-                  className="inline-flex items-center justify-center gap-1.5 min-h-[38px] px-3.5 py-1.5 rounded-xl border border-[#D4AF37]/45 bg-[#121218] text-xs font-medium text-[#F3E5AB] hover:border-[#F3E5AB] hover:bg-[#D4AF37]/15 active:scale-95 transition-all whitespace-nowrap cursor-pointer ml-auto sm:ml-0"
+                  className="inline-flex items-center justify-center gap-1.5 min-h-[38px] px-3.5 py-1.5 rounded-xl border border-[#D4AF37]/45 bg-[#121218] text-xs font-medium text-[#F3E5AB] hover:border-[#F3E5AB] hover:bg-[#D4AF37]/15 active:scale-95 transition-all whitespace-nowrap cursor-pointer shrink-0 self-end sm:self-auto"
                 >
                   <RotateCcw className="w-3.5 h-3.5 text-[#D4AF37]" aria-hidden="true" />
                   <span>Chơi lại</span>
@@ -735,19 +774,19 @@ export const MysticCornerModal: React.FC<MysticCornerModalProps> = ({
             {/* VIEW 0: HUB CHỌN MINI-GAME                                      */}
             {/* ============================================================== */}
             {activeView === 'hub' && (
-              <div className="relative z-10 py-5 sm:py-7">
+              <div className="relative z-10 py-5 sm:py-6">
                 <div className="text-center max-w-xl mx-auto mb-6">
                   <p className="text-xs sm:text-sm text-[#CFC8B8] leading-relaxed">
-                    Chọn một nghi thức huyền bí để khám phá tâm hồn hữu duyên hoặc lắng nghe những bí mật ẩn giấu sau cánh cửa đêm mưa.
+                    Chọn một nghi thức huyền bí để khám phá tâm hồn hữu duyên, bóc phong thư sáp đỏ hay lắng nghe nhịp đập cộng hưởng đêm nay.
                   </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 items-stretch">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 items-stretch">
                   {/* Card Mini-game 1 */}
                   <button
                     type="button"
                     onClick={() => handleSwitchView('potion')}
-                    className="group text-left rounded-2xl bg-[#12121A]/95 border border-[#D4AF37]/45 hover:border-[#F3E5AB] p-5 sm:p-6 flex flex-col justify-between gap-4 shadow-[0_14px_38px_rgba(0,0,0,0.65)] hover:shadow-[0_18px_48px_rgba(212,175,55,0.22)] transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3E5AB]"
+                    className="group text-left rounded-2xl bg-[#12121A]/95 border border-[#D4AF37]/45 hover:border-[#F3E5AB] p-5 flex flex-col justify-between gap-4 shadow-[0_14px_38px_rgba(0,0,0,0.65)] hover:shadow-[0_18px_48px_rgba(212,175,55,0.22)] transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3E5AB]"
                   >
                     <div>
                       <div className="flex items-center justify-between gap-3 mb-3">
@@ -782,7 +821,7 @@ export const MysticCornerModal: React.FC<MysticCornerModalProps> = ({
                       initEavesdropRound();
                       handleSwitchView('eavesdrop');
                     }}
-                    className="group text-left rounded-2xl bg-[#12121A]/95 border border-[#D4AF37]/45 hover:border-[#F3E5AB] p-5 sm:p-6 flex flex-col justify-between gap-4 shadow-[0_14px_38px_rgba(0,0,0,0.65)] hover:shadow-[0_18px_48px_rgba(212,175,55,0.22)] transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3E5AB]"
+                    className="group text-left rounded-2xl bg-[#12121A]/95 border border-[#D4AF37]/45 hover:border-[#F3E5AB] p-5 flex flex-col justify-between gap-4 shadow-[0_14px_38px_rgba(0,0,0,0.65)] hover:shadow-[0_18px_48px_rgba(212,175,55,0.22)] transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3E5AB]"
                   >
                     <div>
                       <div className="flex items-center justify-between gap-3 mb-3">
@@ -804,6 +843,70 @@ export const MysticCornerModal: React.FC<MysticCornerModalProps> = ({
                     <div className="pt-3 border-t border-[#D4AF37]/15 flex items-center justify-between text-xs font-semibold text-[#F3E5AB]">
                       <span>Lại gần cánh cửa</span>
                       <DoorOpen
+                        className="w-4 h-4 text-[#D4AF37] group-hover:translate-x-0.5 transition-transform"
+                        aria-hidden="true"
+                      />
+                    </div>
+                  </button>
+
+                  {/* Card Mini-game 3 */}
+                  <button
+                    type="button"
+                    onClick={() => handleSwitchView('letter')}
+                    className="group text-left rounded-2xl bg-[#12121A]/95 border border-[#D4AF37]/45 hover:border-[#F3E5AB] p-5 flex flex-col justify-between gap-4 shadow-[0_14px_38px_rgba(0,0,0,0.65)] hover:shadow-[0_18px_48px_rgba(212,175,55,0.22)] transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3E5AB]"
+                  >
+                    <div>
+                      <div className="flex items-center justify-between gap-3 mb-3">
+                        <span className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#34111B] to-[#121018] border border-[#D4AF37]/55 flex items-center justify-center text-2xl shadow-[0_0_20px_rgba(196,37,62,0.26)] group-hover:scale-105 transition-transform">
+                          💌
+                        </span>
+                        <span className="text-[11px] font-medium text-[#D4AF37]">
+                          Mini-game 03
+                        </span>
+                      </div>
+                      <h3 className="font-display text-xl sm:text-2xl font-semibold text-[#F3E5AB] group-hover:text-[#FFF4C4] transition-colors">
+                        Bức Thư Niêm Phong Sáp Đỏ
+                      </h3>
+                      <p className="mt-2 text-xs sm:text-[13px] text-[#B8B0A0] leading-relaxed">
+                        Chọn tâm trạng đêm nay để nhận phong thư đen niêm phong sáp đỏ, chạm vỡ con dấu mở lời nhắn định mệnh và hồi âm ngay.
+                      </p>
+                    </div>
+
+                    <div className="pt-3 border-t border-[#D4AF37]/15 flex items-center justify-between text-xs font-semibold text-[#F3E5AB]">
+                      <span>Chọn tâm trạng & mở thư</span>
+                      <Mail
+                        className="w-4 h-4 text-[#D4AF37] group-hover:translate-x-0.5 transition-transform"
+                        aria-hidden="true"
+                      />
+                    </div>
+                  </button>
+
+                  {/* Card Mini-game 4 */}
+                  <button
+                    type="button"
+                    onClick={() => handleSwitchView('heartbeat')}
+                    className="group text-left rounded-2xl bg-[#12121A]/95 border border-[#D4AF37]/45 hover:border-[#F3E5AB] p-5 flex flex-col justify-between gap-4 shadow-[0_14px_38px_rgba(0,0,0,0.65)] hover:shadow-[0_18px_48px_rgba(212,175,55,0.22)] transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3E5AB]"
+                  >
+                    <div>
+                      <div className="flex items-center justify-between gap-3 mb-3">
+                        <span className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#2C200B] to-[#121018] border border-[#D4AF37]/55 flex items-center justify-center text-2xl shadow-[0_0_20px_rgba(212,175,55,0.28)] group-hover:scale-105 transition-transform">
+                          💓
+                        </span>
+                        <span className="text-[11px] font-medium text-[#D4AF37]">
+                          Mini-game 04
+                        </span>
+                      </div>
+                      <h3 className="font-display text-xl sm:text-2xl font-semibold text-[#F3E5AB] group-hover:text-[#FFF4C4] transition-colors">
+                        Nhịp Đập Cộng Hưởng
+                      </h3>
+                      <p className="mt-2 text-xs sm:text-[13px] text-[#B8B0A0] leading-relaxed">
+                        Chạm chuẩn 3 lần đúng khoảnh khắc vòng hào quang thu nhỏ trùng khớp viên ngọc trái tim để đánh thức lời thì thầm đồng điệu.
+                      </p>
+                    </div>
+
+                    <div className="pt-3 border-t border-[#D4AF37]/15 flex items-center justify-between text-xs font-semibold text-[#F3E5AB]">
+                      <span>Bắt nhịp trái tim</span>
+                      <HeartPulse
                         className="w-4 h-4 text-[#D4AF37] group-hover:translate-x-0.5 transition-transform"
                         aria-hidden="true"
                       />
@@ -1495,6 +1598,31 @@ export const MysticCornerModal: React.FC<MysticCornerModalProps> = ({
                     )}
                   </div>
                 </div>
+              </div>
+            )}
+            {/* ============================================================== */}
+            {/* MINI-GAME 3: BỨC THƯ NIÊM PHONG SÁP ĐỎ                          */}
+            {/* ============================================================== */}
+            {activeView === 'letter' && (
+              <div className="relative z-10">
+                <SealedLetterGame
+                  characters={characters}
+                  onOpenCharacterProfile={handleOpenProfile}
+                  resetSignal={letterResetSignal}
+                />
+              </div>
+            )}
+
+            {/* ============================================================== */}
+            {/* MINI-GAME 4: NHỊP ĐẬP CỘNG HƯỞNG                               */}
+            {/* ============================================================== */}
+            {activeView === 'heartbeat' && (
+              <div className="relative z-10">
+                <HeartbeatResonanceGame
+                  characters={characters}
+                  onOpenCharacterProfile={handleOpenProfile}
+                  resetSignal={heartbeatResetSignal}
+                />
               </div>
             )}
           </motion.div>

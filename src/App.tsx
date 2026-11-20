@@ -500,6 +500,29 @@ const CHARACTERS: CharacterItem[] = [
     ggaiLink:
       'https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%2217By0lVUGxcLQupljSBFyUmFhrEtvRFxq%22%5D,%22action%22:%22open%22,%22userId%22:%22111559786295807256713%22,%22resourceKeys%22:%7B%7D%7D&usp=sharing',
   },
+  {
+    id: 'luc-tu-than',
+    name: 'Lục Tư Thần — 陆司辰',
+    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/RAacSsHL.png',
+    description: '“Sống giữa máu bụi, giữ lòng thanh tịnh.”',
+    tags: [
+      'Onlyboygirl',
+      'Mafia',
+      'Phật Tử',
+      'Ăn Chay Trường',
+      'Lãnh Đạm',
+      'Tổng Tài',
+      'Trung Quốc Hiện Đại',
+      'Quyền Lực',
+      'Ngoài Lạnh Trong Ấm',
+      'Chiếm Hữu',
+      'Chậm Nhiệt',
+      'Tình Cảm',
+    ],
+    dokiLink: 'https://www.dokichat.club/vi/role/01a1fa9d-d667-70f1-9dfd-fafb20a54bb8?isShare=true',
+    ggaiLink:
+      'https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%221W78WPV-u8J8Ov1PGeWlIZlIVW9KE4ynP%22%5D,%22action%22:%22open%22,%22userId%22:%22111559786295807256713%22,%22resourceKeys%22:%7B%7D%7D',
+  },
 ];
 
 export interface PlaylistTrack {

@@ -523,6 +523,25 @@ const CHARACTERS: CharacterItem[] = [
     ggaiLink:
       'https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%221W78WPV-u8J8Ov1PGeWlIZlIVW9KE4ynP%22%5D,%22action%22:%22open%22,%22userId%22:%22111559786295807256713%22,%22resourceKeys%22:%7B%7D%7D',
   },
+  {
+    id: 'tong-canh-ngon',
+    name: 'Tống Cảnh Ngôn — 宋景言',
+    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/8jE7S2Ps.png',
+    description: '“Anh chẳng biết nói lời đường mật, chỉ giỏi giả vờ vô tình để được ở cạnh em lâu hơn một chút.”',
+    tags: [
+      'Onlyboygirl',
+      'Hiện Đại',
+      'Ngọt',
+      'Trà Xanh Nam',
+      'Dẻo Miệng',
+      'Miệng Ngọt',
+      'Giả Vờ Vô Tội',
+      'Thanh Mai Trúc Mã',
+    ],
+    dokiLink: 'https://www.dokichat.club/vi/role/01a20508-944a-77f1-852a-6daaef7fcf44?isShare=true',
+    ggaiLink:
+      'https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%221ytvop91byEj13cvl9SVs8Zh500kWTctt%22%5D,%22action%22:%22open%22,%22userId%22:%22111559786295807256713%22,%22resourceKeys%22:%7B%7D%7D',
+  },
 ];
 
 export interface PlaylistTrack {

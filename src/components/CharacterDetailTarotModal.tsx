@@ -10,6 +10,7 @@ import {
   Mail,
   MessageSquareQuote,
   Send,
+  Share2,
   Sparkles,
   Trash2,
   UserPlus,
@@ -35,6 +36,7 @@ interface CharacterDetailTarotModalProps {
   onBackToMystic?: () => void;
   onSendLetter: (characterId: string, content: string) => void;
   onDeleteLetter: (characterId: string, letterId: string) => void;
+  onShareCharacter?: (character: CharacterItem) => void;
   onOpenProfileModal: () => void;
   onClose: () => void;
 }
@@ -80,6 +82,7 @@ export const CharacterDetailTarotModal: React.FC<CharacterDetailTarotModalProps>
   onBackToMystic,
   onSendLetter,
   onDeleteLetter,
+  onShareCharacter,
   onOpenProfileModal,
   onClose,
 }) => {
@@ -186,7 +189,7 @@ export const CharacterDetailTarotModal: React.FC<CharacterDetailTarotModalProps>
           >
             <HolographicTiltCard
               disableTilt
-              className="rounded-[26px] sm:rounded-[28px] bg-gradient-to-b from-[#171620] via-[#0D0D14] to-[#14121B] border-2 border-[#D4AF37]/80 shadow-[0_26px_80px_rgba(0,0,0,0.92),0_0_48px_rgba(212,175,55,0.28)] p-4 sm:p-6 max-h-[90vh] overflow-y-auto"
+              className="rounded-[26px] sm:rounded-[28px] bg-gradient-to-b from-[#171620] via-[#0D0D14] to-[#14121B] border-2 border-[#D4AF37]/80 shadow-[0_26px_80px_rgba(0,0,0,0.92),0_0_48px_rgba(212,175,55,0.28)] p-4 sm:p-6 max-h-[88vh] overflow-y-auto scroll-smooth"
             >
               {/* Khung viền hoa văn Tarot chạm trổ ánh kim bên trong */}
               <div
@@ -311,47 +314,62 @@ export const CharacterDetailTarotModal: React.FC<CharacterDetailTarotModalProps>
                     </div>
                   )}
 
-                  {/* Nút dẫn link Chat trực tiếp */}
-                  {(hasDoki || hasGgai) && (
+                  {/* Nút dẫn link Chat trực tiếp & Chia sẻ nhanh */}
+                  {(hasDoki || hasGgai || onShareCharacter) && (
                     <div className="w-full mt-4 pt-3.5 border-t border-[#D4AF37]/25 space-y-2">
-                      <p className="text-[11px] font-medium text-[#B8B0A0]">
-                        Chọn nền tảng trò chuyện
-                      </p>
-                      <div
-                        className={
-                          hasBothLinks ? 'grid grid-cols-2 gap-2' : 'flex'
-                        }
-                      >
-                        {hasDoki && (
-                          <a
-                            href={character.dokiLink}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={() => playSoftTap('card')}
-                            className={`shimmer-gold-btn inline-flex items-center justify-center gap-1.5 min-h-[40px] px-3 py-2 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#E6C86E] text-[#0B0B0F] text-xs font-semibold whitespace-nowrap hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3E5AB] transition-all ${
-                              !hasBothLinks ? 'w-full' : ''
-                            }`}
+                      {(hasDoki || hasGgai) && (
+                        <>
+                          <p className="text-[11px] font-medium text-[#B8B0A0]">
+                            Chọn nền tảng trò chuyện
+                          </p>
+                          <div
+                            className={
+                              hasBothLinks ? 'grid grid-cols-2 gap-2' : 'flex'
+                            }
                           >
-                            <span>DokiChat</span>
-                            <ArrowUpRight className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
-                          </a>
-                        )}
+                            {hasDoki && (
+                              <a
+                                href={character.dokiLink}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={() => playSoftTap('card')}
+                                className={`shimmer-gold-btn inline-flex items-center justify-center gap-1.5 min-h-[40px] px-3 py-2 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#E6C86E] text-[#0B0B0F] text-xs font-semibold whitespace-nowrap hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3E5AB] transition-all ${
+                                  !hasBothLinks ? 'w-full' : ''
+                                }`}
+                              >
+                                <span>DokiChat</span>
+                                <ArrowUpRight className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+                              </a>
+                            )}
 
-                        {hasGgai && (
-                          <a
-                            href={character.ggaiLink}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={() => playSoftTap('card')}
-                            className={`inline-flex items-center justify-center gap-1.5 min-h-[40px] px-3 py-2 rounded-xl bg-[#0B0B0F] border border-[#D4AF37]/65 text-[#F3E5AB] text-xs font-medium whitespace-nowrap hover:bg-[#D4AF37]/15 hover:border-[#F3E5AB] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] transition-all ${
-                              !hasBothLinks ? 'w-full' : ''
-                            }`}
-                          >
-                            <span>GGAI</span>
-                            <ArrowUpRight className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
-                          </a>
-                        )}
-                      </div>
+                            {hasGgai && (
+                              <a
+                                href={character.ggaiLink}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={() => playSoftTap('card')}
+                                className={`inline-flex items-center justify-center gap-1.5 min-h-[40px] px-3 py-2 rounded-xl bg-[#0B0B0F] border border-[#D4AF37]/65 text-[#F3E5AB] text-xs font-medium whitespace-nowrap hover:bg-[#D4AF37]/15 hover:border-[#F3E5AB] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] transition-all ${
+                                  !hasBothLinks ? 'w-full' : ''
+                                }`}
+                              >
+                                <span>GGAI</span>
+                                <ArrowUpRight className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+                              </a>
+                            )}
+                          </div>
+                        </>
+                      )}
+
+                      {onShareCharacter && (
+                        <button
+                          type="button"
+                          onClick={() => onShareCharacter(character)}
+                          className="w-full inline-flex items-center justify-center gap-1.5 min-h-[38px] px-3 py-1.5 rounded-xl bg-[#12121A] border border-[#D4AF37]/50 text-[#F3E5AB] text-xs font-medium whitespace-nowrap hover:bg-[#D4AF37]/15 hover:border-[#F3E5AB] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] transition-all cursor-pointer"
+                        >
+                          <Share2 className="w-3.5 h-3.5 text-[#D4AF37] shrink-0" aria-hidden="true" />
+                          <span>Chia sẻ nhân vật</span>
+                        </button>
+                      )}
                     </div>
                   )}
                 </div>
@@ -411,23 +429,23 @@ export const CharacterDetailTarotModal: React.FC<CharacterDetailTarotModalProps>
                   </div>
 
                   {activeTab === 'profile' ? (
-                    <div className="space-y-3.5">
+                    <div className="space-y-4">
                       {/* Mục 1: Câu chuyện nền (Backstory) */}
-                      <section className="rounded-2xl bg-[#0B0B0F]/75 border border-[#D4AF37]/25 p-3.5 sm:p-4">
-                        <div className="flex items-center gap-2 mb-2">
+                      <section className="rounded-2xl bg-[#0B0B0F]/75 border border-[#D4AF37]/25 p-4 sm:p-5">
+                        <div className="flex items-center gap-2 mb-2.5">
                           <BookOpen className="w-4 h-4 text-[#D4AF37] shrink-0" aria-hidden="true" />
                           <h4 className="font-display text-lg font-semibold text-[#F3E5AB]">
                             Câu chuyện nền (Backstory)
                           </h4>
                         </div>
-                        <div className="max-h-[210px] sm:max-h-[230px] overflow-y-auto pr-2 text-xs sm:text-[13.5px] text-[#DED7C8] leading-relaxed whitespace-pre-line">
+                        <div className="text-[13px] sm:text-sm text-[#E5DEC9] leading-[1.78] tracking-[0.01em] whitespace-pre-line break-words">
                           {storyProfile.backstory}
                         </div>
                       </section>
 
                       {/* Mục 2: Lời thoại mở đầu (First Message) + Copy nhanh */}
-                      <section className="rounded-2xl bg-[#0B0B0F]/85 border border-[#D4AF37]/35 p-3.5 sm:p-4">
-                        <div className="flex items-center justify-between gap-2 mb-2.5">
+                      <section className="rounded-2xl bg-[#0B0B0F]/85 border border-[#D4AF37]/35 p-4 sm:p-5">
+                        <div className="flex items-center justify-between gap-2 mb-3">
                           <div className="flex items-center gap-2 min-w-0">
                             <MessageSquareQuote
                               className="w-4 h-4 text-[#D4AF37] shrink-0"
@@ -441,7 +459,7 @@ export const CharacterDetailTarotModal: React.FC<CharacterDetailTarotModalProps>
                           <button
                             type="button"
                             onClick={handleCopyFirstMessage}
-                            className={`inline-flex items-center gap-1.5 min-h-[32px] px-2.5 py-1 rounded-lg border text-[11px] font-medium whitespace-nowrap shrink-0 transition-all cursor-pointer ${
+                            className={`inline-flex items-center gap-1.5 min-h-[34px] px-3 py-1 rounded-lg border text-[11px] font-medium whitespace-nowrap shrink-0 transition-all cursor-pointer ${
                               copiedFirstMsg
                                 ? 'bg-[#D4AF37] border-[#F3E5AB] text-[#0B0B0F] font-semibold'
                                 : 'bg-[#15151E] border-[#D4AF37]/45 text-[#F3E5AB] hover:border-[#F3E5AB] hover:bg-[#D4AF37]/15'
@@ -461,10 +479,64 @@ export const CharacterDetailTarotModal: React.FC<CharacterDetailTarotModalProps>
                           </button>
                         </div>
 
-                        <div className="rounded-xl bg-[#12121A]/90 border border-[#D4AF37]/18 p-3 max-h-[220px] sm:max-h-[245px] overflow-y-auto pr-2 text-xs sm:text-[13.5px] text-[#EDE6D6] leading-relaxed whitespace-pre-line italic">
+                        <div className="rounded-xl bg-[#12121A]/90 border border-[#D4AF37]/20 p-3.5 sm:p-4 text-[13px] sm:text-sm text-[#EDE6D6] leading-[1.78] tracking-[0.01em] whitespace-pre-line break-words italic">
                           {storyProfile.firstMessage}
                         </div>
                       </section>
+
+                      {/* Nút vào chat & chia sẻ nhanh ở cuối bài đọc trên màn hình nhỏ */}
+                      {(hasDoki || hasGgai || onShareCharacter) && (
+                        <div className="md:hidden pt-1 space-y-2">
+                          {(hasDoki || hasGgai) && (
+                            <div
+                              className={
+                                hasBothLinks ? 'grid grid-cols-2 gap-2.5' : 'flex'
+                              }
+                            >
+                              {hasDoki && (
+                                <a
+                                  href={character.dokiLink}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  onClick={() => playSoftTap('card')}
+                                  className={`shimmer-gold-btn inline-flex items-center justify-center gap-1.5 min-h-[42px] px-3 py-2 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#E6C86E] text-[#0B0B0F] text-xs font-semibold whitespace-nowrap hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3E5AB] transition-all ${
+                                    !hasBothLinks ? 'w-full' : ''
+                                  }`}
+                                >
+                                  <span>Vào DokiChat</span>
+                                  <ArrowUpRight className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+                                </a>
+                              )}
+
+                              {hasGgai && (
+                                <a
+                                  href={character.ggaiLink}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  onClick={() => playSoftTap('card')}
+                                  className={`inline-flex items-center justify-center gap-1.5 min-h-[42px] px-3 py-2 rounded-xl bg-[#0B0B0F] border border-[#D4AF37]/65 text-[#F3E5AB] text-xs font-medium whitespace-nowrap hover:bg-[#D4AF37]/15 hover:border-[#F3E5AB] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] transition-all ${
+                                    !hasBothLinks ? 'w-full' : ''
+                                  }`}
+                                >
+                                  <span>Vào GGAI</span>
+                                  <ArrowUpRight className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+                                </a>
+                              )}
+                            </div>
+                          )}
+
+                          {onShareCharacter && (
+                            <button
+                              type="button"
+                              onClick={() => onShareCharacter(character)}
+                              className="w-full inline-flex items-center justify-center gap-1.5 min-h-[40px] px-3 py-2 rounded-xl bg-[#12121A] border border-[#D4AF37]/50 text-[#F3E5AB] text-xs font-medium whitespace-nowrap hover:bg-[#D4AF37]/15 hover:border-[#F3E5AB] active:scale-[0.98] transition-all cursor-pointer"
+                            >
+                              <Share2 className="w-3.5 h-3.5 text-[#D4AF37] shrink-0" aria-hidden="true" />
+                              <span>Chia sẻ liên kết nhân vật</span>
+                            </button>
+                          )}
+                        </div>
+                      )}
                     </div>
                   ) : (
                     /* Tab 2: Hòm Thư Tâm Tình (Gửi lời nhắn riêng cho nhân vật) */

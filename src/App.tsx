@@ -6,6 +6,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import {
+  ArrowUp,
   ArrowUpRight,
   ChevronDown,
   ChevronLeft,
@@ -15,6 +16,7 @@ import {
   Pause,
   Play,
   Search,
+  Share2,
   SkipForward,
   SlidersHorizontal,
   Sparkles,
@@ -46,6 +48,11 @@ import {
   type UserProfile,
 } from './types/user';
 import { playAchievementChime, playCatMeowChime, playDoorChime, playSoftTap, playTarotSpreadChime } from './utils/soundEffects';
+import {
+  buildCharacterShareUrl,
+  buildWebsiteShareUrl,
+  shareOrCopyLink,
+} from './utils/shareUtils';
 import {
   getTopTrendingCharacters,
   loadCharacterInteractions,
@@ -707,8 +714,18 @@ function getPaginationItems(current: number, total: number): Array<number | 'ell
   return items;
 }
 
+function getInitialSharedCharacter(): CharacterItem | null {
+  if (typeof window === 'undefined') return null;
+  const charId = new URLSearchParams(window.location.search).get('char');
+  if (!charId) return null;
+  return CHARACTERS.find((item) => item.id === charId) || null;
+}
+
 export default function App() {
-  const [introPhase, setIntroPhase] = useState<IntroPhase>('idle');
+  const initialSharedChar = useMemo(() => getInitialSharedCharacter(), []);
+  const [introPhase, setIntroPhase] = useState<IntroPhase>(() =>
+    initialSharedChar ? 'entered' : 'idle'
+  );
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedGenre, setSelectedGenre] = useState<'Tất cả' | GenreTag>('Tất cả');
   const [showAllTags, setShowAllTags] = useState(false);
@@ -717,7 +734,9 @@ export default function App() {
   const [headerCatMessage, setHeaderCatMessage] = useState<string | null>(null);
   const [isDestinyModalOpen, setIsDestinyModalOpen] = useState(false);
   const [isMysticCornerOpen, setIsMysticCornerOpen] = useState(false);
-  const [selectedCharacter, setSelectedCharacter] = useState<CharacterItem | null>(null);
+  const [selectedCharacter, setSelectedCharacter] = useState<CharacterItem | null>(
+    () => initialSharedChar
+  );
   const [openedDetailFromTarot, setOpenedDetailFromTarot] = useState(false);
   const [openedDetailFromMystic, setOpenedDetailFromMystic] = useState(false);
   const [isSecretBadgeOpen, setIsSecretBadgeOpen] = useState(false);
@@ -734,6 +753,8 @@ export default function App() {
   const [interactionCounts, setInteractionCounts] = useState<Record<string, number>>(() =>
     loadCharacterInteractions()
   );
+  const [shareToast, setShareToast] = useState<string | null>(null);
+  const [showBackToTop, setShowBackToTop] = useState(false);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const shouldPlayRef = useRef(false);
@@ -742,6 +763,7 @@ export default function App() {
   const introTimerRef = useRef<number | null>(null);
   const catTapCountRef = useRef(0);
   const catTapResetTimerRef = useRef<number | null>(null);
+  const shareToastTimerRef = useRef<number | null>(null);
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -757,10 +779,17 @@ export default function App() {
   );
 
   useEffect(() => {
+    const handleScroll = () => {
+      setShowBackToTop(window.scrollY > 300);
+    };
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
+      window.removeEventListener('scroll', handleScroll);
       if (headerCatTimerRef.current) window.clearTimeout(headerCatTimerRef.current);
       if (introTimerRef.current) window.clearTimeout(introTimerRef.current);
       if (catTapResetTimerRef.current) window.clearTimeout(catTapResetTimerRef.current);
+      if (shareToastTimerRef.current) window.clearTimeout(shareToastTimerRef.current);
     };
   }, []);
 
@@ -1096,6 +1125,53 @@ export default function App() {
     setIsMysticCornerOpen(true);
   };
 
+  const triggerShareToast = (message: string) => {
+    setShareToast(message);
+    if (shareToastTimerRef.current) {
+      window.clearTimeout(shareToastTimerRef.current);
+    }
+    shareToastTimerRef.current = window.setTimeout(() => {
+      setShareToast(null);
+    }, 2600);
+  };
+
+  const handleShareCharacter = async (char: CharacterItem) => {
+    playSoftTap('card');
+    trackCharacterInteraction(char.id, 1);
+    const shareUrl = buildCharacterShareUrl(char.id);
+    const cleanQuote = char.description.trim().replace(/^["“]+|["”]+$/g, '');
+    const outcome = await shareOrCopyLink({
+      title: `${char.name} · Ngôi Nhà Nhỏ Của Tần Nhi`,
+      text: `✨ ${char.name} — “${cleanQuote}”\nGhé xem hồ sơ nhân vật tại Ngôi Nhà Nhỏ Của Tần Nhi:`,
+      url: shareUrl,
+    });
+    if (outcome === 'copied') {
+      triggerShareToast('✨ Đã sao chép liên kết nhân vật!');
+    } else if (outcome === 'shared') {
+      triggerShareToast('✨ Đã mở chia sẻ nhân vật!');
+    }
+  };
+
+  const handleShareWebsite = async () => {
+    playSoftTap('card');
+    const siteUrl = buildWebsiteShareUrl();
+    const outcome = await shareOrCopyLink({
+      title: 'Ngôi Nhà Nhỏ Của Tần Nhi',
+      text: '✨ Ghé thăm Ngôi Nhà Nhỏ Của Tần Nhi — Bộ sưu tập nhân vật AI Chatbot & Góc Huyền Bí:',
+      url: siteUrl,
+    });
+    if (outcome === 'copied') {
+      triggerShareToast('✨ Đã sao chép liên kết trang web!');
+    } else if (outcome === 'shared') {
+      triggerShareToast('✨ Đã chia sẻ Ngôi Nhà Nhỏ Của Tần Nhi!');
+    }
+  };
+
+  const handleScrollToTop = () => {
+    playSoftTap('nav');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <div className="min-h-screen bg-[#0B0B0F] text-[#F5EFE0] relative selection:bg-[#D4AF37]/30 selection:text-[#F3E5AB]">
       {/* Audio phát nhạc nền liên tục */}
@@ -1286,14 +1362,25 @@ export default function App() {
                 </p>
               </div>
 
-              <div className="flex items-center gap-3 text-xs sm:text-sm text-[#B8B0A0] tabular-nums shrink-0">
-                <span>
-                  Tổng cộng <strong className="text-[#F3E5AB] font-semibold">{CHARACTERS.length}</strong> nhân vật
-                </span>
-                <span aria-hidden="true" className="text-[#D4AF37]/60">·</span>
-                <span>
-                  Đang hiển thị <strong className="text-[#F3E5AB] font-semibold">{filteredCharacters.length}</strong>
-                </span>
+              <div className="flex flex-wrap items-center justify-between md:justify-end gap-2.5 sm:gap-3 shrink-0">
+                <div className="flex items-center gap-3 text-xs sm:text-sm text-[#B8B0A0] tabular-nums">
+                  <span>
+                    Tổng cộng <strong className="text-[#F3E5AB] font-semibold">{CHARACTERS.length}</strong> nhân vật
+                  </span>
+                  <span aria-hidden="true" className="text-[#D4AF37]/60">·</span>
+                  <span>
+                    Đang hiển thị <strong className="text-[#F3E5AB] font-semibold">{filteredCharacters.length}</strong>
+                  </span>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleShareWebsite}
+                  className="inline-flex items-center gap-1.5 min-h-[36px] px-3 py-1.5 rounded-xl bg-[#121218] border border-[#D4AF37]/50 text-[11px] sm:text-xs font-medium text-[#F3E5AB] hover:bg-[#D4AF37]/15 hover:border-[#F3E5AB] active:scale-95 transition-all whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]"
+                >
+                  <Share2 className="w-3.5 h-3.5 text-[#D4AF37] shrink-0" aria-hidden="true" />
+                  <span>Chia sẻ trang web</span>
+                </button>
               </div>
             </div>
           </section>
@@ -1567,75 +1654,94 @@ export default function App() {
                     </div>
 
                     {/* 4. Hai nút bấm liên kết nằm gọn gàng ở đáy thẻ */}
-                    {(hasDoki || hasGgai) && (
-                      <div
-                        className={`mt-3 sm:mt-4 pt-2.5 sm:pt-3.5 border-t border-[#D4AF37]/15 ${
-                          hasBothLinks ? 'grid grid-cols-2 gap-1.5 sm:gap-2.5' : 'flex'
-                        }`}
-                      >
-                        {hasDoki && (
-                          <a
-                            href={char.dokiLink}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              playSoftTap('card');
-                              trackCharacterInteraction(char.id, 2);
-                            }}
-                            className={`shimmer-gold-btn inline-flex items-center justify-center gap-1 min-h-[36px] sm:min-h-[40px] px-1.5 sm:px-3 py-1.5 rounded-lg bg-gradient-to-r from-[#D4AF37] to-[#E6C86E] text-[#0B0B0F] text-[11px] sm:text-xs font-semibold whitespace-nowrap hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3E5AB] transition-all duration-150 ${
-                              !hasBothLinks ? 'w-full' : ''
-                            }`}
-                          >
-                            {hasBothLinks ? (
-                              <>
-                                <span className="sm:hidden">DokiChat</span>
-                                <span className="hidden sm:inline">Link DokiChat</span>
-                              </>
-                            ) : (
-                              <span>Link DokiChat</span>
-                            )}
-                            <ArrowUpRight
-                              className={`w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0 ${
-                                hasBothLinks ? 'hidden sm:inline-block' : ''
+                    {/* 4. Các nút liên kết Chat & Chia sẻ nhanh nằm gọn gàng ở đáy thẻ */}
+                    <div
+                      className={`mt-3 sm:mt-4 pt-2.5 sm:pt-3.5 border-t border-[#D4AF37]/15 flex flex-col gap-1.5 sm:flex-row sm:items-center sm:gap-2`}
+                    >
+                      {(hasDoki || hasGgai) && (
+                        <div
+                          className={`flex-1 min-w-0 ${
+                            hasBothLinks ? 'grid grid-cols-2 gap-1.5 sm:gap-2' : 'flex'
+                          }`}
+                        >
+                          {hasDoki && (
+                            <a
+                              href={char.dokiLink}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                playSoftTap('card');
+                                trackCharacterInteraction(char.id, 2);
+                              }}
+                              className={`shimmer-gold-btn inline-flex items-center justify-center gap-1 min-h-[36px] sm:min-h-[40px] px-1.5 sm:px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-[#D4AF37] to-[#E6C86E] text-[#0B0B0F] text-[11px] sm:text-xs font-semibold whitespace-nowrap hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3E5AB] transition-all duration-150 ${
+                                !hasBothLinks ? 'w-full' : ''
                               }`}
-                              aria-hidden="true"
-                            />
-                          </a>
-                        )}
+                            >
+                              {hasBothLinks ? (
+                                <>
+                                  <span className="sm:hidden">DokiChat</span>
+                                  <span className="hidden sm:inline">Link DokiChat</span>
+                                </>
+                              ) : (
+                                <span>Link DokiChat</span>
+                              )}
+                              <ArrowUpRight
+                                className={`w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0 ${
+                                  hasBothLinks ? 'hidden sm:inline-block' : ''
+                                }`}
+                                aria-hidden="true"
+                              />
+                            </a>
+                          )}
 
-                        {hasGgai && (
-                          <a
-                            href={char.ggaiLink}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              playSoftTap('card');
-                              trackCharacterInteraction(char.id, 2);
-                            }}
-                            className={`inline-flex items-center justify-center gap-1 min-h-[36px] sm:min-h-[40px] px-1.5 sm:px-3 py-1.5 rounded-lg bg-[#0B0B0F] border border-[#D4AF37]/60 text-[#F3E5AB] text-[11px] sm:text-xs font-medium whitespace-nowrap hover:bg-[#D4AF37]/15 hover:border-[#F3E5AB] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] transition-all duration-150 ${
-                              !hasBothLinks ? 'w-full' : ''
-                            }`}
-                          >
-                            {hasBothLinks ? (
-                              <>
-                                <span className="sm:hidden">GGAI</span>
-                                <span className="hidden sm:inline">Link GGAI</span>
-                              </>
-                            ) : (
-                              <span>Link GGAI</span>
-                            )}
-                            <ArrowUpRight
-                              className={`w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0 ${
-                                hasBothLinks ? 'hidden sm:inline-block' : ''
+                          {hasGgai && (
+                            <a
+                              href={char.ggaiLink}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                playSoftTap('card');
+                                trackCharacterInteraction(char.id, 2);
+                              }}
+                              className={`inline-flex items-center justify-center gap-1 min-h-[36px] sm:min-h-[40px] px-1.5 sm:px-2.5 py-1.5 rounded-lg bg-[#0B0B0F] border border-[#D4AF37]/60 text-[#F3E5AB] text-[11px] sm:text-xs font-medium whitespace-nowrap hover:bg-[#D4AF37]/15 hover:border-[#F3E5AB] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] transition-all duration-150 ${
+                                !hasBothLinks ? 'w-full' : ''
                               }`}
-                              aria-hidden="true"
-                            />
-                          </a>
-                        )}
-                      </div>
-                    )}
+                            >
+                              {hasBothLinks ? (
+                                <>
+                                  <span className="sm:hidden">GGAI</span>
+                                  <span className="hidden sm:inline">Link GGAI</span>
+                                </>
+                              ) : (
+                                <span>Link GGAI</span>
+                              )}
+                              <ArrowUpRight
+                                className={`w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0 ${
+                                  hasBothLinks ? 'hidden sm:inline-block' : ''
+                                }`}
+                                aria-hidden="true"
+                              />
+                            </a>
+                          )}
+                        </div>
+                      )}
+
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          void handleShareCharacter(char);
+                        }}
+                        aria-label={`Chia sẻ liên kết nhân vật ${primaryName}`}
+                        title="Chia sẻ / sao chép liên kết nhân vật"
+                        className="inline-flex items-center justify-center gap-1.5 min-h-[32px] sm:min-h-[40px] px-2.5 sm:px-2.5 py-1 rounded-lg bg-[#0B0B0F]/95 border border-[#D4AF37]/45 text-[#F3E5AB] text-[11px] font-medium whitespace-nowrap hover:bg-[#D4AF37]/15 hover:border-[#F3E5AB] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] transition-all shrink-0 cursor-pointer"
+                      >
+                        <Share2 className="w-3.5 h-3.5 text-[#D4AF37] shrink-0" aria-hidden="true" />
+                        <span className="sm:hidden">Chia sẻ</span>
+                      </button>
+                    </div>
                       </HolographicTiltCard>
                     </motion.article>
                   );
@@ -1772,85 +1878,117 @@ export default function App() {
         </footer>
       </div>
 
-      {/* Trình phát nhạc mini & Linh vật mèo đen ở góc dưới màn hình */}
-      {hasEntered && currentTrack && (
-        <div className="fixed bottom-3 right-3 sm:bottom-5 sm:right-5 z-30 flex flex-col items-end gap-2 max-w-[calc(100vw-1.5rem)]">
+      {/* Cụm góc dưới bên phải: Nút Quay về đầu trang + Trình phát nhạc mini & Linh vật mèo đen */}
+      {hasEntered && (
+        <div className="fixed bottom-3 right-3 sm:bottom-5 sm:right-5 z-30 flex flex-col items-end gap-2.5 max-w-[calc(100vw-1.5rem)]">
           <AnimatePresence>
-            {catGreetingOpen && (
-              <motion.div
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 6 }}
-                transition={{ duration: 0.18 }}
-                className="max-w-[230px] rounded-xl bg-[#121218] border border-[#D4AF37]/45 px-3.5 py-2.5 text-xs text-[#F3E5AB] shadow-lg"
+            {showBackToTop && (
+              <motion.button
+                key="back-to-top-btn"
+                type="button"
+                initial={{ opacity: 0, y: 10, scale: 0.9 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 10, scale: 0.9 }}
+                transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+                onClick={handleScrollToTop}
+                aria-label="Quay về đầu trang"
+                title="Quay về đầu trang"
+                className="group relative w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#121218]/95 backdrop-blur-md border border-[#D4AF37]/75 text-[#F3E5AB] shadow-[0_10px_26px_rgba(0,0,0,0.78),0_0_20px_rgba(212,175,55,0.22)] hover:border-[#FFF4C4] hover:bg-[#1B170F] hover:shadow-[0_0_26px_rgba(243,229,171,0.42)] active:scale-95 flex items-center justify-center transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFF4C4]"
               >
-                Meow~ Chào mừng bạn ghé thăm Ngôi Nhà Nhỏ Của Tần Nhi.
-              </motion.div>
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute -top-1 -right-0.5 text-[10px] text-[#D4AF37] group-hover:text-[#FFF4C4] transition-colors"
+                >
+                  ✦
+                </span>
+                <ArrowUp
+                  className="w-4 h-4 sm:w-[18px] sm:h-[18px] transition-transform duration-200 group-hover:-translate-y-0.5"
+                  aria-hidden="true"
+                />
+              </motion.button>
             )}
           </AnimatePresence>
 
-          <aside
-            aria-label="Trình phát nhạc nền"
-            className="flex items-center gap-2.5 sm:gap-3 rounded-2xl bg-[#121218]/95 backdrop-blur-md border border-[#D4AF37]/45 px-2.5 py-2 sm:px-3.5 sm:py-2.5 shadow-[0_10px_30px_rgba(0,0,0,0.7),0_0_20px_rgba(212,175,55,0.12)]"
-          >
-            {/* Mèo đen đồng hành */}
-            <button
-              type="button"
-              onClick={() => {
-                if (registerSecretCatTap()) return;
-                playSoftTap('music');
-                setCatGreetingOpen((prev) => !prev);
-              }}
-              aria-label="Chú mèo đen đồng hành"
-              title="Chú mèo đen đồng hành"
-              className="relative w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-[#0B0B0F] border border-[#D4AF37]/35 hover:border-[#F3E5AB] flex items-center justify-center shrink-0 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]"
-            >
-              <BlackCatMascot size={34} variant="companion" />
-            </button>
-
-            {/* Thông tin bài hát hiện tại */}
-            <div className="min-w-0 pr-1">
-              <div className="flex items-center gap-1.5 text-[11px] font-medium text-[#D4AF37] tabular-nums">
-                <Music className="w-3 h-3 shrink-0" aria-hidden="true" />
-                <span className="whitespace-nowrap">
-                  Bài {currentTrackIndex + 1}/{PLAYLIST.length}
-                </span>
-              </div>
-              <p
-                title={currentTrack.title}
-                className="text-xs sm:text-[13px] font-semibold text-[#F3E5AB] truncate max-w-[120px] sm:max-w-[160px]"
-              >
-                {currentTrack.title}
-              </p>
-            </div>
-
-            {/* Nút điều khiển Phát / Tạm dừng & Chuyển bài */}
-            <div className="flex items-center gap-1.5 shrink-0">
-              <button
-                type="button"
-                onClick={handleTogglePlay}
-                aria-label={isPlaying ? 'Tạm dừng nhạc' : 'Phát nhạc'}
-                title={isPlaying ? 'Tạm dừng' : 'Phát nhạc'}
-                className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-[#D4AF37] to-[#E6C86E] text-[#0B0B0F] flex items-center justify-center hover:brightness-110 active:scale-95 transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3E5AB]"
-              >
-                {isPlaying ? (
-                  <Pause className="w-4 h-4 fill-current" aria-hidden="true" />
-                ) : (
-                  <Play className="w-4 h-4 fill-current translate-x-[1px]" aria-hidden="true" />
+          {currentTrack && (
+            <>
+              <AnimatePresence>
+                {catGreetingOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 6 }}
+                    transition={{ duration: 0.18 }}
+                    className="max-w-[230px] rounded-xl bg-[#121218] border border-[#D4AF37]/45 px-3.5 py-2.5 text-xs text-[#F3E5AB] shadow-lg"
+                  >
+                    Meow~ Chào mừng bạn ghé thăm Ngôi Nhà Nhỏ Của Tần Nhi.
+                  </motion.div>
                 )}
-              </button>
+              </AnimatePresence>
 
-              <button
-                type="button"
-                onClick={handleNextTrack}
-                aria-label="Chuyển sang bài tiếp theo"
-                title="Bài tiếp theo"
-                className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#0B0B0F] border border-[#D4AF37]/45 text-[#F3E5AB] flex items-center justify-center hover:bg-[#D4AF37]/15 hover:border-[#F3E5AB] active:scale-95 transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]"
+              <aside
+                aria-label="Trình phát nhạc nền"
+                className="flex items-center gap-2.5 sm:gap-3 rounded-2xl bg-[#121218]/95 backdrop-blur-md border border-[#D4AF37]/45 px-2.5 py-2 sm:px-3.5 sm:py-2.5 shadow-[0_10px_30px_rgba(0,0,0,0.7),0_0_20px_rgba(212,175,55,0.12)]"
               >
-                <SkipForward className="w-4 h-4" aria-hidden="true" />
-              </button>
-            </div>
-          </aside>
+                {/* Mèo đen đồng hành */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (registerSecretCatTap()) return;
+                    playSoftTap('music');
+                    setCatGreetingOpen((prev) => !prev);
+                  }}
+                  aria-label="Chú mèo đen đồng hành"
+                  title="Chú mèo đen đồng hành"
+                  className="relative w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-[#0B0B0F] border border-[#D4AF37]/35 hover:border-[#F3E5AB] flex items-center justify-center shrink-0 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]"
+                >
+                  <BlackCatMascot size={34} variant="companion" />
+                </button>
+
+                {/* Thông tin bài hát hiện tại */}
+                <div className="min-w-0 pr-1">
+                  <div className="flex items-center gap-1.5 text-[11px] font-medium text-[#D4AF37] tabular-nums">
+                    <Music className="w-3 h-3 shrink-0" aria-hidden="true" />
+                    <span className="whitespace-nowrap">
+                      Bài {currentTrackIndex + 1}/{PLAYLIST.length}
+                    </span>
+                  </div>
+                  <p
+                    title={currentTrack.title}
+                    className="text-xs sm:text-[13px] font-semibold text-[#F3E5AB] truncate max-w-[120px] sm:max-w-[160px]"
+                  >
+                    {currentTrack.title}
+                  </p>
+                </div>
+
+                {/* Nút điều khiển Phát / Tạm dừng & Chuyển bài */}
+                <div className="flex items-center gap-1.5 shrink-0">
+                  <button
+                    type="button"
+                    onClick={handleTogglePlay}
+                    aria-label={isPlaying ? 'Tạm dừng nhạc' : 'Phát nhạc'}
+                    title={isPlaying ? 'Tạm dừng' : 'Phát nhạc'}
+                    className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-[#D4AF37] to-[#E6C86E] text-[#0B0B0F] flex items-center justify-center hover:brightness-110 active:scale-95 transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3E5AB]"
+                  >
+                    {isPlaying ? (
+                      <Pause className="w-4 h-4 fill-current" aria-hidden="true" />
+                    ) : (
+                      <Play className="w-4 h-4 fill-current translate-x-[1px]" aria-hidden="true" />
+                    )}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleNextTrack}
+                    aria-label="Chuyển sang bài tiếp theo"
+                    title="Bài tiếp theo"
+                    className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#0B0B0F] border border-[#D4AF37]/45 text-[#F3E5AB] flex items-center justify-center hover:bg-[#D4AF37]/15 hover:border-[#F3E5AB] active:scale-95 transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]"
+                  >
+                    <SkipForward className="w-4 h-4" aria-hidden="true" />
+                  </button>
+                </div>
+              </aside>
+            </>
+          )}
         </div>
       )}
       {/* Bàn bốc bài Tarot Gặp Gỡ Định Mệnh */}
@@ -1881,13 +2019,37 @@ export default function App() {
         onBackToMystic={handleBackToMysticFromDetail}
         onSendLetter={handleSendHeartfeltLetter}
         onDeleteLetter={handleDeleteHeartfeltLetter}
+        onShareCharacter={handleShareCharacter}
         onOpenProfileModal={() => setIsProfileModalOpen(true)}
         onClose={() => {
           setSelectedCharacter(null);
           setOpenedDetailFromTarot(false);
           setOpenedDetailFromMystic(false);
+          if (typeof window !== 'undefined' && window.location.search.includes('char=')) {
+            window.history.replaceState({}, '', buildWebsiteShareUrl());
+          }
         }}
       />
+
+      {/* Thông báo Toast vàng Gold khi chia sẻ / sao chép liên kết */}
+      <AnimatePresence>
+        {shareToast && (
+          <motion.div
+            key="gold-share-toast"
+            role="status"
+            aria-live="polite"
+            initial={{ opacity: 0, y: 14, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 10, scale: 0.96 }}
+            transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+            className="fixed bottom-24 sm:bottom-8 left-1/2 -translate-x-1/2 z-[60] pointer-events-none max-w-[calc(100vw-2rem)]"
+          >
+            <div className="px-4 py-2.5 rounded-2xl bg-[#121218]/95 backdrop-blur-md border border-[#D4AF37]/80 text-xs sm:text-sm font-medium text-[#F3E5AB] shadow-[0_14px_36px_rgba(0,0,0,0.88),0_0_24px_rgba(212,175,55,0.3)] whitespace-nowrap">
+              {shareToast}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Modal Góc Tri Kỷ: Tạo / chỉnh sửa tài khoản cục bộ */}
       <SoulmateCornerModal

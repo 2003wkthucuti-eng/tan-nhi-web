@@ -33,6 +33,7 @@ import { MysticCornerModal } from './components/MysticCornerModal';
 import { MysticalFogOverlay } from './components/MysticalFogOverlay';
 import { SecretBadgeModal } from './components/SecretBadgeModal';
 import { SoulmateCornerModal } from './components/SoulmateCornerModal';
+import { TrendingSpotlight } from './components/TrendingSpotlight';
 import { UserAvatarBadge } from './components/UserAvatarBadge';
 import {
   loadHeartfeltLetters,
@@ -45,6 +46,11 @@ import {
   type UserProfile,
 } from './types/user';
 import { playAchievementChime, playCatMeowChime, playDoorChime, playSoftTap, playTarotSpreadChime } from './utils/soundEffects';
+import {
+  getTopTrendingCharacters,
+  loadCharacterInteractions,
+  saveCharacterInteractions,
+} from './utils/trendingStats';
 
 export type GenreTag = string;
 
@@ -725,6 +731,9 @@ export default function App() {
   );
   const [fireworkBurstKey, setFireworkBurstKey] = useState(0);
   const [failedAvatars, setFailedAvatars] = useState<Record<string, boolean>>({});
+  const [interactionCounts, setInteractionCounts] = useState<Record<string, number>>(() =>
+    loadCharacterInteractions()
+  );
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const shouldPlayRef = useRef(false);
@@ -966,9 +975,26 @@ export default function App() {
     saveUserProfile(null);
   };
 
+  const topTrendingEntries = useMemo(
+    () => getTopTrendingCharacters(CHARACTERS, interactionCounts, 3),
+    [interactionCounts]
+  );
+
+  const trackCharacterInteraction = (characterId: string, weight = 1) => {
+    setInteractionCounts((prev) => {
+      const updated = {
+        ...prev,
+        [characterId]: (prev[characterId] ?? 0) + weight,
+      };
+      saveCharacterInteractions(updated);
+      return updated;
+    });
+  };
+
   const handleSendHeartfeltLetter = (characterId: string, content: string) => {
     if (!userProfile) return;
 
+    trackCharacterInteraction(characterId, 2);
     const nextTotalCount = totalLettersSent + 1;
     const willUnlockNow = !hasUnlockedSoulmateBadge && nextTotalCount >= 3;
     const badgeActive = hasUnlockedSoulmateBadge || willUnlockNow;
@@ -1035,6 +1061,7 @@ export default function App() {
   };
 
   const handleInspectCharacterFromTarot = (char: CharacterItem) => {
+    trackCharacterInteraction(char.id, 1);
     setIsDestinyModalOpen(false);
     setOpenedDetailFromMystic(false);
     setOpenedDetailFromTarot(true);
@@ -1055,6 +1082,7 @@ export default function App() {
   };
 
   const handleInspectCharacterFromMystic = (char: CharacterItem) => {
+    trackCharacterInteraction(char.id, 1);
     setIsMysticCornerOpen(false);
     setOpenedDetailFromTarot(false);
     setOpenedDetailFromMystic(true);
@@ -1273,6 +1301,22 @@ export default function App() {
           {/* Đường kẻ phân cách Tarot mặt trăng khuyết & ngôi sao 4 cánh */}
           <TarotDivider />
 
+          {/* Phần Gương mặt nổi bật (Top Trending) hiển thị 3 nhân vật tương tác cao nhất */}
+          <TrendingSpotlight
+            entries={topTrendingEntries}
+            failedAvatars={failedAvatars}
+            onAvatarError={(characterId) =>
+              setFailedAvatars((prev) => ({ ...prev, [characterId]: true }))
+            }
+            onSelectCharacter={(char) => {
+              trackCharacterInteraction(char.id, 1);
+              setOpenedDetailFromTarot(false);
+              setOpenedDetailFromMystic(false);
+              setSelectedCharacter(char);
+            }}
+            onChatLinkClick={(characterId) => trackCharacterInteraction(characterId, 2)}
+          />
+
           {/* Thanh tìm kiếm, Gặp gỡ định mệnh & Bộ lọc thể loại thu gọn */}
           <section
             id="bo-suu-tap"
@@ -1454,6 +1498,7 @@ export default function App() {
                         maxTilt={6.5}
                         onClick={() => {
                           playSoftTap('card');
+                          trackCharacterInteraction(char.id, 1);
                           setOpenedDetailFromTarot(false);
                           setOpenedDetailFromMystic(false);
                           setSelectedCharacter(char);
@@ -1536,6 +1581,7 @@ export default function App() {
                             onClick={(e) => {
                               e.stopPropagation();
                               playSoftTap('card');
+                              trackCharacterInteraction(char.id, 2);
                             }}
                             className={`shimmer-gold-btn inline-flex items-center justify-center gap-1 min-h-[36px] sm:min-h-[40px] px-1.5 sm:px-3 py-1.5 rounded-lg bg-gradient-to-r from-[#D4AF37] to-[#E6C86E] text-[#0B0B0F] text-[11px] sm:text-xs font-semibold whitespace-nowrap hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3E5AB] transition-all duration-150 ${
                               !hasBothLinks ? 'w-full' : ''
@@ -1566,6 +1612,7 @@ export default function App() {
                             onClick={(e) => {
                               e.stopPropagation();
                               playSoftTap('card');
+                              trackCharacterInteraction(char.id, 2);
                             }}
                             className={`inline-flex items-center justify-center gap-1 min-h-[36px] sm:min-h-[40px] px-1.5 sm:px-3 py-1.5 rounded-lg bg-[#0B0B0F] border border-[#D4AF37]/60 text-[#F3E5AB] text-[11px] sm:text-xs font-medium whitespace-nowrap hover:bg-[#D4AF37]/15 hover:border-[#F3E5AB] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] transition-all duration-150 ${
                               !hasBothLinks ? 'w-full' : ''

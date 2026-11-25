@@ -542,6 +542,16 @@ const CHARACTERS: CharacterItem[] = [
     ggaiLink:
       'https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%221ytvop91byEj13cvl9SVs8Zh500kWTctt%22%5D,%22action%22:%22open%22,%22userId%22:%22111559786295807256713%22,%22resourceKeys%22:%7B%7D%7D',
   },
+  {
+    id: 'lang-van-triet',
+    name: 'Lăng Vân Triệt — 凌云彻 🩷',
+    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/TmVkUXOc.png',
+    description: '“Tuyết rơi bao mùa hắn chưa từng chờ ai cho đến khi em đến.”',
+    tags: ['Onlyboygirl', 'Cổ Trang', 'Quyền Mưu', 'Trinh Thám', 'Slowburn'],
+    dokiLink: 'https://www.dokichat.club/vi/role/01a20f16-35c7-7d52-a870-98c948ea2b61?isShare=true',
+    ggaiLink:
+      'https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%221BL54JaI2SJgS2_FgNF3stouzsVVvfNuy%22%5D,%22action%22:%22open%22,%22userId%22:%22111559786295807256713%22,%22resourceKeys%22:%7B%7D%7D',
+  },
 ];
 
 export interface PlaylistTrack {

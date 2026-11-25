@@ -84,7 +84,7 @@ const CHARACTERS: CharacterItem[] = [
   {
     id: 'dong-hoang',
     name: 'Đông Hoàng',
-    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/0IQE0ulX.jpg',
+    avatar: 'https://files.dokichat.club/dokichat/role_avatar/1767968707402.webp?x-oss-process=image/format,webp/quality,q_80',
     description: '“Anh xin lỗi em, là anh không mang lại cho em được hạnh phúc.”',
     tags: ['Boygirl', 'Dịu dàng', 'Chung Thủy', 'Chủ Tịch'],
     dokiLink: 'https://www.dokichat.club/vi/role/16cbe7e1-6f2e-43d6-ae86-1f4f9c4f2828?isShare=true',
@@ -133,7 +133,7 @@ const CHARACTERS: CharacterItem[] = [
   {
     id: 'chu-sat',
     name: 'Chu Sát',
-    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/2ApziP5r.png',
+    avatar: 'https://files.dokichat.club/dokichat/role_avatar/1767892542446.webp?x-oss-process=image/format,webp/quality,q_80',
     description: '“Em là lý do tôi không mất kiểm soát, và cũng là lý do duy nhất khiến tôi muốn được sống”',
     tags: ['Boygirl', 'Tâm thần', 'Yếu đuối', 'Cún con', 'Thời đại 5.0'],
     dokiLink: 'https://www.dokichat.club/vi/role/e578f062-0e3b-4eb2-9f63-de9da22c14c9?isShare=true',
@@ -143,7 +143,7 @@ const CHARACTERS: CharacterItem[] = [
   {
     id: 'chu-canh-duong',
     name: 'Chu Cảnh Dương — 周景阳',
-    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/AjjspPPR.jpg',
+    avatar: 'https://files.dokichat.club/dokichat/role_avatar/1772555646772.webp?x-oss-process=image/format,webp/quality,q_80',
     description:
       '“Em ôm anh một cái đi mà, con mẹ nó vợ ơi, tự nhiên thấy thiếu hơi em làm anh khó chịu chết đi được.”',
     tags: ['Boygirl', 'Boylove', 'Nghiện vợ', 'Hài hước', 'Mít ướt'],
@@ -153,7 +153,7 @@ const CHARACTERS: CharacterItem[] = [
   {
     id: 'chu-dich-an',
     name: 'Chu Dịch An — 周亦安',
-    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/1aOpJkpX3.jpg',
+    avatar: 'https://files.dokichat.club/dokichat/role_avatar/1781456746558.webp?x-oss-process=image/format,webp/quality,q_80',
     description: '“Đừng có chạy lung tung, anh bận vô địch rồi, không rảnh đi tìm em đâu.”',
     tags: [
       'Boygirl',
@@ -171,7 +171,7 @@ const CHARACTERS: CharacterItem[] = [
   {
     id: 'co-tram',
     name: 'Cố Trầm',
-    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/17mQcL2bF.png',
+    avatar: 'https://files.dokichat.club/dokichat/role_avatar/1768503864298.webp?x-oss-process=image/format,webp/quality,q_80',
     description: '“Cái gì?! Kẻ bắt nạt tôi hằng ngày lại là người yêu qua mạng của tôi ư?”',
     tags: ['Boygirl', 'Bắt nạt', 'Thiếu gia', 'Mỏ hỗn'],
     dokiLink: 'https://www.dokichat.club/vi/role/4c9f86ed-29b8-46a4-9d2c-5edc4b28b24d?isShare=true',
@@ -181,7 +181,7 @@ const CHARACTERS: CharacterItem[] = [
   {
     id: 'co-da-lam',
     name: 'Cố Dạ Lam - 顾夜岚',
-    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/1gY04hZ5t.jpg',
+    avatar: 'https://files.dokichat.club/dokichat/role_avatar/1777048165065.webp?x-oss-process=image/format,webp/quality,q_80',
     description: '“Cậu xem tôi là trò tiêu khiển, còn tôi… lại xem cậu là cả thế giới.”',
     tags: ['Boygirl', 'Ngược', 'TXVT', 'Đơn phương'],
     dokiLink: 'https://www.dokichat.club/vi/role/908367c4-9f6d-4b54-b05d-17a77b9e7161?isShare=true',
@@ -191,7 +191,7 @@ const CHARACTERS: CharacterItem[] = [
   {
     id: 'tham-da',
     name: 'Thẩm Dạ',
-    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/pXhNo0Eq.jpg',
+    avatar: 'https://files.dokichat.club/dokichat/role_avatar/1769116608590.webp?x-oss-process=image/format,webp/quality,q_80',
     description: '“Em thất vọng vì mong đợi, không phải vì tôi.”',
     tags: ['Boygirl', 'Lạnh lẽo', 'Trap boy', 'Không thật lòng', 'Học đường'],
     dokiLink: 'https://www.dokichat.club/vi/role/f7353eeb-c1e2-4934-b874-c420056e1f2d?isShare=true',
@@ -200,7 +200,7 @@ const CHARACTERS: CharacterItem[] = [
   {
     id: 'tham-canh-tham',
     name: 'Thẩm Cảnh Thâm — 沈景深',
-    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/kdwJ1oM5.jpg',
+    avatar: 'https://files.dokichat.club/dokichat/role_avatar/1774546091608.webp?x-oss-process=image/format,webp/quality,q_80',
     description: '“Tao không phải không yêu em, tao chỉ chọn sai cách yêu.”',
     tags: ['Boygirl', 'Thay lòng', 'TXVT', 'Người thứ 3', 'Ngược'],
     dokiLink: 'https://www.dokichat.club/vi/role/66120485-89a3-48b4-88e8-6ca66e718e56?isShare=true',
@@ -210,7 +210,7 @@ const CHARACTERS: CharacterItem[] = [
   {
     id: 'tham-hoai-can',
     name: 'Thẩm Hoài Cẩn — 沈怀瑾',
-    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/1eybTfkrq.jpg',
+    avatar: 'https://files.dokichat.club/dokichat/role_avatar/image/1794254226749-9a65fb558ae2bd3b5f7d2ecd.webp?x-oss-process=image/format,webp/quality,q_80',
     description: '“Anh có thể không biết cách yêu em, nhưng lại quá quen với việc em luôn ở bên cạnh.”',
     tags: ['Boygirl', 'Gia trưởng', 'Chiếm hữu', 'Cưới Trước Yêu Sau', 'Ngược'],
     dokiLink: 'https://www.dokichat.club/vi/role/01a1c1e5-78ec-745c-afdd-c49b1fae1712?isShare=true',
@@ -220,7 +220,7 @@ const CHARACTERS: CharacterItem[] = [
   {
     id: 'mac-bac',
     name: 'Mạc Bắc',
-    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/11v2k09lL.png',
+    avatar: 'https://files.dokichat.club/dokichat/role_avatar/1769777664054.webp?x-oss-process=image/format,webp/quality,q_80',
     description: '“Ở cạnh tao quen rồi, giờ làm bộ khách sáo nhìn ngứa mắt ghê.”',
     tags: ['BG', 'Bạn thân', 'Ghen', 'TXVT', 'Mỏ hỗn'],
     dokiLink: 'https://www.dokichat.club/vi/role/588f9690-98ae-443d-b204-580e977bf3e5?isShare=true',
@@ -229,7 +229,7 @@ const CHARACTERS: CharacterItem[] = [
   {
     id: 'tan-tram',
     name: 'Tần Trầm',
-    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/nWb2AW97.png',
+    avatar: 'https://files.dokichat.club/dokichat/role_avatar/1770750762872.webp?x-oss-process=image/format,webp/quality,q_80',
     description: '“Anh ở đây rồi, ngoan nào.”',
     tags: ['BG', 'Côn đồ', 'Thái tử gia Bắc Kinh', 'Ngọt Sủng', 'Ngốc bạch ngọt'],
     dokiLink: 'https://www.dokichat.club/vi/role/6c9f786d-37ff-40ea-9ca0-4888fd70b330?isShare=true',
@@ -239,7 +239,7 @@ const CHARACTERS: CharacterItem[] = [
   {
     id: 'tan-hao-nhien',
     name: 'Tần Hạo Nhiên — 秦浩然',
-    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/4LbBxCu3.png',
+    avatar: 'https://files.dokichat.club/dokichat/role_avatar/image/1786398816263-fy4avl.webp?x-oss-process=image/format,webp/quality,q_80',
     description: '“Mày cứ làm bạn với tao đi… để xem tao nhịn được đến bao giờ.”',
     tags: ['BG', 'TXVT', 'Trên tình bạn dưới tình yêu', 'Bạn thân', 'Cưng Chiều', 'SizeGap', 'Ngọt'],
     dokiLink: 'https://www.dokichat.club/vi/role/019feda1-2d09-7e02-b542-2c060383f400?isShare=true',
@@ -248,7 +248,7 @@ const CHARACTERS: CharacterItem[] = [
   {
     id: 'tram-uyen',
     name: 'Trầm Uyên',
-    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/sVMN9OOv.png',
+    avatar: 'https://files.dokichat.club/dokichat/role_avatar/1770909401315.webp?x-oss-process=image/format,webp/quality,q_80',
     description: '“Em đừng có suy nghĩ linh tinh, em chẳng hiểu cái mẹ gì đâu.”',
     tags: ['BG', 'BL', 'Ngược', 'User Ngốc', 'Ngoại tình'],
     dokiLink: 'https://www.dokichat.club/vi/role/c30f1ea7-bc60-4d1d-96d3-983564a7d652?isShare=true',
@@ -258,7 +258,7 @@ const CHARACTERS: CharacterItem[] = [
   {
     id: 'luc-tu-han',
     name: 'Lục Tư Hàn — 陆司寒',
-    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/EOrjtmEx.png',
+    avatar: 'https://files.dokichat.club/dokichat/role_avatar/1771097437915.webp?x-oss-process=image/format,webp/quality,q_80',
     description: '“Đừng để tao phải cướp mày khỏi tay anh ta.”',
     tags: ['BG', 'BL', 'Ham muốn cao', 'Tình tay ba', 'CEO', 'Bạn Thân'],
     dokiLink: 'https://www.dokichat.club/vi/role/098493ed-3613-47d7-93e6-8352ef869c52?isShare=true',
@@ -268,7 +268,7 @@ const CHARACTERS: CharacterItem[] = [
   {
     id: 'luc-canh-vien',
     name: 'Lục Cảnh Viên — 陆景渊',
-    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/Q2yPh12H.jpg',
+    avatar: 'https://files.dokichat.club/dokichat/role_avatar/1779468582784.webp?x-oss-process=image/format,webp/quality,q_80',
     description: '“Nếu em sợ anh rồi… vậy anh nên buông tay, hay giữ em lại?”',
     tags: [
       'BG',
@@ -287,7 +287,7 @@ const CHARACTERS: CharacterItem[] = [
   {
     id: 'tieu-truong-uyen',
     name: 'Tiêu Trường Uyên — 萧长渊',
-    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/z7s8IPA6.jpg',
+    avatar: 'https://files.dokichat.club/dokichat/role_avatar/1771617739729.webp?x-oss-process=image/format,webp/quality,q_80',
     description: '“Nếu phải hi sinh một người, ta sẽ chọn nàng.”',
     tags: ['BG', 'Lạnh nhạt', 'Khó chinh phục', 'Ngược', 'Cổ Trang'],
     dokiLink: 'https://www.dokichat.club/vi/role/491ac770-dfa3-47c8-baf4-09aad0098c15?isShare=true',
@@ -297,7 +297,7 @@ const CHARACTERS: CharacterItem[] = [
   {
     id: 'diep-trach',
     name: 'Diệp Trạch',
-    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/MbFMqZEa.jpg',
+    avatar: 'https://files.dokichat.club/dokichat/role_avatar/1773245160222.webp?x-oss-process=image/format,webp/quality,q_80',
     description: '“Em thử ngoan một ngày xem, ta muốn biết cảm giác đó thế nào.”',
     tags: ['BL', 'BG', 'Cổ trang', 'Hài hước', 'Nghiện vợ', 'Collab'],
     dokiLink: 'https://www.dokichat.club/vi/role/a6c4a471-0bd7-462e-a0de-586435f75aa2?isShare=true',
@@ -307,7 +307,7 @@ const CHARACTERS: CharacterItem[] = [
   {
     id: 'ta-lanh-phong',
     name: 'Tạ Lãnh Phong — 谢冷枫',
-    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/SZq4vNST.png',
+    avatar: 'https://files.dokichat.club/dokichat/role_avatar/1771958149674.webp?x-oss-process=image/format,webp/quality,q_80',
     description: '“Trách tao cái đéo gì? Do mày tự dạng chân cho tao chơi mà con đĩ.”',
     tags: ['BL', 'BG', 'Khốn nạn', 'Học đường', 'Redflag'],
     dokiLink: 'https://www.dokichat.club/vi/role/eace71ef-9bd5-4a53-939f-5667bec4e80b?isShare=true',
@@ -316,7 +316,7 @@ const CHARACTERS: CharacterItem[] = [
   {
     id: 'ta-canh-hanh',
     name: 'Tạ Cảnh Hành — 谢景行',
-    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/88x2GgDa.jpg',
+    avatar: 'https://files.dokichat.club/dokichat/role_avatar/1775663156789.webp?x-oss-process=image/format,webp/quality,q_80',
     description: '“Chúng ta ngồi cạnh nhau suốt thanh xuân, nhưng chưa từng thuộc về nhau.”',
     tags: ['BL', 'BG', 'Đơn phương', 'Bạn cùng bàn', 'TXVT'],
     dokiLink: 'https://www.dokichat.club/vi/role/c20d0efe-4099-4bdd-a62b-fb001d2eb8f9?isShare=true',
@@ -326,7 +326,7 @@ const CHARACTERS: CharacterItem[] = [
   {
     id: 'ta-mac-than',
     name: 'Tạ Mặc Thần — 谢墨辰',
-    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/JaznjhFB.jpg',
+    avatar: 'https://files.dokichat.club/dokichat/role_avatar/1779735985548.webp?x-oss-process=image/format,webp/quality,q_80',
     description: '“Nếu không thể đứng cùng một phía, vậy tao sẽ đứng về phía mày.”',
     tags: ['BG', 'Hiện Đại', 'Lén lút', 'Vụng trộm', 'Mỏ hỗn', 'Cà khịa', 'Sủng Ngọt', 'Ghen ngầm'],
     dokiLink: 'https://www.dokichat.club/vi/role/9a03e6f9-da95-4fbc-b08f-25a0b1999bd0?isShare=true',
@@ -335,7 +335,7 @@ const CHARACTERS: CharacterItem[] = [
   {
     id: 'ta-quan-han',
     name: 'Tạ Quân Hàn — 谢君寒',
-    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/12lXRhijB.jpg',
+    avatar: 'https://files.dokichat.club/dokichat/role_avatar/image/1791938708931-05d9a2531506e094f0e42c23.webp?x-oss-process=image/format,webp/quality,q_80',
     description: '“Anh ghét nhất là em, cũng ghét nhất việc cả thế giới này chẳng ai có thể thay thế em.”',
     tags: ['BG', 'Hiện Đại', 'Kiêu ngạo', 'Thích cà khịa', 'Cưới Trước Yêu Sau', 'Oan gia ngõ hẹp'],
     dokiLink: 'https://www.dokichat.club/vi/role/01a1407c-96be-7a2d-b089-98e52e83193a?isShare=true',
@@ -345,7 +345,7 @@ const CHARACTERS: CharacterItem[] = [
   {
     id: 'doan-huyen-da',
     name: 'Doãn Huyền Dạ — 尹玄夜',
-    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/WqfYRybc.jpg',
+    avatar: 'https://files.dokichat.club/dokichat/role_avatar/1773547268660.webp?x-oss-process=image/format,webp/quality,q_80',
     description: '“Ta không cần mạng sống của em. Ta cần máu của em. Và đáng tiếc… hai thứ đó lại gắn liền với nhau.”',
     tags: ['BG', 'Vampire', 'Kiểm soát', 'Điên loạn', 'S€X'],
     dokiLink: 'https://www.dokichat.club/vi/role/99b4c80b-234d-4c00-b40b-05999e4fff6c?isShare=true',
@@ -354,7 +354,7 @@ const CHARACTERS: CharacterItem[] = [
   {
     id: 'tran-cong-vien',
     name: 'Trần Công Viễn',
-    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/0O3IHrPI.png',
+    avatar: 'https://files.dokichat.club/dokichat/role_avatar/1776619744854.webp?x-oss-process=image/format,webp/quality,q_80',
     description: '“Có tiền giữ được thiên hạ mà không giữ nổi một người”',
     tags: ['BG', 'Nam bộ xưa', 'Chờ đợi', 'Chung tình'],
     dokiLink: 'https://www.dokichat.club/vi/role/2dba0be1-855b-4033-b981-0b844a569d03?isShare=true',
@@ -363,7 +363,7 @@ const CHARACTERS: CharacterItem[] = [
   {
     id: 'tran-dat-phong',
     name: 'Trần Dật Phong — 陈逸风',
-    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/5NygFR8l.jpg',
+    avatar: 'https://files.dokichat.club/dokichat/role_avatar/1779392924653.webp?x-oss-process=image/format,webp/quality,q_80',
     description: '“Ngoài mặt tao dữ vậy thôi…chứ em khóc một cái là tao thua rồi.”',
     tags: ['BG', 'TXVT', 'Thiên kim giả', 'Thanh mai trúc mã', 'Bảo vệ', 'Đội vợ lên đầu', 'Hiện đại', 'Drama'],
     dokiLink: 'https://www.dokichat.club/vi/role/a57705d1-d9bf-4486-9981-4867fbf9f781?isShare=true',
@@ -373,7 +373,7 @@ const CHARACTERS: CharacterItem[] = [
   {
     id: 'giang-ngon-trach',
     name: 'Giang Ngôn Trạch - 江言泽',
-    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/DQpgGXF6.jpg',
+    avatar: 'https://files.dokichat.club/dokichat/role_avatar/1776704563780.webp?x-oss-process=image/format,webp/quality,q_80',
     description: '“Con đĩ nhỏ, đợi tao chơi nát mày đi”',
     tags: ['BG', 'TXVT', 'Toxic', 'R19', 'Kẻ thù thành người yêu'],
     dokiLink: 'https://www.dokichat.club/vi/role/796af688-62e7-4b06-a036-0d92631453dc?isShare=true',
@@ -383,7 +383,7 @@ const CHARACTERS: CharacterItem[] = [
   {
     id: 'bui-tu-han',
     name: 'Bùi Tư Hàn — 裴思寒',
-    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/7AjZJtzF.jpg',
+    avatar: 'https://files.dokichat.club/dokichat/role_avatar/1779202351848.webp?x-oss-process=image/format,webp/quality,q_80',
     description: '“Người ngoài sợ anh một, anh lại sợ vợ không thương anh mười.”',
     tags: ['BG', 'Hiện đại', 'Mít ướt', 'Cún con', 'Bám vợ', 'Nghiện vợ'],
     dokiLink: 'https://www.dokichat.club/vi/role/11682ad9-8f26-4d38-a802-262646ac1781?isShare=true',
@@ -393,7 +393,7 @@ const CHARACTERS: CharacterItem[] = [
   {
     id: 'ly-minh-hao',
     name: 'Lý Minh Hạo — 李明昊',
-    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/9PMSRbuN.jpg',
+    avatar: 'https://files.dokichat.club/dokichat/role_avatar/1777703131208.webp?x-oss-process=image/format,webp/quality,q_80',
     description: '“Anh không cần cả thế giới biết… nhưng anh không chịu nổi việc phải giấu em mãi.”',
     tags: ['BL', 'BG', 'Idol', 'Mập mờ', 'Chiếm hữu', 'Dính người', 'Hiện Đại', 'Showbiz'],
     dokiLink: 'https://www.dokichat.club/vi/role/83886b27-9f8e-4d64-91a2-433f17927b18?isShare=true',
@@ -403,7 +403,7 @@ const CHARACTERS: CharacterItem[] = [
   {
     id: 'truong-gia-huy',
     name: 'Trương Gia Huy — 张嘉辉',
-    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/47laLced.png',
+    avatar: 'https://files.dokichat.club/dokichat/role_avatar/1778428942140.webp?x-oss-process=image/format,webp/quality,q_80',
     description: '“Bạn thân đéo gì, khác mẹ gì oan gia truyền kiếp.”',
     tags: ['BG', 'TXVT', 'Thanh mai trúc mã', 'Hướng ngoại', 'Mỏ hỗn', 'Greenflag', 'Sủng Ngọt'],
     dokiLink: 'https://www.dokichat.club/vi/role/e6fe899b-33fc-4199-8541-57a2a7a75b3e?isShare=true',
@@ -413,7 +413,7 @@ const CHARACTERS: CharacterItem[] = [
   {
     id: 'pho-can-du',
     name: 'Phó Cẩn Du — 傅谨瑜',
-    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/182nmZFDd.jpg',
+    avatar: 'https://files.dokichat.club/dokichat/role_avatar/1781459981409.webp?x-oss-process=image/format,webp/quality,q_80',
     description: '“Địa vị của anh trong nhà không cao, chỉ cao hơn con robot hút bụi một chút.”',
     tags: ['BG', 'Hiện Đại', 'User CEO', 'Char thái tử gia', 'Nghiện vợ', 'Mê vợ', 'Dị ứng gái ngoài', 'Mít ướt với vợ'],
     dokiLink: 'https://www.dokichat.club/vi/role/3fdafbcf-e1ce-47f6-b31e-4234101ef15d?isShare=true',
@@ -422,7 +422,7 @@ const CHARACTERS: CharacterItem[] = [
   {
     id: 'pho-dinh-chau',
     name: 'Phó Đình Châu — 傅庭洲',
-    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/UBW8YWg5.jpg',
+    avatar: 'https://files.dokichat.club/dokichat/role_avatar/image/1791620103839-cae8da3f9799cd63ed245005.webp?x-oss-process=image/format,webp/quality,q_80',
     description: '“Chị có thể không yêu em, nhưng đừng mong em dễ dàng bỏ cuộc.”',
     tags: ['BG', 'Hồng Hài Nhi', 'Nhỏ tuổi', 'Theo Đuổi lại', 'Hối hận', 'Ghen ngầm', 'Chiếm hữu', 'Mỏ hỗn', 'Thích cà khịa', 'Tự vả'],
     dokiLink: 'https://www.dokichat.club/vi/role/01a124ec-2ae4-7ee4-9444-42e8250295f1?isShare=true',
@@ -432,7 +432,7 @@ const CHARACTERS: CharacterItem[] = [
   {
     id: 'tong-da-nhien',
     name: 'Tống Dạ Nhiên — 宋夜然',
-    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/16wh9semK.jpg',
+    avatar: 'https://files.dokichat.club/dokichat/role_avatar/1779990235003.webp?x-oss-process=image/format,webp/quality,q_80',
     description: '“Em dỗ tao coi...”',
     tags: ['BG', 'TXVT', 'Bám vợ', 'Hay dỗi', 'Dễ ghen', 'Ngọt', 'Mỏ hỗn', 'Cún lớn'],
     dokiLink: 'https://www.dokichat.club/vi/role/d9ff349f-decf-4a15-84d5-c92a78ffc6ea?isShare=true',
@@ -442,7 +442,7 @@ const CHARACTERS: CharacterItem[] = [
   {
     id: 'lam-tu-mac',
     name: 'Lâm Tử Mặc — 林子墨',
-    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/11ULF9GYz.jpg',
+    avatar: 'https://files.dokichat.club/dokichat/role_avatar/1782454492939.webp?x-oss-process=image/format,webp/quality,q_80',
     description: '“Xin đừng buông tay... tôi không sống nổi thêm một lần bị bỏ rơi.”',
     tags: ['BG - BL', 'Hiện Đại', 'Đấu giá', 'Dị chủng cấp S', 'Bám người', 'Ngọt'],
     dokiLink: 'https://www.dokichat.club/vi/role/1aea6527-b8a1-4176-9f7c-1105f017f7d5?isShare=true',
@@ -451,7 +451,7 @@ const CHARACTERS: CharacterItem[] = [
   {
     id: 'bac-canh-hanh',
     name: 'Bạc Cảnh Hành — 薄景行',
-    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/26nmsN71.jpg',
+    avatar: 'https://files.dokichat.club/dokichat/role_avatar/image/1793729306131-1340fd8af7691730f5e449b9.webp?x-oss-process=image/format,webp/quality,q_80',
     description: '“Anh giữ được trách nhiệm với cô ấy, nhưng liệu còn giữ được em?”',
     tags: ['BG', 'Ngược Tâm', 'Ngoại Tình', 'Người thứ 3', 'Mang Thai', 'Chiếm hữu'],
     dokiLink: 'https://www.dokichat.club/vi/role/01a1a29f-622d-70d9-9fc8-5b899d392140?isShare=true',
@@ -461,7 +461,7 @@ const CHARACTERS: CharacterItem[] = [
   {
     id: 'hoac-dinh-kieu',
     name: 'Hoắc Đình Kiêu — 霍庭骁',
-    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/qpARNClJ.png',
+    avatar: 'https://files.dokichat.club/dokichat/role_avatar/image/1794515797676-c29d9c283de5e19d95b7dea3.webp?x-oss-process=image/format,webp/quality,q_80',
     description: '“Em cứ thử thích cậu ta đi, xem anh có để em được như ý không.”',
     tags: ['BG', 'TXVT', 'Thanh Mai Trúc Mã', 'Học đường', 'Trà Xanh', 'Tâm Cơ', 'Chiếm Hữu', 'Hai Mặt', 'Ghen ngầm'],
     dokiLink: 'https://www.dokichat.club/vi/role/01a1d18f-4e82-7cb0-855b-d1a53f02cfa5?isShare=true',
@@ -471,7 +471,7 @@ const CHARACTERS: CharacterItem[] = [
   {
     id: 'lucien-devereux',
     name: 'Lucien Devereux',
-    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/NpV0tbTC.jpg',
+    avatar: 'https://files.dokichat.club/dokichat/role_avatar/1779208015129.webp?x-oss-process=image/format,webp/quality,q_80',
     description: '“Ta cưới em không phải vì trách nhiệm… mà vì từ lâu, ta đã chờ đúng gương mặt này xuất hiện.”',
     tags: ['BG', 'Âu Cổ', 'Sủng', 'Chiếm hữu', 'Bí ẩn', 'Ma mị'],
     dokiLink: 'https://www.dokichat.club/vi/role/4806520d-6f58-4b66-8363-7135c69c6f5e?isShare=true',
@@ -480,7 +480,7 @@ const CHARACTERS: CharacterItem[] = [
   {
     id: 'theodore-dartois',
     name: "Théodore D'Artois",
-    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/occqOWcG.jpg',
+    avatar: 'https://files.dokichat.club/dokichat/role_avatar/1781458068807.webp?x-oss-process=image/format,webp/quality,q_80',
     description: '“Ngoan nào, tiểu nữ hoàng, đừng chết trước khi ta giết hết bọn chúng.”',
     tags: ['BG', 'Hoàng gia', 'Điên', 'Chiếm hữu', 'Thằng Hề', 'Công chúa hoàng gia'],
     dokiLink: 'https://www.dokichat.club/vi/role/8b8f28b1-389d-45ac-a5b1-e09b3952ce93?isShare=true',
@@ -489,7 +489,7 @@ const CHARACTERS: CharacterItem[] = [
   {
     id: 'lucien-alexandre-valmont',
     name: 'Lucien Alexandre Valmont',
-    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/9AiWVtim.png',
+    avatar: 'https://files.dokichat.club/dokichat/role_avatar/image/1794423010572-76b972f6a529d529999a4a1b.webp?x-oss-process=image/format,webp/quality,q_80',
     description: '“Nếu số phận đã viết sẵn kết cục cho nàng, ta sẽ là kẻ đầu tiên xé bỏ trang cuối cùng.”',
     tags: ['Âu Cổ', 'BG', 'Xuyên Không', 'Đại Công Tước', 'Quý Tộc', 'Fantasy', 'Hôn Ước Chính Trị', 'Chậm Nhiệt', 'Định Mệnh'],
     dokiLink: 'https://www.dokichat.club/vi/role/01a1cbf6-b229-74bb-989a-cad7c034a01b?isShare=true',
@@ -499,7 +499,7 @@ const CHARACTERS: CharacterItem[] = [
   {
     id: 'thua-da-giang-dat-nhat-duy-minh-triet',
     name: 'Thừa Dạ-Giang Dật-Nhất Duy-Minh Triết',
-    avatar: 'https://cdn.imagetourls.com/uploads/tyImg/okUerCvG.jpg',
+    avatar: 'https://files.dokichat.club/dokichat/role_avatar/1777050655558.webp?x-oss-process=image/format,webp/quality,q_80',
     description: '“Tụi tao không là gì của mày… nhưng cũng chưa từng để mày thuộc về người khác.”',
     tags: ['BG', '4in1', 'Không danh phận', 'TXVT'],
     dokiLink: 'https://www.dokichat.club/vi/role/6b5d33b1-76b7-41bc-956e-9c96ae4d3d0d?isShare=true',

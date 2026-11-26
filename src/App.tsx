@@ -2041,7 +2041,13 @@ function AppContent() {
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
               <div className="max-w-2xl">
                 <p className="text-[11px] sm:text-xs font-medium tracking-widest text-[#D4AF37] mb-1.5">
-                  Bộ sưu tập nhân vật AI Chatbot
+                  {activeTheme.id === 'bien-dem-sua'
+                    ? '🫧 Khung sóng biển đêm & sứa phát sáng · Bộ sưu tập'
+                    : activeTheme.id === 'bao-cu-nhac'
+                    ? '🗞️ Nhật báo cổ điển Tần Nhi · Số đặc biệt'
+                    : activeTheme.id === 'pixel-doodles'
+                    ? '♡ Sổ tay Pixel Doodle & sticker đáng yêu ♡'
+                    : 'Bộ sưu tập nhân vật AI Chatbot'}
                 </p>
                 <h2 className="font-display text-2xl sm:text-3xl lg:text-[40px] font-semibold text-[#F5EFE0] leading-[1.15] [text-wrap:balance]">
                   Những tâm hồn đang đợi bạn trò chuyện đêm nay
@@ -2818,6 +2824,16 @@ function AppContent() {
                   >
                     {currentTrack.title}
                   </p>
+                  {activeTheme.id === 'bao-cu-nhac' && (
+                    <div aria-hidden="true" className="mt-1.5 flex items-center gap-1.5">
+                      <span className="text-[9px] text-[#CFC2B0] tabular-nums">00:00</span>
+                      <div className="relative h-[2px] flex-1 rounded-full bg-[#CFA972]/30">
+                        <div className="h-full w-2/5 rounded-full bg-[#F5E9D3]" />
+                        <span className="absolute left-[40%] top-1/2 -translate-y-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-[#F5E9D3] shadow-[0_0_6px_rgba(245,233,211,0.75)]" />
+                      </div>
+                      <span className="text-[9px] text-[#CFC2B0] tabular-nums">20:25</span>
+                    </div>
+                  )}
                 </div>
 
                 {/* Nút điều khiển Phát / Tạm dừng & Chuyển bài */}

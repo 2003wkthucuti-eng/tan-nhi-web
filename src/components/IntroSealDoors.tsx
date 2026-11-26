@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { Check, ChevronDown, Palette, X } from 'lucide-react';
 import { BlackCatMascot } from './BlackCatMascot';
 import { GoldenStardust } from './GoldenStardust';
-import { useSiteTheme } from '../themes/siteThemes';
+import { useSiteTheme, type SiteThemeId } from '../themes/siteThemes';
 import { playSoftTap } from '../utils/soundEffects';
 
 export type IntroPhase = 'idle' | 'opening' | 'entered';
@@ -76,6 +76,11 @@ export const IntroSealDoors: React.FC<IntroSealDoorsProps> = ({
   const { activeTheme, themeId, setThemeId, themes } = useSiteTheme();
   const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false);
   const themePickerRef = useRef<HTMLDivElement | null>(null);
+  const heartUid = useId().replace(/:/g, '');
+  const heartClipId = `introHeartClip-${heartUid}`;
+  const heartLeftMaskId = `introHeartLeft-${heartUid}`;
+  const heartRightMaskId = `introHeartRight-${heartUid}`;
+  const heartFadeMaskId = `introHeartBotFade-${heartUid}`;
 
   useEffect(() => {
     if (!isThemeMenuOpen) return;
@@ -410,112 +415,279 @@ export const IntroSealDoors: React.FC<IntroSealDoorsProps> = ({
       />
 
       {/* Nội dung trung tâm & Con dấu sáp phong ấn */}
-      <div
-        className={`relative z-30 h-full flex flex-col items-center justify-center px-5 sm:px-6 text-center ${
-          themeId === 'collage-hai-be'
-            ? 'pt-12 pb-6 sm:pt-14 sm:pb-8'
-            : 'pt-16 pb-8 sm:pt-20 sm:pb-10'
-        }`}
-      >
-        <motion.div
-          animate={{ opacity: isOpening ? 0 : 1, y: isOpening ? -10 : 0 }}
-          transition={{ duration: 0.35, ease: 'easeOut' }}
-          className="flex flex-col items-center max-w-xl mx-auto"
-        >
+      {(() => {
+        const hasCutoutShowcase =
+          themeId === 'collage-hai-be' ||
+          themeId === 'bien-dem-sua' ||
+          themeId === 'bao-cu-nhac' ||
+          themeId === 'pixel-doodles';
+
+        const cutoutAccentDecor: Partial<Record<SiteThemeId, { left: string; right: string; glow: string }>> = {
+          'bien-dem-sua': {
+            left: '🫧',
+            right: '🪼',
+            glow: 'radial-gradient(circle, rgba(108,182,255,0.45) 0%, rgba(226,242,255,0.22) 52%, transparent 74%)',
+          },
+          'bao-cu-nhac': {
+            left: '♪',
+            right: '♫',
+            glow: 'radial-gradient(circle, rgba(207,169,114,0.42) 0%, rgba(245,233,211,0.22) 52%, transparent 74%)',
+          },
+          'pixel-doodles': {
+            left: '♡',
+            right: '♥',
+            glow: 'radial-gradient(circle, rgba(247,154,192,0.48) 0%, rgba(255,242,246,0.28) 52%, transparent 74%)',
+          },
+        };
+
+        const specialDecor = cutoutAccentDecor[themeId];
+
+        return (
           <div
-            style={{ filter: `drop-shadow(0 0 24px ${accentColor}52)` }}
-            className={`animate-cat-float transition-all duration-300 ${
-              themeId === 'collage-hai-be' ? 'mb-2 sm:mb-3 scale-90 sm:scale-95' : 'mb-3.5 sm:mb-4'
+            className={`relative z-30 h-full flex flex-col items-center justify-center px-5 sm:px-6 text-center ${
+              hasCutoutShowcase
+                ? 'pt-12 pb-6 sm:pt-14 sm:pb-8'
+                : 'pt-16 pb-8 sm:pt-20 sm:pb-10'
             }`}
           >
-            <BlackCatMascot size={108} variant="hero" />
-          </div>
-
-          <p
-            style={{ color: accentColor }}
-            className="text-xs sm:text-sm font-medium tracking-widest mb-1.5 sm:mb-2 transition-colors duration-300"
-          >
-            {activeTheme.tagline}
-          </p>
-
-          <h1 className="font-display text-3xl sm:text-5xl md:text-6xl font-semibold tracking-tight leading-[1.12] [text-wrap:balance] gold-shimmer-text">
-            Ngôi Nhà Nhỏ Của Tần Nhi
-          </h1>
-
-          <div
-            className={`w-24 h-px transition-all duration-300 ${
-              themeId === 'collage-hai-be' ? 'my-2.5 sm:my-3.5' : 'my-4 sm:my-5'
-            }`}
-            style={{
-              background: `linear-gradient(to right, transparent, ${accentColor}B3, transparent)`,
-            }}
-            aria-hidden="true"
-          />
-
-          <p
-            style={{ color: activeTheme.mutedTextColor }}
-            className={`text-xs sm:text-base leading-relaxed max-w-md transition-colors duration-300 ${
-              themeId === 'collage-hai-be' ? 'mb-3 sm:mb-4' : 'mb-6 sm:mb-8'
-            }`}
-          >
-            Nơi lưu giữ những nhân vật AI Chatbot dịu dàng và bí ẩn, luôn đợi bạn ghé thăm sau một ngày dài.
-          </p>
-        </motion.div>
-
-        {/* Con dấu sáp phong ấn cổ điển đổi sắc theo Theme */}
-        <div className="relative flex flex-col items-center">
-          {/* Collage Hai Bé & Dấu Sáp: Hiển thị hình hai bé kích thước lớn nổi bật kiểu sticker nằm ngay phía sau dấu sáp */}
-          {themeId === 'collage-hai-be' && (
             <motion.div
-              aria-hidden="true"
-              initial={{ opacity: 0, scale: 0.9, y: 12 }}
-              animate={
-                isOpening
-                  ? { opacity: 0, scale: 0.94, y: -12 }
-                  : { opacity: 1, scale: 1, y: 0 }
-              }
-              transition={{ duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
-              className="pointer-events-none select-none relative z-0 -mb-12 sm:-mb-14 flex items-center justify-center"
+              animate={{ opacity: isOpening ? 0 : 1, y: isOpening ? -10 : 0 }}
+              transition={{ duration: 0.35, ease: 'easeOut' }}
+              className="flex flex-col items-center max-w-xl mx-auto"
             >
-              {/* Hào quang kem & hồng sticker phía sau hai bé */}
               <div
-                className="absolute -inset-3 rounded-full blur-2xl opacity-55"
+                style={{ filter: `drop-shadow(0 0 24px ${accentColor}52)` }}
+                className={`animate-cat-float transition-all duration-300 ${
+                  hasCutoutShowcase ? 'mb-2 sm:mb-3 scale-90 sm:scale-95' : 'mb-3.5 sm:mb-4'
+                }`}
+              >
+                <BlackCatMascot size={108} variant="hero" />
+              </div>
+
+              <p
+                style={{ color: accentColor }}
+                className="text-xs sm:text-sm font-medium tracking-widest mb-1.5 sm:mb-2 transition-colors duration-300"
+              >
+                {activeTheme.tagline}
+              </p>
+
+              <h1 className="font-display text-3xl sm:text-5xl md:text-6xl font-semibold tracking-tight leading-[1.12] [text-wrap:balance] gold-shimmer-text">
+                Ngôi Nhà Nhỏ Của Tần Nhi
+              </h1>
+
+              <div
+                className={`w-24 h-px transition-all duration-300 ${
+                  hasCutoutShowcase ? 'my-2.5 sm:my-3.5' : 'my-4 sm:my-5'
+                }`}
                 style={{
-                  background:
-                    'radial-gradient(circle, rgba(246,240,228,0.45) 0%, rgba(223,149,165,0.28) 48%, transparent 74%)',
+                  background: `linear-gradient(to right, transparent, ${accentColor}B3, transparent)`,
                 }}
+                aria-hidden="true"
               />
 
-              {/* Sticker ngôi sao trang trí hai bên khung hình hai bé */}
-              <span className="absolute -left-4 top-5 text-lg text-[#F6F0E4] drop-shadow-[0_0_8px_rgba(246,240,228,0.85)] animate-pulse">
-                ✦
-              </span>
-              <span className="absolute -right-4 top-8 text-base text-[#DF95A5] drop-shadow-[0_0_8px_rgba(223,149,165,0.85)] animate-pulse">
-                ★
-              </span>
-
-              {/* Khung cắt nổi kiểu sticker PNG của hai bé */}
-              <div
-                className="relative w-40 h-44 sm:w-52 sm:h-56 rounded-t-[999px] rounded-b-[28px] overflow-hidden border-[3px] border-[#F6F0E4]/90 shadow-[0_14px_34px_rgba(0,0,0,0.72),0_0_24px_rgba(246,240,228,0.28)]"
-                style={{
-                  backgroundColor: '#1E1D24',
-                  backgroundImage:
-                    "url('/assets/aistudio/78335d250b39f0b102946d1a018dd969_e5721dca.jpg')",
-                  backgroundSize: '204% auto',
-                  backgroundPosition: '95% 81%',
-                  backgroundRepeat: 'no-repeat',
-                }}
+              <p
+                style={{ color: activeTheme.mutedTextColor }}
+                className={`text-xs sm:text-base leading-relaxed max-w-md transition-colors duration-300 ${
+                  hasCutoutShowcase ? 'mb-3 sm:mb-4' : 'mb-6 sm:mb-8'
+                }`}
               >
-                <div
-                  className="absolute inset-0"
-                  style={{
-                    background:
-                      'linear-gradient(to top, rgba(17,17,21,0.92) 0%, rgba(17,17,21,0.22) 28%, transparent 55%)',
-                  }}
-                />
-              </div>
+                Nơi lưu giữ những nhân vật AI Chatbot dịu dàng và bí ẩn, luôn đợi bạn ghé thăm sau một ngày dài.
+              </p>
             </motion.div>
-          )}
+
+            {/* Con dấu sáp phong ấn cổ điển đổi sắc theo Theme */}
+            <div className="relative flex flex-col items-center">
+              {/* Collage Hai Bé & Dấu Sáp */}
+              {themeId === 'collage-hai-be' && (
+                <motion.div
+                  aria-hidden="true"
+                  initial={{ opacity: 0, scale: 0.9, y: 12 }}
+                  animate={
+                    isOpening
+                      ? { opacity: 0, scale: 0.94, y: -12 }
+                      : { opacity: 1, scale: 1, y: 0 }
+                  }
+                  transition={{ duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
+                  className="pointer-events-none select-none relative z-0 -mb-12 sm:-mb-14 flex items-center justify-center"
+                >
+                  <div
+                    className="absolute -inset-3 rounded-full blur-2xl opacity-55"
+                    style={{
+                      background:
+                        'radial-gradient(circle, rgba(246,240,228,0.45) 0%, rgba(223,149,165,0.28) 48%, transparent 74%)',
+                    }}
+                  />
+                  <span className="absolute -left-4 top-5 text-lg text-[#F6F0E4] drop-shadow-[0_0_8px_rgba(246,240,228,0.85)] animate-pulse">
+                    ✦
+                  </span>
+                  <span className="absolute -right-4 top-8 text-base text-[#DF95A5] drop-shadow-[0_0_8px_rgba(223,149,165,0.85)] animate-pulse">
+                    ★
+                  </span>
+                  <div
+                    className="relative w-40 h-44 sm:w-52 sm:h-56 rounded-t-[999px] rounded-b-[28px] overflow-hidden border-[3px] border-[#F6F0E4]/90 shadow-[0_14px_34px_rgba(0,0,0,0.72),0_0_24px_rgba(246,240,228,0.28)]"
+                    style={{
+                      backgroundColor: '#1E1D24',
+                      backgroundImage:
+                        "url('/assets/aistudio/78335d250b39f0b102946d1a018dd969_e5721dca.jpg')",
+                      backgroundSize: '204% auto',
+                      backgroundPosition: '95% 81%',
+                      backgroundRepeat: 'no-repeat',
+                    }}
+                  >
+                    <div
+                      className="absolute inset-0"
+                      style={{
+                        background:
+                          'linear-gradient(to top, rgba(17,17,21,0.92) 0%, rgba(17,17,21,0.22) 28%, transparent 55%)',
+                      }}
+                    />
+                  </div>
+                </motion.div>
+              )}
+
+              {/* 3 Theme Đặc Biệt: Khung hình trái tim kích thước lớn chứa hai chủ thể nằm ngay phía sau dấu sáp */}
+              {specialDecor && activeTheme.bgImageUrl && (
+                <motion.div
+                  aria-hidden="true"
+                  initial={{ opacity: 0, scale: 0.9, y: 12 }}
+                  animate={
+                    isOpening
+                      ? { opacity: 0, scale: 0.94, y: -12 }
+                      : { opacity: 1, scale: 1, y: 0 }
+                  }
+                  transition={{ duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
+                  className="pointer-events-none select-none relative z-0 -mb-14 sm:-mb-16 flex items-center justify-center"
+                >
+                  <div
+                    className="absolute -inset-4 rounded-full blur-2xl opacity-70"
+                    style={{ background: specialDecor.glow }}
+                  />
+                  <span
+                    style={{ color: brightColor }}
+                    className="absolute -left-2 sm:-left-4 top-6 text-base sm:text-lg drop-shadow-[0_0_10px_rgba(255,255,255,0.65)] animate-pulse"
+                  >
+                    {specialDecor.left}
+                  </span>
+                  <span
+                    style={{ color: accentColor }}
+                    className="absolute -right-2 sm:-right-4 top-8 text-base sm:text-lg drop-shadow-[0_0_10px_rgba(255,255,255,0.65)] animate-pulse"
+                  >
+                    {specialDecor.right}
+                  </span>
+
+                  <svg
+                    viewBox="0 0 220 200"
+                    className="relative w-52 h-48 sm:w-64 sm:h-60 overflow-visible"
+                    style={{
+                      filter: `drop-shadow(0 14px 32px rgba(0,0,0,0.72)) drop-shadow(0 0 20px ${accentColor}4D)`,
+                    }}
+                  >
+                    <defs>
+                      <clipPath id={heartClipId}>
+                        <path d="M110 186 C110 186 16 128 16 64 C16 30 42 12 69 12 C88 12 103 23 110 37 C117 23 132 12 151 12 C178 12 204 30 204 64 C204 128 110 186 110 186 Z" />
+                      </clipPath>
+
+                      <linearGradient id={heartFadeMaskId} x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor={activeTheme.bgColor} stopOpacity="0" />
+                        <stop offset="68%" stopColor={activeTheme.bgColor} stopOpacity="0" />
+                        <stop offset="100%" stopColor={activeTheme.bgColor} stopOpacity="0.88" />
+                      </linearGradient>
+
+                      <linearGradient id={`${heartLeftMaskId}-grad`} x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%" stopColor="#FFFFFF" stopOpacity="1" />
+                        <stop offset="46%" stopColor="#FFFFFF" stopOpacity="1" />
+                        <stop offset="56%" stopColor="#FFFFFF" stopOpacity="0" />
+                        <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0" />
+                      </linearGradient>
+                      <mask id={heartLeftMaskId}>
+                        <rect x="0" y="0" width="220" height="200" fill={`url(#${heartLeftMaskId}-grad)`} />
+                      </mask>
+
+                      <linearGradient id={`${heartRightMaskId}-grad`} x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0" />
+                        <stop offset="44%" stopColor="#FFFFFF" stopOpacity="0" />
+                        <stop offset="54%" stopColor="#FFFFFF" stopOpacity="1" />
+                        <stop offset="100%" stopColor="#FFFFFF" stopOpacity="1" />
+                      </linearGradient>
+                      <mask id={heartRightMaskId}>
+                        <rect x="0" y="0" width="220" height="200" fill={`url(#${heartRightMaskId}-grad)`} />
+                      </mask>
+                    </defs>
+
+                    <g clipPath={`url(#${heartClipId})`}>
+                      <rect x="0" y="0" width="220" height="200" fill={activeTheme.surfaceColor} />
+
+                      {themeId === 'bien-dem-sua' && (
+                        <>
+                          {/* Nửa trái trái tim: Yeo Taeju */}
+                          <g mask={`url(#${heartLeftMaskId})`}>
+                            <image
+                              href={activeTheme.bgImageUrl}
+                              x="-62"
+                              y="-116"
+                              width="315"
+                              height="560"
+                              preserveAspectRatio="xMidYMid slice"
+                            />
+                          </g>
+                          {/* Nửa phải trái tim: Kim Euihyun & Yeo Taeju */}
+                          <g mask={`url(#${heartRightMaskId})`}>
+                            <image
+                              href={activeTheme.bgImageUrl}
+                              x="-16"
+                              y="-260"
+                              width="350"
+                              height="622"
+                              preserveAspectRatio="xMidYMid slice"
+                            />
+                          </g>
+                        </>
+                      )}
+
+                      {themeId === 'bao-cu-nhac' && (
+                        <image
+                          href={activeTheme.bgImageUrl}
+                          x="-44"
+                          y="-26"
+                          width="308"
+                          height="548"
+                          preserveAspectRatio="xMidYMid slice"
+                        />
+                      )}
+
+                      {themeId === 'pixel-doodles' && (
+                        <image
+                          href={activeTheme.bgImageUrl}
+                          x="6"
+                          y="-242"
+                          width="632"
+                          height="1124"
+                          preserveAspectRatio="xMidYMid slice"
+                        />
+                      )}
+
+                      <rect x="0" y="0" width="220" height="200" fill={`url(#${heartFadeMaskId})`} />
+                    </g>
+
+                    {/* Viền khung trái tim phát sáng đồng bộ Theme */}
+                    <path
+                      d="M110 186 C110 186 16 128 16 64 C16 30 42 12 69 12 C88 12 103 23 110 37 C117 23 132 12 151 12 C178 12 204 30 204 64 C204 128 110 186 110 186 Z"
+                      fill="none"
+                      stroke={brightColor}
+                      strokeWidth="3.2"
+                      strokeOpacity="0.92"
+                    />
+                    <path
+                      d="M110 192 C110 192 10 132 10 64 C10 26 39 6 69 6 C89 6 104 17 110 30 C116 17 131 6 151 6 C181 6 210 26 210 64 C210 132 110 192 110 192 Z"
+                      fill="none"
+                      stroke={accentColor}
+                      strokeWidth="1.2"
+                      strokeOpacity="0.55"
+                      strokeDasharray={themeId === 'pixel-doodles' ? '5 4' : undefined}
+                    />
+                  </svg>
+                </motion.div>
+              )}
 
           <button
             type="button"
@@ -583,8 +755,10 @@ export const IntroSealDoors: React.FC<IntroSealDoorsProps> = ({
           >
             Chạm con dấu · Gõ cửa nhà nhỏ
           </motion.span>
-        </div>
-      </div>
+            </div>
+          </div>
+        );
+      })()}
     </section>
   );
 };
@@ -699,6 +873,15 @@ const WaxSealArtwork: React.FC = () => {
         )}
         {themeId === 'collage-hai-be' && (
           <path d="M72 32L73.2 35L76.2 36L73.2 37L72 40L70.8 37L67.8 36L70.8 35Z" fill={o0} fillOpacity="0.9" />
+        )}
+        {themeId === 'bien-dem-sua' && (
+          <path d="M40 31C40 27.5 42.5 25.5 45 25.5C47.5 25.5 50 27.5 50 31H40Z" fill={o0} fillOpacity="0.78" />
+        )}
+        {themeId === 'bao-cu-nhac' && (
+          <circle cx="66.5" cy="46.5" r="4.2" stroke={o0} strokeWidth="0.95" fill="none" strokeOpacity="0.85" />
+        )}
+        {themeId === 'pixel-doodles' && (
+          <path d="M58 29H60V30.5H61.5V29H63.5V31.5H61.5V33H60V34.5H58.5V33H57V31.5H56.5V29H58Z" fill={o0} fillOpacity="0.92" />
         )}
 
         {/* Đôi mắt sáng nổi bật trên nền khắc đen */}

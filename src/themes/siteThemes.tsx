@@ -14,9 +14,20 @@ export type SiteThemeId =
   | 'co-phong-tram'
   | 'dem-xanh'
   | 'bong-bong-sua'
-  | 'collage-hai-be';
+  | 'collage-hai-be'
+  | 'bien-dem-sua'
+  | 'bao-cu-nhac'
+  | 'pixel-doodles';
 
-export type ThemeParticleKind = 'star' | 'petal' | 'note' | 'leaf' | 'celestial' | 'bubble';
+export type ThemeParticleKind =
+  | 'star'
+  | 'petal'
+  | 'note'
+  | 'leaf'
+  | 'celestial'
+  | 'bubble'
+  | 'jellyfish'
+  | 'pixel-heart';
 
 export interface SiteThemeDefinition {
   id: SiteThemeId;
@@ -318,6 +329,81 @@ export const SITE_THEMES: SiteThemeDefinition[] = [
     fogSecondary: 'rgba(223, 149, 165, 0.09)',
     waxOuter: ['#FAF5EC', '#D6D9E2', '#7E8294', '#393B47'],
     waxInner: ['#B8909C', '#696C7E', '#2A2B36'],
+  },
+  {
+    id: 'bien-dem-sua',
+    name: 'Biển Đêm & Sứa',
+    shortName: 'Biển Đêm',
+    tagline: 'Thẻ kính biển đêm, bọt nước & sứa phát sáng',
+    mascotLabel: 'Mèo biển đêm cùng sứa phát sáng & bong bóng',
+    bgImageUrl: '/assets/aistudio/831d5902ba49c748bd67cbf703dec664_0cdc2b76.jpg',
+    bgImageOpacity: 0.2,
+    bgColor: '#060E1A',
+    surfaceColor: '#0B182C',
+    accentColor: '#6CB6FF',
+    brightColor: '#E2F2FF',
+    textColor: '#F0F7FF',
+    mutedTextColor: '#B4CBE3',
+    buttonTextColor: '#041020',
+    swatchFrom: '#2B629D',
+    swatchTo: '#B8E2FF',
+    particleKind: 'jellyfish',
+    particleColors: ['#E2F2FF', '#6CB6FF'],
+    fireworkPalette: ['#FFFFFF', '#E2F2FF', '#6CB6FF', '#448EE4', '#A9DBFF'],
+    fogPrimary: 'rgba(108, 182, 255, 0.14)',
+    fogSecondary: 'rgba(226, 242, 255, 0.085)',
+    waxOuter: ['#EDF7FF', '#8CC5FC', '#316BA6', '#102D50'],
+    waxInner: ['#4C95DF', '#1F4D82', '#0B213E'],
+  },
+  {
+    id: 'bao-cu-nhac',
+    name: 'Báo Cũ & Nhạc Cổ Điển',
+    shortName: 'Báo Cũ',
+    tagline: 'Trang báo cổ điển, nâu kem & giai điệu xưa',
+    mascotLabel: 'Mèo vintage kính tròn & nốt nhạc cổ điển',
+    bgImageUrl: '/assets/aistudio/2488991092aa63155a2893e4584dfb87_b04971ee.jpg',
+    bgImageOpacity: 0.2,
+    bgColor: '#15110C',
+    surfaceColor: '#1F1912',
+    accentColor: '#CFA972',
+    brightColor: '#F5E9D3',
+    textColor: '#F8F1E3',
+    mutedTextColor: '#CFC2B0',
+    buttonTextColor: '#1A130C',
+    swatchFrom: '#7D5C38',
+    swatchTo: '#F5E9D3',
+    particleKind: 'note',
+    particleColors: ['#F5E9D3', '#CFA972'],
+    fireworkPalette: ['#FFF8EB', '#F5E9D3', '#CFA972', '#B3844D', '#E8D2B0'],
+    fogPrimary: 'rgba(207, 169, 114, 0.12)',
+    fogSecondary: 'rgba(245, 233, 211, 0.075)',
+    waxOuter: ['#FAF0DF', '#D9B683', '#8C6639', '#49331B'],
+    waxInner: ['#B38851', '#7A562C', '#3B2712'],
+  },
+  {
+    id: 'pixel-doodles',
+    name: 'Pixel Doodles & Mèo Trắng Đen',
+    shortName: 'Mèo Pixel',
+    tagline: 'Sổ tay sticker bo tròn, trái tim pixel & cặp mèo ôm nhau',
+    mascotLabel: 'Cặp mèo trắng đen ôm nhau cùng trái tim pixel',
+    bgImageUrl: '/assets/aistudio/15f1ecdcad9a6a57a425d18dff732ecb_79402018.jpg',
+    bgImageOpacity: 0.2,
+    bgColor: '#1B1318',
+    surfaceColor: '#251A21',
+    accentColor: '#F79AC0',
+    brightColor: '#FFF2F6',
+    textColor: '#FFF8FA',
+    mutedTextColor: '#DEC5CF',
+    buttonTextColor: '#24121B',
+    swatchFrom: '#E57AA8',
+    swatchTo: '#FFF2F6',
+    particleKind: 'pixel-heart',
+    particleColors: ['#FFF2F6', '#F79AC0'],
+    fireworkPalette: ['#FFFFFF', '#FFF2F6', '#F79AC0', '#F077A8', '#FFD6E7'],
+    fogPrimary: 'rgba(247, 154, 192, 0.14)',
+    fogSecondary: 'rgba(255, 242, 246, 0.09)',
+    waxOuter: ['#FFF6F9', '#F8B1CE', '#CE6692', '#6C2846'],
+    waxInner: ['#E882AD', '#B34D79', '#5B1F3A'],
   },
 ];
 

@@ -146,6 +146,25 @@ export const GoldenStardust: React.FC<GoldenStardustProps> = ({
                       strokeOpacity="0.85"
                     />
                   </g>
+                ) : shapeKind === 'jellyfish' ? (
+                  <g>
+                    <path
+                      d="M5 12C5 7.6 8.1 4.5 12 4.5C15.9 4.5 19 7.6 19 12H5Z"
+                      fill={color}
+                      fillOpacity="0.72"
+                    />
+                    <path
+                      d="M8 12.5C7.2 15.5 8.8 18 7.8 20.5M12 12.5C12.4 16 11.4 18.5 12 21.5M16 12.5C16.8 15.5 15.2 18 16.2 20.5"
+                      stroke={color}
+                      strokeWidth="1.4"
+                      strokeLinecap="round"
+                    />
+                  </g>
+                ) : shapeKind === 'pixel-heart' ? (
+                  <path
+                    d="M5 6H9V8H11V10H13V8H15V6H19V8H21V13H19V15H17V17H15V19H13V21H11V19H9V17H7V15H5V13H3V8H5V6Z"
+                    fill={color}
+                  />
                 ) : (
                   <path
                     d="M12 0L14.4 9.6L24 12L14.4 14.4L12 24L9.6 14.4L0 12L9.6 9.6Z"

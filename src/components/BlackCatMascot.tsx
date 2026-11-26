@@ -184,11 +184,191 @@ export const BlackCatMascot: React.FC<BlackCatMascotProps> = ({
       starBright: '#F6F0E4',
       starWarm: '#DF95A5',
     },
+    'bien-dem-sua': {
+      gradStart: '#E2F2FF',
+      gradMid: '#6CB6FF',
+      gradEnd: '#2B629D',
+      bodyFill: '#081526',
+      eyeFill: '#D4EEFF',
+      pupilFill: '#05152C',
+      noseFill: '#6CB6FF',
+      auraInner: '#E2F2FF',
+      auraMid: '#6CB6FF',
+      starBright: '#E2F2FF',
+      starWarm: '#6CB6FF',
+    },
+    'bao-cu-nhac': {
+      gradStart: '#F5E9D3',
+      gradMid: '#CFA972',
+      gradEnd: '#7D5C38',
+      bodyFill: '#1B150E',
+      eyeFill: '#F5E9D3',
+      pupilFill: '#1C140C',
+      noseFill: '#CFA972',
+      auraInner: '#F5E9D3',
+      auraMid: '#CFA972',
+      starBright: '#F5E9D3',
+      starWarm: '#CFA972',
+    },
+    'pixel-doodles': {
+      gradStart: '#FFF2F6',
+      gradMid: '#F79AC0',
+      gradEnd: '#C86790',
+      bodyFill: '#181216',
+      eyeFill: '#FFF2F6',
+      pupilFill: '#20131A',
+      noseFill: '#F79AC0',
+      auraInner: '#FFF2F6',
+      auraMid: '#F79AC0',
+      starBright: '#FFF2F6',
+      starWarm: '#F79AC0',
+    },
   };
 
   const p = paletteMap[effectiveThemeId];
   const resolvedTitle = title ?? activeTheme.mascotLabel;
-  const hasStarryEyes = effectiveThemeId === 'rose-nebula' || effectiveThemeId === 'dem-xanh';
+  const hasStarryEyes =
+    effectiveThemeId === 'rose-nebula' ||
+    effectiveThemeId === 'dem-xanh' ||
+    effectiveThemeId === 'bien-dem-sua';
+
+  /* Theme Pixel Doodles & Mèo Trắng Đen: Render riêng cặp mèo trắng đen ôm nhau */
+  if (effectiveThemeId === 'pixel-doodles') {
+    return (
+      <svg
+        width={size}
+        height={size}
+        viewBox="0 0 120 120"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className={className}
+        role="img"
+        aria-label={resolvedTitle}
+      >
+        <defs>
+          <radialGradient id={auraId} cx="50%" cy="54%" r="50%">
+            <stop offset="0%" stopColor="#FFF2F6" stopOpacity="0.34" />
+            <stop offset="56%" stopColor="#F79AC0" stopOpacity="0.16" />
+            <stop offset="100%" stopColor="#F79AC0" stopOpacity="0" />
+          </radialGradient>
+        </defs>
+
+        {variant !== 'badge' && (
+          <>
+            <circle cx="60" cy="60" r="56" fill={`url(#${auraId})`} />
+            <rect
+              x="14"
+              y="14"
+              width="92"
+              height="92"
+              rx="24"
+              stroke="#F79AC0"
+              strokeOpacity="0.38"
+              strokeWidth="1.4"
+              strokeDasharray="4 4"
+            />
+          </>
+        )}
+
+        {/* Trái tim pixel hồng bay quanh cặp mèo */}
+        <path
+          d="M55 21H58V23H60V25H62V23H64V21H67V23H69V27H67V29H65V31H63V33H61V35H59V33H57V31H55V29H53V27H51V23H53V21H55Z"
+          fill="#F79AC0"
+          className="animate-cat-star-1"
+        />
+        {variant !== 'badge' && (
+          <>
+            <path
+              d="M17 33H19V35H21V33H23V37H21V39H19V41H17V39H15V37H13V33H15V35H17V33Z"
+              fill="#FFF2F6"
+              className="animate-cat-star-2"
+            />
+            <path
+              d="M97 34H99V36H101V34H103V38H101V40H99V42H97V40H95V38H93V34H95V36H97V34Z"
+              fill="#F79AC0"
+              className="animate-cat-star-3"
+            />
+          </>
+        )}
+
+        {/* Đuôi mèo trắng & mèo đen tạo hình trái tim mềm mại ở 2 bên */}
+        <path
+          d="M28 91C16 88 13 76 19 69C23 65 28 69 27 74"
+          stroke="#FFF8FA"
+          strokeWidth="3.4"
+          strokeLinecap="round"
+        />
+        <path
+          d="M92 91C104 88 107 76 101 69C97 65 92 69 93 74"
+          stroke="#F79AC0"
+          strokeWidth="3.4"
+          strokeLinecap="round"
+        />
+
+        {/* Mèo trắng (bên trái, hơi nghiêng ôm lấy mèo đen) */}
+        <g transform="rotate(6 45 70)">
+          <path
+            d="M27 94C26 78 31 65 37 61H54C59 66 61 80 59 94C50 97 35 97 27 94Z"
+            fill="#FFF8FA"
+            stroke="#241820"
+            strokeWidth="2.1"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M27 48L26 30L38 38C43 36 50 37 54 39L64 31L62 49C63 57 57 64 45 64C33 64 26 56 27 48Z"
+            fill="#FFF8FA"
+            stroke="#241820"
+            strokeWidth="2.1"
+            strokeLinejoin="round"
+          />
+          {/* Tai trong hồng phấn */}
+          <path d="M29.5 43L29.5 35.5L35 40" stroke="#F79AC0" strokeWidth="1.5" strokeLinecap="round" />
+          {/* Mắt nhắm tít hạnh phúc & má hồng */}
+          <path d="M36 50C37.5 48.2 40 48.2 41.5 50" stroke="#241820" strokeWidth="1.7" strokeLinecap="round" />
+          <path d="M49 50C50.5 48.2 53 48.2 54.5 50" stroke="#241820" strokeWidth="1.7" strokeLinecap="round" />
+          <ellipse cx="34" cy="54" rx="2.4" ry="1.3" fill="#F79AC0" fillOpacity="0.65" />
+          <path d="M43.5 53.5C44.5 54.5 46 54.5 47 53.5" stroke="#241820" strokeWidth="1.3" strokeLinecap="round" />
+        </g>
+
+        {/* Mèo đen (bên phải, rúc đầu ôm mèo trắng) */}
+        <g transform="rotate(-6 75 70)">
+          <path
+            d="M61 94C59 80 61 66 66 61H83C89 65 94 78 93 94C85 97 70 97 61 94Z"
+            fill="#1B1419"
+            stroke="#F79AC0"
+            strokeWidth="2.1"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M58 49L56 31L66 39C70 37 77 36 82 38L94 30L93 48C94 56 87 64 75 64C63 64 57 57 58 49Z"
+            fill="#1B1419"
+            stroke="#F79AC0"
+            strokeWidth="2.1"
+            strokeLinejoin="round"
+          />
+          <path d="M90.5 43L90.5 35.5L85 40" stroke="#F79AC0" strokeWidth="1.5" strokeLinecap="round" />
+          <circle cx="67.5" cy="50" r="2.2" fill="#FFF2F6" />
+          <circle cx="80.5" cy="50" r="2.2" fill="#FFF2F6" />
+          <ellipse cx="86" cy="54" rx="2.4" ry="1.3" fill="#F79AC0" fillOpacity="0.55" />
+          <path d="M72.5 54C73.5 55 75 55 76 54" stroke="#F79AC0" strokeWidth="1.3" strokeLinecap="round" />
+        </g>
+
+        {/* Đôi tay mèo trắng đặt ôm sang vai mèo đen */}
+        <path
+          d="M53 72C59 71 66 72 70 76"
+          stroke="#FFF8FA"
+          strokeWidth="4.2"
+          strokeLinecap="round"
+        />
+        <path
+          d="M53 72C59 71 66 72 70 76"
+          stroke="#241820"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+        />
+      </svg>
+    );
+  }
 
   return (
     <svg
@@ -541,6 +721,41 @@ export const BlackCatMascot: React.FC<BlackCatMascotProps> = ({
         </g>
       )}
 
+      {/* Biển Đêm & Sứa: Sứa phát sáng lam ngọc & bọt nước đại dương bay quanh mèo */}
+      {effectiveThemeId === 'bien-dem-sua' && (
+        <g aria-hidden="true">
+          {/* Sứa phát sáng nhỏ góc trên phải */}
+          <g className="animate-cat-star-1">
+            <path d="M88 26C88 20.5 92.2 16.5 97 16.5C101.8 16.5 106 20.5 106 26H88Z" fill="#6CB6FF" fillOpacity="0.45" stroke="#E2F2FF" strokeWidth="1.1" />
+            <path d="M92 26.5C91 31 93 35 91.5 38M97 26.5C97.6 31.5 96.4 36 97 39.5M102 26.5C103 31 101 35 102.5 38" stroke="#6CB6FF" strokeWidth="1.1" strokeLinecap="round" />
+          </g>
+          {variant !== 'badge' && (
+            <>
+              <circle cx="22" cy="37" r="6" fill="#6CB6FF" fillOpacity="0.14" stroke="#E2F2FF" strokeOpacity="0.65" strokeWidth="1.1" className="animate-cat-star-2" />
+              <circle cx="20" cy="34.8" r="1.3" fill="#FFFFFF" fillOpacity="0.85" />
+              <circle cx="24" cy="78" r="4.2" fill="#E2F2FF" fillOpacity="0.14" stroke="#6CB6FF" strokeOpacity="0.7" strokeWidth="1" className="animate-cat-star-3" />
+              <circle cx="98" cy="72" r="3.5" fill="#6CB6FF" fillOpacity="0.18" stroke="#E2F2FF" strokeOpacity="0.65" strokeWidth="1" />
+            </>
+          )}
+        </g>
+      )}
+
+      {/* Báo Cũ & Nhạc Cổ Điển: Viền báo cổ điển double-circle & nốt nhạc vintage */}
+      {variant !== 'badge' && effectiveThemeId === 'bao-cu-nhac' && (
+        <g aria-hidden="true">
+          <circle cx="60" cy="54" r="41" stroke="#CFA972" strokeOpacity="0.48" strokeWidth="1.2" />
+          <circle cx="60" cy="54" r="37" stroke="#F5E9D3" strokeOpacity="0.28" strokeWidth="0.9" strokeDasharray="3 3" />
+          <g className="animate-cat-star-1" fill="#F5E9D3">
+            <circle cx="21" cy="35" r="2.2" />
+            <path d="M23 35V24L29 26.5V29.5L23 27.5" stroke="#CFA972" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+          </g>
+          <g className="animate-cat-star-2" fill="#CFA972">
+            <circle cx="97" cy="43" r="2" />
+            <path d="M99 43V33.5L103 35" stroke="#F5E9D3" strokeWidth="1.3" strokeLinecap="round" />
+          </g>
+        </g>
+      )}
+
       {/* Đuôi mèo uốn cong đung đưa mềm mại */}
       <path
         d="M77 95C91 95 101 86 101 75C101 66 93 62 90 67C88 71 92 75 93 78"
@@ -749,6 +964,24 @@ export const BlackCatMascot: React.FC<BlackCatMascotProps> = ({
             stroke="#DF95A5"
             strokeWidth="0.7"
           />
+        </g>
+      )}
+
+      {/* Báo Cũ & Nhạc Cổ Điển: Mũ nồi vintage & kính tròn đồng cổ */}
+      {effectiveThemeId === 'bao-cu-nhac' && (
+        <g aria-hidden="true">
+          {/* Mũ beret cổ điển đội lệch nhẹ */}
+          <path
+            d="M44 33C46 25 56 22 68 25C74 26.5 78 30 76 34C67 32 54 32 44 33Z"
+            fill="#5C4026"
+            stroke="#CFA972"
+            strokeWidth="1.3"
+            strokeLinejoin="round"
+          />
+          <circle cx="63" cy="23.5" r="1.5" fill="#CFA972" />
+          {/* Kính tròn vintage mắt phải */}
+          <circle cx="69.5" cy="48" r="6" stroke="#CFA972" strokeWidth="1.4" fill="#F5E9D3" fillOpacity="0.08" />
+          <path d="M75.5 48C79 51 80 57 78 63" stroke="#CFA972" strokeWidth="0.9" strokeDasharray="2 1.5" strokeLinecap="round" />
         </g>
       )}
 

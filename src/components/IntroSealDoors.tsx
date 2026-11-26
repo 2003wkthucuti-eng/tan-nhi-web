@@ -179,7 +179,7 @@ export const IntroSealDoors: React.FC<IntroSealDoorsProps> = ({
                   style={{ color: brightColor }}
                   className="text-[11px] font-semibold tracking-wide pl-0.5"
                 >
-                  Chọn Theme (3×3)
+                  Chọn Theme
                 </span>
                 <button
                   type="button"

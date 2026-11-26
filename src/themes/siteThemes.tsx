@@ -1,4 +1,7 @@
 import React, { createContext, useContext, useMemo, useState } from 'react';
+import thuyMacBg from '../assets/images/thuy_mac_suong_1795718425975.jpg';
+import coPhongTramBg from '../assets/images/co_phong_tram_1795718426202.jpg';
+import demXanhSaoBg from '../assets/images/dem_xanh_sao_1795718426121.jpg';
 
 export type SiteThemeId =
   | 'classic-gold'
@@ -6,7 +9,10 @@ export type SiteThemeId =
   | 'velvet-vinyl'
   | 'ink-lily'
   | 'rose-nebula'
-  | 'celestial-scroll';
+  | 'celestial-scroll'
+  | 'thuy-mac'
+  | 'co-phong-tram'
+  | 'dem-xanh';
 
 export type ThemeParticleKind = 'star' | 'petal' | 'note' | 'leaf' | 'celestial';
 
@@ -164,7 +170,7 @@ export const SITE_THEMES: SiteThemeDefinition[] = [
   {
     id: 'celestial-scroll',
     name: 'Celestial Scroll',
-    shortName: 'Celestial Scroll',
+    shortName: 'Celestial',
     tagline: 'Cuộn tranh cổ phong vân ngọc & nhật nguyệt',
     mascotLabel: 'Mèo cổ phong mang vòng hào quang mây ngọc',
     bgImageUrl: '/assets/aistudio/d0055a583fe61a369f86a752f605e9b8_deb62e3c.jpg',
@@ -185,6 +191,81 @@ export const SITE_THEMES: SiteThemeDefinition[] = [
     fogSecondary: 'rgba(232, 210, 155, 0.085)',
     waxOuter: ['#F8EBCB', '#D9BC7B', '#6E9A8A', '#3E4B47'],
     waxInner: ['#7DA796', '#A6554C', '#4D2523'],
+  },
+  {
+    id: 'thuy-mac',
+    name: 'Thủy Mặc Sương Khói',
+    shortName: 'Thủy Mặc',
+    tagline: 'Cuốn thư mực tàu & sương khói bảng lảng',
+    mascotLabel: 'Mèo đen nét mực tĩnh lặng',
+    bgImageUrl: thuyMacBg,
+    bgImageOpacity: 0.2,
+    bgColor: '#0A0B0D',
+    surfaceColor: '#121417',
+    accentColor: '#A9B4C0',
+    brightColor: '#EEF2F5',
+    textColor: '#F2F5F7',
+    mutedTextColor: '#B8C0C8',
+    buttonTextColor: '#0B0D10',
+    swatchFrom: '#545F6B',
+    swatchTo: '#EEF2F5',
+    particleKind: 'leaf',
+    particleColors: ['#EEF2F5', '#A9B4C0'],
+    fireworkPalette: ['#FFFFFF', '#EEF2F5', '#BFC8D1', '#8E99A6', '#D7DFE6'],
+    fogPrimary: 'rgba(176, 186, 198, 0.13)',
+    fogSecondary: 'rgba(238, 242, 245, 0.08)',
+    waxOuter: ['#F0F3F6', '#B9C3CD', '#6B7682', '#333A42'],
+    waxInner: ['#85919E', '#57616C', '#2A3037'],
+  },
+  {
+    id: 'co-phong-tram',
+    name: 'Cổ Phong Trâm Ngọc',
+    shortName: 'Trâm Ngọc',
+    tagline: 'Cửa gỗ cổ, trâm ngọc bích & sắc đỏ trầm',
+    mascotLabel: 'Mèo ngồi cạnh dây tua rua nhỏ',
+    bgImageUrl: coPhongTramBg,
+    bgImageOpacity: 0.2,
+    bgColor: '#12080A',
+    surfaceColor: '#1B0D10',
+    accentColor: '#67C4A7',
+    brightColor: '#EFE4CA',
+    textColor: '#F8F1E3',
+    mutedTextColor: '#CFBFC2',
+    buttonTextColor: '#16080B',
+    swatchFrom: '#9B2938',
+    swatchTo: '#67C4A7',
+    particleKind: 'celestial',
+    particleColors: ['#EFE4CA', '#67C4A7'],
+    fireworkPalette: ['#FFF6DF', '#67C4A7', '#C84B59', '#9ADCC6', '#EFE4CA'],
+    fogPrimary: 'rgba(103, 196, 167, 0.11)',
+    fogSecondary: 'rgba(168, 46, 62, 0.12)',
+    waxOuter: ['#F5EAD2', '#7FCBB2', '#8F2936', '#461218'],
+    waxInner: ['#A83846', '#448C74', '#2F1115'],
+  },
+  {
+    id: 'dem-xanh',
+    name: 'Đêm Xanh Ánh Mắt',
+    shortName: 'Đêm Xanh',
+    tagline: 'Bầu trời đêm khuya & ánh sao xanh băng',
+    mascotLabel: 'Mèo xanh đêm mắt sao lấp lánh',
+    bgImageUrl: demXanhSaoBg,
+    bgImageOpacity: 0.2,
+    bgColor: '#070C18',
+    surfaceColor: '#0E1629',
+    accentColor: '#7EC8F2',
+    brightColor: '#E8F6FF',
+    textColor: '#F0F8FF',
+    mutedTextColor: '#B5C8E0',
+    buttonTextColor: '#061022',
+    swatchFrom: '#2F6FB3',
+    swatchTo: '#E8F6FF',
+    particleKind: 'star',
+    particleColors: ['#E8F6FF', '#7EC8F2'],
+    fireworkPalette: ['#FFFFFF', '#E8F6FF', '#7EC8F2', '#52A4DF', '#B8E3FF'],
+    fogPrimary: 'rgba(126, 200, 242, 0.13)',
+    fogSecondary: 'rgba(232, 246, 255, 0.08)',
+    waxOuter: ['#F0F9FF', '#8CD2F7', '#357BB5', '#15385E'],
+    waxInner: ['#53A3DC', '#265E96', '#102B4A'],
   },
 ];
 

@@ -537,6 +537,63 @@
   --t-grad-to: #E8D29B;
 }
 
+[data-site-theme="thuy-mac"] {
+  --t-bg: #0A0B0D;
+  --t-bg-rgb: 10, 11, 13;
+  --t-surface: #121417;
+  --t-surface-rgb: 18, 20, 23;
+  --t-surface-alt: #1A1D22;
+  --t-surface-alt-rgb: 26, 29, 34;
+  --t-accent: #A9B4C0;
+  --t-accent-rgb: 169, 180, 192;
+  --t-bright: #EEF2F5;
+  --t-bright-rgb: 238, 242, 245;
+  --t-soft: #CDD5DD;
+  --t-text: #F2F5F7;
+  --t-muted: #B8C0C8;
+  --t-btn-text: #0B0D10;
+  --t-grad-from: #7B8694;
+  --t-grad-to: #EEF2F5;
+}
+
+[data-site-theme="co-phong-tram"] {
+  --t-bg: #12080A;
+  --t-bg-rgb: 18, 8, 10;
+  --t-surface: #1B0D10;
+  --t-surface-rgb: 27, 13, 16;
+  --t-surface-alt: #281217;
+  --t-surface-alt-rgb: 40, 18, 23;
+  --t-accent: #67C4A7;
+  --t-accent-rgb: 103, 196, 167;
+  --t-bright: #EFE4CA;
+  --t-bright-rgb: 239, 228, 202;
+  --t-soft: #9ADCC6;
+  --t-text: #F8F1E3;
+  --t-muted: #CFBFC2;
+  --t-btn-text: #16080B;
+  --t-grad-from: #B53B49;
+  --t-grad-to: #67C4A7;
+}
+
+[data-site-theme="dem-xanh"] {
+  --t-bg: #070C18;
+  --t-bg-rgb: 7, 12, 24;
+  --t-surface: #0E1629;
+  --t-surface-rgb: 14, 22, 41;
+  --t-surface-alt: #15213D;
+  --t-surface-alt-rgb: 21, 33, 61;
+  --t-accent: #7EC8F2;
+  --t-accent-rgb: 126, 200, 242;
+  --t-bright: #E8F6FF;
+  --t-bright-rgb: 232, 246, 255;
+  --t-soft: #B4DDF8;
+  --t-text: #F0F8FF;
+  --t-muted: #B5C8E0;
+  --t-btn-text: #061022;
+  --t-grad-from: #3D88CE;
+  --t-grad-to: #E8F6FF;
+}
+
 /* Áp dụng token cho các Theme mới (trừ mặc định classic-gold) */
 [data-site-theme]:not([data-site-theme="classic-gold"]) {
   background-color: var(--t-bg);

@@ -68,7 +68,7 @@ export const ThemeSelectorButton: React.FC = () => {
           >
             <div className="flex items-center justify-between gap-1.5 pb-1.5 mb-2 border-b border-[#D4AF37]/20">
               <span className="text-[11px] font-semibold tracking-wide text-[#F3E5AB] pl-0.5">
-                Chọn Theme (3×3)
+                Chọn Theme
               </span>
               <button
                 type="button"

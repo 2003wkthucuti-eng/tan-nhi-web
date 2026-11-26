@@ -119,10 +119,50 @@ export const BlackCatMascot: React.FC<BlackCatMascotProps> = ({
       starBright: '#E8D29B',
       starWarm: '#8FB9A8',
     },
+    'thuy-mac': {
+      gradStart: '#EEF2F5',
+      gradMid: '#A9B4C0',
+      gradEnd: '#545F6B',
+      bodyFill: '#0B0C0E',
+      eyeFill: '#DDE5EC',
+      pupilFill: '#0A0C0F',
+      noseFill: '#8E99A6',
+      auraInner: '#EEF2F5',
+      auraMid: '#A9B4C0',
+      starBright: '#EEF2F5',
+      starWarm: '#A9B4C0',
+    },
+    'co-phong-tram': {
+      gradStart: '#EFE4CA',
+      gradMid: '#67C4A7',
+      gradEnd: '#9B2938',
+      bodyFill: '#14090B',
+      eyeFill: '#7FE3C3',
+      pupilFill: '#16080B',
+      noseFill: '#C84B59',
+      auraInner: '#EFE4CA',
+      auraMid: '#67C4A7',
+      starBright: '#EFE4CA',
+      starWarm: '#67C4A7',
+    },
+    'dem-xanh': {
+      gradStart: '#E8F6FF',
+      gradMid: '#7EC8F2',
+      gradEnd: '#2F6FB3',
+      bodyFill: '#0A152B',
+      eyeFill: '#E8F6FF',
+      pupilFill: '#0B2347',
+      noseFill: '#7EC8F2',
+      auraInner: '#E8F6FF',
+      auraMid: '#7EC8F2',
+      starBright: '#E8F6FF',
+      starWarm: '#7EC8F2',
+    },
   };
 
   const p = paletteMap[effectiveThemeId];
   const resolvedTitle = title ?? activeTheme.mascotLabel;
+  const hasStarryEyes = effectiveThemeId === 'rose-nebula' || effectiveThemeId === 'dem-xanh';
 
   return (
     <svg
@@ -183,7 +223,7 @@ export const BlackCatMascot: React.FC<BlackCatMascotProps> = ({
         </>
       )}
 
-      {/* Gothic Lily & Ribbon: Cánh hoa loa kèn & ren gothic phía sau */}
+      {/* Gothic Lily & Ribbon */}
       {variant !== 'badge' && effectiveThemeId === 'gothic-lily' && (
         <g aria-hidden="true">
           <circle
@@ -215,13 +255,12 @@ export const BlackCatMascot: React.FC<BlackCatMascotProps> = ({
         </g>
       )}
 
-      {/* Velvet & Vinyl: Đĩa than cổ điển phía sau đầu mèo & nốt nhạc bay */}
+      {/* Velvet & Vinyl */}
       {variant !== 'badge' && effectiveThemeId === 'velvet-vinyl' && (
         <g aria-hidden="true">
           <circle cx="60" cy="48" r="35" fill="#0B0406" fillOpacity="0.65" stroke="#8E2034" strokeWidth="1.4" strokeOpacity="0.6" />
           <circle cx="60" cy="48" r="29" stroke="#F7EAD9" strokeWidth="0.7" strokeOpacity="0.22" strokeDasharray="12 6" />
           <circle cx="60" cy="48" r="23" stroke="#E2B89B" strokeWidth="0.6" strokeOpacity="0.24" />
-          {/* Nốt nhạc móc đơn nhảy nhẹ */}
           <g className="animate-cat-star-1" fill="#F7EAD9">
             <circle cx="22" cy="36" r="2.3" />
             <path d="M24 36V25L29 27V30L24 28.2" stroke="#F7EAD9" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
@@ -233,7 +272,7 @@ export const BlackCatMascot: React.FC<BlackCatMascotProps> = ({
         </g>
       )}
 
-      {/* Ink Lily & Seal: Vòng tròn thủy mặc & dấu ấn đỏ son nhỏ */}
+      {/* Ink Lily & Seal */}
       {variant !== 'badge' && effectiveThemeId === 'ink-lily' && (
         <g aria-hidden="true">
           <circle
@@ -256,7 +295,7 @@ export const BlackCatMascot: React.FC<BlackCatMascotProps> = ({
         </g>
       )}
 
-      {/* Rose Nebula: Quỹ đạo tinh vân & các ngôi sao trắng/hồng lấp lánh */}
+      {/* Rose Nebula */}
       {variant !== 'badge' && effectiveThemeId === 'rose-nebula' && (
         <g aria-hidden="true">
           <ellipse
@@ -284,12 +323,11 @@ export const BlackCatMascot: React.FC<BlackCatMascotProps> = ({
         </g>
       )}
 
-      {/* Celestial Scroll: Vòng hào quang nhật nguyệt & vân mây cổ phong */}
+      {/* Celestial Scroll */}
       {variant !== 'badge' && effectiveThemeId === 'celestial-scroll' && (
         <g aria-hidden="true">
           <circle cx="60" cy="48" r="34" stroke="#E8D29B" strokeOpacity="0.55" strokeWidth="1.5" />
           <circle cx="60" cy="48" r="39" stroke="#8FB9A8" strokeOpacity="0.38" strokeWidth="1" strokeDasharray="4 4" />
-          {/* Tia nhật luân trên đỉnh vòng quang */}
           <path
             d="M60 9V14M44 13L46.5 17M76 13L73.5 17M31 24L35 27M89 24L85 27"
             stroke="#E8D29B"
@@ -314,6 +352,90 @@ export const BlackCatMascot: React.FC<BlackCatMascotProps> = ({
         </g>
       )}
 
+      {/* Thủy Mặc Sương Khói: Vòng nét mực Enso & làn khói sương nhẹ phía sau */}
+      {variant !== 'badge' && effectiveThemeId === 'thuy-mac' && (
+        <g aria-hidden="true">
+          <path
+            d="M34 25C49 14 75 15 88 30C99 44 97 67 84 80"
+            stroke="#A9B4C0"
+            strokeOpacity="0.45"
+            strokeWidth="2.8"
+            strokeLinecap="round"
+          />
+          <path
+            d="M28 42C20 55 21 73 33 83"
+            stroke="#EEF2F5"
+            strokeOpacity="0.28"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+          />
+          {/* Dải sương khói uốn nhẹ */}
+          <path
+            d="M14 78C23 73 30 77 36 74"
+            stroke="#EEF2F5"
+            strokeOpacity="0.42"
+            strokeWidth="1.4"
+            strokeLinecap="round"
+          />
+          <path
+            d="M86 24C92 21 98 24 104 20"
+            stroke="#A9B4C0"
+            strokeOpacity="0.48"
+            strokeWidth="1.3"
+            strokeLinecap="round"
+          />
+        </g>
+      )}
+
+      {/* Cổ Phong Trâm Ngọc: Trâm ngọc cài phía sau & khung cửa cổ tròn */}
+      {variant !== 'badge' && effectiveThemeId === 'co-phong-tram' && (
+        <g aria-hidden="true">
+          <circle
+            cx="60"
+            cy="52"
+            r="39"
+            stroke="#9B2938"
+            strokeOpacity="0.52"
+            strokeWidth="1.6"
+          />
+          <circle
+            cx="60"
+            cy="52"
+            r="35"
+            stroke="#67C4A7"
+            strokeOpacity="0.34"
+            strokeWidth="0.9"
+            strokeDasharray="6 4"
+          />
+          {/* Cây trâm ngọc bích vắt chéo tinh tế */}
+          <line x1="25" y1="29" x2="94" y2="21" stroke="#EFE4CA" strokeWidth="1.5" strokeLinecap="round" strokeOpacity="0.72" />
+          <circle cx="24" cy="29" r="3.4" fill="#67C4A7" stroke="#EFE4CA" strokeWidth="1" />
+        </g>
+      )}
+
+      {/* Đêm Xanh Ánh Mắt: Các ngôi sao xanh băng lấp lánh quanh chú mèo xanh đêm */}
+      {variant !== 'badge' && effectiveThemeId === 'dem-xanh' && (
+        <g aria-hidden="true">
+          <path
+            d="M21 29L23 35L29 37L23 39L21 45L19 39L13 37L19 35Z"
+            fill="#E8F6FF"
+            className="animate-cat-star-1"
+          />
+          <path
+            d="M99 40L100.6 44.4L105 46L100.6 47.6L99 52L97.4 47.6L93 46L97.4 44.4Z"
+            fill="#7EC8F2"
+            className="animate-cat-star-2"
+          />
+          <path
+            d="M23 77L24.2 80.5L27.5 81.5L24.2 82.5L23 86L21.8 82.5L18.5 81.5L21.8 80.5Z"
+            fill="#E8F6FF"
+            className="animate-cat-star-3"
+          />
+          <circle cx="88" cy="22" r="1.8" fill="#7EC8F2" />
+          <circle cx="34" cy="18" r="1.4" fill="#E8F6FF" />
+        </g>
+      )}
+
       {/* Đuôi mèo uốn cong đung đưa mềm mại */}
       <path
         d="M77 95C91 95 101 86 101 75C101 66 93 62 90 67C88 71 92 75 93 78"
@@ -322,6 +444,28 @@ export const BlackCatMascot: React.FC<BlackCatMascotProps> = ({
         strokeLinecap="round"
         className="animate-cat-tail"
       />
+
+      {/* Cổ Phong Trâm Ngọc: Dây tua rua nhỏ rủ cạnh chú mèo đang ngồi */}
+      {effectiveThemeId === 'co-phong-tram' && (
+        <g aria-hidden="true">
+          {/* Dây treo từ cạnh cổ xuống bên trái mèo */}
+          <path
+            d="M44 63C35 66 30 72 30 78"
+            stroke="#9B2938"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+          />
+          {/* Hạt ngọc bích & nút thắt nhỏ */}
+          <circle cx="30" cy="79" r="2.7" fill="#67C4A7" stroke="#EFE4CA" strokeWidth="0.9" />
+          {/* Chùm tua rua đỏ trầm rủ thẳng */}
+          <path
+            d="M30 82V96M28 83L26.8 95M32 83L33.2 95"
+            stroke="#C84B59"
+            strokeWidth="1.4"
+            strokeLinecap="round"
+          />
+        </g>
+      )}
 
       {/* Thân mèo ngồi */}
       <path
@@ -343,10 +487,8 @@ export const BlackCatMascot: React.FC<BlackCatMascotProps> = ({
 
       {/* Vòng cổ & phụ kiện cổ riêng theo từng theme */}
       {effectiveThemeId === 'gothic-lily' ? (
-        /* Nơ ren hồng tro nổi bật ở cổ mèo */
         <g aria-hidden="true">
           <path d="M47 62C54 65 66 65 73 62" stroke="#D8A7B1" strokeWidth="1.8" strokeLinecap="round" />
-          {/* Cánh nơ trái & phải viền ren */}
           <path
             d="M58 65L45 59C43.5 63.5 44 69 47 72L58 67Z"
             fill="#B77D8B"
@@ -361,13 +503,11 @@ export const BlackCatMascot: React.FC<BlackCatMascotProps> = ({
             strokeWidth="1.2"
             strokeLinejoin="round"
           />
-          {/* Dải ruy-băng rủ xuống */}
           <path d="M58 68L53 79L57 77L59 68Z" fill="#D8A7B1" stroke="#F6EAEF" strokeWidth="0.9" />
           <path d="M62 68L67 79L63 77L61 68Z" fill="#D8A7B1" stroke="#F6EAEF" strokeWidth="0.9" />
           <circle cx="60" cy="66" r="3" fill="#F6EAEF" stroke="#9B6573" strokeWidth="1.1" />
         </g>
       ) : effectiveThemeId === 'ink-lily' ? (
-        /* Nút thắt đồng tâm & tua rua ngọc rêu cổ phong */
         <g aria-hidden="true">
           <path d="M47 62C54 66 66 66 73 62" stroke="#9CAF8E" strokeWidth="1.8" strokeLinecap="round" />
           <rect x="57.2" y="64.5" width="5.6" height="5.6" transform="rotate(45 60 67.3)" fill="#617454" stroke="#E7EFE0" strokeWidth="1" />
@@ -375,15 +515,28 @@ export const BlackCatMascot: React.FC<BlackCatMascotProps> = ({
           <circle cx="60" cy="67.3" r="1.4" fill="#E7EFE0" />
         </g>
       ) : effectiveThemeId === 'celestial-scroll' ? (
-        /* Dải lụa mây ngọc & ngọc bội đỏ son */
         <g aria-hidden="true">
           <path d="M46 62C54 67 66 67 74 62" stroke="#8FB9A8" strokeWidth="2.4" strokeLinecap="round" />
           <path d="M48 64C42 70 40 76 44 82" stroke="#8FB9A8" strokeWidth="1.8" strokeLinecap="round" strokeOpacity="0.85" />
           <path d="M72 64C78 70 80 76 76 82" stroke="#E8D29B" strokeWidth="1.8" strokeLinecap="round" strokeOpacity="0.85" />
           <circle cx="60" cy="67.5" r="3.4" fill="#B54B4B" stroke="#E8D29B" strokeWidth="1.3" />
         </g>
+      ) : effectiveThemeId === 'thuy-mac' ? (
+        /* Thủy Mặc Sương Khói: Nét mực tĩnh lặng thanh thoát, không chuông rườm rà */
+        <path
+          d="M48 63C55 66 65 66 72 63"
+          stroke="#A9B4C0"
+          strokeWidth="1.6"
+          strokeOpacity="0.7"
+          strokeLinecap="round"
+        />
+      ) : effectiveThemeId === 'co-phong-tram' ? (
+        /* Cổ Phong Trâm Ngọc: Vòng cổ đỏ trầm đính ngọc bích giữa ngực */
+        <g aria-hidden="true">
+          <path d="M47 62C54 66 66 66 73 62" stroke="#C84B59" strokeWidth="2.1" strokeLinecap="round" />
+          <circle cx="60" cy="67" r="3.1" fill="#67C4A7" stroke="#EFE4CA" strokeWidth="1.1" />
+        </g>
       ) : (
-        /* Vòng cổ mảnh & chuông / mặt dây chuyền */
         <>
           <path
             d="M47 62C54 66 66 66 73 62"
@@ -415,10 +568,9 @@ export const BlackCatMascot: React.FC<BlackCatMascotProps> = ({
       <path d="M40 40L39.5 31L46.5 36.5" stroke={p.gradMid} strokeWidth="1.2" strokeOpacity="0.72" strokeLinecap="round" strokeLinejoin="round" />
       <path d="M80 40L80.5 31L73.5 36.5" stroke={p.gradMid} strokeWidth="1.2" strokeOpacity="0.72" strokeLinecap="round" strokeLinejoin="round" />
 
-      {/* Velvet & Vinyl: Tai nghe đỏ đô - kem cổ điển chụp lên đầu mèo */}
+      {/* Velvet & Vinyl: Tai nghe đỏ đô - kem cổ điển */}
       {effectiveThemeId === 'velvet-vinyl' && (
         <g aria-hidden="true">
-          {/* Quai tai nghe uốn vòng qua đỉnh đầu */}
           <path
             d="M34 44C33 27 45 19 60 19C75 19 87 27 86 44"
             stroke="#F7EAD9"
@@ -431,10 +583,8 @@ export const BlackCatMascot: React.FC<BlackCatMascotProps> = ({
             strokeWidth="2"
             strokeLinecap="round"
           />
-          {/* Chụp tai trái */}
           <rect x="29" y="40" width="9.5" height="15.5" rx="4.5" fill="#7B182A" stroke="#F7EAD9" strokeWidth="1.4" />
           <line x1="33.8" y1="44" x2="33.8" y2="51.5" stroke="#E2B89B" strokeWidth="1.1" strokeLinecap="round" />
-          {/* Chụp tai phải */}
           <rect x="81.5" y="40" width="9.5" height="15.5" rx="4.5" fill="#7B182A" stroke="#F7EAD9" strokeWidth="1.4" />
           <line x1="86.2" y1="44" x2="86.2" y2="51.5" stroke="#E2B89B" strokeWidth="1.1" strokeLinecap="round" />
         </g>
@@ -454,25 +604,56 @@ export const BlackCatMascot: React.FC<BlackCatMascotProps> = ({
         </g>
       )}
 
+      {/* Đêm Xanh Ánh Mắt: Điểm nhấn trăng khuyết nhỏ trên trán mèo xanh đêm */}
+      {effectiveThemeId === 'dem-xanh' && (
+        <path
+          d="M62.5 38C61 36.2 58.2 36.4 57.2 38.4C58.6 38 60.4 38.8 61 40.3C62 39.8 62.7 39 62.5 38Z"
+          fill="#7EC8F2"
+          opacity="0.9"
+        />
+      )}
+
       {/* Đôi mắt biểu cảm chớp nhẹ */}
-      <g className="animate-cat-eye">
-        <ellipse cx="50.5" cy="48" rx="3.4" ry="4.2" fill={p.eyeFill} />
-        <ellipse cx="50.8" cy="48" rx="1.1" ry="2.8" fill={p.pupilFill} />
-        {effectiveThemeId === 'rose-nebula' ? (
-          <path d="M50.5 45.2L51.1 47.4L53.3 48L51.1 48.6L50.5 50.8L49.9 48.6L47.7 48L49.9 47.4Z" fill="#FFF4F9" />
-        ) : (
-          <circle cx="49.5" cy="46.5" r="0.9" fill="#FFFFFF" fillOpacity="0.9" />
-        )}
-      </g>
-      <g className="animate-cat-eye">
-        <ellipse cx="69.5" cy="48" rx="3.4" ry="4.2" fill={p.eyeFill} />
-        <ellipse cx="69.8" cy="48" rx="1.1" ry="2.8" fill={p.pupilFill} />
-        {effectiveThemeId === 'rose-nebula' ? (
-          <path d="M69.5 45.2L70.1 47.4L72.3 48L70.1 48.6L69.5 50.8L68.9 48.6L66.7 48L68.9 47.4Z" fill="#FFF4F9" />
-        ) : (
-          <circle cx="68.5" cy="46.5" r="0.9" fill="#FFFFFF" fillOpacity="0.9" />
-        )}
-      </g>
+      {effectiveThemeId === 'thuy-mac' ? (
+        /* Thủy Mặc Sương Khói: Đôi mắt tĩnh lặng thanh thoát */
+        <>
+          <g className="animate-cat-eye">
+            <ellipse cx="50.5" cy="48.5" rx="3.2" ry="2.4" fill={p.eyeFill} />
+            <ellipse cx="50.8" cy="48.5" rx="1" ry="1.8" fill={p.pupilFill} />
+          </g>
+          <g className="animate-cat-eye">
+            <ellipse cx="69.5" cy="48.5" rx="3.2" ry="2.4" fill={p.eyeFill} />
+            <ellipse cx="69.8" cy="48.5" rx="1" ry="1.8" fill={p.pupilFill} />
+          </g>
+        </>
+      ) : (
+        <>
+          <g className="animate-cat-eye">
+            <ellipse cx="50.5" cy="48" rx="3.4" ry="4.2" fill={p.eyeFill} />
+            <ellipse cx="50.8" cy="48" rx="1.1" ry="2.8" fill={p.pupilFill} />
+            {hasStarryEyes ? (
+              <path
+                d="M50.5 45L51.1 47.4L53.5 48L51.1 48.6L50.5 51L49.9 48.6L47.5 48L49.9 47.4Z"
+                fill="#FFFFFF"
+              />
+            ) : (
+              <circle cx="49.5" cy="46.5" r="0.9" fill="#FFFFFF" fillOpacity="0.9" />
+            )}
+          </g>
+          <g className="animate-cat-eye">
+            <ellipse cx="69.5" cy="48" rx="3.4" ry="4.2" fill={p.eyeFill} />
+            <ellipse cx="69.8" cy="48" rx="1.1" ry="2.8" fill={p.pupilFill} />
+            {hasStarryEyes ? (
+              <path
+                d="M69.5 45L70.1 47.4L72.5 48L70.1 48.6L69.5 51L68.9 48.6L66.5 48L68.9 47.4Z"
+                fill="#FFFFFF"
+              />
+            ) : (
+              <circle cx="68.5" cy="46.5" r="0.9" fill="#FFFFFF" fillOpacity="0.9" />
+            )}
+          </g>
+        </>
+      )}
 
       {/* Rose Nebula: Má hồng dịu dàng */}
       {effectiveThemeId === 'rose-nebula' && (

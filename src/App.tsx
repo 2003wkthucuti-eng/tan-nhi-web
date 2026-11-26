@@ -1722,6 +1722,7 @@ function AppContent() {
   return (
     <div
       data-site-theme={activeTheme.id}
+      data-form-variant={activeTheme.formVariant ?? 'default'}
       className={`min-h-screen bg-[#0B0B0F] text-[#F5EFE0] relative selection:bg-[#D4AF37]/30 selection:text-[#F3E5AB] transition-colors duration-500 ${
         isMoonlightSilverMode ? 'moonlight-silver-mode' : ''
       }`}
@@ -1755,7 +1756,7 @@ function AppContent() {
           hasEntered ? 'opacity-100' : 'opacity-0 pointer-events-none h-screen overflow-hidden'
         }`}
       >
-        {/* Nền ảnh trang trí mờ theo Theme hiện tại (có lớp phủ tối giữ độ tương phản chữ) */}
+        {/* Nền ảnh trang trí mờ theo Theme hiện tại (~20% xuyên suốt từ Intro vào trong) */}
         {activeTheme.bgImageUrl && (
           <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
             <div
@@ -1763,11 +1764,13 @@ function AppContent() {
                 backgroundImage: `url(${activeTheme.bgImageUrl})`,
                 opacity: activeTheme.bgImageOpacity,
               }}
-              className="absolute inset-0 bg-cover bg-center blur-[3px] scale-105 transition-opacity duration-700"
+              className="absolute inset-0 bg-cover bg-center blur-[2.5px] scale-105 transition-opacity duration-700"
             />
             <div
               style={{
-                background: `radial-gradient(ellipse at top, ${activeTheme.bgColor}9E 0%, ${activeTheme.bgColor}E8 62%, ${activeTheme.bgColor}FA 100%)`,
+                background: activeTheme.isSpecialTheme
+                  ? `radial-gradient(ellipse at top, ${activeTheme.bgColor}4D 0%, ${activeTheme.bgColor}78 55%, ${activeTheme.bgColor}AD 100%)`
+                  : `radial-gradient(ellipse at top, ${activeTheme.bgColor}78 0%, ${activeTheme.bgColor}B8 60%, ${activeTheme.bgColor}DE 100%)`,
               }}
               className="absolute inset-0 transition-colors duration-500"
             />

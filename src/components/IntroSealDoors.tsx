@@ -331,7 +331,9 @@ export const IntroSealDoors: React.FC<IntroSealDoorsProps> = ({
             aria-hidden="true"
             className="absolute inset-0 transition-all duration-500"
             style={{
-              background: `radial-gradient(circle at 100% 48%, ${accentColor}26 0%, ${activeTheme.bgColor}BA 48%, ${activeTheme.bgColor}FA 88%)`,
+              background: activeTheme.isSpecialTheme
+                ? `radial-gradient(circle at 100% 48%, ${accentColor}26 0%, ${activeTheme.bgColor}61 48%, ${activeTheme.bgColor}A6 92%)`
+                : `radial-gradient(circle at 100% 48%, ${accentColor}26 0%, ${activeTheme.bgColor}99 48%, ${activeTheme.bgColor}DE 90%)`,
             }}
           />
           <DoorOrnament side="left" accentColor={accentColor} />
@@ -372,7 +374,9 @@ export const IntroSealDoors: React.FC<IntroSealDoorsProps> = ({
             aria-hidden="true"
             className="absolute inset-0 transition-all duration-500"
             style={{
-              background: `radial-gradient(circle at 0% 48%, ${accentColor}26 0%, ${activeTheme.bgColor}BA 48%, ${activeTheme.bgColor}FA 88%)`,
+              background: activeTheme.isSpecialTheme
+                ? `radial-gradient(circle at 0% 48%, ${accentColor}26 0%, ${activeTheme.bgColor}61 48%, ${activeTheme.bgColor}A6 92%)`
+                : `radial-gradient(circle at 0% 48%, ${accentColor}26 0%, ${activeTheme.bgColor}99 48%, ${activeTheme.bgColor}DE 90%)`,
             }}
           />
           <DoorOrnament side="right" accentColor={accentColor} />

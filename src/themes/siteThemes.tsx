@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useMemo, useState } from 'react';
+import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import thuyMacBg from '../assets/images/thuy_mac_suong_1795718425975.jpg';
 import coPhongTramBg from '../assets/images/co_phong_tram_1795718426202.jpg';
 import demXanhSaoBg from '../assets/images/dem_xanh_sao_1795718426121.jpg';
@@ -29,12 +29,20 @@ export type ThemeParticleKind =
   | 'jellyfish'
   | 'pixel-heart';
 
+export type ThemeFormVariant =
+  | 'default'
+  | 'jellyfish-sea'
+  | 'vintage-newspaper'
+  | 'pixel-notebook';
+
 export interface SiteThemeDefinition {
   id: SiteThemeId;
   name: string;
   shortName: string;
   tagline: string;
   mascotLabel: string;
+  isSpecialTheme?: boolean;
+  formVariant?: ThemeFormVariant;
   bgImageUrl?: string;
   bgImageOpacity: number;
   bgColor: string;
@@ -336,6 +344,8 @@ export const SITE_THEMES: SiteThemeDefinition[] = [
     shortName: 'Biển Đêm',
     tagline: 'Thẻ kính biển đêm, bọt nước & sứa phát sáng',
     mascotLabel: 'Mèo biển đêm cùng sứa phát sáng & bong bóng',
+    isSpecialTheme: true,
+    formVariant: 'jellyfish-sea',
     bgImageUrl: '/assets/aistudio/831d5902ba49c748bd67cbf703dec664_0cdc2b76.jpg',
     bgImageOpacity: 0.2,
     bgColor: '#060E1A',
@@ -361,6 +371,8 @@ export const SITE_THEMES: SiteThemeDefinition[] = [
     shortName: 'Báo Cũ',
     tagline: 'Trang báo cổ điển, nâu kem & giai điệu xưa',
     mascotLabel: 'Mèo vintage kính tròn & nốt nhạc cổ điển',
+    isSpecialTheme: true,
+    formVariant: 'vintage-newspaper',
     bgImageUrl: '/assets/aistudio/2488991092aa63155a2893e4584dfb87_b04971ee.jpg',
     bgImageOpacity: 0.2,
     bgColor: '#15110C',
@@ -386,6 +398,8 @@ export const SITE_THEMES: SiteThemeDefinition[] = [
     shortName: 'Mèo Pixel',
     tagline: 'Sổ tay sticker bo tròn, trái tim pixel & cặp mèo ôm nhau',
     mascotLabel: 'Cặp mèo trắng đen ôm nhau cùng trái tim pixel',
+    isSpecialTheme: true,
+    formVariant: 'pixel-notebook',
     bgImageUrl: '/assets/aistudio/15f1ecdcad9a6a57a425d18dff732ecb_79402018.jpg',
     bgImageOpacity: 0.2,
     bgColor: '#1B1318',
@@ -406,6 +420,16 @@ export const SITE_THEMES: SiteThemeDefinition[] = [
     waxInner: ['#E882AD', '#B34D79', '#5B1F3A'],
   },
 ];
+
+export const SPECIAL_SITE_THEME_IDS: readonly SiteThemeId[] = [
+  'bien-dem-sua',
+  'bao-cu-nhac',
+  'pixel-doodles',
+];
+
+export function isSpecialSiteTheme(id: SiteThemeId): boolean {
+  return SPECIAL_SITE_THEME_IDS.includes(id);
+}
 
 const THEME_BY_ID = new Map<SiteThemeId, SiteThemeDefinition>(
   SITE_THEMES.map((theme) => [theme.id, theme])
@@ -431,15 +455,24 @@ const SiteThemeContext = createContext<SiteThemeContextValue>({
 
 export const SiteThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [themeId, setThemeId] = useState<SiteThemeId>('classic-gold');
+  const activeTheme = useMemo(() => getSiteThemeById(themeId), [themeId]);
+
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    const root = document.documentElement;
+    root.setAttribute('data-site-theme', themeId);
+    root.style.backgroundColor = activeTheme.bgColor;
+    root.style.color = activeTheme.textColor;
+  }, [themeId, activeTheme.bgColor, activeTheme.textColor]);
 
   const value = useMemo<SiteThemeContextValue>(
     () => ({
       themeId,
-      activeTheme: getSiteThemeById(themeId),
+      activeTheme,
       setThemeId,
       themes: SITE_THEMES,
     }),
-    [themeId]
+    [themeId, activeTheme]
   );
 
   return <SiteThemeContext.Provider value={value}>{children}</SiteThemeContext.Provider>;

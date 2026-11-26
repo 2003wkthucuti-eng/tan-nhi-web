@@ -29,6 +29,7 @@ import {
 import { BlackCatMascot } from './components/BlackCatMascot';
 import { CharacterDetailTarotModal } from './components/CharacterDetailTarotModal';
 import { ConstellationSky } from './components/ConstellationSky';
+import { DualCharacterMatchupModal } from './components/DualCharacterMatchupModal';
 import { DestinyTarotModal } from './components/DestinyTarotModal';
 import { GoldenFireworks } from './components/GoldenFireworks';
 import { GoldenSparkleTrail } from './components/GoldenSparkleTrail';
@@ -659,6 +660,43 @@ const GENRE_FILTERS: GenreTag[] = (() => {
   return result;
 })();
 
+export type MoodVibeType =
+  | 'Tất cả'
+  | 'Huyền bí / Ám ảnh'
+  | 'Ngọt ngào / Che chở'
+  | 'Lạnh lùng / Kịch tính'
+  | 'Đêm khuya tâm sự';
+
+const MOOD_FILTERS: MoodVibeType[] = [
+  'Tất cả',
+  'Huyền bí / Ám ảnh',
+  'Ngọt ngào / Che chở',
+  'Lạnh lùng / Kịch tính',
+  'Đêm khuya tâm sự',
+];
+
+function characterMatchesMood(char: CharacterItem, mood: MoodVibeType): boolean {
+  if (mood === 'Tất cả') return true;
+  const tagStr = char.tags.join(' ').toLowerCase();
+  const descStr = char.description.toLowerCase();
+  const nameStr = char.name.toLowerCase();
+  const combined = `${tagStr} ${descStr} ${nameStr}`;
+
+  if (mood === 'Huyền bí / Ám ảnh') {
+    return /cổ trang|quyền mưu|trinh thám|vampire|mafia|tâm thần|điên|bí ẩn|ma mị|dị chủng|sắc|slowburn|thần|sát nhân|huyết|đại công tước|quý tộc/.test(combined);
+  }
+  if (mood === 'Ngọt ngào / Che chở') {
+    return /dịu dàng|ngọt|sủng|bảo vệ|cưng chiều|đội vợ|chữa lành|chung thủy|ngốc bạch ngọt|mít ướt|ấm|yêu|cún con/.test(combined);
+  }
+  if (mood === 'Lạnh lùng / Kịch tính') {
+    return /lạnh lùng|thống trị|ngược|côn đồ|toxic|gia trưởng|chiếm hữu|tra|khốn nạn|redflag|ghen|đánh ghen|trả thù|ác|lạnh lẽo|trap|mỏ hỗn/.test(combined);
+  }
+  if (mood === 'Đêm khuya tâm sự') {
+    return /đơn phương|gương vỡ|chờ đợi|mít ướt|bạn thân|thanh mai|oan gia|trùng sinh|tình tay ba|buồn|nhớ|mập mờ|không danh phận|bám|ôm/.test(combined);
+  }
+  return true;
+}
+
 const ITEMS_PER_PAGE = 12;
 
 const HOST_CAT_GREETINGS: string[] = [
@@ -839,6 +877,8 @@ export default function App() {
   const [signatureHoldProgress, setSignatureHoldProgress] = useState(0);
   const [signatureHoldAnchor, setSignatureHoldAnchor] = useState<'header' | 'footer' | null>(null);
   const [tabWhisper, setTabWhisper] = useState<TabWhisperPayload | null>(null);
+  const [selectedMood, setSelectedMood] = useState<MoodVibeType>('Tất cả');
+  const [isDualMatchupOpen, setIsDualMatchupOpen] = useState(false);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const shouldPlayRef = useRef(false);
@@ -1023,16 +1063,41 @@ export default function App() {
 
   const filteredCharacters = useMemo(() => {
     const normalizedQuery = normalizeText(searchQuery);
-    return CHARACTERS.filter((char) => {
+    const baseFiltered = CHARACTERS.filter((char) => {
       const matchesGenre =
         selectedGenre === 'Tất cả' ||
         char.tags.some((t) => t.trim().toLowerCase() === selectedGenre.toLowerCase());
+      const matchesMood = characterMatchesMood(char, selectedMood);
       const matchesSearch =
         normalizedQuery === '' ||
         normalizeText(char.name).includes(normalizedQuery);
-      return matchesGenre && matchesSearch;
+      return matchesGenre && matchesMood && matchesSearch;
     });
-  }, [searchQuery, selectedGenre]);
+
+    if (baseFiltered.length === 0 && selectedMood !== 'Tất cả') {
+      return CHARACTERS.filter((char) => {
+        const matchesGenre =
+          selectedGenre === 'Tất cả' ||
+          char.tags.some((t) => t.trim().toLowerCase() === selectedGenre.toLowerCase());
+        const matchesSearch =
+          normalizedQuery === '' ||
+          normalizeText(char.name).includes(normalizedQuery);
+        return matchesGenre && matchesSearch;
+      });
+    }
+
+    return baseFiltered;
+  }, [searchQuery, selectedGenre, selectedMood]);
+
+  const handleRandomPickInMood = () => {
+    if (filteredCharacters.length === 0) return;
+    playSoftTap('card');
+    const chosen = filteredCharacters[Math.floor(Math.random() * filteredCharacters.length)];
+    trackCharacterInteraction(chosen.id, 1);
+    setOpenedDetailFromTarot(false);
+    setOpenedDetailFromMystic(false);
+    setSelectedCharacter(chosen);
+  };
 
   const totalPages = Math.max(1, Math.ceil(filteredCharacters.length / ITEMS_PER_PAGE));
   const safeCurrentPage = Math.min(currentPage, totalPages);
@@ -2094,8 +2159,59 @@ export default function App() {
                   >
                     <span>🔮 Góc Huyền Bí</span>
                   </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playSoftTap('card');
+                      setIsDualMatchupOpen(true);
+                    }}
+                    className="shimmer-gold-btn inline-flex items-center justify-center gap-1.5 min-h-[40px] px-3 sm:px-3.5 py-2 rounded-xl border border-[#D4AF37]/80 bg-gradient-to-r from-[#181520] via-[#241C10] to-[#181520] text-xs font-semibold text-[#F3E5AB] shadow-[0_0_18px_rgba(212,175,55,0.24)] hover:border-[#FFF4C4] active:scale-95 transition-all duration-150 whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFF4C4]"
+                  >
+                    <span>⚖️ Hai Cánh Cửa</span>
+                  </button>
                 </div>
               </div>
+            </div>
+
+            {/* Lọc Nhanh Theo "Khí Chất Đêm Nay" (Mood & Vibe Filter) */}
+            <div className="flex flex-wrap items-center justify-between gap-2 pt-1 pb-1">
+              <div
+                role="group"
+                aria-label="Lọc theo khí chất đêm nay"
+                className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5"
+              >
+                {MOOD_FILTERS.map((mood) => {
+                  const isActive = selectedMood === mood;
+                  return (
+                    <button
+                      key={mood}
+                      type="button"
+                      onClick={() => {
+                        playSoftTap('tap');
+                        setSelectedMood(mood);
+                        setCurrentPage(1);
+                      }}
+                      aria-pressed={isActive}
+                      className={`min-h-[32px] px-3 py-1 rounded-xl text-[11px] sm:text-xs font-medium whitespace-nowrap shrink-0 transition-all cursor-pointer ${
+                        isActive
+                          ? 'bg-gradient-to-r from-[#D4AF37] to-[#E6C86E] text-[#0B0B0F] font-semibold shadow-[0_0_12px_rgba(212,175,55,0.32)]'
+                          : 'bg-[#14121B] border border-[#D4AF37]/35 text-[#DCD4C6] hover:border-[#D4AF37]/75 hover:text-[#F3E5AB]'
+                      }`}
+                    >
+                      {mood === 'Tất cả' ? '✨ Mọi Khí Chất' : mood}
+                    </button>
+                  );
+                })}
+              </div>
+
+              <button
+                type="button"
+                onClick={handleRandomPickInMood}
+                className="shimmer-gold-btn inline-flex items-center gap-1 min-h-[32px] px-3 py-1 rounded-xl bg-[#19150A] border border-[#D4AF37]/65 text-[11px] font-semibold text-[#F3E5AB] hover:border-[#FFF4C4] active:scale-95 transition-all whitespace-nowrap shrink-0 cursor-pointer"
+              >
+                <span>🎲 Bốc ngẫu nhiên</span>
+              </button>
             </div>
 
             {/* Danh sách Tag: Mặc định 1 hàng ngang vuốt trượt mượt, bấm nút sẽ xổ gọn toàn bộ */}
@@ -2816,6 +2932,20 @@ export default function App() {
           setIsSecretNotebookOpen(true);
         }}
         onClose={() => setIsSignatureSealOpen(false)}
+      />
+
+      {/* ⚖️ Hai Cánh Cửa Định Mệnh (Dual Character Matchup) */}
+      <DualCharacterMatchupModal
+        isOpen={isDualMatchupOpen}
+        characters={CHARACTERS}
+        onInspectCharacter={(char) => {
+          trackCharacterInteraction(char.id, 1);
+          setOpenedDetailFromTarot(false);
+          setOpenedDetailFromMystic(false);
+          setSelectedCharacter(char);
+        }}
+        onChatLinkClick={(charId) => trackCharacterInteraction(charId, 2)}
+        onClose={() => setIsDualMatchupOpen(false)}
       />
 
       {/* Easter Egg mới #1: 👻 Tiếng Thì Thầm Khi Đổi Tab / Quay lại sau 60s */}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import {
   ArrowLeft,
@@ -90,13 +90,30 @@ export const CharacterDetailTarotModal: React.FC<CharacterDetailTarotModalProps>
   const [activeTab, setActiveTab] = useState<ModalTab>('profile');
   const [copiedFirstMsg, setCopiedFirstMsg] = useState(false);
   const [draftLetter, setDraftLetter] = useState('');
+  const [isStreamingMsg, setIsStreamingMsg] = useState(false);
+  const [streamedText, setStreamedText] = useState('');
+  const streamTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
     setAvatarFailed(false);
     setActiveTab('profile');
     setCopiedFirstMsg(false);
     setDraftLetter('');
+    setIsStreamingMsg(false);
+    setStreamedText('');
+    if (streamTimerRef.current) {
+      window.clearInterval(streamTimerRef.current);
+      streamTimerRef.current = null;
+    }
   }, [character?.id]);
+
+  useEffect(() => {
+    return () => {
+      if (streamTimerRef.current) {
+        window.clearInterval(streamTimerRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (!character) return;
@@ -159,6 +176,43 @@ export const CharacterDetailTarotModal: React.FC<CharacterDetailTarotModalProps>
     playSoftTap('card');
     onSendLetter(character.id, trimmed);
     setDraftLetter('');
+  };
+
+  const handleStartLiveSpeech = () => {
+    if (!storyProfile) return;
+    playSoftTap('card');
+    if (streamTimerRef.current) {
+      window.clearInterval(streamTimerRef.current);
+    }
+    setIsStreamingMsg(true);
+    setStreamedText('');
+    const full = storyProfile.firstMessage;
+    let idx = 0;
+    streamTimerRef.current = window.setInterval(() => {
+      idx += 2;
+      if (idx >= full.length) {
+        setStreamedText(full);
+        setIsStreamingMsg(false);
+        if (streamTimerRef.current) {
+          window.clearInterval(streamTimerRef.current);
+          streamTimerRef.current = null;
+        }
+      } else {
+        setStreamedText(full.slice(0, idx));
+      }
+    }, 28);
+  };
+
+  const handleSkipLiveSpeech = () => {
+    playSoftTap('tap');
+    if (streamTimerRef.current) {
+      window.clearInterval(streamTimerRef.current);
+      streamTimerRef.current = null;
+    }
+    setIsStreamingMsg(false);
+    if (storyProfile) {
+      setStreamedText(storyProfile.firstMessage);
+    }
   };
 
   return (
@@ -443,9 +497,9 @@ export const CharacterDetailTarotModal: React.FC<CharacterDetailTarotModalProps>
                         </div>
                       </section>
 
-                      {/* Mục 2: Lời thoại mở đầu (First Message) + Copy nhanh */}
+                      {/* Mục 2: Lời thoại mở đầu (First Message) + Live Speech Stage & Copy */}
                       <section className="rounded-2xl bg-[#0B0B0F]/85 border border-[#D4AF37]/35 p-4 sm:p-5">
-                        <div className="flex items-center justify-between gap-2 mb-3">
+                        <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
                           <div className="flex items-center gap-2 min-w-0">
                             <MessageSquareQuote
                               className="w-4 h-4 text-[#D4AF37] shrink-0"
@@ -456,31 +510,54 @@ export const CharacterDetailTarotModal: React.FC<CharacterDetailTarotModalProps>
                             </h4>
                           </div>
 
-                          <button
-                            type="button"
-                            onClick={handleCopyFirstMessage}
-                            className={`inline-flex items-center gap-1.5 min-h-[34px] px-3 py-1 rounded-lg border text-[11px] font-medium whitespace-nowrap shrink-0 transition-all cursor-pointer ${
-                              copiedFirstMsg
-                                ? 'bg-[#D4AF37] border-[#F3E5AB] text-[#0B0B0F] font-semibold'
-                                : 'bg-[#15151E] border-[#D4AF37]/45 text-[#F3E5AB] hover:border-[#F3E5AB] hover:bg-[#D4AF37]/15'
-                            }`}
-                          >
-                            {copiedFirstMsg ? (
-                              <>
-                                <Check className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
-                                <span>Đã sao chép</span>
-                              </>
+                          <div className="flex flex-wrap items-center gap-1.5 shrink-0">
+                            {!isStreamingMsg ? (
+                              <button
+                                type="button"
+                                onClick={handleStartLiveSpeech}
+                                className="inline-flex items-center gap-1.5 min-h-[34px] px-3 py-1 rounded-lg border border-[#D4AF37]/75 bg-[#1C160B] text-[11px] font-semibold text-[#F3E5AB] hover:border-[#FFF4C4] hover:bg-[#D4AF37]/20 active:scale-95 transition-all cursor-pointer"
+                              >
+                                <Sparkles className="w-3.5 h-3.5 text-[#F3E5AB] shrink-0" aria-hidden="true" />
+                                <span>▶ Nghe lời mở đầu</span>
+                              </button>
                             ) : (
-                              <>
-                                <Copy className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
-                                <span>Copy nhanh</span>
-                              </>
+                              <button
+                                type="button"
+                                onClick={handleSkipLiveSpeech}
+                                className="inline-flex items-center gap-1.5 min-h-[34px] px-3 py-1 rounded-lg border border-[#D4AF37]/85 bg-[#D4AF37]/20 text-[11px] font-semibold text-[#FFF4C4] hover:bg-[#D4AF37]/30 active:scale-95 transition-all cursor-pointer"
+                              >
+                                <span>⏩ Hiện hết ngay</span>
+                              </button>
                             )}
-                          </button>
+
+                            <button
+                              type="button"
+                              onClick={handleCopyFirstMessage}
+                              className={`inline-flex items-center gap-1.5 min-h-[34px] px-3 py-1 rounded-lg border text-[11px] font-medium whitespace-nowrap shrink-0 transition-all cursor-pointer ${
+                                copiedFirstMsg
+                                  ? 'bg-[#D4AF37] border-[#F3E5AB] text-[#0B0B0F] font-semibold'
+                                  : 'bg-[#15151E] border-[#D4AF37]/45 text-[#F3E5AB] hover:border-[#F3E5AB] hover:bg-[#D4AF37]/15'
+                              }`}
+                            >
+                              {copiedFirstMsg ? (
+                                <>
+                                  <Check className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+                                  <span>Đã sao chép</span>
+                                </>
+                              ) : (
+                                <>
+                                  <Copy className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+                                  <span>Copy nhanh</span>
+                                </>
+                              )}
+                            </button>
+                          </div>
                         </div>
 
                         <div className="rounded-xl bg-[#12121A]/90 border border-[#D4AF37]/20 p-3.5 sm:p-4 text-[13px] sm:text-sm text-[#EDE6D6] leading-[1.78] tracking-[0.01em] whitespace-pre-line break-words italic">
-                          {storyProfile.firstMessage}
+                          {isStreamingMsg || streamedText
+                            ? `${streamedText}${isStreamingMsg ? ' ▍' : ''}`
+                            : storyProfile.firstMessage}
                         </div>
                       </section>
 

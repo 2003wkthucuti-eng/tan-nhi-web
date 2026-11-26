@@ -858,4 +858,160 @@ export function playWitchingHourChime(): void {
   }
 }
 
+/**
+ * Nốt chuông ánh sao tăng dần theo từng ngôi sao được thắp sáng (1 -> 5).
+ */
+export function playConstellationStarChime(stepIndex: number): void {
+  try {
+    const chain = getAudioChain();
+    if (!chain) return;
+
+    const { ctx, destination } = chain;
+    const now = ctx.currentTime;
+    const starNotes = [987.77, 1174.66, 1318.51, 1479.98, 1760.0];
+    const freq = starNotes[Math.max(0, Math.min(starNotes.length - 1, stepIndex))];
+
+    const masterGain = ctx.createGain();
+    masterGain.gain.setValueAtTime(0.84, now);
+    masterGain.connect(destination);
+
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(freq, now);
+
+    gain.gain.setValueAtTime(0.0001, now);
+    gain.gain.linearRampToValueAtTime(0.42, now + 0.005);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.95);
+
+    const overtone = ctx.createOscillator();
+    const overtoneGain = ctx.createGain();
+    overtone.type = 'sine';
+    overtone.frequency.setValueAtTime(freq * 2, now);
+    overtoneGain.gain.setValueAtTime(0.0001, now);
+    overtoneGain.gain.linearRampToValueAtTime(0.14, now + 0.004);
+    overtoneGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.48);
+
+    osc.connect(gain);
+    overtone.connect(overtoneGain);
+    gain.connect(masterGain);
+    overtoneGain.connect(masterGain);
+
+    osc.start(now);
+    overtone.start(now);
+    osc.stop(now + 1.0);
+    overtone.stop(now + 0.52);
+  } catch {
+    // An toàn nếu trình duyệt chặn audio context
+  }
+}
+
+/**
+ * Hợp âm sao đêm ngân vang khi nối đủ 5 ngôi sao của chòm sao bí mật.
+ */
+export function playConstellationCompleteChime(): void {
+  try {
+    const chain = getAudioChain();
+    if (!chain) return;
+
+    const { ctx, destination } = chain;
+    const now = ctx.currentTime;
+
+    const masterGain = ctx.createGain();
+    masterGain.gain.setValueAtTime(0.9, now);
+    masterGain.connect(destination);
+
+    const notes = [880.0, 1174.66, 1318.51, 1760.0, 2093.0, 2637.02];
+    notes.forEach((freq, idx) => {
+      const startTime = now + idx * 0.07;
+      const duration = 2.4 - idx * 0.08;
+
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, startTime);
+      gain.gain.setValueAtTime(0.0001, startTime);
+      gain.gain.linearRampToValueAtTime(0.32, startTime + 0.007);
+      gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+
+      osc.connect(gain);
+      gain.connect(masterGain);
+      osc.start(startTime);
+      osc.stop(startTime + duration + 0.04);
+    });
+  } catch {
+    // An toàn nếu trình duyệt chặn audio context
+  }
+}
+
+/**
+ * Tiếng chuông ánh trăng mát dịu khi chuyển đổi sắc Bạc Ánh Trăng / Vàng Gold.
+ */
+export function playMoonlightShiftChime(): void {
+  try {
+    const chain = getAudioChain();
+    if (!chain) return;
+
+    const { ctx, destination } = chain;
+    const now = ctx.currentTime;
+
+    const masterGain = ctx.createGain();
+    masterGain.gain.setValueAtTime(0.84, now);
+    masterGain.connect(destination);
+
+    const notes = [1046.5, 1318.51, 1567.98, 2093.0];
+    notes.forEach((freq, idx) => {
+      const startTime = now + idx * 0.085;
+      const duration = 1.9 - idx * 0.1;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, startTime);
+      gain.gain.setValueAtTime(0.0001, startTime);
+      gain.gain.linearRampToValueAtTime(0.28, startTime + 0.007);
+      gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+      osc.connect(gain);
+      gain.connect(masterGain);
+      osc.start(startTime);
+      osc.stop(startTime + duration + 0.04);
+    });
+  } catch {
+    // An toàn nếu trình duyệt chặn audio context
+  }
+}
+
+/**
+ * Tiếng chuông thì thầm nhẹ nhàng khi vị khách quay lại tab.
+ */
+export function playWhisperReturnChime(): void {
+  try {
+    const chain = getAudioChain();
+    if (!chain) return;
+
+    const { ctx, destination } = chain;
+    const now = ctx.currentTime;
+
+    const masterGain = ctx.createGain();
+    masterGain.gain.setValueAtTime(0.7, now);
+    masterGain.connect(destination);
+
+    const notes = [1174.66, 1479.98];
+    notes.forEach((freq, idx) => {
+      const startTime = now + idx * 0.11;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, startTime);
+      gain.gain.setValueAtTime(0.0001, startTime);
+      gain.gain.linearRampToValueAtTime(0.24, startTime + 0.008);
+      gain.gain.exponentialRampToValueAtTime(0.0001, startTime + 1.15);
+      osc.connect(gain);
+      gain.connect(masterGain);
+      osc.start(startTime);
+      osc.stop(startTime + 1.2);
+    });
+  } catch {
+    // An toàn nếu trình duyệt chặn audio context
+  }
+}
 

@@ -14,12 +14,20 @@ interface SparkleParticle {
 
 const MAX_PARTICLES = 44;
 
+interface GoldenSparkleTrailProps {
+  moonlightMode?: boolean;
+}
+
 /**
- * Vệt bụi sao vàng Gold li ti khi người dùng chạm tay hoặc di chuột lướt trên màn hình.
+ * Vệt bụi sao vàng Gold (hoặc Bạc Ánh Trăng) li ti khi người dùng chạm tay hoặc di chuột lướt trên màn hình.
  * Tự động dừng vòng lặp requestAnimationFrame khi không có hạt để tiết kiệm pin và CPU di động.
  */
-export const GoldenSparkleTrail: React.FC = () => {
+export const GoldenSparkleTrail: React.FC<GoldenSparkleTrailProps> = ({
+  moonlightMode = false,
+}) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const moonlightRef = useRef(moonlightMode);
+  moonlightRef.current = moonlightMode;
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -51,6 +59,7 @@ export const GoldenSparkleTrail: React.FC = () => {
     window.addEventListener('resize', resize, { passive: true });
 
     const spawnParticles = (x: number, y: number, count: number) => {
+      const isSilver = moonlightRef.current;
       for (let i = 0; i < count; i += 1) {
         if (particles.length >= MAX_PARTICLES) {
           particles.shift();
@@ -66,7 +75,13 @@ export const GoldenSparkleTrail: React.FC = () => {
           life: 0,
           maxLife: 28 + Math.random() * 20,
           isStar: Math.random() > 0.52,
-          color: Math.random() > 0.4 ? '#F3E5AB' : '#D4AF37',
+          color: isSilver
+            ? Math.random() > 0.4
+              ? '#E6F0FC'
+              : '#A8BFE0'
+            : Math.random() > 0.4
+            ? '#F3E5AB'
+            : '#D4AF37',
         });
       }
       if (rafId === null) {

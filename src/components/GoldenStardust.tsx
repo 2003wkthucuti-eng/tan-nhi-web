@@ -48,6 +48,7 @@ const WITCHING_EXTRA_PARTICLES: ParticleSpec[] = [
 interface GoldenStardustProps {
   className?: string;
   witchingHour?: boolean;
+  moonlightMode?: boolean;
 }
 
 /**
@@ -56,6 +57,7 @@ interface GoldenStardustProps {
 export const GoldenStardust: React.FC<GoldenStardustProps> = ({
   className = '',
   witchingHour = false,
+  moonlightMode = false,
 }) => {
   const activeParticles = witchingHour
     ? [...PARTICLES, ...WITCHING_EXTRA_PARTICLES]
@@ -67,7 +69,13 @@ export const GoldenStardust: React.FC<GoldenStardustProps> = ({
       className={`pointer-events-none absolute inset-0 overflow-hidden transition-opacity duration-700 ${className}`}
     >
       {activeParticles.map((p) => {
-        const color = p.tone === 'bright' ? '#F3E5AB' : '#D4AF37';
+        const color = moonlightMode
+          ? p.tone === 'bright'
+            ? '#E8F1FD'
+            : '#A9BFE0'
+          : p.tone === 'bright'
+          ? '#F3E5AB'
+          : '#D4AF37';
         const effectiveOpacity = witchingHour ? Math.min(0.95, p.opacity + 0.16) : p.opacity;
         return (
           <span

@@ -14,6 +14,7 @@ import {
   DoorOpen,
   KeyRound,
   Moon,
+  MoonStar,
   Music,
   Pause,
   Play,
@@ -27,6 +28,7 @@ import {
 } from 'lucide-react';
 import { BlackCatMascot } from './components/BlackCatMascot';
 import { CharacterDetailTarotModal } from './components/CharacterDetailTarotModal';
+import { ConstellationSky } from './components/ConstellationSky';
 import { DestinyTarotModal } from './components/DestinyTarotModal';
 import { GoldenFireworks } from './components/GoldenFireworks';
 import { GoldenSparkleTrail } from './components/GoldenSparkleTrail';
@@ -38,7 +40,9 @@ import { MysticalFogOverlay } from './components/MysticalFogOverlay';
 import { SecretBadgeModal } from './components/SecretBadgeModal';
 import { SecretDiaryAndBadgesModal } from './components/SecretDiaryAndBadgesModal';
 import { SecretRoomModal } from './components/SecretRoomModal';
+import { SignatureSealModal } from './components/SignatureSealModal';
 import { SoulmateCornerModal } from './components/SoulmateCornerModal';
+import { TabWhisperToast, type TabWhisperPayload } from './components/TabWhisperToast';
 import { TrendingSpotlight } from './components/TrendingSpotlight';
 import { UserAvatarBadge } from './components/UserAvatarBadge';
 import {
@@ -58,9 +62,11 @@ import {
   playAchievementChime,
   playCatMeowChime,
   playDoorChime,
+  playMoonlightShiftChime,
   playSecretRoomChime,
   playSoftTap,
   playTarotSpreadChime,
+  playWhisperReturnChime,
   playWitchingHourChime,
 } from './utils/soundEffects';
 import {
@@ -664,34 +670,75 @@ const HOST_CAT_GREETINGS: string[] = [
   'Mong rằng có một ánh mắt nơi đây khiến lòng cậu dịu lại.',
 ];
 
-const TarotDivider: React.FC = () => (
-  <div aria-hidden="true" className="my-5 sm:my-7 flex items-center justify-center gap-3 sm:gap-4">
-    <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#D4AF37]/35 to-[#D4AF37]/75" />
-    <div className="flex items-center gap-2.5 text-[#D4AF37]">
-      <span className="w-1.5 h-1.5 rotate-45 bg-[#D4AF37]/70" />
-      <svg viewBox="0 0 64 24" fill="none" className="w-14 h-5 sm:w-16 sm:h-6">
-        {/* Mặt trăng khuyết mảnh */}
-        <path
-          d="M23 5.5C19.2 6.1 16.5 9.2 16.5 12.8C16.5 16.7 19.6 19.8 23.5 19.8C25.1 19.8 26.6 19.2 27.8 18.3C25.4 18.4 23.2 16.6 22.8 14.1C22.4 11.4 23.8 8.8 26.1 7.6C25.2 6.4 24.1 5.7 23 5.5Z"
-          stroke="#D4AF37"
-          strokeWidth="1.25"
-          fill="#D4AF37"
-          fillOpacity="0.16"
-        />
-        {/* Ngôi sao 4 cánh lấp lánh ở trung tâm */}
-        <path
-          d="M36 4L37.8 10.2L44 12L37.8 13.8L36 20L34.2 13.8L28 12L34.2 10.2Z"
-          fill="#F3E5AB"
-          stroke="#D4AF37"
-          strokeWidth="0.7"
-        />
-        <circle cx="48.5" cy="12" r="1.2" fill="#D4AF37" fillOpacity="0.8" />
-      </svg>
-      <span className="w-1.5 h-1.5 rotate-45 bg-[#D4AF37]/70" />
+const TAB_WHISPER_TITLES: string[] = [
+  '🌙 Đừng bỏ đi mà...',
+  '👻 Những tâm hồn vẫn đang đợi...',
+  '✨ Ánh đèn nhỏ vẫn sáng chờ bạn...',
+];
+
+const SIGNATURE_HOLD_DURATION_MS = 1650;
+const IDLE_WHISPER_THRESHOLD_MS = 60000;
+
+interface TarotDividerProps {
+  moonlightMode?: boolean;
+  onDoubleTrigger?: () => void;
+}
+
+const TarotDivider: React.FC<TarotDividerProps> = ({
+  moonlightMode = false,
+  onDoubleTrigger,
+}) => {
+  const lastTapRef = useRef(0);
+  const strokeColor = moonlightMode ? '#B6C9E4' : '#D4AF37';
+  const fillStarColor = moonlightMode ? '#E4EEF9' : '#F3E5AB';
+
+  const handleTap = () => {
+    if (!onDoubleTrigger) return;
+    const now = Date.now();
+    if (now - lastTapRef.current < 360) {
+      lastTapRef.current = 0;
+      onDoubleTrigger();
+    } else {
+      lastTapRef.current = now;
+    }
+  };
+
+  return (
+    <div aria-hidden="true" className="my-5 sm:my-7 flex items-center justify-center gap-3 sm:gap-4">
+      <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#D4AF37]/35 to-[#D4AF37]/75" />
+      <button
+        type="button"
+        tabIndex={-1}
+        onClick={handleTap}
+        title="Mặt trăng khuyết và ánh sao..."
+        style={{ touchAction: 'manipulation' }}
+        className="flex items-center gap-2.5 text-[#D4AF37] cursor-pointer rounded-full px-1 py-0.5 hover:scale-105 transition-transform focus:outline-none"
+      >
+        <span className="w-1.5 h-1.5 rotate-45 bg-[#D4AF37]/70" />
+        <svg viewBox="0 0 64 24" fill="none" className="w-14 h-5 sm:w-16 sm:h-6">
+          {/* Mặt trăng khuyết mảnh */}
+          <path
+            d="M23 5.5C19.2 6.1 16.5 9.2 16.5 12.8C16.5 16.7 19.6 19.8 23.5 19.8C25.1 19.8 26.6 19.2 27.8 18.3C25.4 18.4 23.2 16.6 22.8 14.1C22.4 11.4 23.8 8.8 26.1 7.6C25.2 6.4 24.1 5.7 23 5.5Z"
+            stroke={strokeColor}
+            strokeWidth="1.25"
+            fill={strokeColor}
+            fillOpacity="0.16"
+          />
+          {/* Ngôi sao 4 cánh lấp lánh ở trung tâm */}
+          <path
+            d="M36 4L37.8 10.2L44 12L37.8 13.8L36 20L34.2 13.8L28 12L34.2 10.2Z"
+            fill={fillStarColor}
+            stroke={strokeColor}
+            strokeWidth="0.7"
+          />
+          <circle cx="48.5" cy="12" r="1.2" fill={strokeColor} fillOpacity="0.8" />
+        </svg>
+        <span className="w-1.5 h-1.5 rotate-45 bg-[#D4AF37]/70" />
+      </button>
+      <div className="h-px flex-1 bg-gradient-to-l from-transparent via-[#D4AF37]/35 to-[#D4AF37]/75" />
     </div>
-    <div className="h-px flex-1 bg-gradient-to-l from-transparent via-[#D4AF37]/35 to-[#D4AF37]/75" />
-  </div>
-);
+  );
+};
 
 function normalizeText(value: string): string {
   return value
@@ -786,6 +833,12 @@ export default function App() {
   );
   const [isWitchingHourTestMode, setIsWitchingHourTestMode] = useState(false);
   const [witchingBannerDismissed, setWitchingBannerDismissed] = useState(false);
+  const [isMoonlightSilverMode, setIsMoonlightSilverMode] = useState(false);
+  const [isSignatureSealOpen, setIsSignatureSealOpen] = useState(false);
+  const [justUnlockedSignatureSeal, setJustUnlockedSignatureSeal] = useState(false);
+  const [signatureHoldProgress, setSignatureHoldProgress] = useState(0);
+  const [signatureHoldAnchor, setSignatureHoldAnchor] = useState<'header' | 'footer' | null>(null);
+  const [tabWhisper, setTabWhisper] = useState<TabWhisperPayload | null>(null);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const shouldPlayRef = useRef(false);
@@ -798,6 +851,17 @@ export default function App() {
   const titleTapResetTimerRef = useRef<number | null>(null);
   const keywordBufferRef = useRef('');
   const shareToastTimerRef = useRef<number | null>(null);
+  const originalTitleRef = useRef('Ngôi Nhà Nhỏ Của Tần Nhi');
+  const wasTabHiddenRef = useRef(false);
+  const idleWhisperArmedRef = useRef(false);
+  const idleWhisperTimerRef = useRef<number | null>(null);
+  const whisperDismissTimerRef = useRef<number | null>(null);
+  const holdRafRef = useRef<number | null>(null);
+  const holdStartTimeRef = useRef(0);
+  const holdStartPosRef = useRef<{ x: number; y: number } | null>(null);
+  const suppressNextTitleClickRef = useRef(false);
+  const footerMoonClickTimerRef = useRef<number | null>(null);
+  const moonIconLastTapRef = useRef(0);
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -830,6 +894,10 @@ export default function App() {
       if (catTapResetTimerRef.current) window.clearTimeout(catTapResetTimerRef.current);
       if (titleTapResetTimerRef.current) window.clearTimeout(titleTapResetTimerRef.current);
       if (shareToastTimerRef.current) window.clearTimeout(shareToastTimerRef.current);
+      if (idleWhisperTimerRef.current) window.clearTimeout(idleWhisperTimerRef.current);
+      if (whisperDismissTimerRef.current) window.clearTimeout(whisperDismissTimerRef.current);
+      if (footerMoonClickTimerRef.current) window.clearTimeout(footerMoonClickTimerRef.current);
+      if (holdRafRef.current !== null) window.cancelAnimationFrame(holdRafRef.current);
     };
   }, []);
 
@@ -1236,6 +1304,10 @@ export default function App() {
 
   const handleTitleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
+    if (suppressNextTitleClickRef.current) {
+      suppressNextTitleClickRef.current = false;
+      return;
+    }
     titleTapCountRef.current += 1;
     if (titleTapResetTimerRef.current) {
       window.clearTimeout(titleTapResetTimerRef.current);
@@ -1299,6 +1371,257 @@ export default function App() {
     });
   }, [hasEntered, isWitchingHourActive]);
 
+  // Easter Egg mới #1: Tiếng Thì Thầm Khi Đổi Tab (hoặc không thao tác 60 giây rồi quay lại)
+  const triggerTabWhisper = () => {
+    if (CHARACTERS.length === 0) return;
+    playWhisperReturnChime();
+    const randomChar = CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)];
+
+    let unlockedFresh = false;
+    setSecretBadges((prev) => {
+      if (prev.lostReturner) return prev;
+      unlockedFresh = true;
+      const next: SecretBadgesState = {
+        ...prev,
+        lostReturner: true,
+        unlockedAt: {
+          ...prev.unlockedAt,
+          lost_returner: Date.now(),
+        },
+      };
+      saveSecretBadgesState(next);
+      return next;
+    });
+
+    setTabWhisper({
+      id: Date.now(),
+      character: randomChar,
+      justUnlockedBadge: unlockedFresh,
+    });
+
+    if (whisperDismissTimerRef.current) {
+      window.clearTimeout(whisperDismissTimerRef.current);
+    }
+    whisperDismissTimerRef.current = window.setTimeout(() => {
+      setTabWhisper(null);
+    }, 7500);
+  };
+
+  useEffect(() => {
+    if (!hasEntered || typeof document === 'undefined') return;
+    originalTitleRef.current = document.title || 'Ngôi Nhà Nhỏ Của Tần Nhi';
+
+    const scheduleIdleTimer = () => {
+      if (idleWhisperTimerRef.current) {
+        window.clearTimeout(idleWhisperTimerRef.current);
+      }
+      idleWhisperTimerRef.current = window.setTimeout(() => {
+        if (!document.hidden) {
+          idleWhisperArmedRef.current = true;
+          document.title = '🌙 Vẫn còn người thức chờ bạn...';
+        }
+      }, IDLE_WHISPER_THRESHOLD_MS);
+    };
+
+    const handleUserActivity = () => {
+      if (document.hidden) return;
+      if (idleWhisperArmedRef.current) {
+        idleWhisperArmedRef.current = false;
+        document.title = originalTitleRef.current;
+        triggerTabWhisper();
+      }
+      scheduleIdleTimer();
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        wasTabHiddenRef.current = true;
+        if (idleWhisperTimerRef.current) {
+          window.clearTimeout(idleWhisperTimerRef.current);
+        }
+        const whisperTitle =
+          TAB_WHISPER_TITLES[Math.floor(Math.random() * TAB_WHISPER_TITLES.length)];
+        document.title = whisperTitle;
+      } else {
+        if (wasTabHiddenRef.current) {
+          wasTabHiddenRef.current = false;
+          idleWhisperArmedRef.current = false;
+          document.title = originalTitleRef.current;
+          triggerTabWhisper();
+        }
+        scheduleIdleTimer();
+      }
+    };
+
+    scheduleIdleTimer();
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('pointerdown', handleUserActivity, { passive: true });
+    window.addEventListener('keydown', handleUserActivity, { passive: true });
+    window.addEventListener('scroll', handleUserActivity, { passive: true });
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('pointerdown', handleUserActivity);
+      window.removeEventListener('keydown', handleUserActivity);
+      window.removeEventListener('scroll', handleUserActivity);
+      if (idleWhisperTimerRef.current) {
+        window.clearTimeout(idleWhisperTimerRef.current);
+      }
+      document.title = originalTitleRef.current;
+    };
+  }, [hasEntered]);
+
+  // Easter Egg mới #2: Hoàn tất thắp sáng 5 ngôi sao
+  const handleConstellationComplete = (): boolean => {
+    setFireworkBurstKey((prev) => prev + 1);
+    let unlockedFresh = false;
+    setSecretBadges((prev) => {
+      if (prev.starWeaver) return prev;
+      unlockedFresh = true;
+      const next: SecretBadgesState = {
+        ...prev,
+        starWeaver: true,
+        unlockedAt: {
+          ...prev.unlockedAt,
+          star_weaver: Date.now(),
+        },
+      };
+      saveSecretBadgesState(next);
+      return next;
+    });
+    return unlockedFresh;
+  };
+
+  // Easter Egg mới #3: Nhấn giữ chữ ký "Tần Nhi" (1.65s)
+  const cancelSignatureHold = () => {
+    if (holdRafRef.current !== null) {
+      window.cancelAnimationFrame(holdRafRef.current);
+      holdRafRef.current = null;
+    }
+    holdStartPosRef.current = null;
+    setSignatureHoldProgress(0);
+    setSignatureHoldAnchor(null);
+  };
+
+  const completeSignatureHold = (anchor: 'header' | 'footer') => {
+    cancelSignatureHold();
+    if (anchor === 'header') {
+      suppressNextTitleClickRef.current = true;
+    }
+    playAchievementChime();
+    setFireworkBurstKey((prev) => prev + 1);
+
+    const wasAlreadySoulmate = hasUnlockedSoulmateBadge && secretBadges.signatureSealUnlocked;
+    setHasUnlockedSoulmateBadge(true);
+    saveSoulmateUnlocked(true);
+    setSecretBadges((prev) => {
+      const next: SecretBadgesState = {
+        ...prev,
+        signatureSealUnlocked: true,
+        unlockedAt: {
+          ...prev.unlockedAt,
+          soulmate: prev.unlockedAt.soulmate ?? Date.now(),
+        },
+      };
+      saveSecretBadgesState(next);
+      return next;
+    });
+
+    setJustUnlockedSignatureSeal(!wasAlreadySoulmate);
+    setIsSignatureSealOpen(true);
+  };
+
+  const startSignatureHold = (
+    anchor: 'header' | 'footer',
+    e: React.PointerEvent<HTMLElement>
+  ) => {
+    if (e.button !== 0 && e.pointerType === 'mouse') return;
+    cancelSignatureHold();
+    holdStartTimeRef.current = performance.now();
+    holdStartPosRef.current = { x: e.clientX, y: e.clientY };
+    setSignatureHoldAnchor(anchor);
+
+    const step = (now: number) => {
+      const elapsed = now - holdStartTimeRef.current;
+      const ratio = Math.min(1, elapsed / SIGNATURE_HOLD_DURATION_MS);
+      setSignatureHoldProgress(ratio);
+      if (ratio >= 1) {
+        completeSignatureHold(anchor);
+        return;
+      }
+      holdRafRef.current = window.requestAnimationFrame(step);
+    };
+
+    holdRafRef.current = window.requestAnimationFrame(step);
+  };
+
+  const moveSignatureHold = (e: React.PointerEvent<HTMLElement>) => {
+    if (!holdStartPosRef.current) return;
+    const dx = e.clientX - holdStartPosRef.current.x;
+    const dy = e.clientY - holdStartPosRef.current.y;
+    if (Math.hypot(dx, dy) > 14) {
+      cancelSignatureHold();
+    }
+  };
+
+  // Easter Egg mới #4: Chuyển chế độ Bạc Ánh Trăng (Moonlight Silver Mode)
+  const toggleMoonlightSilverMode = () => {
+    const nextSilver = !isMoonlightSilverMode;
+    setIsMoonlightSilverMode(nextSilver);
+    playMoonlightShiftChime();
+    setFireworkBurstKey((prev) => prev + 1);
+
+    let unlockedFresh = false;
+    setSecretBadges((prev) => {
+      if (prev.moonKeeper) return prev;
+      unlockedFresh = true;
+      const next: SecretBadgesState = {
+        ...prev,
+        moonKeeper: true,
+        unlockedAt: {
+          ...prev.unlockedAt,
+          moon_keeper: Date.now(),
+        },
+      };
+      saveSecretBadgesState(next);
+      return next;
+    });
+
+    if (nextSilver) {
+      triggerShareToast(
+        unlockedFresh
+          ? '🌕 Mặt trăng đã đổi sắc Bạc Ánh Trăng · Mở khóa: Người Gác Trăng!'
+          : '🌕 Mặt trăng đã đổi sắc Bạc Ánh Trăng...'
+      );
+    } else {
+      triggerShareToast('✨ Ánh sáng đã trở về sắc Vàng Gold truyền thống.');
+    }
+  };
+
+  const handleMoonOrnamentDoubleTap = () => {
+    const now = Date.now();
+    if (now - moonIconLastTapRef.current < 360) {
+      moonIconLastTapRef.current = 0;
+      toggleMoonlightSilverMode();
+    } else {
+      moonIconLastTapRef.current = now;
+      playSoftTap('tap');
+    }
+  };
+
+  const handleFooterMoonClick = () => {
+    if (footerMoonClickTimerRef.current) {
+      window.clearTimeout(footerMoonClickTimerRef.current);
+      footerMoonClickTimerRef.current = null;
+      toggleMoonlightSilverMode();
+      return;
+    }
+    footerMoonClickTimerRef.current = window.setTimeout(() => {
+      footerMoonClickTimerRef.current = null;
+      handleToggleWitchingHourTest();
+    }, 260);
+  };
+
   const handleToggleWitchingHourTest = () => {
     const nextState = !isWitchingHourTestMode;
     setIsWitchingHourTestMode(nextState);
@@ -1328,7 +1651,11 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0B0B0F] text-[#F5EFE0] relative selection:bg-[#D4AF37]/30 selection:text-[#F3E5AB]">
+    <div
+      className={`min-h-screen bg-[#0B0B0F] text-[#F5EFE0] relative selection:bg-[#D4AF37]/30 selection:text-[#F3E5AB] ${
+        isMoonlightSilverMode ? 'moonlight-silver-mode' : ''
+      }`}
+    >
       {/* Audio phát nhạc nền liên tục */}
       {currentTrack && (
         <audio
@@ -1344,8 +1671,8 @@ export default function App() {
       {/* Màn hình Intro Con dấu sáp & Cánh cửa ánh sáng */}
       <IntroSealDoors phase={introPhase} onOpenDoor={handleEnterHouse} />
 
-      {/* Vệt bụi sao vàng Gold khi chạm/di chuột trên màn hình */}
-      <GoldenSparkleTrail />
+      {/* Vệt bụi sao vàng Gold / Bạc Ánh Trăng khi chạm/di chuột trên màn hình */}
+      <GoldenSparkleTrail moonlightMode={isMoonlightSilverMode} />
 
       {/* Giao diện Trang chủ */}
       <div
@@ -1354,21 +1681,28 @@ export default function App() {
           hasEntered ? 'opacity-100' : 'opacity-0 pointer-events-none h-screen overflow-hidden'
         }`}
       >
-        {/* Lớp sương mù vàng Gold huyền ảo chuyển động chậm */}
-        <MysticalFogOverlay />
+        {/* Lớp sương mù huyền ảo chuyển động chậm */}
+        <MysticalFogOverlay moonlightMode={isMoonlightSilverMode} />
 
-        {/* Hào quang Đêm Sâu khi Khung Giờ Ma Thuật (00:00 – 03:00) được kích hoạt */}
-        {isWitchingHourActive && (
+        {/* Hào quang Đêm Sâu hoặc Bạc Ánh Trăng */}
+        {(isWitchingHourActive || isMoonlightSilverMode) && (
           <div
             aria-hidden="true"
-            className="pointer-events-none fixed inset-0 z-0 bg-[radial-gradient(ellipse_at_top,rgba(212,175,55,0.11),transparent_62%)] transition-opacity duration-700"
+            className={`pointer-events-none fixed inset-0 z-0 transition-opacity duration-700 ${
+              isMoonlightSilverMode
+                ? 'bg-[radial-gradient(ellipse_at_top,rgba(196,214,240,0.12),transparent_64%)]'
+                : 'bg-[radial-gradient(ellipse_at_top,rgba(212,175,55,0.11),transparent_62%)]'
+            }`}
           />
         )}
 
-        {/* Bụi vàng lấp lánh ở nền Trang chủ */}
+        {/* Bụi sao lấp lánh ở nền Trang chủ */}
         <GoldenStardust
           witchingHour={isWitchingHourActive}
-          className={`fixed inset-0 z-0 ${isWitchingHourActive ? 'opacity-100' : 'opacity-85'}`}
+          moonlightMode={isMoonlightSilverMode}
+          className={`fixed inset-0 z-0 ${
+            isWitchingHourActive || isMoonlightSilverMode ? 'opacity-100' : 'opacity-85'
+          }`}
         />
 
         {/* Top Bar 3 vùng rõ ràng */}
@@ -1396,7 +1730,45 @@ export default function App() {
                 className="min-w-0 truncate focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] rounded-lg py-1"
               >
                 <span className="font-display text-[17px] sm:text-2xl font-semibold tracking-tight gold-shimmer-text">
-                  Ngôi Nhà Nhỏ Của Tần Nhi
+                  Ngôi Nhà Nhỏ Của{' '}
+                  <span
+                    onPointerDown={(e) => startSignatureHold('header', e)}
+                    onPointerMove={moveSignatureHold}
+                    onPointerUp={cancelSignatureHold}
+                    onPointerLeave={cancelSignatureHold}
+                    onPointerCancel={cancelSignatureHold}
+                    onContextMenu={(e) => e.preventDefault()}
+                    className="signature-longpress-target relative inline-flex items-center gap-1"
+                  >
+                    <span>Tần Nhi</span>
+                    {signatureHoldAnchor === 'header' && signatureHoldProgress > 0.08 && (
+                      <svg
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                        className="w-4 h-4 -rotate-90 shrink-0"
+                      >
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="9"
+                          fill="none"
+                          stroke="rgba(212,175,55,0.28)"
+                          strokeWidth="2.5"
+                        />
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="9"
+                          fill="none"
+                          stroke="#FFF4C4"
+                          strokeWidth="2.5"
+                          strokeLinecap="round"
+                          strokeDasharray={56.55}
+                          strokeDashoffset={56.55 * (1 - signatureHoldProgress)}
+                        />
+                      </svg>
+                    )}
+                  </span>
                 </span>
               </a>
 
@@ -1509,6 +1881,13 @@ export default function App() {
 
         {/* Nội dung chính */}
         <main id="top" className="relative z-10 flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-10">
+          {/* Easter Egg mới #2: Vòm trời 5 ngôi sao ẩn để nối chòm sao */}
+          <ConstellationSky
+            moonlightMode={isMoonlightSilverMode}
+            hasUnlockedStarWeaver={secretBadges.starWeaver}
+            onConstellationComplete={handleConstellationComplete}
+          />
+
           {/* Dải thông báo Khung Giờ Ma Thuật (00:00 – 03:00 hoặc chế độ thử Đêm Sâu) */}
           <AnimatePresence>
             {isWitchingHourActive && !witchingBannerDismissed && (
@@ -1588,6 +1967,18 @@ export default function App() {
                   </span>
                 </div>
 
+                {isMoonlightSilverMode && (
+                  <button
+                    type="button"
+                    onClick={toggleMoonlightSilverMode}
+                    title="Chuyển nhanh về màu vàng Gold truyền thống"
+                    className="inline-flex items-center gap-1.5 min-h-[36px] px-3 py-1.5 rounded-xl bg-[#121622] border border-[#D4AF37]/55 text-[11px] sm:text-xs font-medium text-[#F3E5AB] hover:bg-[#D4AF37]/15 active:scale-95 transition-all whitespace-nowrap shrink-0 cursor-pointer"
+                  >
+                    <MoonStar className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+                    <span>Về Vàng Gold</span>
+                  </button>
+                )}
+
                 <button
                   type="button"
                   onClick={handleShareWebsite}
@@ -1600,8 +1991,11 @@ export default function App() {
             </div>
           </section>
 
-          {/* Đường kẻ phân cách Tarot mặt trăng khuyết & ngôi sao 4 cánh */}
-          <TarotDivider />
+          {/* Đường kẻ phân cách Tarot mặt trăng khuyết & ngôi sao 4 cánh (chạm đúp để đổi sắc Ánh Trăng) */}
+          <TarotDivider
+            moonlightMode={isMoonlightSilverMode}
+            onDoubleTrigger={toggleMoonlightSilverMode}
+          />
 
           {/* Phần Gương mặt nổi bật (Top Trending) hiển thị 3 nhân vật tương tác cao nhất */}
           <TrendingSpotlight
@@ -2067,7 +2461,55 @@ export default function App() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-3">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-[#8E877A]">
               <p className="text-[#B8B0A0]">
-                Ngôi Nhà Nhỏ Của Tần Nhi · Góc lưu trữ nhân vật AI Chatbot
+                Ngôi Nhà Nhỏ Của{' '}
+                <span
+                  role="button"
+                  tabIndex={0}
+                  onPointerDown={(e) => startSignatureHold('footer', e)}
+                  onPointerMove={moveSignatureHold}
+                  onPointerUp={cancelSignatureHold}
+                  onPointerLeave={cancelSignatureHold}
+                  onPointerCancel={cancelSignatureHold}
+                  onContextMenu={(e) => e.preventDefault()}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      completeSignatureHold('footer');
+                    }
+                  }}
+                  title="Chữ ký chủ nhà — thử nhấn giữ một chút xem..."
+                  className="signature-longpress-target relative inline-flex items-center gap-1 font-display text-sm font-semibold text-[#F3E5AB] underline decoration-[#D4AF37]/35 underline-offset-4 cursor-pointer px-0.5 rounded"
+                >
+                  <span>Tần Nhi</span>
+                  {signatureHoldAnchor === 'footer' && signatureHoldProgress > 0.04 && (
+                    <svg
+                      viewBox="0 0 24 24"
+                      aria-hidden="true"
+                      className="w-3.5 h-3.5 -rotate-90 shrink-0"
+                    >
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="9"
+                        fill="none"
+                        stroke="rgba(212,175,55,0.28)"
+                        strokeWidth="2.6"
+                      />
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="9"
+                        fill="none"
+                        stroke="#FFF4C4"
+                        strokeWidth="2.6"
+                        strokeLinecap="round"
+                        strokeDasharray={56.55}
+                        strokeDashoffset={56.55 * (1 - signatureHoldProgress)}
+                      />
+                    </svg>
+                  )}
+                </span>{' '}
+                · Góc lưu trữ nhân vật AI Chatbot
               </p>
               <p>Chúc bạn có những cuộc trò chuyện thật êm đềm.</p>
             </div>
@@ -2090,7 +2532,7 @@ export default function App() {
               )}
             </div>
 
-            {/* Tận cùng chân trang: Chiếc chìa khóa vàng nhỏ mờ ảo (Easter Egg #3) & vầng trăng thử Đêm Sâu */}
+            {/* Tận cùng chân trang: Chìa khóa Sổ Tay Bí Mật, Vầng Trăng Đêm Sâu & Ánh Trăng Bạc */}
             <div className="flex items-center justify-center gap-3 pt-1">
               <button
                 type="button"
@@ -2110,13 +2552,14 @@ export default function App() {
 
               <button
                 type="button"
-                onClick={handleToggleWitchingHourTest}
-                aria-label="Thử chế độ Khung Giờ Ma Thuật Đêm Sâu (00:00 – 03:00)"
+                onClick={handleFooterMoonClick}
+                aria-label="Thử chế độ Đêm Sâu hoặc bấm đúp đổi sắc Bạc Ánh Trăng"
                 title={
                   isWitchingHourActive
-                    ? 'Đang ở không khí Đêm Sâu (00:00 – 03:00)'
-                    : 'Thử không khí Đêm Sâu (00:00 – 03:00)'
+                    ? 'Đang ở không khí Đêm Sâu (00:00 – 03:00) · Bấm đúp để đổi sắc Trăng Bạc'
+                    : 'Bấm để thử Đêm Sâu · Bấm đúp để đổi sắc Bạc Ánh Trăng'
                 }
+                style={{ touchAction: 'manipulation' }}
                 className={`group inline-flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] ${
                   isWitchingHourActive
                     ? 'text-[#F3E5AB] bg-[#D4AF37]/15 shadow-[0_0_16px_rgba(212,175,55,0.38)]'
@@ -2124,6 +2567,25 @@ export default function App() {
                 }`}
               >
                 <Moon className="w-3.5 h-3.5" aria-hidden="true" />
+              </button>
+
+              <button
+                type="button"
+                onClick={handleMoonOrnamentDoubleTap}
+                aria-label="Bấm đúp để bật hoặc tắt chế độ Bạc Ánh Trăng"
+                title={
+                  isMoonlightSilverMode
+                    ? 'Đang ở chế độ Bạc Ánh Trăng · Bấm đúp để trở về Vàng Gold'
+                    : 'Bấm đúp để đánh thức sắc Bạc Ánh Trăng'
+                }
+                style={{ touchAction: 'manipulation' }}
+                className={`group inline-flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] ${
+                  isMoonlightSilverMode
+                    ? 'text-[#F3E5AB] bg-[#D4AF37]/15 shadow-[0_0_16px_rgba(196,214,240,0.45)]'
+                    : 'text-[#D4AF37]/40 hover:text-[#F3E5AB] hover:bg-[#D4AF37]/12 hover:shadow-[0_0_14px_rgba(212,175,55,0.3)]'
+                }`}
+              >
+                <MoonStar className="w-3.5 h-3.5" aria-hidden="true" />
               </button>
             </div>
           </div>
@@ -2314,14 +2776,14 @@ export default function App() {
         onClose={() => setIsProfileModalOpen(false)}
       />
 
-      {/* Pháo hoa bụi vàng & Bảng huy hiệu thành tựu ẩn */}
-      <GoldenFireworks burstKey={fireworkBurstKey} />
+      {/* Pháo hoa bụi vàng / bạc & Bảng huy hiệu thành tựu ẩn */}
+      <GoldenFireworks burstKey={fireworkBurstKey} moonlightMode={isMoonlightSilverMode} />
       <SecretBadgeModal
         isOpen={isSecretBadgeOpen}
         onClose={() => setIsSecretBadgeOpen(false)}
       />
 
-      {/* Easter Egg #1: 🗝️ Căn Phòng Bí Mật Của Chủ Nhà */}
+      {/* Easter Egg #1 cũ: 🗝️ Căn Phòng Bí Mật Của Chủ Nhà */}
       <SecretRoomModal
         isOpen={isSecretRoomOpen}
         justUnlockedBadge={justUnlockedNightDecoder}
@@ -2332,14 +2794,42 @@ export default function App() {
         onClose={() => setIsSecretRoomOpen(false)}
       />
 
-      {/* Easter Egg #3: 📜 Bức Thư Dưới Đáy Trang & Sổ Huy Hiệu Bí Mật */}
+      {/* Easter Egg #3 cũ: 📜 Bức Thư Dưới Đáy Trang & Sổ Huy Hiệu Bí Mật */}
       <SecretDiaryAndBadgesModal
         isOpen={isSecretNotebookOpen}
         hasSoulmateBadge={hasUnlockedSoulmateBadge}
         secretBadges={secretBadges}
         isWitchingHourActive={isWitchingHourActive}
+        isMoonlightSilverMode={isMoonlightSilverMode}
         onToggleWitchingHourTest={handleToggleWitchingHourTest}
+        onToggleMoonlightSilverMode={toggleMoonlightSilverMode}
         onClose={() => setIsSecretNotebookOpen(false)}
+      />
+
+      {/* Easter Egg mới #3: 🖋️ Dấu Ấn Của Chủ Nhân (Nhấn giữ chữ ký Tần Nhi) */}
+      <SignatureSealModal
+        isOpen={isSignatureSealOpen}
+        justUnlockedSoulmate={justUnlockedSignatureSeal}
+        moonlightMode={isMoonlightSilverMode}
+        onOpenSecretNotebook={() => {
+          setIsSignatureSealOpen(false);
+          setIsSecretNotebookOpen(true);
+        }}
+        onClose={() => setIsSignatureSealOpen(false)}
+      />
+
+      {/* Easter Egg mới #1: 👻 Tiếng Thì Thầm Khi Đổi Tab / Quay lại sau 60s */}
+      <TabWhisperToast
+        whisper={tabWhisper}
+        onInspectCharacter={(char) => {
+          playSoftTap('card');
+          trackCharacterInteraction(char.id, 1);
+          setTabWhisper(null);
+          setOpenedDetailFromTarot(false);
+          setOpenedDetailFromMystic(false);
+          setSelectedCharacter(char);
+        }}
+        onDismiss={() => setTabWhisper(null)}
       />
     </div>
   );

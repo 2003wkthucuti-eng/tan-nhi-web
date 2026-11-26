@@ -4,9 +4,11 @@ import {
   Award,
   BookOpen,
   Feather,
+  Ghost,
   HelpCircle,
   KeyRound,
   Moon,
+  MoonStar,
   Sparkles,
   X,
 } from 'lucide-react';
@@ -20,7 +22,9 @@ interface SecretDiaryAndBadgesModalProps {
   hasSoulmateBadge: boolean;
   secretBadges: SecretBadgesState;
   isWitchingHourActive: boolean;
+  isMoonlightSilverMode: boolean;
   onToggleWitchingHourTest: () => void;
+  onToggleMoonlightSilverMode: () => void;
   onClose: () => void;
 }
 
@@ -29,17 +33,17 @@ interface SecretBadgeDefinition {
   title: string;
   unlockedDesc: string;
   vagueHint: string;
-  icon: 'cat' | 'key' | 'moon';
+  icon: 'cat' | 'key' | 'moon' | 'ghost' | 'star' | 'silver_moon';
 }
 
 const SECRET_BADGE_DEFINITIONS: SecretBadgeDefinition[] = [
   {
     id: 'soulmate',
-    title: '✨ Tri kỷ của Tần Nhi',
+    title: '✨ Tri Kỷ Của Tần Nhi',
     unlockedDesc:
-      'Chú mèo đen canh cửa đã nhớ mặt cậu rồi. Danh hiệu dành cho vị khách dịu dàng và gắn bó nhất.',
+      'Chú mèo đen đã nhớ mặt cậu, hoặc cậu đã chạm giữ đủ lâu để mở con dấu tái bút của Tần Nhi.',
     vagueHint:
-      'Gợi ý mơ hồ: Chú mèo đen canh cửa rất thích được cưng nựng 3 lần liên tiếp... hoặc đọc được 3 lá thư tâm tình.',
+      'Gợi ý mơ hồ: Thử cưng nựng chú mèo đen 3 lần, gửi 3 lá thư tâm tình... hoặc nhấn giữ thật lâu vào cái tên "Tần Nhi".',
     icon: 'cat',
   },
   {
@@ -59,6 +63,33 @@ const SECRET_BADGE_DEFINITIONS: SecretBadgeDefinition[] = [
     vagueHint:
       'Gợi ý mơ hồ: Ghé thăm ngôi nhà khi đồng hồ điểm 00:00 – 03:00 sáng... hoặc tìm vầng trăng nhỏ bí mật dưới chân trang.',
     icon: 'moon',
+  },
+  {
+    id: 'lost_returner',
+    title: '👻 Kẻ Lạc Lối Quay Về',
+    unlockedDesc:
+      'Dù có rời tab đi đâu hay đứng lặng một lúc lâu, cậu vẫn quay về lắng nghe lời thì thầm trong căn phòng nhỏ.',
+    vagueHint:
+      'Gợi ý mơ hồ: Thử chuyển sang một tab khác rồi quay trở lại, hoặc ngồi yên lặng khoảng một phút trước khi chạm lại trang.',
+    icon: 'ghost',
+  },
+  {
+    id: 'star_weaver',
+    title: '✨ Người Nối Ánh Sao',
+    unlockedDesc:
+      'Đôi mắt tinh tường của cậu đã thắp sáng đủ 5 ngôi sao ẩn trên vòm trời đầu trang để nhận lời chúc phúc đêm.',
+    vagueHint:
+      'Gợi ý mơ hồ: Ngước nhìn lên khoảng trời phía trên đầu trang, có 5 ngôi sao nhỏ đang chờ được nối lại thành chòm sao.',
+    icon: 'star',
+  },
+  {
+    id: 'moon_keeper',
+    title: '🌕 Người Gác Trăng',
+    unlockedDesc:
+      'Cậu đã đánh thức tiếng vọng dưới ánh trăng, nhuộm toàn bộ ánh kim của ngôi nhà sang sắc Bạc Ánh Trăng huyền ảo.',
+    vagueHint:
+      'Gợi ý mơ hồ: Hãy chạm đúp (Double Click / Double Tap) vào biểu tượng trăng khuyết hoặc ngôi sao trang trí trên trang.',
+    icon: 'silver_moon',
   },
 ];
 
@@ -81,7 +112,9 @@ export const SecretDiaryAndBadgesModal: React.FC<SecretDiaryAndBadgesModalProps>
   hasSoulmateBadge,
   secretBadges,
   isWitchingHourActive,
+  isMoonlightSilverMode,
   onToggleWitchingHourTest,
+  onToggleMoonlightSilverMode,
   onClose,
 }) => {
   useEffect(() => {
@@ -102,9 +135,12 @@ export const SecretDiaryAndBadgesModal: React.FC<SecretDiaryAndBadgesModalProps>
   };
 
   const isBadgeUnlocked = (id: SecretBadgeId): boolean => {
-    if (id === 'soulmate') return hasSoulmateBadge;
+    if (id === 'soulmate') return hasSoulmateBadge || secretBadges.signatureSealUnlocked;
     if (id === 'night_decoder') return secretBadges.nightDecoder;
     if (id === 'night_owl') return secretBadges.nightOwl;
+    if (id === 'lost_returner') return secretBadges.lostReturner;
+    if (id === 'star_weaver') return secretBadges.starWeaver;
+    if (id === 'moon_keeper') return secretBadges.moonKeeper;
     return false;
   };
 
@@ -125,7 +161,7 @@ export const SecretDiaryAndBadgesModal: React.FC<SecretDiaryAndBadgesModalProps>
           onClick={handleClose}
           className="fixed inset-0 z-[65] flex items-center justify-center p-3 sm:p-6 bg-[#040407]/88 backdrop-blur-md overflow-y-auto"
         >
-          <GoldenStardust className="z-0 opacity-90" />
+          <GoldenStardust moonlightMode={isMoonlightSilverMode} className="z-0 opacity-90" />
 
           <motion.div
             initial={{ opacity: 0, scale: 0.92, y: 16 }}
@@ -233,6 +269,12 @@ Mong rằng mỗi đêm ghé thăm, ngôi nhà đều mang lại cho cậu một
                                   <KeyRound className="w-5 h-5" aria-hidden="true" />
                                 ) : badge.icon === 'moon' ? (
                                   <Moon className="w-5 h-5" aria-hidden="true" />
+                                ) : badge.icon === 'ghost' ? (
+                                  <Ghost className="w-5 h-5" aria-hidden="true" />
+                                ) : badge.icon === 'star' ? (
+                                  <Sparkles className="w-5 h-5" aria-hidden="true" />
+                                ) : badge.icon === 'silver_moon' ? (
+                                  <MoonStar className="w-5 h-5" aria-hidden="true" />
                                 ) : (
                                   <Award className="w-5 h-5" aria-hidden="true" />
                                 )
@@ -281,22 +323,31 @@ Mong rằng mỗi đêm ghé thăm, ngôi nhà đều mang lại cho cậu một
                   </div>
                 </section>
 
-                {/* Chân modal: Nút thử nhanh Khung Giờ Ma Thuật & Đóng */}
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-2.5 pt-1">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      onToggleWitchingHourTest();
-                    }}
-                    className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 min-h-[38px] px-3.5 py-1.5 rounded-xl bg-[#12121A] border border-[#D4AF37]/40 text-[11px] sm:text-xs font-medium text-[#DCD4C6] hover:text-[#F3E5AB] hover:border-[#D4AF37]/75 transition-all cursor-pointer"
-                  >
-                    <Moon className="w-3.5 h-3.5 text-[#D4AF37] shrink-0" aria-hidden="true" />
-                    <span>
-                      {isWitchingHourActive
-                        ? 'Tắt thử chế độ Đêm Sâu'
-                        : 'Thử chế độ Đêm Sâu (00:00 – 03:00)'}
-                    </span>
-                  </button>
+                {/* Chân modal: Nút thử nhanh Khung Giờ Ma Thuật, Đổi sắc Trăng Bạc & Đóng */}
+                <div className="flex flex-col sm:flex-row flex-wrap items-center justify-between gap-2 pt-1">
+                  <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+                    <button
+                      type="button"
+                      onClick={onToggleWitchingHourTest}
+                      className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 min-h-[38px] px-3 py-1.5 rounded-xl bg-[#12121A] border border-[#D4AF37]/40 text-[11px] font-medium text-[#DCD4C6] hover:text-[#F3E5AB] hover:border-[#D4AF37]/75 transition-all cursor-pointer"
+                    >
+                      <Moon className="w-3.5 h-3.5 text-[#D4AF37] shrink-0" aria-hidden="true" />
+                      <span>
+                        {isWitchingHourActive ? 'Tắt Đêm Sâu' : 'Thử Đêm Sâu'}
+                      </span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={onToggleMoonlightSilverMode}
+                      className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 min-h-[38px] px-3 py-1.5 rounded-xl bg-[#12121A] border border-[#D4AF37]/40 text-[11px] font-medium text-[#DCD4C6] hover:text-[#F3E5AB] hover:border-[#D4AF37]/75 transition-all cursor-pointer"
+                    >
+                      <MoonStar className="w-3.5 h-3.5 text-[#D4AF37] shrink-0" aria-hidden="true" />
+                      <span>
+                        {isMoonlightSilverMode ? 'Về Vàng Gold' : 'Bạc Ánh Trăng'}
+                      </span>
+                    </button>
+                  </div>
 
                   <button
                     type="button"

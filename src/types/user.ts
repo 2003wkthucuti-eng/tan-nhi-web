@@ -31,11 +31,21 @@ export const STORAGE_KEYS = {
   EASTER_EGG_BADGES: 'tannhi_easter_egg_badges_v1',
 } as const;
 
-export type SecretBadgeId = 'soulmate' | 'night_decoder' | 'night_owl';
+export type SecretBadgeId =
+  | 'soulmate'
+  | 'night_decoder'
+  | 'night_owl'
+  | 'lost_returner'
+  | 'star_weaver'
+  | 'moon_keeper';
 
 export interface SecretBadgesState {
   nightDecoder: boolean;
   nightOwl: boolean;
+  lostReturner: boolean;
+  starWeaver: boolean;
+  moonKeeper: boolean;
+  signatureSealUnlocked: boolean;
   unlockedAt: Partial<Record<SecretBadgeId, number>>;
 }
 
@@ -43,17 +53,37 @@ export function loadSecretBadgesState(): SecretBadgesState {
   try {
     const raw = window.localStorage.getItem(STORAGE_KEYS.EASTER_EGG_BADGES);
     if (!raw) {
-      return { nightDecoder: false, nightOwl: false, unlockedAt: {} };
+      return {
+        nightDecoder: false,
+        nightOwl: false,
+        lostReturner: false,
+        starWeaver: false,
+        moonKeeper: false,
+        signatureSealUnlocked: false,
+        unlockedAt: {},
+      };
     }
     const parsed = JSON.parse(raw) as Partial<SecretBadgesState>;
     return {
       nightDecoder: Boolean(parsed?.nightDecoder),
       nightOwl: Boolean(parsed?.nightOwl),
+      lostReturner: Boolean(parsed?.lostReturner),
+      starWeaver: Boolean(parsed?.starWeaver),
+      moonKeeper: Boolean(parsed?.moonKeeper),
+      signatureSealUnlocked: Boolean(parsed?.signatureSealUnlocked),
       unlockedAt:
         parsed?.unlockedAt && typeof parsed.unlockedAt === 'object' ? parsed.unlockedAt : {},
     };
   } catch {
-    return { nightDecoder: false, nightOwl: false, unlockedAt: {} };
+    return {
+      nightDecoder: false,
+      nightOwl: false,
+      lostReturner: false,
+      starWeaver: false,
+      moonKeeper: false,
+      signatureSealUnlocked: false,
+      unlockedAt: {},
+    };
   }
 }
 

@@ -14,16 +14,23 @@ interface FireworkParticle {
 
 interface GoldenFireworksProps {
   burstKey: number;
+  moonlightMode?: boolean;
 }
 
-const PALETTE = ['#FFF7D6', '#F3E5AB', '#D4AF37', '#E6C25A', '#FFE48F'];
+const GOLD_PALETTE = ['#FFF7D6', '#F3E5AB', '#D4AF37', '#E6C25A', '#FFE48F'];
+const SILVER_PALETTE = ['#FFFFFF', '#E6F0FC', '#C7D7ED', '#A8BFE0', '#DCE7F7'];
 
 /**
- * Pháo hoa bụi vàng lấp lánh bung tỏa khi mở khóa huy hiệu bí mật.
+ * Pháo hoa bụi vàng (hoặc bạc ánh trăng) lấp lánh bung tỏa khi mở khóa huy hiệu bí mật.
  * Tối ưu bằng Canvas + tự dừng requestAnimationFrame khi kết thúc.
  */
-export const GoldenFireworks: React.FC<GoldenFireworksProps> = ({ burstKey }) => {
+export const GoldenFireworks: React.FC<GoldenFireworksProps> = ({
+  burstKey,
+  moonlightMode = false,
+}) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const moonlightRef = useRef(moonlightMode);
+  moonlightRef.current = moonlightMode;
 
   useEffect(() => {
     if (burstKey <= 0 || typeof window === 'undefined') return;
@@ -47,6 +54,8 @@ export const GoldenFireworks: React.FC<GoldenFireworksProps> = ({ burstKey }) =>
     let rafId: number | null = null;
     const timers: number[] = [];
 
+    const palette = moonlightRef.current ? SILVER_PALETTE : GOLD_PALETTE;
+
     const spawnBurst = (cx: number, cy: number, count: number) => {
       for (let i = 0; i < count; i += 1) {
         const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.28;
@@ -59,7 +68,7 @@ export const GoldenFireworks: React.FC<GoldenFireworksProps> = ({ burstKey }) =>
           size: 2.4 + Math.random() * 3.8,
           life: 0,
           maxLife: 48 + Math.random() * 28,
-          color: PALETTE[Math.floor(Math.random() * PALETTE.length)],
+          color: palette[Math.floor(Math.random() * palette.length)],
           isStar: Math.random() > 0.42,
         });
       }

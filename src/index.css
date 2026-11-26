@@ -430,3 +430,218 @@
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+/* Vùng nhấn giữ chữ ký trên mobile: chặn bôi đen chữ & menu copy mặc định */
+.signature-longpress-target {
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* Chế độ Bạc Ánh Trăng (Moonlight Silver Mode) - chỉ đổi điểm nhấn ánh kim, giữ nguyên ảnh nhân vật */
+.moonlight-silver-mode .gold-shimmer-text {
+  color: #E3ECF8;
+  background-image: linear-gradient(
+    110deg,
+    #8CA3C4 0%,
+    #DCE7F7 24%,
+    #FFFFFF 38%,
+    #B4C7E2 54%,
+    #DCE7F7 76%,
+    #8CA3C4 100%
+  );
+}
+
+.moonlight-silver-mode .destiny-card-glow {
+  border-color: rgba(218, 232, 250, 0.95) !important;
+  box-shadow:
+    0 0 24px rgba(182, 206, 238, 0.42),
+    0 0 48px rgba(226, 238, 255, 0.24),
+    inset 0 0 18px rgba(182, 206, 238, 0.16);
+}
+
+.moonlight-silver-mode .destiny-card-glow::before {
+  background: linear-gradient(
+    115deg,
+    rgba(164, 188, 222, 0.4) 18%,
+    rgba(245, 250, 255, 0.98) 50%,
+    rgba(164, 188, 222, 0.4) 82%
+  );
+  background-size: 240% 100%;
+}
+
+.moonlight-silver-mode .shimmer-card-border::before {
+  background: linear-gradient(
+    115deg,
+    transparent 28%,
+    rgba(220, 233, 250, 0.85) 50%,
+    transparent 72%
+  );
+  background-size: 240% 100%;
+}
+
+.moonlight-silver-mode .holo-foil-layer {
+  background:
+    radial-gradient(
+      circle 220px at var(--foil-x) var(--foil-y),
+      rgba(240, 247, 255, 0.24) 0%,
+      rgba(176, 198, 230, 0.14) 36%,
+      transparent 72%
+    ),
+    linear-gradient(
+      125deg,
+      transparent 20%,
+      rgba(220, 234, 252, 0.16) 44%,
+      rgba(245, 250, 255, 0.22) 50%,
+      rgba(176, 198, 230, 0.14) 56%,
+      transparent 80%
+    );
+}
+
+.moonlight-silver-mode .soulmate-shimmer-badge {
+  background-image: linear-gradient(
+    115deg,
+    rgba(18, 24, 36, 0.96) 0%,
+    rgba(52, 68, 92, 0.95) 45%,
+    rgba(82, 102, 134, 0.95) 55%,
+    rgba(18, 24, 36, 0.96) 100%
+  );
+  box-shadow: 0 0 14px rgba(196, 214, 240, 0.35);
+}
+
+.moonlight-silver-mode [class~="text-[#F3E5AB]"] {
+  color: #E4EEF9;
+}
+
+.moonlight-silver-mode [class~="text-[#D4AF37]"] {
+  color: #B6C9E4;
+}
+
+.moonlight-silver-mode [class~="text-[#D4AF37]/85"] {
+  color: rgba(182, 201, 228, 0.85);
+}
+
+.moonlight-silver-mode [class~="text-[#D4AF37]/80"] {
+  color: rgba(182, 201, 228, 0.8);
+}
+
+.moonlight-silver-mode [class~="text-[#D4AF37]/75"] {
+  color: rgba(182, 201, 228, 0.75);
+}
+
+.moonlight-silver-mode [class~="text-[#D4AF37]/70"] {
+  color: rgba(182, 201, 228, 0.7);
+}
+
+.moonlight-silver-mode [class~="text-[#D4AF37]/50"] {
+  color: rgba(182, 201, 228, 0.55);
+}
+
+.moonlight-silver-mode [class~="text-[#D4AF37]/40"] {
+  color: rgba(182, 201, 228, 0.45);
+}
+
+.moonlight-silver-mode [class~="text-[#E6CD82]"] {
+  color: #CFE0F5;
+}
+
+.moonlight-silver-mode [class~="bg-[#D4AF37]"] {
+  background-color: #C7D7ED;
+}
+
+.moonlight-silver-mode [class~="bg-[#D4AF37]/10"] {
+  background-color: rgba(186, 206, 234, 0.1);
+}
+
+.moonlight-silver-mode [class~="bg-[#D4AF37]/12"] {
+  background-color: rgba(186, 206, 234, 0.12);
+}
+
+.moonlight-silver-mode [class~="bg-[#D4AF37]/15"] {
+  background-color: rgba(186, 206, 234, 0.15);
+}
+
+.moonlight-silver-mode [class~="bg-[#D4AF37]/20"] {
+  background-color: rgba(186, 206, 234, 0.2);
+}
+
+.moonlight-silver-mode [class~="from-[#D4AF37]"] {
+  --tw-gradient-from: #B2C5E0;
+}
+
+.moonlight-silver-mode [class~="to-[#E6C86E]"] {
+  --tw-gradient-to: #E6F0FC;
+}
+
+.moonlight-silver-mode [class~="border-[#D4AF37]/15"] {
+  border-color: rgba(182, 201, 228, 0.16);
+}
+
+.moonlight-silver-mode [class~="border-[#D4AF37]/18"] {
+  border-color: rgba(182, 201, 228, 0.2);
+}
+
+.moonlight-silver-mode [class~="border-[#D4AF37]/20"] {
+  border-color: rgba(182, 201, 228, 0.22);
+}
+
+.moonlight-silver-mode [class~="border-[#D4AF37]/25"] {
+  border-color: rgba(182, 201, 228, 0.27);
+}
+
+.moonlight-silver-mode [class~="border-[#D4AF37]/30"] {
+  border-color: rgba(182, 201, 228, 0.32);
+}
+
+.moonlight-silver-mode [class~="border-[#D4AF37]/35"] {
+  border-color: rgba(182, 201, 228, 0.37);
+}
+
+.moonlight-silver-mode [class~="border-[#D4AF37]/40"] {
+  border-color: rgba(182, 201, 228, 0.42);
+}
+
+.moonlight-silver-mode [class~="border-[#D4AF37]/45"] {
+  border-color: rgba(182, 201, 228, 0.47);
+}
+
+.moonlight-silver-mode [class~="border-[#D4AF37]/50"] {
+  border-color: rgba(182, 201, 228, 0.52);
+}
+
+.moonlight-silver-mode [class~="border-[#D4AF37]/55"] {
+  border-color: rgba(182, 201, 228, 0.56);
+}
+
+.moonlight-silver-mode [class~="border-[#D4AF37]/60"] {
+  border-color: rgba(182, 201, 228, 0.62);
+}
+
+.moonlight-silver-mode [class~="border-[#D4AF37]/65"] {
+  border-color: rgba(182, 201, 228, 0.66);
+}
+
+.moonlight-silver-mode [class~="border-[#D4AF37]/70"] {
+  border-color: rgba(182, 201, 228, 0.72);
+}
+
+.moonlight-silver-mode [class~="border-[#D4AF37]/75"] {
+  border-color: rgba(182, 201, 228, 0.76);
+}
+
+.moonlight-silver-mode [class~="border-[#D4AF37]/80"] {
+  border-color: rgba(182, 201, 228, 0.82);
+}
+
+.moonlight-silver-mode [class~="border-[#D4AF37]/85"] {
+  border-color: rgba(182, 201, 228, 0.86);
+}
+
+.moonlight-silver-mode [class~="border-[#F3E5AB]/50"],
+.moonlight-silver-mode [class~="border-[#F3E5AB]/60"],
+.moonlight-silver-mode [class~="border-[#F3E5AB]/70"],
+.moonlight-silver-mode [class~="border-[#F3E5AB]/80"] {
+  border-color: rgba(226, 238, 255, 0.7);
+}
+

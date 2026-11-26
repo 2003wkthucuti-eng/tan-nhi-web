@@ -34,21 +34,41 @@ const PARTICLES: ParticleSpec[] = [
   { id: 'p18', left: '94%', top: '88%', size: 4, kind: 'dot', duration: '4.1s', delay: '0.5s', driftDuration: '13s', opacity: 0.55, tone: 'warm' },
 ];
 
+const WITCHING_EXTRA_PARTICLES: ParticleSpec[] = [
+  { id: 'w1', left: '14%', top: '24%', size: 6, kind: 'dot', duration: '2.7s', delay: '0.2s', driftDuration: '9s', opacity: 0.85, tone: 'bright' },
+  { id: 'w2', left: '38%', top: '36%', size: 11, kind: 'star', duration: '3.2s', delay: '1.1s', driftDuration: '11s', opacity: 0.78, tone: 'bright' },
+  { id: 'w3', left: '61%', top: '14%', size: 5.5, kind: 'dot', duration: '2.8s', delay: '0.7s', driftDuration: '10s', opacity: 0.82, tone: 'warm' },
+  { id: 'w4', left: '76%', top: '52%', size: 12, kind: 'star', duration: '3.5s', delay: '1.8s', driftDuration: '12s', opacity: 0.8, tone: 'bright' },
+  { id: 'w5', left: '22%', top: '62%', size: 5.5, kind: 'dot', duration: '3.0s', delay: '0.4s', driftDuration: '11s', opacity: 0.78, tone: 'warm' },
+  { id: 'w6', left: '47%', top: '76%', size: 10, kind: 'star', duration: '3.4s', delay: '2.0s', driftDuration: '10s', opacity: 0.75, tone: 'bright' },
+  { id: 'w7', left: '84%', top: '82%', size: 6, kind: 'dot', duration: '2.6s', delay: '1.3s', driftDuration: '9.5s', opacity: 0.85, tone: 'bright' },
+  { id: 'w8', left: '9%', top: '58%', size: 9, kind: 'star', duration: '3.3s', delay: '0.9s', driftDuration: '12.5s', opacity: 0.72, tone: 'warm' },
+];
+
 interface GoldenStardustProps {
   className?: string;
+  witchingHour?: boolean;
 }
 
 /**
  * Hiệu ứng bụi vàng & sao 4 cánh lấp lánh thuần CSS (GPU-accelerated transform + opacity).
  */
-export const GoldenStardust: React.FC<GoldenStardustProps> = ({ className = '' }) => {
+export const GoldenStardust: React.FC<GoldenStardustProps> = ({
+  className = '',
+  witchingHour = false,
+}) => {
+  const activeParticles = witchingHour
+    ? [...PARTICLES, ...WITCHING_EXTRA_PARTICLES]
+    : PARTICLES;
+
   return (
     <div
       aria-hidden="true"
-      className={`pointer-events-none absolute inset-0 overflow-hidden ${className}`}
+      className={`pointer-events-none absolute inset-0 overflow-hidden transition-opacity duration-700 ${className}`}
     >
-      {PARTICLES.map((p) => {
+      {activeParticles.map((p) => {
         const color = p.tone === 'bright' ? '#F3E5AB' : '#D4AF37';
+        const effectiveOpacity = witchingHour ? Math.min(0.95, p.opacity + 0.16) : p.opacity;
         return (
           <span
             key={p.id}
@@ -70,8 +90,8 @@ export const GoldenStardust: React.FC<GoldenStardustProps> = ({ className = '' }
                 style={{
                   animationDuration: p.duration,
                   animationDelay: p.delay,
-                  opacity: p.opacity,
-                  filter: `drop-shadow(0 0 6px ${color})`,
+                  opacity: effectiveOpacity,
+                  filter: `drop-shadow(0 0 ${witchingHour ? 9 : 6}px ${color})`,
                 }}
               >
                 <path
@@ -86,8 +106,8 @@ export const GoldenStardust: React.FC<GoldenStardustProps> = ({ className = '' }
                   width: p.size,
                   height: p.size,
                   backgroundColor: color,
-                  opacity: p.opacity,
-                  boxShadow: `0 0 8px 1px ${color}`,
+                  opacity: effectiveOpacity,
+                  boxShadow: `0 0 ${witchingHour ? 13 : 8}px ${witchingHour ? 2 : 1}px ${color}`,
                   animationDuration: p.duration,
                   animationDelay: p.delay,
                 }}

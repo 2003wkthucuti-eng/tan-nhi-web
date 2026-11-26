@@ -12,6 +12,8 @@ import {
   ChevronLeft,
   ChevronRight,
   DoorOpen,
+  KeyRound,
+  Moon,
   Music,
   Pause,
   Play,
@@ -34,20 +36,33 @@ import { IntroSealDoors, type IntroPhase } from './components/IntroSealDoors';
 import { MysticCornerModal } from './components/MysticCornerModal';
 import { MysticalFogOverlay } from './components/MysticalFogOverlay';
 import { SecretBadgeModal } from './components/SecretBadgeModal';
+import { SecretDiaryAndBadgesModal } from './components/SecretDiaryAndBadgesModal';
+import { SecretRoomModal } from './components/SecretRoomModal';
 import { SoulmateCornerModal } from './components/SoulmateCornerModal';
 import { TrendingSpotlight } from './components/TrendingSpotlight';
 import { UserAvatarBadge } from './components/UserAvatarBadge';
 import {
   loadHeartfeltLetters,
+  loadSecretBadgesState,
   loadSoulmateUnlocked,
   loadUserProfile,
   saveHeartfeltLetters,
+  saveSecretBadgesState,
   saveSoulmateUnlocked,
   saveUserProfile,
   type HeartfeltLetter,
+  type SecretBadgesState,
   type UserProfile,
 } from './types/user';
-import { playAchievementChime, playCatMeowChime, playDoorChime, playSoftTap, playTarotSpreadChime } from './utils/soundEffects';
+import {
+  playAchievementChime,
+  playCatMeowChime,
+  playDoorChime,
+  playSecretRoomChime,
+  playSoftTap,
+  playTarotSpreadChime,
+  playWitchingHourChime,
+} from './utils/soundEffects';
 import {
   buildCharacterShareUrl,
   buildWebsiteShareUrl,
@@ -721,6 +736,11 @@ function getInitialSharedCharacter(): CharacterItem | null {
   return CHARACTERS.find((item) => item.id === charId) || null;
 }
 
+function isWithinWitchingHour(): boolean {
+  const hour = new Date().getHours();
+  return hour >= 0 && hour < 3;
+}
+
 export default function App() {
   const initialSharedChar = useMemo(() => getInitialSharedCharacter(), []);
   const [introPhase, setIntroPhase] = useState<IntroPhase>(() =>
@@ -755,6 +775,17 @@ export default function App() {
   );
   const [shareToast, setShareToast] = useState<string | null>(null);
   const [showBackToTop, setShowBackToTop] = useState(false);
+  const [secretBadges, setSecretBadges] = useState<SecretBadgesState>(() =>
+    loadSecretBadgesState()
+  );
+  const [isSecretRoomOpen, setIsSecretRoomOpen] = useState(false);
+  const [justUnlockedNightDecoder, setJustUnlockedNightDecoder] = useState(false);
+  const [isSecretNotebookOpen, setIsSecretNotebookOpen] = useState(false);
+  const [isRealWitchingHour, setIsRealWitchingHour] = useState<boolean>(() =>
+    isWithinWitchingHour()
+  );
+  const [isWitchingHourTestMode, setIsWitchingHourTestMode] = useState(false);
+  const [witchingBannerDismissed, setWitchingBannerDismissed] = useState(false);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const shouldPlayRef = useRef(false);
@@ -763,11 +794,15 @@ export default function App() {
   const introTimerRef = useRef<number | null>(null);
   const catTapCountRef = useRef(0);
   const catTapResetTimerRef = useRef<number | null>(null);
+  const titleTapCountRef = useRef(0);
+  const titleTapResetTimerRef = useRef<number | null>(null);
+  const keywordBufferRef = useRef('');
   const shareToastTimerRef = useRef<number | null>(null);
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
 
   const hasEntered = introPhase !== 'idle';
+  const isWitchingHourActive = isRealWitchingHour || isWitchingHourTestMode;
   const currentTrack = PLAYLIST[currentTrackIndex];
   const totalLettersSent = useMemo(
     () =>
@@ -784,11 +819,16 @@ export default function App() {
     };
     handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
+    const witchingTimer = window.setInterval(() => {
+      setIsRealWitchingHour(isWithinWitchingHour());
+    }, 30000);
     return () => {
       window.removeEventListener('scroll', handleScroll);
+      window.clearInterval(witchingTimer);
       if (headerCatTimerRef.current) window.clearTimeout(headerCatTimerRef.current);
       if (introTimerRef.current) window.clearTimeout(introTimerRef.current);
       if (catTapResetTimerRef.current) window.clearTimeout(catTapResetTimerRef.current);
+      if (titleTapResetTimerRef.current) window.clearTimeout(titleTapResetTimerRef.current);
       if (shareToastTimerRef.current) window.clearTimeout(shareToastTimerRef.current);
     };
   }, []);
@@ -1172,6 +1212,121 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const openSecretRoom = () => {
+    playSecretRoomChime();
+    setFireworkBurstKey((prev) => prev + 1);
+    let unlockedFresh = false;
+    setSecretBadges((prev) => {
+      if (prev.nightDecoder) return prev;
+      unlockedFresh = true;
+      const next: SecretBadgesState = {
+        ...prev,
+        nightDecoder: true,
+        unlockedAt: {
+          ...prev.unlockedAt,
+          night_decoder: Date.now(),
+        },
+      };
+      saveSecretBadgesState(next);
+      return next;
+    });
+    setJustUnlockedNightDecoder(unlockedFresh);
+    setIsSecretRoomOpen(true);
+  };
+
+  const handleTitleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    titleTapCountRef.current += 1;
+    if (titleTapResetTimerRef.current) {
+      window.clearTimeout(titleTapResetTimerRef.current);
+    }
+
+    if (titleTapCountRef.current >= 5) {
+      titleTapCountRef.current = 0;
+      titleTapResetTimerRef.current = null;
+      openSecretRoom();
+      return;
+    }
+
+    titleTapResetTimerRef.current = window.setTimeout(() => {
+      titleTapCountRef.current = 0;
+      titleTapResetTimerRef.current = null;
+    }, 3500);
+
+    playSoftTap('nav');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    if (!hasEntered) return;
+    const handleKeywordListen = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (
+        target &&
+        (target.tagName === 'INPUT' ||
+          target.tagName === 'TEXTAREA' ||
+          target.tagName === 'SELECT' ||
+          target.isContentEditable)
+      ) {
+        return;
+      }
+      if (e.key.length !== 1 || e.ctrlKey || e.metaKey || e.altKey) return;
+      const nextBuf = (keywordBufferRef.current + e.key.toLowerCase()).slice(-12);
+      keywordBufferRef.current = nextBuf;
+      if (nextBuf.endsWith('tannhi')) {
+        keywordBufferRef.current = '';
+        openSecretRoom();
+      }
+    };
+    window.addEventListener('keydown', handleKeywordListen);
+    return () => window.removeEventListener('keydown', handleKeywordListen);
+  }, [hasEntered]);
+
+  useEffect(() => {
+    if (!hasEntered || !isWitchingHourActive) return;
+    setSecretBadges((prev) => {
+      if (prev.nightOwl) return prev;
+      const next: SecretBadgesState = {
+        ...prev,
+        nightOwl: true,
+        unlockedAt: {
+          ...prev.unlockedAt,
+          night_owl: Date.now(),
+        },
+      };
+      saveSecretBadgesState(next);
+      return next;
+    });
+  }, [hasEntered, isWitchingHourActive]);
+
+  const handleToggleWitchingHourTest = () => {
+    const nextState = !isWitchingHourTestMode;
+    setIsWitchingHourTestMode(nextState);
+    if (nextState) {
+      setWitchingBannerDismissed(false);
+      playWitchingHourChime();
+      setFireworkBurstKey((prev) => prev + 1);
+      triggerShareToast(
+        secretBadges.nightOwl
+          ? '🌙 Đã bật chế độ Khung Giờ Ma Thuật (Đêm Sâu)!'
+          : '🌙 Đã kích hoạt Đêm Sâu · Mở khóa huy hiệu Cú Đêm Ngôi Nhà Nhỏ!'
+      );
+    } else {
+      playSoftTap('nav');
+      triggerShareToast('☀️ Đã tắt chế độ thử Đêm Sâu.');
+    }
+  };
+
+  const handlePickLateNightCharacter = () => {
+    if (CHARACTERS.length === 0) return;
+    playSoftTap('card');
+    const chosen = CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)];
+    trackCharacterInteraction(chosen.id, 1);
+    setOpenedDetailFromTarot(false);
+    setOpenedDetailFromMystic(false);
+    setSelectedCharacter(chosen);
+  };
+
   return (
     <div className="min-h-screen bg-[#0B0B0F] text-[#F5EFE0] relative selection:bg-[#D4AF37]/30 selection:text-[#F3E5AB]">
       {/* Audio phát nhạc nền liên tục */}
@@ -1202,8 +1357,19 @@ export default function App() {
         {/* Lớp sương mù vàng Gold huyền ảo chuyển động chậm */}
         <MysticalFogOverlay />
 
+        {/* Hào quang Đêm Sâu khi Khung Giờ Ma Thuật (00:00 – 03:00) được kích hoạt */}
+        {isWitchingHourActive && (
+          <div
+            aria-hidden="true"
+            className="pointer-events-none fixed inset-0 z-0 bg-[radial-gradient(ellipse_at_top,rgba(212,175,55,0.11),transparent_62%)] transition-opacity duration-700"
+          />
+        )}
+
         {/* Bụi vàng lấp lánh ở nền Trang chủ */}
-        <GoldenStardust className="fixed inset-0 z-0 opacity-85" />
+        <GoldenStardust
+          witchingHour={isWitchingHourActive}
+          className={`fixed inset-0 z-0 ${isWitchingHourActive ? 'opacity-100' : 'opacity-85'}`}
+        />
 
         {/* Top Bar 3 vùng rõ ràng */}
         <header className="sticky top-0 z-30 bg-[#0B0B0F]/90 backdrop-blur-md border-b border-[#D4AF37]/20">
@@ -1226,11 +1392,7 @@ export default function App() {
 
               <a
                 href="#top"
-                onClick={(e) => {
-                  e.preventDefault();
-                  playSoftTap('nav');
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                }}
+                onClick={handleTitleLogoClick}
                 className="min-w-0 truncate focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] rounded-lg py-1"
               >
                 <span className="font-display text-[17px] sm:text-2xl font-semibold tracking-tight gold-shimmer-text">
@@ -1347,6 +1509,59 @@ export default function App() {
 
         {/* Nội dung chính */}
         <main id="top" className="relative z-10 flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-10">
+          {/* Dải thông báo Khung Giờ Ma Thuật (00:00 – 03:00 hoặc chế độ thử Đêm Sâu) */}
+          <AnimatePresence>
+            {isWitchingHourActive && !witchingBannerDismissed && (
+              <motion.aside
+                key="witching-hour-banner"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                aria-label="Thông báo Khung Giờ Ma Thuật"
+                className="mb-5 sm:mb-6 rounded-2xl bg-[#110F18]/88 backdrop-blur-md border border-[#D4AF37]/45 px-3.5 py-2.5 sm:px-5 sm:py-3 shadow-[0_8px_28px_rgba(0,0,0,0.6),0_0_24px_rgba(212,175,55,0.16)] flex flex-col sm:flex-row sm:items-center justify-between gap-2.5"
+              >
+                <p className="text-xs sm:text-[13px] text-[#F3E5AB] leading-relaxed italic">
+                  🌙 Đã quá nửa đêm rồi, sao bạn vẫn chưa ngủ? Những tâm hồn ở đây vẫn đang thức chờ bạn...
+                </p>
+
+                <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
+                  <button
+                    type="button"
+                    onClick={handlePickLateNightCharacter}
+                    className="shimmer-gold-btn inline-flex items-center gap-1.5 min-h-[34px] px-3 py-1 rounded-xl bg-gradient-to-r from-[#231B0B] to-[#30240E] border border-[#D4AF37]/70 text-[11px] sm:text-xs font-medium text-[#F3E5AB] hover:border-[#FFF4C4] active:scale-95 transition-all whitespace-nowrap cursor-pointer"
+                  >
+                    <Sparkles className="w-3.5 h-3.5 text-[#F3E5AB] shrink-0" aria-hidden="true" />
+                    <span>Gợi ý đêm muộn</span>
+                  </button>
+
+                  {isWitchingHourTestMode && !isRealWitchingHour && (
+                    <button
+                      type="button"
+                      onClick={handleToggleWitchingHourTest}
+                      title="Tắt chế độ thử Đêm Sâu"
+                      className="inline-flex items-center justify-center min-h-[34px] px-2.5 py-1 rounded-xl bg-[#0B0B0F] border border-[#D4AF37]/30 text-[11px] text-[#B8B0A0] hover:text-[#F3E5AB] hover:border-[#D4AF37]/60 transition-colors whitespace-nowrap cursor-pointer"
+                    >
+                      Tắt thử
+                    </button>
+                  )}
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playSoftTap('nav');
+                      setWitchingBannerDismissed(true);
+                    }}
+                    aria-label="Ẩn dải thông báo đêm muộn"
+                    className="inline-flex items-center justify-center w-8 h-8 rounded-lg text-[#B8B0A0] hover:text-[#F3E5AB] hover:bg-[#D4AF37]/10 transition-colors cursor-pointer"
+                  >
+                    <X className="w-3.5 h-3.5" aria-hidden="true" />
+                  </button>
+                </div>
+              </motion.aside>
+            )}
+          </AnimatePresence>
+
           {/* Phần giới thiệu ngắn đầu trang */}
           <section>
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
@@ -1874,6 +2089,43 @@ export default function App() {
                 </button>
               )}
             </div>
+
+            {/* Tận cùng chân trang: Chiếc chìa khóa vàng nhỏ mờ ảo (Easter Egg #3) & vầng trăng thử Đêm Sâu */}
+            <div className="flex items-center justify-center gap-3 pt-1">
+              <button
+                type="button"
+                onClick={() => {
+                  playSoftTap('card');
+                  setIsSecretNotebookOpen(true);
+                }}
+                aria-label="Mở Bức Thư Dưới Đáy Trang và Sổ Huy Hiệu Bí Mật"
+                title="Một chiếc chìa khóa vàng nhỏ rơi dưới đáy trang..."
+                className="group inline-flex items-center justify-center w-8 h-8 rounded-full text-[#D4AF37]/50 hover:text-[#FFF4C4] hover:bg-[#D4AF37]/12 hover:shadow-[0_0_16px_rgba(212,175,55,0.38)] active:scale-95 transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]"
+              >
+                <KeyRound
+                  className="w-3.5 h-3.5 transition-transform duration-300 group-hover:rotate-[-12deg] group-hover:scale-110"
+                  aria-hidden="true"
+                />
+              </button>
+
+              <button
+                type="button"
+                onClick={handleToggleWitchingHourTest}
+                aria-label="Thử chế độ Khung Giờ Ma Thuật Đêm Sâu (00:00 – 03:00)"
+                title={
+                  isWitchingHourActive
+                    ? 'Đang ở không khí Đêm Sâu (00:00 – 03:00)'
+                    : 'Thử không khí Đêm Sâu (00:00 – 03:00)'
+                }
+                className={`group inline-flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] ${
+                  isWitchingHourActive
+                    ? 'text-[#F3E5AB] bg-[#D4AF37]/15 shadow-[0_0_16px_rgba(212,175,55,0.38)]'
+                    : 'text-[#D4AF37]/40 hover:text-[#F3E5AB] hover:bg-[#D4AF37]/12 hover:shadow-[0_0_14px_rgba(212,175,55,0.3)]'
+                }`}
+              >
+                <Moon className="w-3.5 h-3.5" aria-hidden="true" />
+              </button>
+            </div>
           </div>
         </footer>
       </div>
@@ -2067,6 +2319,27 @@ export default function App() {
       <SecretBadgeModal
         isOpen={isSecretBadgeOpen}
         onClose={() => setIsSecretBadgeOpen(false)}
+      />
+
+      {/* Easter Egg #1: 🗝️ Căn Phòng Bí Mật Của Chủ Nhà */}
+      <SecretRoomModal
+        isOpen={isSecretRoomOpen}
+        justUnlockedBadge={justUnlockedNightDecoder}
+        onOpenSecretNotebook={() => {
+          setIsSecretRoomOpen(false);
+          setIsSecretNotebookOpen(true);
+        }}
+        onClose={() => setIsSecretRoomOpen(false)}
+      />
+
+      {/* Easter Egg #3: 📜 Bức Thư Dưới Đáy Trang & Sổ Huy Hiệu Bí Mật */}
+      <SecretDiaryAndBadgesModal
+        isOpen={isSecretNotebookOpen}
+        hasSoulmateBadge={hasUnlockedSoulmateBadge}
+        secretBadges={secretBadges}
+        isWitchingHourActive={isWitchingHourActive}
+        onToggleWitchingHourTest={handleToggleWitchingHourTest}
+        onClose={() => setIsSecretNotebookOpen(false)}
       />
     </div>
   );

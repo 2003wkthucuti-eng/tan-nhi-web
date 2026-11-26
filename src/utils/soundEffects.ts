@@ -765,3 +765,97 @@ export function playResonanceMissTone(): void {
   }
 }
 
+/**
+ * Chuỗi chuông huyền bí ngân nhẹ khi giải mã thành công "Căn Phòng Bí Mật Của Chủ Nhà".
+ */
+export function playSecretRoomChime(): void {
+  try {
+    const chain = getAudioChain();
+    if (!chain) return;
+
+    const { ctx, destination } = chain;
+    const now = ctx.currentTime;
+
+    const masterGain = ctx.createGain();
+    masterGain.gain.setValueAtTime(0.86, now);
+    masterGain.connect(destination);
+
+    // Hợp âm bí ẩn Ebmaj9 / Dmaj9 ngân nhẹ (D5 - F#5 - A5 - C#6 - E6 - A6)
+    const notes = [587.33, 739.99, 880.0, 1108.73, 1318.51, 1760.0];
+    notes.forEach((freq, idx) => {
+      const startTime = now + idx * 0.078;
+      const tailDuration = 2.4 - idx * 0.08;
+
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, startTime);
+
+      gain.gain.setValueAtTime(0.0001, startTime);
+      gain.gain.linearRampToValueAtTime(0.32, startTime + 0.008);
+      gain.gain.exponentialRampToValueAtTime(0.0001, startTime + tailDuration);
+
+      const shimmer = ctx.createOscillator();
+      const shimmerGain = ctx.createGain();
+      shimmer.type = 'sine';
+      shimmer.frequency.setValueAtTime(freq * 2, startTime);
+      shimmerGain.gain.setValueAtTime(0.0001, startTime);
+      shimmerGain.gain.linearRampToValueAtTime(0.1, startTime + 0.005);
+      shimmerGain.gain.exponentialRampToValueAtTime(0.0001, startTime + tailDuration * 0.48);
+
+      osc.connect(gain);
+      shimmer.connect(shimmerGain);
+      gain.connect(masterGain);
+      shimmerGain.connect(masterGain);
+
+      osc.start(startTime);
+      shimmer.start(startTime);
+      osc.stop(startTime + tailDuration + 0.04);
+      shimmer.stop(startTime + tailDuration * 0.52);
+    });
+  } catch {
+    // An toàn nếu trình duyệt chặn audio context
+  }
+}
+
+/**
+ * Chuông đêm sâu thanh mảnh khi bước vào Khung Giờ Ma Thuật (00:00 – 03:00).
+ */
+export function playWitchingHourChime(): void {
+  try {
+    const chain = getAudioChain();
+    if (!chain) return;
+
+    const { ctx, destination } = chain;
+    const now = ctx.currentTime;
+
+    const masterGain = ctx.createGain();
+    masterGain.gain.setValueAtTime(0.78, now);
+    masterGain.connect(destination);
+
+    // 3 tiếng chuông đồng hồ nửa đêm dịu dàng (A5 - E6 - B6)
+    const notes = [880.0, 1318.51, 1975.53];
+    notes.forEach((freq, idx) => {
+      const startTime = now + idx * 0.14;
+      const duration = 2.1 - idx * 0.12;
+
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, startTime);
+
+      gain.gain.setValueAtTime(0.0001, startTime);
+      gain.gain.linearRampToValueAtTime(0.28, startTime + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+
+      osc.connect(gain);
+      gain.connect(masterGain);
+      osc.start(startTime);
+      osc.stop(startTime + duration + 0.04);
+    });
+  } catch {
+    // An toàn nếu trình duyệt chặn audio context
+  }
+}
+
+

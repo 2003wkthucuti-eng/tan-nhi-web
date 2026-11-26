@@ -28,7 +28,42 @@ export const STORAGE_KEYS = {
   USER_PROFILE: 'tannhi_user_profile_v1',
   SOULMATE_BADGE: 'tannhi_soulmate_badge_v1',
   LETTERS_BY_CHAR: 'tannhi_heartfelt_letters_v1',
+  EASTER_EGG_BADGES: 'tannhi_easter_egg_badges_v1',
 } as const;
+
+export type SecretBadgeId = 'soulmate' | 'night_decoder' | 'night_owl';
+
+export interface SecretBadgesState {
+  nightDecoder: boolean;
+  nightOwl: boolean;
+  unlockedAt: Partial<Record<SecretBadgeId, number>>;
+}
+
+export function loadSecretBadgesState(): SecretBadgesState {
+  try {
+    const raw = window.localStorage.getItem(STORAGE_KEYS.EASTER_EGG_BADGES);
+    if (!raw) {
+      return { nightDecoder: false, nightOwl: false, unlockedAt: {} };
+    }
+    const parsed = JSON.parse(raw) as Partial<SecretBadgesState>;
+    return {
+      nightDecoder: Boolean(parsed?.nightDecoder),
+      nightOwl: Boolean(parsed?.nightOwl),
+      unlockedAt:
+        parsed?.unlockedAt && typeof parsed.unlockedAt === 'object' ? parsed.unlockedAt : {},
+    };
+  } catch {
+    return { nightDecoder: false, nightOwl: false, unlockedAt: {} };
+  }
+}
+
+export function saveSecretBadgesState(state: SecretBadgesState): void {
+  try {
+    window.localStorage.setItem(STORAGE_KEYS.EASTER_EGG_BADGES, JSON.stringify(state));
+  } catch {
+    // Ignore storage quota errors
+  }
+}
 
 export function loadUserProfile(): UserProfile | null {
   try {

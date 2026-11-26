@@ -83,7 +83,7 @@ export const ThemeSelectorButton: React.FC = () => {
               </button>
             </div>
 
-            <div className="grid grid-cols-3 gap-1.5">
+            <div className="grid grid-cols-3 gap-1.5 max-h-[268px] sm:max-h-[286px] overflow-y-auto pr-0.5">
               {themes.map((theme) => {
                 const isSelected = theme.id === themeId;
                 return (
@@ -161,7 +161,9 @@ export const ThemeSelectorButton: React.FC = () => {
                 );
               })}
 
-              {Array.from({ length: Math.max(0, 9 - themes.length) }).map((_, idx) => (
+              {Array.from({
+                length: themes.length % 3 === 0 ? 0 : 3 - (themes.length % 3),
+              }).map((_, idx) => (
                 <div
                   key={`reserved-slot-${idx}`}
                   aria-hidden="true"

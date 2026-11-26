@@ -158,6 +158,32 @@ export const BlackCatMascot: React.FC<BlackCatMascotProps> = ({
       starBright: '#E8F6FF',
       starWarm: '#7EC8F2',
     },
+    'bong-bong-sua': {
+      gradStart: '#EBF8FF',
+      gradMid: '#8FD4EC',
+      gradEnd: '#4A96BF',
+      bodyFill: '#0A1A28',
+      eyeFill: '#EBF8FF',
+      pupilFill: '#0A263C',
+      noseFill: '#8FD4EC',
+      auraInner: '#EBF8FF',
+      auraMid: '#8FD4EC',
+      starBright: '#EBF8FF',
+      starWarm: '#8FD4EC',
+    },
+    'collage-hai-be': {
+      gradStart: '#F6F0E4',
+      gradMid: '#D6D9E2',
+      gradEnd: '#7E8294',
+      bodyFill: '#141319',
+      eyeFill: '#F6F0E4',
+      pupilFill: '#1B1822',
+      noseFill: '#DF95A5',
+      auraInner: '#F6F0E4',
+      auraMid: '#DF95A5',
+      starBright: '#F6F0E4',
+      starWarm: '#DF95A5',
+    },
   };
 
   const p = paletteMap[effectiveThemeId];
@@ -436,6 +462,85 @@ export const BlackCatMascot: React.FC<BlackCatMascotProps> = ({
         </g>
       )}
 
+      {/* Bong Bóng Sứa Lam Ngọc: Mèo lơ lửng giữa vòng bong bóng xanh băng - bạc */}
+      {effectiveThemeId === 'bong-bong-sua' && (
+        <g aria-hidden="true">
+          {/* Vòng bong bóng lớn bao quanh chú mèo */}
+          <circle
+            cx="60"
+            cy="55"
+            r={variant === 'badge' ? 46 : 43}
+            fill="#8FD4EC"
+            fillOpacity="0.06"
+            stroke="#EBF8FF"
+            strokeOpacity="0.45"
+            strokeWidth="1.4"
+          />
+          <path
+            d="M32 34C39 24 51 19 63 19"
+            stroke="#FFFFFF"
+            strokeOpacity="0.55"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+          />
+          {variant !== 'badge' && (
+            <>
+              {/* Các bong bóng nhỏ lơ lửng xung quanh */}
+              <g className="animate-cat-star-1">
+                <circle cx="21" cy="34" r="8.5" fill="#8FD4EC" fillOpacity="0.14" stroke="#EBF8FF" strokeOpacity="0.68" strokeWidth="1.2" />
+                <path d="M16.5 31C17.5 29 19.5 28 21.5 28" stroke="#FFFFFF" strokeOpacity="0.85" strokeWidth="1.2" strokeLinecap="round" />
+              </g>
+              <g className="animate-cat-star-2">
+                <circle cx="98" cy="39" r="7" fill="#EBF8FF" fillOpacity="0.12" stroke="#8FD4EC" strokeOpacity="0.72" strokeWidth="1.2" />
+                <path d="M94.5 36.2C95.4 34.7 97 34 98.6 34" stroke="#FFFFFF" strokeOpacity="0.85" strokeWidth="1.1" strokeLinecap="round" />
+              </g>
+              <g className="animate-cat-star-3">
+                <circle cx="24" cy="79" r="5" fill="#8FD4EC" fillOpacity="0.15" stroke="#EBF8FF" strokeOpacity="0.65" strokeWidth="1.1" />
+                <circle cx="22.5" cy="77.2" r="1.1" fill="#FFFFFF" fillOpacity="0.85" />
+              </g>
+              <circle cx="95" cy="77" r="4.2" fill="#EBF8FF" fillOpacity="0.15" stroke="#8FD4EC" strokeOpacity="0.6" strokeWidth="1" />
+              <circle cx="88" cy="19" r="2.6" fill="#EBF8FF" fillOpacity="0.55" />
+            </>
+          )}
+        </g>
+      )}
+
+      {/* Collage Hai Bé & Dấu Sáp: Khung Polaroid nghiêng nhẹ & sticker ngôi sao / hội thoại pixel */}
+      {variant !== 'badge' && effectiveThemeId === 'collage-hai-be' && (
+        <g aria-hidden="true">
+          <rect
+            x="16"
+            y="14"
+            width="88"
+            height="92"
+            rx="12"
+            transform="rotate(-2.5 60 60)"
+            fill="#F6F0E4"
+            fillOpacity="0.04"
+            stroke="#F6F0E4"
+            strokeOpacity="0.34"
+            strokeWidth="1.4"
+            strokeDasharray="6 4"
+          />
+          {/* Sticker bong bóng pixel trái tim */}
+          <g className="animate-cat-star-1">
+            <rect x="88" y="19" width="18" height="14" rx="4" fill="#F6F0E4" stroke="#141319" strokeWidth="1.1" />
+            <path d="M97 29.5C97 29.5 92.8 26.8 92.8 24.4C92.8 23.1 93.8 22.2 95 22.2C95.8 22.2 96.5 22.7 97 23.4C97.5 22.7 98.2 22.2 99 22.2C100.2 22.2 101.2 23.1 101.2 24.4C101.2 26.8 97 29.5 97 29.5Z" fill="#DF95A5" />
+          </g>
+          {/* Ngôi sao sticker lấp lánh */}
+          <path
+            d="M21 31L23 36.2L28.2 38.2L23 40.2L21 45.4L19 40.2L13.8 38.2L19 36.2Z"
+            fill="#F6F0E4"
+            className="animate-cat-star-2"
+          />
+          <path
+            d="M24 79L25.4 82.6L29 84L25.4 85.4L24 89L22.6 85.4L19 84L22.6 82.6Z"
+            fill="#DF95A5"
+            className="animate-cat-star-3"
+          />
+        </g>
+      )}
+
       {/* Đuôi mèo uốn cong đung đưa mềm mại */}
       <path
         d="M77 95C91 95 101 86 101 75C101 66 93 62 90 67C88 71 92 75 93 78"
@@ -536,6 +641,17 @@ export const BlackCatMascot: React.FC<BlackCatMascotProps> = ({
           <path d="M47 62C54 66 66 66 73 62" stroke="#C84B59" strokeWidth="2.1" strokeLinecap="round" />
           <circle cx="60" cy="67" r="3.1" fill="#67C4A7" stroke="#EFE4CA" strokeWidth="1.1" />
         </g>
+      ) : effectiveThemeId === 'collage-hai-be' ? (
+        /* Collage Hai Bé & Dấu Sáp: Vòng cổ gắn charm sticker ngôi sao hồng kem */
+        <g aria-hidden="true">
+          <path d="M47 62C54 66 66 66 73 62" stroke="#F6F0E4" strokeWidth="2" strokeLinecap="round" />
+          <path
+            d="M60 63.2L61.6 66.5L65 67.5L61.6 68.5L60 71.8L58.4 68.5L55 67.5L58.4 66.5Z"
+            fill="#DF95A5"
+            stroke="#F6F0E4"
+            strokeWidth="0.9"
+          />
+        </g>
       ) : (
         <>
           <path
@@ -613,6 +729,29 @@ export const BlackCatMascot: React.FC<BlackCatMascotProps> = ({
         />
       )}
 
+      {/* Collage Hai Bé & Dấu Sáp: Kẹp tóc sticker ngôi sao trên tai phải & sticker băng dán cá nhân */}
+      {effectiveThemeId === 'collage-hai-be' && (
+        <g aria-hidden="true">
+          <path
+            d="M78.5 30L79.8 33.2L83 34.2L79.8 35.2L78.5 38.4L77.2 35.2L74 34.2L77.2 33.2Z"
+            fill="#F6F0E4"
+            stroke="#DF95A5"
+            strokeWidth="0.8"
+          />
+          <rect
+            x="40.5"
+            y="50.5"
+            width="6.5"
+            height="3.2"
+            rx="1.2"
+            transform="rotate(-12 43.7 52.1)"
+            fill="#F6F0E4"
+            stroke="#DF95A5"
+            strokeWidth="0.7"
+          />
+        </g>
+      )}
+
       {/* Đôi mắt biểu cảm chớp nhẹ */}
       {effectiveThemeId === 'thuy-mac' ? (
         /* Thủy Mặc Sương Khói: Đôi mắt tĩnh lặng thanh thoát */
@@ -655,11 +794,25 @@ export const BlackCatMascot: React.FC<BlackCatMascotProps> = ({
         </>
       )}
 
-      {/* Rose Nebula: Má hồng dịu dàng */}
-      {effectiveThemeId === 'rose-nebula' && (
+      {/* Rose Nebula & Collage Hai Bé: Má hồng dịu dàng */}
+      {(effectiveThemeId === 'rose-nebula' || effectiveThemeId === 'collage-hai-be') && (
         <g aria-hidden="true">
-          <ellipse cx="43.5" cy="53" rx="2.6" ry="1.4" fill="#F7A8C8" fillOpacity="0.45" />
-          <ellipse cx="76.5" cy="53" rx="2.6" ry="1.4" fill="#F7A8C8" fillOpacity="0.45" />
+          <ellipse
+            cx="43.5"
+            cy="53"
+            rx="2.6"
+            ry="1.4"
+            fill={effectiveThemeId === 'collage-hai-be' ? '#DF95A5' : '#F7A8C8'}
+            fillOpacity="0.45"
+          />
+          <ellipse
+            cx="76.5"
+            cy="53"
+            rx="2.6"
+            ry="1.4"
+            fill={effectiveThemeId === 'collage-hai-be' ? '#DF95A5' : '#F7A8C8'}
+            fillOpacity="0.45"
+          />
         </g>
       )}
 

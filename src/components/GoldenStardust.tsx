@@ -127,6 +127,25 @@ export const GoldenStardust: React.FC<GoldenStardustProps> = ({
                     d="M12 1L14.5 9L22.5 12L14.5 15L12 23L9.5 15L1.5 12L9.5 9Z"
                     fill={color}
                   />
+                ) : shapeKind === 'bubble' ? (
+                  <g>
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="8.5"
+                      stroke={color}
+                      strokeWidth="1.6"
+                      fill={color}
+                      fillOpacity="0.14"
+                    />
+                    <path
+                      d="M8.2 9.2C9.1 7.6 10.6 6.8 12.2 6.8"
+                      stroke="#FFFFFF"
+                      strokeWidth="1.4"
+                      strokeLinecap="round"
+                      strokeOpacity="0.85"
+                    />
+                  </g>
                 ) : (
                   <path
                     d="M12 0L14.4 9.6L24 12L14.4 14.4L12 24L9.6 14.4L0 12L9.6 9.6Z"

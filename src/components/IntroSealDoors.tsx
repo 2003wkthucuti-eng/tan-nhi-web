@@ -195,8 +195,8 @@ export const IntroSealDoors: React.FC<IntroSealDoorsProps> = ({
                 </button>
               </div>
 
-              {/* Lưới vuông 3x3 nhỏ gọn */}
-              <div className="grid grid-cols-3 gap-1.5">
+              {/* Lưới vuông 3 cột nhỏ gọn */}
+              <div className="grid grid-cols-3 gap-1.5 max-h-[268px] sm:max-h-[286px] overflow-y-auto pr-0.5">
                 {themes.map((theme) => {
                   const isSelected = theme.id === themeId;
                   return (
@@ -274,7 +274,9 @@ export const IntroSealDoors: React.FC<IntroSealDoorsProps> = ({
                   );
                 })}
 
-                {Array.from({ length: Math.max(0, 9 - themes.length) }).map((_, idx) => (
+                {Array.from({
+                  length: themes.length % 3 === 0 ? 0 : 3 - (themes.length % 3),
+                }).map((_, idx) => (
                   <div
                     key={`reserved-slot-${idx}`}
                     aria-hidden="true"
@@ -408,7 +410,13 @@ export const IntroSealDoors: React.FC<IntroSealDoorsProps> = ({
       />
 
       {/* Nội dung trung tâm & Con dấu sáp phong ấn */}
-      <div className="relative z-30 h-full flex flex-col items-center justify-center px-5 pt-16 pb-8 sm:px-6 sm:pt-20 sm:pb-10 text-center">
+      <div
+        className={`relative z-30 h-full flex flex-col items-center justify-center px-5 sm:px-6 text-center ${
+          themeId === 'collage-hai-be'
+            ? 'pt-12 pb-6 sm:pt-14 sm:pb-8'
+            : 'pt-16 pb-8 sm:pt-20 sm:pb-10'
+        }`}
+      >
         <motion.div
           animate={{ opacity: isOpening ? 0 : 1, y: isOpening ? -10 : 0 }}
           transition={{ duration: 0.35, ease: 'easeOut' }}
@@ -416,24 +424,28 @@ export const IntroSealDoors: React.FC<IntroSealDoorsProps> = ({
         >
           <div
             style={{ filter: `drop-shadow(0 0 24px ${accentColor}52)` }}
-            className="animate-cat-float mb-3.5 sm:mb-4 transition-all duration-300"
+            className={`animate-cat-float transition-all duration-300 ${
+              themeId === 'collage-hai-be' ? 'mb-2 sm:mb-3 scale-90 sm:scale-95' : 'mb-3.5 sm:mb-4'
+            }`}
           >
             <BlackCatMascot size={108} variant="hero" />
           </div>
 
           <p
             style={{ color: accentColor }}
-            className="text-xs sm:text-sm font-medium tracking-widest mb-2 transition-colors duration-300"
+            className="text-xs sm:text-sm font-medium tracking-widest mb-1.5 sm:mb-2 transition-colors duration-300"
           >
             {activeTheme.tagline}
           </p>
 
-          <h1 className="font-display text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight leading-[1.12] [text-wrap:balance] gold-shimmer-text">
+          <h1 className="font-display text-3xl sm:text-5xl md:text-6xl font-semibold tracking-tight leading-[1.12] [text-wrap:balance] gold-shimmer-text">
             Ngôi Nhà Nhỏ Của Tần Nhi
           </h1>
 
           <div
-            className="w-24 h-px my-4 sm:my-5 transition-all duration-300"
+            className={`w-24 h-px transition-all duration-300 ${
+              themeId === 'collage-hai-be' ? 'my-2.5 sm:my-3.5' : 'my-4 sm:my-5'
+            }`}
             style={{
               background: `linear-gradient(to right, transparent, ${accentColor}B3, transparent)`,
             }}
@@ -442,7 +454,9 @@ export const IntroSealDoors: React.FC<IntroSealDoorsProps> = ({
 
           <p
             style={{ color: activeTheme.mutedTextColor }}
-            className="text-sm sm:text-base leading-relaxed max-w-md mb-6 sm:mb-8 transition-colors duration-300"
+            className={`text-xs sm:text-base leading-relaxed max-w-md transition-colors duration-300 ${
+              themeId === 'collage-hai-be' ? 'mb-3 sm:mb-4' : 'mb-6 sm:mb-8'
+            }`}
           >
             Nơi lưu giữ những nhân vật AI Chatbot dịu dàng và bí ẩn, luôn đợi bạn ghé thăm sau một ngày dài.
           </p>
@@ -450,12 +464,65 @@ export const IntroSealDoors: React.FC<IntroSealDoorsProps> = ({
 
         {/* Con dấu sáp phong ấn cổ điển đổi sắc theo Theme */}
         <div className="relative flex flex-col items-center">
+          {/* Collage Hai Bé & Dấu Sáp: Hiển thị hình hai bé kích thước lớn nổi bật kiểu sticker nằm ngay phía sau dấu sáp */}
+          {themeId === 'collage-hai-be' && (
+            <motion.div
+              aria-hidden="true"
+              initial={{ opacity: 0, scale: 0.9, y: 12 }}
+              animate={
+                isOpening
+                  ? { opacity: 0, scale: 0.94, y: -12 }
+                  : { opacity: 1, scale: 1, y: 0 }
+              }
+              transition={{ duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
+              className="pointer-events-none select-none relative z-0 -mb-12 sm:-mb-14 flex items-center justify-center"
+            >
+              {/* Hào quang kem & hồng sticker phía sau hai bé */}
+              <div
+                className="absolute -inset-3 rounded-full blur-2xl opacity-55"
+                style={{
+                  background:
+                    'radial-gradient(circle, rgba(246,240,228,0.45) 0%, rgba(223,149,165,0.28) 48%, transparent 74%)',
+                }}
+              />
+
+              {/* Sticker ngôi sao trang trí hai bên khung hình hai bé */}
+              <span className="absolute -left-4 top-5 text-lg text-[#F6F0E4] drop-shadow-[0_0_8px_rgba(246,240,228,0.85)] animate-pulse">
+                ✦
+              </span>
+              <span className="absolute -right-4 top-8 text-base text-[#DF95A5] drop-shadow-[0_0_8px_rgba(223,149,165,0.85)] animate-pulse">
+                ★
+              </span>
+
+              {/* Khung cắt nổi kiểu sticker PNG của hai bé */}
+              <div
+                className="relative w-40 h-44 sm:w-52 sm:h-56 rounded-t-[999px] rounded-b-[28px] overflow-hidden border-[3px] border-[#F6F0E4]/90 shadow-[0_14px_34px_rgba(0,0,0,0.72),0_0_24px_rgba(246,240,228,0.28)]"
+                style={{
+                  backgroundColor: '#1E1D24',
+                  backgroundImage:
+                    "url('/assets/aistudio/78335d250b39f0b102946d1a018dd969_e5721dca.jpg')",
+                  backgroundSize: '204% auto',
+                  backgroundPosition: '95% 81%',
+                  backgroundRepeat: 'no-repeat',
+                }}
+              >
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    background:
+                      'linear-gradient(to top, rgba(17,17,21,0.92) 0%, rgba(17,17,21,0.22) 28%, transparent 55%)',
+                  }}
+                />
+              </div>
+            </motion.div>
+          )}
+
           <button
             type="button"
             onClick={onOpenDoor}
             disabled={isOpening}
             aria-label="Chạm vào con dấu sáp để mở cửa Ngôi Nhà Nhỏ Của Tần Nhi"
-            className="group relative flex items-center justify-center cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3E5AB] focus-visible:ring-offset-4 focus-visible:ring-offset-[#0A0A0E] rounded-full"
+            className="group relative z-10 flex items-center justify-center cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3E5AB] focus-visible:ring-offset-4 focus-visible:ring-offset-[#0A0A0E] rounded-full"
           >
             {/* Vòng hào quang nhẹ phía sau con dấu */}
             <motion.span
@@ -623,6 +690,15 @@ const WaxSealArtwork: React.FC = () => {
         )}
         {themeId === 'rose-nebula' && (
           <path d="M56 36L58 31L60 34L62 31L64 36Z" fill={o0} fillOpacity="0.9" />
+        )}
+        {themeId === 'bong-bong-sua' && (
+          <g fill="none" stroke={o0} strokeOpacity="0.82">
+            <circle cx="43" cy="29" r="3.4" strokeWidth="1" />
+            <circle cx="77" cy="30" r="2.6" strokeWidth="0.9" />
+          </g>
+        )}
+        {themeId === 'collage-hai-be' && (
+          <path d="M72 32L73.2 35L76.2 36L73.2 37L72 40L70.8 37L67.8 36L70.8 35Z" fill={o0} fillOpacity="0.9" />
         )}
 
         {/* Đôi mắt sáng nổi bật trên nền khắc đen */}

@@ -12,9 +12,11 @@ export type SiteThemeId =
   | 'celestial-scroll'
   | 'thuy-mac'
   | 'co-phong-tram'
-  | 'dem-xanh';
+  | 'dem-xanh'
+  | 'bong-bong-sua'
+  | 'collage-hai-be';
 
-export type ThemeParticleKind = 'star' | 'petal' | 'note' | 'leaf' | 'celestial';
+export type ThemeParticleKind = 'star' | 'petal' | 'note' | 'leaf' | 'celestial' | 'bubble';
 
 export interface SiteThemeDefinition {
   id: SiteThemeId;
@@ -266,6 +268,56 @@ export const SITE_THEMES: SiteThemeDefinition[] = [
     fogSecondary: 'rgba(232, 246, 255, 0.08)',
     waxOuter: ['#F0F9FF', '#8CD2F7', '#357BB5', '#15385E'],
     waxInner: ['#53A3DC', '#265E96', '#102B4A'],
+  },
+  {
+    id: 'bong-bong-sua',
+    name: 'Bong Bóng Sứa Lam Ngọc',
+    shortName: 'Bong Bóng Sứa',
+    tagline: 'Biển đêm lam ngọc & vòng bong bóng sứa mơ màng',
+    mascotLabel: 'Mèo lơ lửng giữa bong bóng lam ngọc',
+    bgImageUrl: '/assets/aistudio/3498711bbfcb52c939718538af244573_4e63f4fd.jpg',
+    bgImageOpacity: 0.2,
+    bgColor: '#07111A',
+    surfaceColor: '#0D1C2A',
+    accentColor: '#8FD4EC',
+    brightColor: '#EBF8FF',
+    textColor: '#F2FAFF',
+    mutedTextColor: '#B8D4E6',
+    buttonTextColor: '#061522',
+    swatchFrom: '#5DA9D6',
+    swatchTo: '#EBF8FF',
+    particleKind: 'bubble',
+    particleColors: ['#EBF8FF', '#8FD4EC'],
+    fireworkPalette: ['#FFFFFF', '#EBF8FF', '#8FD4EC', '#66B7DF', '#C7EDFC'],
+    fogPrimary: 'rgba(143, 212, 236, 0.14)',
+    fogSecondary: 'rgba(235, 248, 255, 0.085)',
+    waxOuter: ['#F3FBFF', '#9BD8F0', '#4A96BF', '#1B4969'],
+    waxInner: ['#6DBCE0', '#316F94', '#143852'],
+  },
+  {
+    id: 'collage-hai-be',
+    name: 'Collage Hai Bé & Dấu Sáp',
+    shortName: 'Hai Bé',
+    tagline: 'Khung Polaroid ký ức, sticker tai mèo & ánh sao đêm',
+    mascotLabel: 'Mèo đeo sticker & tai mèo đáng yêu',
+    bgImageUrl: '/assets/aistudio/78335d250b39f0b102946d1a018dd969_e5721dca.jpg',
+    bgImageOpacity: 0.2,
+    bgColor: '#111115',
+    surfaceColor: '#1A191F',
+    accentColor: '#D6D9E2',
+    brightColor: '#F6F0E4',
+    textColor: '#F7F4EE',
+    mutedTextColor: '#C9C6CE',
+    buttonTextColor: '#15141A',
+    swatchFrom: '#50535E',
+    swatchTo: '#F6F0E4',
+    particleKind: 'star',
+    particleColors: ['#F6F0E4', '#DF95A5'],
+    fireworkPalette: ['#FFFFFF', '#F6F0E4', '#D6D9E2', '#DF95A5', '#A9B0C2'],
+    fogPrimary: 'rgba(214, 217, 226, 0.11)',
+    fogSecondary: 'rgba(223, 149, 165, 0.09)',
+    waxOuter: ['#FAF5EC', '#D6D9E2', '#7E8294', '#393B47'],
+    waxInner: ['#B8909C', '#696C7E', '#2A2B36'],
   },
 ];
 

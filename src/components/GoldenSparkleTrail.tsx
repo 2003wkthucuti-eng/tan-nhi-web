@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { useSiteTheme } from '../themes/siteThemes';
 
 interface SparkleParticle {
   x: number;
@@ -19,15 +20,17 @@ interface GoldenSparkleTrailProps {
 }
 
 /**
- * Vệt bụi sao vàng Gold (hoặc Bạc Ánh Trăng) li ti khi người dùng chạm tay hoặc di chuột lướt trên màn hình.
- * Tự động dừng vòng lặp requestAnimationFrame khi không có hạt để tiết kiệm pin và CPU di động.
+ * Vệt bụi sao đồng bộ theo Theme (hoặc Bạc Ánh Trăng) khi chạm tay hoặc di chuột lướt trên màn hình.
  */
 export const GoldenSparkleTrail: React.FC<GoldenSparkleTrailProps> = ({
   moonlightMode = false,
 }) => {
+  const { activeTheme } = useSiteTheme();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const moonlightRef = useRef(moonlightMode);
   moonlightRef.current = moonlightMode;
+  const themeColorsRef = useRef<[string, string]>(activeTheme.particleColors);
+  themeColorsRef.current = activeTheme.particleColors;
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -60,6 +63,7 @@ export const GoldenSparkleTrail: React.FC<GoldenSparkleTrailProps> = ({
 
     const spawnParticles = (x: number, y: number, count: number) => {
       const isSilver = moonlightRef.current;
+      const [brightCol, accentCol] = themeColorsRef.current;
       for (let i = 0; i < count; i += 1) {
         if (particles.length >= MAX_PARTICLES) {
           particles.shift();
@@ -80,8 +84,8 @@ export const GoldenSparkleTrail: React.FC<GoldenSparkleTrailProps> = ({
               ? '#E6F0FC'
               : '#A8BFE0'
             : Math.random() > 0.4
-            ? '#F3E5AB'
-            : '#D4AF37',
+            ? brightCol
+            : accentCol,
         });
       }
       if (rafId === null) {

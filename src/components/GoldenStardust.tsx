@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSiteTheme } from '../themes/siteThemes';
 
 interface ParticleSpec {
   id: string;
@@ -52,16 +53,19 @@ interface GoldenStardustProps {
 }
 
 /**
- * Hiệu ứng bụi vàng & sao 4 cánh lấp lánh thuần CSS (GPU-accelerated transform + opacity).
+ * Hiệu ứng hạt bay & ánh sáng đồng bộ theo Theme (sao, cánh hoa, nốt nhạc, lá thủy mặc hoặc bụi sao cổ phong).
  */
 export const GoldenStardust: React.FC<GoldenStardustProps> = ({
   className = '',
   witchingHour = false,
   moonlightMode = false,
 }) => {
+  const { activeTheme } = useSiteTheme();
   const activeParticles = witchingHour
     ? [...PARTICLES, ...WITCHING_EXTRA_PARTICLES]
     : PARTICLES;
+
+  const shapeKind = moonlightMode ? 'star' : activeTheme.particleKind;
 
   return (
     <div
@@ -74,9 +78,10 @@ export const GoldenStardust: React.FC<GoldenStardustProps> = ({
             ? '#E8F1FD'
             : '#A9BFE0'
           : p.tone === 'bright'
-          ? '#F3E5AB'
-          : '#D4AF37';
+          ? activeTheme.particleColors[0]
+          : activeTheme.particleColors[1];
         const effectiveOpacity = witchingHour ? Math.min(0.95, p.opacity + 0.16) : p.opacity;
+
         return (
           <span
             key={p.id}
@@ -102,10 +107,32 @@ export const GoldenStardust: React.FC<GoldenStardustProps> = ({
                   filter: `drop-shadow(0 0 ${witchingHour ? 9 : 6}px ${color})`,
                 }}
               >
-                <path
-                  d="M12 0L14.4 9.6L24 12L14.4 14.4L12 24L9.6 14.4L0 12L9.6 9.6Z"
-                  fill={color}
-                />
+                {shapeKind === 'petal' ? (
+                  <path
+                    d="M12 2C16.5 5.5 18 12.5 12 22C6 12.5 7.5 5.5 12 2Z"
+                    fill={color}
+                  />
+                ) : shapeKind === 'note' ? (
+                  <path
+                    d="M10 17.5A3.2 3.2 0 1 1 8.5 12.2V4.5L18 2.5V6.5L11.2 8V17.5Z"
+                    fill={color}
+                  />
+                ) : shapeKind === 'leaf' ? (
+                  <path
+                    d="M20 4C11 5 5 11 4 20C13 19 19 13 20 4Z"
+                    fill={color}
+                  />
+                ) : shapeKind === 'celestial' ? (
+                  <path
+                    d="M12 1L14.5 9L22.5 12L14.5 15L12 23L9.5 15L1.5 12L9.5 9Z"
+                    fill={color}
+                  />
+                ) : (
+                  <path
+                    d="M12 0L14.4 9.6L24 12L14.4 14.4L12 24L9.6 14.4L0 12L9.6 9.6Z"
+                    fill={color}
+                  />
+                )}
               </svg>
             ) : (
               <span

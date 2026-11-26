@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { Award, RotateCcw, Sparkles, X } from 'lucide-react';
+import { useSiteTheme } from '../themes/siteThemes';
 import {
   playConstellationCompleteChime,
   playConstellationStarChime,
@@ -41,6 +42,7 @@ export const ConstellationSky: React.FC<ConstellationSkyProps> = ({
   hasUnlockedStarWeaver,
   onConstellationComplete,
 }) => {
+  const { activeTheme } = useSiteTheme();
   const [litOrder, setLitOrder] = useState<number[]>([]);
   const [activeBlessing, setActiveBlessing] = useState<string | null>(null);
   const [justUnlockedBadge, setJustUnlockedBadge] = useState(false);
@@ -88,8 +90,8 @@ export const ConstellationSky: React.FC<ConstellationSkyProps> = ({
     setJustUnlockedBadge(false);
   };
 
-  const primaryColor = moonlightMode ? '#E4EEF9' : '#FFF4C4';
-  const accentColor = moonlightMode ? '#9CB7DB' : '#D4AF37';
+  const primaryColor = moonlightMode ? '#E4EEF9' : activeTheme.brightColor;
+  const accentColor = moonlightMode ? '#9CB7DB' : activeTheme.accentColor;
 
   return (
     <div className="relative mb-3 sm:mb-4 select-none">

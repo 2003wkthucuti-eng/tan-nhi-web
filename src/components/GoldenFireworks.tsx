@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { useSiteTheme } from '../themes/siteThemes';
 
 interface FireworkParticle {
   x: number;
@@ -17,20 +18,21 @@ interface GoldenFireworksProps {
   moonlightMode?: boolean;
 }
 
-const GOLD_PALETTE = ['#FFF7D6', '#F3E5AB', '#D4AF37', '#E6C25A', '#FFE48F'];
 const SILVER_PALETTE = ['#FFFFFF', '#E6F0FC', '#C7D7ED', '#A8BFE0', '#DCE7F7'];
 
 /**
- * Pháo hoa bụi vàng (hoặc bạc ánh trăng) lấp lánh bung tỏa khi mở khóa huy hiệu bí mật.
- * Tối ưu bằng Canvas + tự dừng requestAnimationFrame khi kết thúc.
+ * Pháo hoa lấp lánh bung tỏa theo sắc màu của Theme đang chọn (hoặc Bạc Ánh Trăng).
  */
 export const GoldenFireworks: React.FC<GoldenFireworksProps> = ({
   burstKey,
   moonlightMode = false,
 }) => {
+  const { activeTheme } = useSiteTheme();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const moonlightRef = useRef(moonlightMode);
   moonlightRef.current = moonlightMode;
+  const themePaletteRef = useRef(activeTheme.fireworkPalette);
+  themePaletteRef.current = activeTheme.fireworkPalette;
 
   useEffect(() => {
     if (burstKey <= 0 || typeof window === 'undefined') return;
@@ -54,7 +56,7 @@ export const GoldenFireworks: React.FC<GoldenFireworksProps> = ({
     let rafId: number | null = null;
     const timers: number[] = [];
 
-    const palette = moonlightRef.current ? SILVER_PALETTE : GOLD_PALETTE;
+    const palette = moonlightRef.current ? SILVER_PALETTE : themePaletteRef.current;
 
     const spawnBurst = (cx: number, cy: number, count: number) => {
       for (let i = 0; i < count; i += 1) {
@@ -137,7 +139,6 @@ export const GoldenFireworks: React.FC<GoldenFireworksProps> = ({
       }
     };
 
-    // 3 chùm pháo hoa vàng nổ nối tiếp nhau mượt mà
     spawnBurst(width * 0.5, height * 0.36, 36);
     timers.push(
       window.setTimeout(() => spawnBurst(width * 0.28, height * 0.3, 26), 190),

@@ -44,8 +44,10 @@ import { SecretRoomModal } from './components/SecretRoomModal';
 import { SignatureSealModal } from './components/SignatureSealModal';
 import { SoulmateCornerModal } from './components/SoulmateCornerModal';
 import { TabWhisperToast, type TabWhisperPayload } from './components/TabWhisperToast';
+import { ThemeSelectorButton } from './components/ThemeSelectorButton';
 import { TrendingSpotlight } from './components/TrendingSpotlight';
 import { UserAvatarBadge } from './components/UserAvatarBadge';
+import { SiteThemeProvider, useSiteTheme } from './themes/siteThemes';
 import {
   loadHeartfeltLetters,
   loadSecretBadgesState,
@@ -726,9 +728,10 @@ const TarotDivider: React.FC<TarotDividerProps> = ({
   moonlightMode = false,
   onDoubleTrigger,
 }) => {
+  const { activeTheme } = useSiteTheme();
   const lastTapRef = useRef(0);
-  const strokeColor = moonlightMode ? '#B6C9E4' : '#D4AF37';
-  const fillStarColor = moonlightMode ? '#E4EEF9' : '#F3E5AB';
+  const strokeColor = moonlightMode ? '#B6C9E4' : activeTheme.accentColor;
+  const fillStarColor = moonlightMode ? '#E4EEF9' : activeTheme.brightColor;
 
   const handleTap = () => {
     if (!onDoubleTrigger) return;
@@ -826,7 +829,8 @@ function isWithinWitchingHour(): boolean {
   return hour >= 0 && hour < 3;
 }
 
-export default function App() {
+function AppContent() {
+  const { activeTheme } = useSiteTheme();
   const initialSharedChar = useMemo(() => getInitialSharedCharacter(), []);
   const [introPhase, setIntroPhase] = useState<IntroPhase>(() =>
     initialSharedChar ? 'entered' : 'idle'
@@ -1717,7 +1721,8 @@ export default function App() {
 
   return (
     <div
-      className={`min-h-screen bg-[#0B0B0F] text-[#F5EFE0] relative selection:bg-[#D4AF37]/30 selection:text-[#F3E5AB] ${
+      data-site-theme={activeTheme.id}
+      className={`min-h-screen bg-[#0B0B0F] text-[#F5EFE0] relative selection:bg-[#D4AF37]/30 selection:text-[#F3E5AB] transition-colors duration-500 ${
         isMoonlightSilverMode ? 'moonlight-silver-mode' : ''
       }`}
     >
@@ -1734,9 +1739,13 @@ export default function App() {
         />
       )}
       {/* Màn hình Intro Con dấu sáp & Cánh cửa ánh sáng */}
-      <IntroSealDoors phase={introPhase} onOpenDoor={handleEnterHouse} />
+      <IntroSealDoors
+        phase={introPhase}
+        onOpenDoor={handleEnterHouse}
+        moonlightMode={isMoonlightSilverMode}
+      />
 
-      {/* Vệt bụi sao vàng Gold / Bạc Ánh Trăng khi chạm/di chuột trên màn hình */}
+      {/* Vệt bụi sao đồng bộ Theme / Bạc Ánh Trăng khi chạm/di chuột trên màn hình */}
       <GoldenSparkleTrail moonlightMode={isMoonlightSilverMode} />
 
       {/* Giao diện Trang chủ */}
@@ -1746,6 +1755,25 @@ export default function App() {
           hasEntered ? 'opacity-100' : 'opacity-0 pointer-events-none h-screen overflow-hidden'
         }`}
       >
+        {/* Nền ảnh trang trí mờ theo Theme hiện tại (có lớp phủ tối giữ độ tương phản chữ) */}
+        {activeTheme.bgImageUrl && (
+          <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
+            <div
+              style={{
+                backgroundImage: `url(${activeTheme.bgImageUrl})`,
+                opacity: activeTheme.bgImageOpacity,
+              }}
+              className="absolute inset-0 bg-cover bg-center blur-[3px] scale-105 transition-opacity duration-700"
+            />
+            <div
+              style={{
+                background: `radial-gradient(ellipse at top, ${activeTheme.bgColor}9E 0%, ${activeTheme.bgColor}E8 62%, ${activeTheme.bgColor}FA 100%)`,
+              }}
+              className="absolute inset-0 transition-colors duration-500"
+            />
+          </div>
+        )}
+
         {/* Lớp sương mù huyền ảo chuyển động chậm */}
         <MysticalFogOverlay moonlightMode={isMoonlightSilverMode} />
 
@@ -1883,8 +1911,10 @@ export default function App() {
               )}
             </nav>
 
-            {/* Zone 3: Góc Tri Kỷ (Tài khoản cục bộ) + Màn chào */}
+            {/* Zone 3: Theme + Góc Tri Kỷ (Tài khoản cục bộ) + Màn chào */}
             <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+              <ThemeSelectorButton />
+
               <button
                 type="button"
                 onClick={() => {
@@ -2964,3 +2994,12 @@ export default function App() {
     </div>
   );
 }
+
+export default function App() {
+  return (
+    <SiteThemeProvider>
+      <AppContent />
+    </SiteThemeProvider>
+  );
+}
+

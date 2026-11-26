@@ -439,8 +439,505 @@
   -webkit-touch-callout: none;
 }
 
-/* Chế độ Bạc Ánh Trăng (Moonlight Silver Mode) - chỉ đổi điểm nhấn ánh kim, giữ nguyên ảnh nhân vật */
-.moonlight-silver-mode .gold-shimmer-text {
+/* ============================================================================
+   HỆ THỐNG CHỦ ĐỀ (THEME SYSTEM) - ĐỒNG BỘ TỪ INTRO ĐẾN TOÀN BỘ GIAO DIỆN
+   ============================================================================ */
+[data-site-theme="gothic-lily"] {
+  --t-bg: #08070B;
+  --t-bg-rgb: 8, 7, 11;
+  --t-surface: #120F16;
+  --t-surface-rgb: 18, 15, 22;
+  --t-surface-alt: #1A131C;
+  --t-surface-alt-rgb: 26, 19, 28;
+  --t-accent: #D8A7B1;
+  --t-accent-rgb: 216, 167, 177;
+  --t-bright: #F6EAEF;
+  --t-bright-rgb: 246, 234, 239;
+  --t-soft: #E5C7D0;
+  --t-text: #F7EFF2;
+  --t-muted: #C8BAC0;
+  --t-btn-text: #160B10;
+  --t-grad-from: #B77D8B;
+  --t-grad-to: #F6EAEF;
+}
+
+[data-site-theme="velvet-vinyl"] {
+  --t-bg: #14060A;
+  --t-bg-rgb: 20, 6, 10;
+  --t-surface: #1E0B10;
+  --t-surface-rgb: 30, 11, 16;
+  --t-surface-alt: #2B0F17;
+  --t-surface-alt-rgb: 43, 15, 23;
+  --t-accent: #E2B89B;
+  --t-accent-rgb: 226, 184, 155;
+  --t-bright: #F7EAD9;
+  --t-bright-rgb: 247, 234, 217;
+  --t-soft: #E9CEBA;
+  --t-text: #FAF1E6;
+  --t-muted: #D2BFB8;
+  --t-btn-text: #24080E;
+  --t-grad-from: #B24455;
+  --t-grad-to: #F7EAD9;
+}
+
+[data-site-theme="ink-lily"] {
+  --t-bg: #070908;
+  --t-bg-rgb: 7, 9, 8;
+  --t-surface: #101411;
+  --t-surface-rgb: 16, 20, 17;
+  --t-surface-alt: #171D18;
+  --t-surface-alt-rgb: 23, 29, 24;
+  --t-accent: #9CAF8E;
+  --t-accent-rgb: 156, 175, 142;
+  --t-bright: #E7EFE0;
+  --t-bright-rgb: 231, 239, 224;
+  --t-soft: #C8D6BC;
+  --t-text: #EFF4EA;
+  --t-muted: #B8C2B0;
+  --t-btn-text: #0D130E;
+  --t-grad-from: #738865;
+  --t-grad-to: #E7EFE0;
+}
+
+[data-site-theme="rose-nebula"] {
+  --t-bg: #1E0B15;
+  --t-bg-rgb: 30, 11, 21;
+  --t-surface: #2A111D;
+  --t-surface-rgb: 42, 17, 29;
+  --t-surface-alt: #381627;
+  --t-surface-alt-rgb: 56, 22, 39;
+  --t-accent: #F7A8C8;
+  --t-accent-rgb: 247, 168, 200;
+  --t-bright: #FFF0F7;
+  --t-bright-rgb: 255, 240, 247;
+  --t-soft: #F9CCE0;
+  --t-text: #FFF5FA;
+  --t-muted: #E4C2D2;
+  --t-btn-text: #2B0C1B;
+  --t-grad-from: #D95D93;
+  --t-grad-to: #FFF0F7;
+}
+
+[data-site-theme="celestial-scroll"] {
+  --t-bg: #0E0B0E;
+  --t-bg-rgb: 14, 11, 14;
+  --t-surface: #171316;
+  --t-surface-rgb: 23, 19, 22;
+  --t-surface-alt: #211B1D;
+  --t-surface-alt-rgb: 33, 27, 29;
+  --t-accent: #8FB9A8;
+  --t-accent-rgb: 143, 185, 168;
+  --t-bright: #E8D29B;
+  --t-bright-rgb: 232, 210, 155;
+  --t-soft: #C7DBD1;
+  --t-text: #F5EFE2;
+  --t-muted: #C9C0B2;
+  --t-btn-text: #100E10;
+  --t-grad-from: #73A08E;
+  --t-grad-to: #E8D29B;
+}
+
+/* Áp dụng token cho các Theme mới (trừ mặc định classic-gold) */
+[data-site-theme]:not([data-site-theme="classic-gold"]) {
+  background-color: var(--t-bg);
+  color: var(--t-text);
+}
+
+[data-site-theme]:not([data-site-theme="classic-gold"]) .gold-shimmer-text {
+  color: var(--t-bright);
+  background-image: linear-gradient(
+    110deg,
+    var(--t-grad-from) 0%,
+    var(--t-bright) 24%,
+    #FFFFFF 38%,
+    var(--t-accent) 54%,
+    var(--t-bright) 76%,
+    var(--t-grad-from) 100%
+  );
+}
+
+[data-site-theme]:not([data-site-theme="classic-gold"]) .destiny-card-glow {
+  border-color: rgba(var(--t-bright-rgb), 0.95) !important;
+  box-shadow:
+    0 0 24px rgba(var(--t-accent-rgb), 0.42),
+    0 0 48px rgba(var(--t-bright-rgb), 0.24),
+    inset 0 0 18px rgba(var(--t-accent-rgb), 0.16);
+}
+
+[data-site-theme]:not([data-site-theme="classic-gold"]) .destiny-card-glow::before {
+  background: linear-gradient(
+    115deg,
+    rgba(var(--t-accent-rgb), 0.4) 18%,
+    rgba(var(--t-bright-rgb), 0.98) 50%,
+    rgba(var(--t-accent-rgb), 0.4) 82%
+  );
+  background-size: 240% 100%;
+}
+
+[data-site-theme]:not([data-site-theme="classic-gold"]) .shimmer-card-border::before {
+  background: linear-gradient(
+    115deg,
+    transparent 28%,
+    rgba(var(--t-bright-rgb), 0.85) 50%,
+    transparent 72%
+  );
+  background-size: 240% 100%;
+}
+
+[data-site-theme]:not([data-site-theme="classic-gold"]) .holo-foil-layer {
+  background:
+    radial-gradient(
+      circle 220px at var(--foil-x) var(--foil-y),
+      rgba(var(--t-bright-rgb), 0.24) 0%,
+      rgba(var(--t-accent-rgb), 0.14) 36%,
+      transparent 72%
+    ),
+    linear-gradient(
+      125deg,
+      transparent 20%,
+      rgba(var(--t-bright-rgb), 0.16) 44%,
+      rgba(255, 255, 255, 0.2) 50%,
+      rgba(var(--t-accent-rgb), 0.14) 56%,
+      transparent 80%
+    );
+}
+
+[data-site-theme]:not([data-site-theme="classic-gold"]) .soulmate-shimmer-badge {
+  background-image: linear-gradient(
+    115deg,
+    rgba(var(--t-surface-rgb), 0.96) 0%,
+    rgba(var(--t-surface-alt-rgb), 0.96) 45%,
+    rgba(var(--t-accent-rgb), 0.35) 55%,
+    rgba(var(--t-surface-rgb), 0.96) 100%
+  );
+  box-shadow: 0 0 14px rgba(var(--t-accent-rgb), 0.35);
+}
+
+/* Chuyển đổi nền chính & bề mặt thẻ/modal hài hòa theo Theme (giữ độ tương phản chữ rõ ràng) */
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#0B0B0F]"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#0A0A0E]"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#08080C]"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#0D0D14]"] {
+  background-color: var(--t-bg);
+}
+
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#0B0B0F]/90"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#0B0B0F]/92"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#0B0B0F]/95"] {
+  background-color: rgba(var(--t-bg-rgb), 0.92);
+}
+
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#0B0B0F]/80"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#0B0B0F]/82"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#0B0B0F]/85"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#0B0B0F]/88"] {
+  background-color: rgba(var(--t-bg-rgb), 0.85);
+}
+
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#0B0B0F]/70"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#0B0B0F]/75"] {
+  background-color: rgba(var(--t-bg-rgb), 0.75);
+}
+
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#121218]"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#12121A]"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#14121B]"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#15151E]"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#161622]"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#17140E]"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#19150A]"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#191622]"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#191722]"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#1A1622]"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#1B170F]"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#1C120B]"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#1C160B]"] {
+  background-color: var(--t-surface);
+}
+
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#121218]/90"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#121218]/92"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#121218]/95"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#121218]/96"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#121219]/90"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#12121A]/90"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#12121A]/95"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#110F18]/88"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#111018]/90"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#111018]/96"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#161320]/95"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#101016]/85"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#0F0F16]/60"] {
+  background-color: rgba(var(--t-surface-rgb), 0.92);
+}
+
+/* Chữ chính, chữ phụ & chữ ánh kim theo Theme */
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="text-[#0B0B0F]"] {
+  color: var(--t-btn-text);
+}
+
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="text-[#F5EFE0]"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="text-[#EDE6D6]"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="text-[#EAE2D0]"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="text-[#E5DEC9]"] {
+  color: var(--t-text);
+}
+
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="text-[#C4BCB0]"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="text-[#C7C0B2]"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="text-[#B8B0A0]"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="text-[#DCD4C6]"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="text-[#DED7C8]"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="text-[#CFC8B8]"] {
+  color: var(--t-muted);
+}
+
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="text-[#F3E5AB]"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="text-[#FFF4C4]"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="text-[#FFF4CC]"] {
+  color: var(--t-bright);
+}
+
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="text-[#F3E5AB]/90"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="text-[#F3E5AB]/85"] {
+  color: rgba(var(--t-bright-rgb), 0.9);
+}
+
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="text-[#E6CD82]"] {
+  color: var(--t-soft);
+}
+
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="text-[#D4AF37]"] {
+  color: var(--t-accent);
+}
+
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="text-[#D4AF37]/90"] {
+  color: rgba(var(--t-accent-rgb), 0.9);
+}
+
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="text-[#D4AF37]/85"] {
+  color: rgba(var(--t-accent-rgb), 0.85);
+}
+
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="text-[#D4AF37]/80"] {
+  color: rgba(var(--t-accent-rgb), 0.8);
+}
+
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="text-[#D4AF37]/75"] {
+  color: rgba(var(--t-accent-rgb), 0.75);
+}
+
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="text-[#D4AF37]/70"] {
+  color: rgba(var(--t-accent-rgb), 0.7);
+}
+
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="text-[#D4AF37]/60"] {
+  color: rgba(var(--t-accent-rgb), 0.62);
+}
+
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="text-[#D4AF37]/50"] {
+  color: rgba(var(--t-accent-rgb), 0.54);
+}
+
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="text-[#D4AF37]/40"] {
+  color: rgba(var(--t-accent-rgb), 0.45);
+}
+
+/* Điểm nhấn nền & gradient cho nút bấm / huy hiệu */
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#D4AF37]"] {
+  background-color: var(--t-accent);
+}
+
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#F3E5AB]"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#FFF4C4]"] {
+  background-color: var(--t-bright);
+}
+
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#D4AF37]/10"] {
+  background-color: rgba(var(--t-accent-rgb), 0.1);
+}
+
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#D4AF37]/12"] {
+  background-color: rgba(var(--t-accent-rgb), 0.12);
+}
+
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#D4AF37]/14"] {
+  background-color: rgba(var(--t-accent-rgb), 0.14);
+}
+
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#D4AF37]/15"] {
+  background-color: rgba(var(--t-accent-rgb), 0.15);
+}
+
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#D4AF37]/16"] {
+  background-color: rgba(var(--t-accent-rgb), 0.16);
+}
+
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#D4AF37]/18"] {
+  background-color: rgba(var(--t-accent-rgb), 0.18);
+}
+
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#D4AF37]/20"] {
+  background-color: rgba(var(--t-accent-rgb), 0.2);
+}
+
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#D4AF37]/25"] {
+  background-color: rgba(var(--t-accent-rgb), 0.25);
+}
+
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="bg-[#D4AF37]/30"] {
+  background-color: rgba(var(--t-accent-rgb), 0.3);
+}
+
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="from-[#D4AF37]"] {
+  --tw-gradient-from: var(--t-grad-from);
+}
+
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="to-[#E6C86E]"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="to-[#D4AF37]"] {
+  --tw-gradient-to: var(--t-grad-to);
+}
+
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="via-[#D4AF37]/70"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="via-[#D4AF37]/80"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="via-[#D4AF37]/35"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="via-[#D4AF37]/45"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="to-[#D4AF37]/75"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="to-[#F3E5AB]/75"] {
+  --tw-gradient-via: rgba(var(--t-accent-rgb), 0.65);
+  --tw-gradient-to: rgba(var(--t-bright-rgb), 0.65);
+}
+
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="from-[#19150A]"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="from-[#1B1422]"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="from-[#181520]"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="from-[#171320]/95"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="from-[#231B0B]"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="from-[#231B0B]/95"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="from-[#2A2110]"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="from-[#1D170B]/95"] {
+  --tw-gradient-from: var(--t-surface);
+}
+
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="via-[#271F0A]"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="via-[#281E12]"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="via-[#241C10]"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="via-[#12101A]/95"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="via-[#2F240D]/95"] {
+  --tw-gradient-via: var(--t-surface-alt);
+}
+
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="to-[#19150A]"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="to-[#1A1320]"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="to-[#181520]"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="to-[#30240E]"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="to-[#17140D]/95"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="to-[#0B0B0F]"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="to-[#0D0D14]"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="to-[#1B1508]"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="to-[#231B0B]/95"] {
+  --tw-gradient-to: var(--t-bg);
+}
+
+/* Viền mảnh hài hòa theo Theme */
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="border-[#D4AF37]"] {
+  border-color: var(--t-accent);
+}
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="border-[#D4AF37]/12"] {
+  border-color: rgba(var(--t-accent-rgb), 0.14);
+}
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="border-[#D4AF37]/15"] {
+  border-color: rgba(var(--t-accent-rgb), 0.16);
+}
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="border-[#D4AF37]/18"] {
+  border-color: rgba(var(--t-accent-rgb), 0.2);
+}
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="border-[#D4AF37]/20"] {
+  border-color: rgba(var(--t-accent-rgb), 0.22);
+}
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="border-[#D4AF37]/22"] {
+  border-color: rgba(var(--t-accent-rgb), 0.24);
+}
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="border-[#D4AF37]/24"] {
+  border-color: rgba(var(--t-accent-rgb), 0.26);
+}
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="border-[#D4AF37]/25"] {
+  border-color: rgba(var(--t-accent-rgb), 0.27);
+}
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="border-[#D4AF37]/28"] {
+  border-color: rgba(var(--t-accent-rgb), 0.3);
+}
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="border-[#D4AF37]/30"] {
+  border-color: rgba(var(--t-accent-rgb), 0.32);
+}
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="border-[#D4AF37]/35"] {
+  border-color: rgba(var(--t-accent-rgb), 0.37);
+}
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="border-[#D4AF37]/38"] {
+  border-color: rgba(var(--t-accent-rgb), 0.4);
+}
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="border-[#D4AF37]/40"] {
+  border-color: rgba(var(--t-accent-rgb), 0.42);
+}
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="border-[#D4AF37]/45"] {
+  border-color: rgba(var(--t-accent-rgb), 0.47);
+}
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="border-[#D4AF37]/50"] {
+  border-color: rgba(var(--t-accent-rgb), 0.52);
+}
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="border-[#D4AF37]/55"] {
+  border-color: rgba(var(--t-accent-rgb), 0.57);
+}
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="border-[#D4AF37]/60"] {
+  border-color: rgba(var(--t-accent-rgb), 0.62);
+}
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="border-[#D4AF37]/65"] {
+  border-color: rgba(var(--t-accent-rgb), 0.67);
+}
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="border-[#D4AF37]/70"] {
+  border-color: rgba(var(--t-accent-rgb), 0.72);
+}
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="border-[#D4AF37]/75"] {
+  border-color: rgba(var(--t-accent-rgb), 0.77);
+}
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="border-[#D4AF37]/80"] {
+  border-color: rgba(var(--t-accent-rgb), 0.82);
+}
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="border-[#D4AF37]/85"] {
+  border-color: rgba(var(--t-accent-rgb), 0.86);
+}
+
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="border-[#F3E5AB]"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="border-[#FFF4C4]"] {
+  border-color: var(--t-bright);
+}
+
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="border-[#F3E5AB]/25"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="border-[#F3E5AB]/28"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="border-[#F3E5AB]/30"] {
+  border-color: rgba(var(--t-bright-rgb), 0.3);
+}
+
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="border-[#F3E5AB]/50"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="border-[#F3E5AB]/55"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="border-[#F3E5AB]/60"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="border-[#F3E5AB]/70"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="border-[#F3E5AB]/75"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="border-[#F3E5AB]/80"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="border-[#F3E5AB]/85"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="border-[#FFF4C4]/50"] {
+  border-color: rgba(var(--t-bright-rgb), 0.72);
+}
+
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="decoration-[#D4AF37]/35"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="decoration-[#D4AF37]/50"],
+[data-site-theme]:not([data-site-theme="classic-gold"]) [class~="decoration-[#D4AF37]/60"] {
+  text-decoration-color: rgba(var(--t-accent-rgb), 0.55);
+}
+
+/* Chế độ Bạc Ánh Trăng (Moonlight Silver Mode) - giữ ưu tiên cao hơn khi bật Easter Egg Ánh Trăng */
+.moonlight-silver-mode .gold-shimmer-text,
+[data-site-theme].moonlight-silver-mode .gold-shimmer-text {
   color: #E3ECF8;
   background-image: linear-gradient(
     110deg,
@@ -453,7 +950,8 @@
   );
 }
 
-.moonlight-silver-mode .destiny-card-glow {
+.moonlight-silver-mode .destiny-card-glow,
+[data-site-theme].moonlight-silver-mode .destiny-card-glow {
   border-color: rgba(218, 232, 250, 0.95) !important;
   box-shadow:
     0 0 24px rgba(182, 206, 238, 0.42),
@@ -461,7 +959,8 @@
     inset 0 0 18px rgba(182, 206, 238, 0.16);
 }
 
-.moonlight-silver-mode .destiny-card-glow::before {
+.moonlight-silver-mode .destiny-card-glow::before,
+[data-site-theme].moonlight-silver-mode .destiny-card-glow::before {
   background: linear-gradient(
     115deg,
     rgba(164, 188, 222, 0.4) 18%,
@@ -471,7 +970,8 @@
   background-size: 240% 100%;
 }
 
-.moonlight-silver-mode .shimmer-card-border::before {
+.moonlight-silver-mode .shimmer-card-border::before,
+[data-site-theme].moonlight-silver-mode .shimmer-card-border::before {
   background: linear-gradient(
     115deg,
     transparent 28%,
@@ -481,7 +981,8 @@
   background-size: 240% 100%;
 }
 
-.moonlight-silver-mode .holo-foil-layer {
+.moonlight-silver-mode .holo-foil-layer,
+[data-site-theme].moonlight-silver-mode .holo-foil-layer {
   background:
     radial-gradient(
       circle 220px at var(--foil-x) var(--foil-y),
@@ -499,7 +1000,8 @@
     );
 }
 
-.moonlight-silver-mode .soulmate-shimmer-badge {
+.moonlight-silver-mode .soulmate-shimmer-badge,
+[data-site-theme].moonlight-silver-mode .soulmate-shimmer-badge {
   background-image: linear-gradient(
     115deg,
     rgba(18, 24, 36, 0.96) 0%,
@@ -510,138 +1012,175 @@
   box-shadow: 0 0 14px rgba(196, 214, 240, 0.35);
 }
 
-.moonlight-silver-mode [class~="text-[#F3E5AB]"] {
+.moonlight-silver-mode [class~="text-[#F3E5AB]"],
+[data-site-theme].moonlight-silver-mode [class~="text-[#F3E5AB]"] {
   color: #E4EEF9;
 }
 
-.moonlight-silver-mode [class~="text-[#D4AF37]"] {
+.moonlight-silver-mode [class~="text-[#D4AF37]"],
+[data-site-theme].moonlight-silver-mode [class~="text-[#D4AF37]"] {
   color: #B6C9E4;
 }
 
-.moonlight-silver-mode [class~="text-[#D4AF37]/85"] {
+.moonlight-silver-mode [class~="text-[#D4AF37]/85"],
+[data-site-theme].moonlight-silver-mode [class~="text-[#D4AF37]/85"] {
   color: rgba(182, 201, 228, 0.85);
 }
 
-.moonlight-silver-mode [class~="text-[#D4AF37]/80"] {
+.moonlight-silver-mode [class~="text-[#D4AF37]/80"],
+[data-site-theme].moonlight-silver-mode [class~="text-[#D4AF37]/80"] {
   color: rgba(182, 201, 228, 0.8);
 }
 
-.moonlight-silver-mode [class~="text-[#D4AF37]/75"] {
+.moonlight-silver-mode [class~="text-[#D4AF37]/75"],
+[data-site-theme].moonlight-silver-mode [class~="text-[#D4AF37]/75"] {
   color: rgba(182, 201, 228, 0.75);
 }
 
-.moonlight-silver-mode [class~="text-[#D4AF37]/70"] {
+.moonlight-silver-mode [class~="text-[#D4AF37]/70"],
+[data-site-theme].moonlight-silver-mode [class~="text-[#D4AF37]/70"] {
   color: rgba(182, 201, 228, 0.7);
 }
 
-.moonlight-silver-mode [class~="text-[#D4AF37]/50"] {
+.moonlight-silver-mode [class~="text-[#D4AF37]/50"],
+[data-site-theme].moonlight-silver-mode [class~="text-[#D4AF37]/50"] {
   color: rgba(182, 201, 228, 0.55);
 }
 
-.moonlight-silver-mode [class~="text-[#D4AF37]/40"] {
+.moonlight-silver-mode [class~="text-[#D4AF37]/40"],
+[data-site-theme].moonlight-silver-mode [class~="text-[#D4AF37]/40"] {
   color: rgba(182, 201, 228, 0.45);
 }
 
-.moonlight-silver-mode [class~="text-[#E6CD82]"] {
+.moonlight-silver-mode [class~="text-[#E6CD82]"],
+[data-site-theme].moonlight-silver-mode [class~="text-[#E6CD82]"] {
   color: #CFE0F5;
 }
 
-.moonlight-silver-mode [class~="bg-[#D4AF37]"] {
+.moonlight-silver-mode [class~="bg-[#D4AF37]"],
+[data-site-theme].moonlight-silver-mode [class~="bg-[#D4AF37]"] {
   background-color: #C7D7ED;
 }
 
-.moonlight-silver-mode [class~="bg-[#D4AF37]/10"] {
+.moonlight-silver-mode [class~="bg-[#D4AF37]/10"],
+[data-site-theme].moonlight-silver-mode [class~="bg-[#D4AF37]/10"] {
   background-color: rgba(186, 206, 234, 0.1);
 }
 
-.moonlight-silver-mode [class~="bg-[#D4AF37]/12"] {
+.moonlight-silver-mode [class~="bg-[#D4AF37]/12"],
+[data-site-theme].moonlight-silver-mode [class~="bg-[#D4AF37]/12"] {
   background-color: rgba(186, 206, 234, 0.12);
 }
 
-.moonlight-silver-mode [class~="bg-[#D4AF37]/15"] {
+.moonlight-silver-mode [class~="bg-[#D4AF37]/15"],
+[data-site-theme].moonlight-silver-mode [class~="bg-[#D4AF37]/15"] {
   background-color: rgba(186, 206, 234, 0.15);
 }
 
-.moonlight-silver-mode [class~="bg-[#D4AF37]/20"] {
+.moonlight-silver-mode [class~="bg-[#D4AF37]/20"],
+[data-site-theme].moonlight-silver-mode [class~="bg-[#D4AF37]/20"] {
   background-color: rgba(186, 206, 234, 0.2);
 }
 
-.moonlight-silver-mode [class~="from-[#D4AF37]"] {
+.moonlight-silver-mode [class~="from-[#D4AF37]"],
+[data-site-theme].moonlight-silver-mode [class~="from-[#D4AF37]"] {
   --tw-gradient-from: #B2C5E0;
 }
 
-.moonlight-silver-mode [class~="to-[#E6C86E]"] {
+.moonlight-silver-mode [class~="to-[#E6C86E]"],
+[data-site-theme].moonlight-silver-mode [class~="to-[#E6C86E]"] {
   --tw-gradient-to: #E6F0FC;
 }
 
-.moonlight-silver-mode [class~="border-[#D4AF37]/15"] {
+.moonlight-silver-mode [class~="border-[#D4AF37]/15"],
+[data-site-theme].moonlight-silver-mode [class~="border-[#D4AF37]/15"] {
   border-color: rgba(182, 201, 228, 0.16);
 }
 
-.moonlight-silver-mode [class~="border-[#D4AF37]/18"] {
+.moonlight-silver-mode [class~="border-[#D4AF37]/18"],
+[data-site-theme].moonlight-silver-mode [class~="border-[#D4AF37]/18"] {
   border-color: rgba(182, 201, 228, 0.2);
 }
 
-.moonlight-silver-mode [class~="border-[#D4AF37]/20"] {
+.moonlight-silver-mode [class~="border-[#D4AF37]/20"],
+[data-site-theme].moonlight-silver-mode [class~="border-[#D4AF37]/20"] {
   border-color: rgba(182, 201, 228, 0.22);
 }
 
-.moonlight-silver-mode [class~="border-[#D4AF37]/25"] {
+.moonlight-silver-mode [class~="border-[#D4AF37]/25"],
+[data-site-theme].moonlight-silver-mode [class~="border-[#D4AF37]/25"] {
   border-color: rgba(182, 201, 228, 0.27);
 }
 
-.moonlight-silver-mode [class~="border-[#D4AF37]/30"] {
+.moonlight-silver-mode [class~="border-[#D4AF37]/30"],
+[data-site-theme].moonlight-silver-mode [class~="border-[#D4AF37]/30"] {
   border-color: rgba(182, 201, 228, 0.32);
 }
 
-.moonlight-silver-mode [class~="border-[#D4AF37]/35"] {
+.moonlight-silver-mode [class~="border-[#D4AF37]/35"],
+[data-site-theme].moonlight-silver-mode [class~="border-[#D4AF37]/35"] {
   border-color: rgba(182, 201, 228, 0.37);
 }
 
-.moonlight-silver-mode [class~="border-[#D4AF37]/40"] {
+.moonlight-silver-mode [class~="border-[#D4AF37]/40"],
+[data-site-theme].moonlight-silver-mode [class~="border-[#D4AF37]/40"] {
   border-color: rgba(182, 201, 228, 0.42);
 }
 
-.moonlight-silver-mode [class~="border-[#D4AF37]/45"] {
+.moonlight-silver-mode [class~="border-[#D4AF37]/45"],
+[data-site-theme].moonlight-silver-mode [class~="border-[#D4AF37]/45"] {
   border-color: rgba(182, 201, 228, 0.47);
 }
 
-.moonlight-silver-mode [class~="border-[#D4AF37]/50"] {
+.moonlight-silver-mode [class~="border-[#D4AF37]/50"],
+[data-site-theme].moonlight-silver-mode [class~="border-[#D4AF37]/50"] {
   border-color: rgba(182, 201, 228, 0.52);
 }
 
-.moonlight-silver-mode [class~="border-[#D4AF37]/55"] {
+.moonlight-silver-mode [class~="border-[#D4AF37]/55"],
+[data-site-theme].moonlight-silver-mode [class~="border-[#D4AF37]/55"] {
   border-color: rgba(182, 201, 228, 0.56);
 }
 
-.moonlight-silver-mode [class~="border-[#D4AF37]/60"] {
+.moonlight-silver-mode [class~="border-[#D4AF37]/60"],
+[data-site-theme].moonlight-silver-mode [class~="border-[#D4AF37]/60"] {
   border-color: rgba(182, 201, 228, 0.62);
 }
 
-.moonlight-silver-mode [class~="border-[#D4AF37]/65"] {
+.moonlight-silver-mode [class~="border-[#D4AF37]/65"],
+[data-site-theme].moonlight-silver-mode [class~="border-[#D4AF37]/65"] {
   border-color: rgba(182, 201, 228, 0.66);
 }
 
-.moonlight-silver-mode [class~="border-[#D4AF37]/70"] {
+.moonlight-silver-mode [class~="border-[#D4AF37]/70"],
+[data-site-theme].moonlight-silver-mode [class~="border-[#D4AF37]/70"] {
   border-color: rgba(182, 201, 228, 0.72);
 }
 
-.moonlight-silver-mode [class~="border-[#D4AF37]/75"] {
+.moonlight-silver-mode [class~="border-[#D4AF37]/75"],
+[data-site-theme].moonlight-silver-mode [class~="border-[#D4AF37]/75"] {
   border-color: rgba(182, 201, 228, 0.76);
 }
 
-.moonlight-silver-mode [class~="border-[#D4AF37]/80"] {
+.moonlight-silver-mode [class~="border-[#D4AF37]/80"],
+[data-site-theme].moonlight-silver-mode [class~="border-[#D4AF37]/80"] {
   border-color: rgba(182, 201, 228, 0.82);
 }
 
-.moonlight-silver-mode [class~="border-[#D4AF37]/85"] {
+.moonlight-silver-mode [class~="border-[#D4AF37]/85"],
+[data-site-theme].moonlight-silver-mode [class~="border-[#D4AF37]/85"] {
   border-color: rgba(182, 201, 228, 0.86);
 }
 
 .moonlight-silver-mode [class~="border-[#F3E5AB]/50"],
 .moonlight-silver-mode [class~="border-[#F3E5AB]/60"],
 .moonlight-silver-mode [class~="border-[#F3E5AB]/70"],
-.moonlight-silver-mode [class~="border-[#F3E5AB]/80"] {
+.moonlight-silver-mode [class~="border-[#F3E5AB]/80"],
+[data-site-theme].moonlight-silver-mode [class~="border-[#F3E5AB]/50"],
+[data-site-theme].moonlight-silver-mode [class~="border-[#F3E5AB]/60"],
+[data-site-theme].moonlight-silver-mode [class~="border-[#F3E5AB]/70"],
+[data-site-theme].moonlight-silver-mode [class~="border-[#F3E5AB]/80"] {
   border-color: rgba(226, 238, 255, 0.7);
 }
+
 

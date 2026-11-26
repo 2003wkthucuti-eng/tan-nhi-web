@@ -1,16 +1,21 @@
 import React from 'react';
+import { useSiteTheme } from '../themes/siteThemes';
 
 interface MysticalFogOverlayProps {
   moonlightMode?: boolean;
 }
 
 /**
- * Lớp sương mù / khói mờ huyền ảo sắc vàng Gold (hoặc Bạc Ánh Trăng) chuyển động cực chậm,
- * tối ưu hoàn toàn bằng GPU (chỉ transform và opacity, không gây giật lag trên di động).
+ * Lớp sương mù / khói mờ huyền ảo tự động hòa sắc theo Theme hiện tại (hoặc Bạc Ánh Trăng).
  */
 export const MysticalFogOverlay: React.FC<MysticalFogOverlayProps> = ({
   moonlightMode = false,
 }) => {
+  const { activeTheme } = useSiteTheme();
+
+  const primary = moonlightMode ? 'rgba(176, 198, 232, 0.12)' : activeTheme.fogPrimary;
+  const secondary = moonlightMode ? 'rgba(220, 233, 252, 0.09)' : activeTheme.fogSecondary;
+
   return (
     <div
       aria-hidden="true"
@@ -20,9 +25,7 @@ export const MysticalFogOverlay: React.FC<MysticalFogOverlayProps> = ({
       <div
         className="animate-fog-a absolute -top-[18%] -left-[15%] w-[85vw] max-w-[900px] h-[68vh] rounded-full transition-colors duration-700"
         style={{
-          background: moonlightMode
-            ? 'radial-gradient(ellipse at center, rgba(176, 198, 232, 0.12) 0%, rgba(226, 238, 255, 0.05) 42%, transparent 72%)'
-            : 'radial-gradient(ellipse at center, rgba(212, 175, 55, 0.11) 0%, rgba(243, 229, 171, 0.04) 42%, transparent 72%)',
+          background: `radial-gradient(ellipse at center, ${primary} 0%, ${secondary} 45%, transparent 72%)`,
         }}
       />
 
@@ -30,9 +33,7 @@ export const MysticalFogOverlay: React.FC<MysticalFogOverlayProps> = ({
       <div
         className="animate-fog-b absolute -bottom-[20%] -right-[12%] w-[90vw] max-w-[960px] h-[72vh] rounded-full transition-colors duration-700"
         style={{
-          background: moonlightMode
-            ? 'radial-gradient(ellipse at center, rgba(220, 233, 252, 0.09) 0%, rgba(142, 166, 206, 0.05) 45%, transparent 74%)'
-            : 'radial-gradient(ellipse at center, rgba(243, 229, 171, 0.09) 0%, rgba(186, 145, 42, 0.045) 45%, transparent 74%)',
+          background: `radial-gradient(ellipse at center, ${secondary} 0%, ${primary} 45%, transparent 74%)`,
         }}
       />
 
@@ -41,12 +42,9 @@ export const MysticalFogOverlay: React.FC<MysticalFogOverlayProps> = ({
         className="animate-fog-a absolute top-[28%] left-[18%] w-[70vw] max-w-[760px] h-[52vh] rounded-full transition-colors duration-700"
         style={{
           animationDelay: '-14s',
-          background: moonlightMode
-            ? 'radial-gradient(ellipse at center, rgba(176, 198, 232, 0.07) 0%, rgba(118, 142, 178, 0.03) 48%, transparent 75%)'
-            : 'radial-gradient(ellipse at center, rgba(212, 175, 55, 0.065) 0%, rgba(140, 110, 38, 0.025) 48%, transparent 75%)',
+          background: `radial-gradient(ellipse at center, ${primary} 0%, transparent 72%)`,
         }}
       />
     </div>
   );
 };
-

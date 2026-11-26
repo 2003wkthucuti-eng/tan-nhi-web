@@ -1,4 +1,9 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  ThemeLiquidTransition,
+  type ThemeTransitionOrigin,
+  type ThemeTransitionState,
+} from '../components/ThemeLiquidTransition';
 import thuyMacBg from '../assets/images/thuy_mac_suong_1795718425975.jpg';
 import coPhongTramBg from '../assets/images/co_phong_tram_1795718426202.jpg';
 import demXanhSaoBg from '../assets/images/dem_xanh_sao_1795718426121.jpg';
@@ -439,10 +444,35 @@ export function getSiteThemeById(id: SiteThemeId): SiteThemeDefinition {
   return THEME_BY_ID.get(id) ?? SITE_THEMES[0];
 }
 
+export function getThemeOriginFromEvent(
+  event?: React.MouseEvent<HTMLElement> | null
+): ThemeTransitionOrigin {
+  if (typeof window === 'undefined') {
+    return { x: 0, y: 0 };
+  }
+  const rect = event?.currentTarget?.getBoundingClientRect?.();
+  if (rect && rect.width > 0 && rect.height > 0) {
+    return {
+      x: rect.left + rect.width / 2,
+      y: rect.top + rect.height / 2,
+    };
+  }
+  if (event && Number.isFinite(event.clientX) && Number.isFinite(event.clientY) && (event.clientX !== 0 || event.clientY !== 0)) {
+    return {
+      x: event.clientX,
+      y: event.clientY,
+    };
+  }
+  return {
+    x: window.innerWidth / 2,
+    y: window.innerHeight / 2,
+  };
+}
+
 interface SiteThemeContextValue {
   themeId: SiteThemeId;
   activeTheme: SiteThemeDefinition;
-  setThemeId: (nextId: SiteThemeId) => void;
+  setThemeId: (nextId: SiteThemeId, origin?: ThemeTransitionOrigin) => void;
   themes: SiteThemeDefinition[];
 }
 
@@ -454,8 +484,39 @@ const SiteThemeContext = createContext<SiteThemeContextValue>({
 });
 
 export const SiteThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [themeId, setThemeId] = useState<SiteThemeId>('classic-gold');
+  const [themeId, setThemeIdState] = useState<SiteThemeId>('classic-gold');
+  const [liquidTransition, setLiquidTransition] = useState<ThemeTransitionState | null>(null);
+  const transitionSeqRef = useRef(0);
   const activeTheme = useMemo(() => getSiteThemeById(themeId), [themeId]);
+
+  const setThemeId = useCallback(
+    (nextId: SiteThemeId, origin?: ThemeTransitionOrigin) => {
+      if (nextId !== themeId) {
+        const nextTheme = getSiteThemeById(nextId);
+        const fallbackCenter: ThemeTransitionOrigin =
+          typeof window !== 'undefined'
+            ? { x: window.innerWidth / 2, y: window.innerHeight / 2 }
+            : { x: 0, y: 0 };
+        const resolvedOrigin =
+          origin && Number.isFinite(origin.x) && Number.isFinite(origin.y)
+            ? origin
+            : fallbackCenter;
+
+        transitionSeqRef.current += 1;
+        setLiquidTransition({
+          key: transitionSeqRef.current,
+          theme: nextTheme,
+          origin: resolvedOrigin,
+        });
+      }
+      setThemeIdState(nextId);
+    },
+    [themeId]
+  );
+
+  const handleTransitionComplete = useCallback((completedKey: number) => {
+    setLiquidTransition((prev) => (prev && prev.key === completedKey ? null : prev));
+  }, []);
 
   useEffect(() => {
     if (typeof document === 'undefined') return;
@@ -472,10 +533,18 @@ export const SiteThemeProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       setThemeId,
       themes: SITE_THEMES,
     }),
-    [themeId, activeTheme]
+    [themeId, activeTheme, setThemeId]
   );
 
-  return <SiteThemeContext.Provider value={value}>{children}</SiteThemeContext.Provider>;
+  return (
+    <SiteThemeContext.Provider value={value}>
+      {children}
+      <ThemeLiquidTransition
+        transition={liquidTransition}
+        onComplete={handleTransitionComplete}
+      />
+    </SiteThemeContext.Provider>
+  );
 };
 
 export function useSiteTheme(): SiteThemeContextValue {

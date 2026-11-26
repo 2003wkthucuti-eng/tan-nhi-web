@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { Check, ChevronDown, Palette, X } from 'lucide-react';
 import { BlackCatMascot } from './BlackCatMascot';
 import { GoldenStardust } from './GoldenStardust';
-import { useSiteTheme, type SiteThemeId } from '../themes/siteThemes';
+import { getThemeOriginFromEvent, useSiteTheme, type SiteThemeId } from '../themes/siteThemes';
 import { playSoftTap } from '../utils/soundEffects';
 
 export type IntroPhase = 'idle' | 'opening' | 'entered';
@@ -208,9 +208,9 @@ export const IntroSealDoors: React.FC<IntroSealDoorsProps> = ({
                     <button
                       key={theme.id}
                       type="button"
-                      onClick={() => {
+                      onClick={(e) => {
                         playSoftTap('tap');
-                        setThemeId(theme.id);
+                        setThemeId(theme.id, getThemeOriginFromEvent(e));
                         setIsThemeMenuOpen(false);
                       }}
                       aria-pressed={isSelected}

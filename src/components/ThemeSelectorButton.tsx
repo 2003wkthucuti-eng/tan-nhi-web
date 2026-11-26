@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { Check, Palette, X } from 'lucide-react';
 import { BlackCatMascot } from './BlackCatMascot';
-import { useSiteTheme } from '../themes/siteThemes';
+import { getThemeOriginFromEvent, useSiteTheme } from '../themes/siteThemes';
 import { playSoftTap } from '../utils/soundEffects';
 
 /**
@@ -90,9 +90,9 @@ export const ThemeSelectorButton: React.FC = () => {
                   <button
                     key={theme.id}
                     type="button"
-                    onClick={() => {
+                    onClick={(e) => {
                       playSoftTap('tap');
-                      setThemeId(theme.id);
+                      setThemeId(theme.id, getThemeOriginFromEvent(e));
                       setIsOpen(false);
                     }}
                     aria-pressed={isSelected}

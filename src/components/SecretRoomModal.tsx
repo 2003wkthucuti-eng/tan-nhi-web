@@ -121,13 +121,13 @@ export const SecretRoomModal: React.FC<SecretRoomModalProps> = ({
                   🗝️ Căn Phòng Bí Mật Của Chủ Nhà
                 </h2>
 
-                {/* Trạng thái mở khóa huy hiệu ẩn */}
+                {/* Trạng thái mở khóa khung ảnh đại diện */}
                 <div className="mt-3.5 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-[#231B0B]/95 via-[#2F240D]/95 to-[#231B0B]/95 border border-[#F3E5AB]/60 text-xs font-medium text-[#F3E5AB] shadow-[0_0_20px_rgba(212,175,55,0.24)]">
                   <Award className="w-4 h-4 text-[#F3E5AB] shrink-0" aria-hidden="true" />
                   <span>
                     {justUnlockedBadge
-                      ? 'Đã mở khóa huy hiệu ẩn: Kẻ Giải Mã Bóng Đêm!'
-                      : 'Huy hiệu đã sở hữu: Kẻ Giải Mã Bóng Đêm'}
+                      ? 'Đã mở khóa Khung Ảnh: Hắc Long Nét Cọ!'
+                      : 'Đã sở hữu Khung Ảnh: Hắc Long Nét Cọ'}
                   </span>
                 </div>
 

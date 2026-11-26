@@ -112,8 +112,8 @@ export const SignatureSealModal: React.FC<SignatureSealModalProps> = ({
                   <Award className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
                   <span>
                     {justUnlockedSoulmate
-                      ? 'Đã mở khóa huy hiệu: Tri Kỷ Của Tần Nhi!'
-                      : 'Huy hiệu đã sở hữu: Tri Kỷ Của Tần Nhi'}
+                      ? 'Đã mở khóa Khung Ảnh: Hắc Long Nét Cọ!'
+                      : 'Đã sở hữu Khung Ảnh: Hắc Long Nét Cọ'}
                   </span>
                 </div>
 

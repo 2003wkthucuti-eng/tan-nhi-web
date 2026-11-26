@@ -18,17 +18,17 @@ import {
 } from 'lucide-react';
 import type { CharacterItem } from '../App';
 import { getCharacterStoryProfile } from '../data/characterProfiles';
-import type { HeartfeltLetter, UserProfile } from '../types/user';
+import type { AvatarFrameId, HeartfeltLetter, UserProfile } from '../types/user';
 import { BlackCatMascot } from './BlackCatMascot';
 import { GoldenStardust } from './GoldenStardust';
 import { HolographicTiltCard } from './HolographicTiltCard';
-import { SoulmateInlineBadge, UserAvatarBadge } from './UserAvatarBadge';
+import { AvatarFrameInlineTag, UserAvatarBadge } from './UserAvatarBadge';
 import { playSoftTap } from '../utils/soundEffects';
 
 interface CharacterDetailTarotModalProps {
   character: CharacterItem | null;
   userProfile: UserProfile | null;
-  hasSoulmateBadge: boolean;
+  equippedFrameId: AvatarFrameId | null;
   letters: HeartfeltLetter[];
   openedFromTarot?: boolean;
   onBackToTarot?: () => void;
@@ -74,7 +74,7 @@ function formatLetterTimestamp(timestamp: number): string {
 export const CharacterDetailTarotModal: React.FC<CharacterDetailTarotModalProps> = ({
   character,
   userProfile,
-  hasSoulmateBadge,
+  equippedFrameId,
   letters,
   openedFromTarot = false,
   onBackToTarot,
@@ -628,14 +628,18 @@ export const CharacterDetailTarotModal: React.FC<CharacterDetailTarotModalProps>
                               <UserAvatarBadge
                                 avatarUrl={userProfile.avatarUrl}
                                 avatarIcon={userProfile.avatarIcon}
+                                frameId={equippedFrameId}
                                 displayName={userProfile.displayName}
                                 size="sm"
+                                reserveFrameSpace
                               />
                               <div className="flex flex-wrap items-center gap-1.5 min-w-0">
                                 <span className="text-xs sm:text-sm font-semibold text-[#F3E5AB] truncate max-w-[140px] sm:max-w-[190px]">
                                   {userProfile.displayName}
                                 </span>
-                                {hasSoulmateBadge && <SoulmateInlineBadge />}
+                                {equippedFrameId && (
+                                  <AvatarFrameInlineTag frameId={equippedFrameId} />
+                                )}
                               </div>
                             </div>
 
@@ -699,11 +703,11 @@ export const CharacterDetailTarotModal: React.FC<CharacterDetailTarotModalProps>
                       <div className="space-y-2.5 max-h-[260px] overflow-y-auto pr-1">
                         {letters.length > 0 ? (
                           letters.map((letter) => {
-                            const showBadge =
-                              letter.hasSoulmateBadge ||
-                              (hasSoulmateBadge &&
-                                userProfile &&
-                                letter.authorName === userProfile.displayName);
+                            const letterFrameId =
+                              letter.authorFrameId ??
+                              (userProfile && letter.authorName === userProfile.displayName
+                                ? equippedFrameId
+                                : null);
 
                             return (
                               <article
@@ -715,15 +719,19 @@ export const CharacterDetailTarotModal: React.FC<CharacterDetailTarotModalProps>
                                     <UserAvatarBadge
                                       avatarUrl={letter.authorAvatarUrl}
                                       avatarIcon={letter.authorAvatarIcon}
+                                      frameId={letterFrameId}
                                       displayName={letter.authorName}
                                       size="sm"
+                                      reserveFrameSpace
                                     />
                                     <div className="min-w-0">
                                       <div className="flex flex-wrap items-center gap-1.5">
                                         <span className="text-xs font-semibold text-[#F3E5AB] truncate max-w-[160px]">
                                           {letter.authorName}
                                         </span>
-                                        {showBadge && <SoulmateInlineBadge />}
+                                        {letterFrameId && (
+                                          <AvatarFrameInlineTag frameId={letterFrameId} />
+                                        )}
                                       </div>
                                       <p className="text-[10px] text-[#8E877A] tabular-nums mt-0.5">
                                         {formatLetterTimestamp(letter.createdAt)}

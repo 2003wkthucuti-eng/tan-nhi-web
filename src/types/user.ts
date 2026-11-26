@@ -6,10 +6,23 @@ export type DefaultAvatarIconId =
   | 'night-rose'
   | 'warm-tea';
 
+export type AvatarFrameId =
+  | 'bang-vu-pha-le'
+  | 'bach-long-ho-ly'
+  | 'long-van-thuy-mac'
+  | 'huyet-nguyet-kiem-khach'
+  | 'hac-long-net-co';
+
+export interface AvatarFramesState {
+  unlocked: Partial<Record<AvatarFrameId, number>>;
+  equippedFrameId: AvatarFrameId | null;
+}
+
 export interface UserProfile {
   displayName: string;
   avatarUrl: string;
   avatarIcon: DefaultAvatarIconId;
+  equippedFrameId?: AvatarFrameId | null;
   createdAt: string;
 }
 
@@ -19,81 +32,15 @@ export interface HeartfeltLetter {
   authorName: string;
   authorAvatarUrl: string;
   authorAvatarIcon: DefaultAvatarIconId;
-  hasSoulmateBadge: boolean;
+  authorFrameId?: AvatarFrameId | null;
   content: string;
   createdAt: number;
 }
 
 export const STORAGE_KEYS = {
   USER_PROFILE: 'tannhi_user_profile_v1',
-  SOULMATE_BADGE: 'tannhi_soulmate_badge_v1',
   LETTERS_BY_CHAR: 'tannhi_heartfelt_letters_v1',
-  EASTER_EGG_BADGES: 'tannhi_easter_egg_badges_v1',
 } as const;
-
-export type SecretBadgeId =
-  | 'soulmate'
-  | 'night_decoder'
-  | 'night_owl'
-  | 'lost_returner'
-  | 'star_weaver'
-  | 'moon_keeper';
-
-export interface SecretBadgesState {
-  nightDecoder: boolean;
-  nightOwl: boolean;
-  lostReturner: boolean;
-  starWeaver: boolean;
-  moonKeeper: boolean;
-  signatureSealUnlocked: boolean;
-  unlockedAt: Partial<Record<SecretBadgeId, number>>;
-}
-
-export function loadSecretBadgesState(): SecretBadgesState {
-  try {
-    const raw = window.localStorage.getItem(STORAGE_KEYS.EASTER_EGG_BADGES);
-    if (!raw) {
-      return {
-        nightDecoder: false,
-        nightOwl: false,
-        lostReturner: false,
-        starWeaver: false,
-        moonKeeper: false,
-        signatureSealUnlocked: false,
-        unlockedAt: {},
-      };
-    }
-    const parsed = JSON.parse(raw) as Partial<SecretBadgesState>;
-    return {
-      nightDecoder: Boolean(parsed?.nightDecoder),
-      nightOwl: Boolean(parsed?.nightOwl),
-      lostReturner: Boolean(parsed?.lostReturner),
-      starWeaver: Boolean(parsed?.starWeaver),
-      moonKeeper: Boolean(parsed?.moonKeeper),
-      signatureSealUnlocked: Boolean(parsed?.signatureSealUnlocked),
-      unlockedAt:
-        parsed?.unlockedAt && typeof parsed.unlockedAt === 'object' ? parsed.unlockedAt : {},
-    };
-  } catch {
-    return {
-      nightDecoder: false,
-      nightOwl: false,
-      lostReturner: false,
-      starWeaver: false,
-      moonKeeper: false,
-      signatureSealUnlocked: false,
-      unlockedAt: {},
-    };
-  }
-}
-
-export function saveSecretBadgesState(state: SecretBadgesState): void {
-  try {
-    window.localStorage.setItem(STORAGE_KEYS.EASTER_EGG_BADGES, JSON.stringify(state));
-  } catch {
-    // Ignore storage quota errors
-  }
-}
 
 export function loadUserProfile(): UserProfile | null {
   try {
@@ -107,6 +54,7 @@ export function loadUserProfile(): UserProfile | null {
       displayName: parsed.displayName.trim(),
       avatarUrl: typeof parsed.avatarUrl === 'string' ? parsed.avatarUrl.trim() : '',
       avatarIcon: parsed.avatarIcon || 'black-cat',
+      equippedFrameId: parsed.equippedFrameId ?? null,
       createdAt: typeof parsed.createdAt === 'string' ? parsed.createdAt : new Date().toISOString(),
     };
   } catch {
@@ -120,23 +68,15 @@ export function saveUserProfile(profile: UserProfile | null): void {
       window.localStorage.removeItem(STORAGE_KEYS.USER_PROFILE);
       return;
     }
-    window.localStorage.setItem(STORAGE_KEYS.USER_PROFILE, JSON.stringify(profile));
-  } catch {
-    // Ignore storage quota errors
-  }
-}
-
-export function loadSoulmateUnlocked(): boolean {
-  try {
-    return window.localStorage.getItem(STORAGE_KEYS.SOULMATE_BADGE) === 'true';
-  } catch {
-    return false;
-  }
-}
-
-export function saveSoulmateUnlocked(unlocked: boolean): void {
-  try {
-    window.localStorage.setItem(STORAGE_KEYS.SOULMATE_BADGE, unlocked ? 'true' : 'false');
+    // Tránh lưu chuỗi ảnh base64 quá lớn vào localStorage để chạy mượt trong phiên
+    const safeAvatarUrl =
+      profile.avatarUrl.startsWith('data:') && profile.avatarUrl.length > 60000
+        ? ''
+        : profile.avatarUrl;
+    window.localStorage.setItem(
+      STORAGE_KEYS.USER_PROFILE,
+      JSON.stringify({ ...profile, avatarUrl: safeAvatarUrl })
+    );
   } catch {
     // Ignore storage quota errors
   }

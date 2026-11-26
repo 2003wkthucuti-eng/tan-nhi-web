@@ -26,6 +26,10 @@ import {
   User,
   X,
 } from 'lucide-react';
+import {
+  AvatarFrameShowcaseSection,
+  AvatarFrameStudioModal,
+} from './components/AvatarFrameStudio';
 import { BlackCatMascot } from './components/BlackCatMascot';
 import { CharacterDetailTarotModal } from './components/CharacterDetailTarotModal';
 import { ConstellationSky } from './components/ConstellationSky';
@@ -47,18 +51,17 @@ import { TabWhisperToast, type TabWhisperPayload } from './components/TabWhisper
 import { ThemeSelectorButton } from './components/ThemeSelectorButton';
 import { TrendingSpotlight } from './components/TrendingSpotlight';
 import { UserAvatarBadge } from './components/UserAvatarBadge';
+import { AVATAR_FRAMES, AVATAR_FRAME_MAP } from './data/avatarFrames';
 import { SiteThemeProvider, useSiteTheme } from './themes/siteThemes';
 import {
   loadHeartfeltLetters,
-  loadSecretBadgesState,
-  loadSoulmateUnlocked,
   loadUserProfile,
   saveHeartfeltLetters,
-  saveSecretBadgesState,
-  saveSoulmateUnlocked,
   saveUserProfile,
+  type AvatarFrameId,
+  type AvatarFramesState,
+  type DefaultAvatarIconId,
   type HeartfeltLetter,
-  type SecretBadgesState,
   type UserProfile,
 } from './types/user';
 import {
@@ -848,11 +851,22 @@ function AppContent() {
   );
   const [openedDetailFromTarot, setOpenedDetailFromTarot] = useState(false);
   const [openedDetailFromMystic, setOpenedDetailFromMystic] = useState(false);
-  const [isSecretBadgeOpen, setIsSecretBadgeOpen] = useState(false);
-  const [hasUnlockedSoulmateBadge, setHasUnlockedSoulmateBadge] = useState<boolean>(() =>
-    loadSoulmateUnlocked()
-  );
   const [userProfile, setUserProfile] = useState<UserProfile | null>(() => loadUserProfile());
+  const [previewAvatarUrl, setPreviewAvatarUrl] = useState<string>(
+    () => loadUserProfile()?.avatarUrl ?? ''
+  );
+  const [previewAvatarIcon, setPreviewAvatarIcon] = useState<DefaultAvatarIconId>(
+    () => loadUserProfile()?.avatarIcon ?? 'black-cat'
+  );
+  const [avatarFrames, setAvatarFrames] = useState<AvatarFramesState>({
+    unlocked: {},
+    equippedFrameId: null,
+  });
+  const [isFrameStudioOpen, setIsFrameStudioOpen] = useState(false);
+  const [unlockCelebration, setUnlockCelebration] = useState<{
+    frameId: AvatarFrameId;
+    sourceNote: string;
+  } | null>(null);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [lettersByChar, setLettersByChar] = useState<Record<string, HeartfeltLetter[]>>(() =>
     loadHeartfeltLetters()
@@ -864,9 +878,6 @@ function AppContent() {
   );
   const [shareToast, setShareToast] = useState<string | null>(null);
   const [showBackToTop, setShowBackToTop] = useState(false);
-  const [secretBadges, setSecretBadges] = useState<SecretBadgesState>(() =>
-    loadSecretBadgesState()
-  );
   const [isSecretRoomOpen, setIsSecretRoomOpen] = useState(false);
   const [justUnlockedNightDecoder, setJustUnlockedNightDecoder] = useState(false);
   const [isSecretNotebookOpen, setIsSecretNotebookOpen] = useState(false);
@@ -906,19 +917,29 @@ function AppContent() {
   const suppressNextTitleClickRef = useRef(false);
   const footerMoonClickTimerRef = useRef<number | null>(null);
   const moonIconLastTapRef = useRef(0);
+  const unlockedFramesRef = useRef<Set<AvatarFrameId>>(new Set());
+  const prevThemeIdRef = useRef(activeTheme.id);
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
 
   const hasEntered = introPhase !== 'idle';
   const isWitchingHourActive = isRealWitchingHour || isWitchingHourTestMode;
   const currentTrack = PLAYLIST[currentTrackIndex];
-  const totalLettersSent = useMemo(
+  const unlockedFramesCount = useMemo(
+    () => AVATAR_FRAMES.filter((f) => Boolean(avatarFrames.unlocked[f.id])).length,
+    [avatarFrames.unlocked]
+  );
+  const activeAvatarUrl = userProfile?.avatarUrl || previewAvatarUrl;
+  const activeAvatarIcon = userProfile?.avatarIcon ?? previewAvatarIcon;
+  const activeDisplayName = userProfile?.displayName || 'Tri kỷ của Tần Nhi';
+  const characterAvatarSamples = useMemo(
     () =>
-      Object.values(lettersByChar).reduce(
-        (sum, list) => sum + (Array.isArray(list) ? list.length : 0),
-        0
-      ),
-    [lettersByChar]
+      CHARACTERS.slice(0, 6).map((c) => ({
+        id: c.id,
+        name: c.name,
+        avatar: c.avatar,
+      })),
+    []
   );
 
   useEffect(() => {
@@ -1097,10 +1118,7 @@ function AppContent() {
     if (filteredCharacters.length === 0) return;
     playSoftTap('card');
     const chosen = filteredCharacters[Math.floor(Math.random() * filteredCharacters.length)];
-    trackCharacterInteraction(chosen.id, 1);
-    setOpenedDetailFromTarot(false);
-    setOpenedDetailFromMystic(false);
-    setSelectedCharacter(chosen);
+    openCharacterProfileModal(chosen);
   };
 
   const totalPages = Math.max(1, Math.ceil(filteredCharacters.length / ITEMS_PER_PAGE));
@@ -1139,14 +1157,80 @@ function AppContent() {
     }
   };
 
-  const unlockSoulmateAchievement = (showModal: boolean) => {
-    setHasUnlockedSoulmateBadge(true);
-    saveSoulmateUnlocked(true);
+  const unlockAvatarFrame = (
+    frameId: AvatarFrameId,
+    sourceNote: string,
+    options: { showModal?: boolean; showToast?: boolean } = {}
+  ): boolean => {
+    if (unlockedFramesRef.current.has(frameId)) {
+      return false;
+    }
+    unlockedFramesRef.current.add(frameId);
+    const unlockedAt = Date.now();
+    setAvatarFrames((prev) => ({
+      ...prev,
+      unlocked: {
+        ...prev.unlocked,
+        [frameId]: unlockedAt,
+      },
+    }));
+
     playAchievementChime();
     setFireworkBurstKey((prev) => prev + 1);
-    if (showModal) {
-      setIsSecretBadgeOpen(true);
+
+    const frameDef = AVATAR_FRAME_MAP[frameId];
+    if (options.showToast !== false && frameDef) {
+      triggerShareToast(`✨ Đã mở khóa Khung Ảnh: ${frameDef.name}!`);
     }
+    if (options.showModal !== false) {
+      setUnlockCelebration({ frameId, sourceNote });
+    }
+    return true;
+  };
+
+  const handleSelectAvatarFrame = (frameId: AvatarFrameId | null) => {
+    setAvatarFrames((prev) => ({
+      ...prev,
+      equippedFrameId: frameId,
+    }));
+    if (userProfile) {
+      const updated: UserProfile = {
+        ...userProfile,
+        equippedFrameId: frameId,
+      };
+      setUserProfile(updated);
+      saveUserProfile(updated);
+    }
+  };
+
+  const handleChangePreviewAvatar = (nextUrl: string, nextIcon: DefaultAvatarIconId) => {
+    setPreviewAvatarUrl(nextUrl);
+    setPreviewAvatarIcon(nextIcon);
+    if (userProfile) {
+      const updated: UserProfile = {
+        ...userProfile,
+        avatarUrl: nextUrl,
+        avatarIcon: nextIcon,
+      };
+      setUserProfile(updated);
+      saveUserProfile(updated);
+    }
+  };
+
+  const openCharacterProfileModal = (
+    char: CharacterItem,
+    source: { fromTarot?: boolean; fromMystic?: boolean } = {}
+  ) => {
+    trackCharacterInteraction(char.id, 1);
+    setOpenedDetailFromTarot(Boolean(source.fromTarot));
+    setOpenedDetailFromMystic(Boolean(source.fromMystic));
+    setSelectedCharacter(char);
+    const primary = char.name.split(/\s+[—-]\s+/)[0] || char.name;
+    unlockAvatarFrame(
+      'bach-long-ho-ly',
+      `Cậu vừa gõ cửa gặp gỡ ${primary} và đánh thức Khung Ảnh Bạch Long & Hồ Ly!`,
+      { showModal: true }
+    );
   };
 
   const registerSecretCatTap = (): boolean => {
@@ -1160,7 +1244,16 @@ function AppContent() {
       catTapResetTimerRef.current = null;
       setHeaderCatMessage(null);
       setCatGreetingOpen(false);
-      unlockSoulmateAchievement(true);
+      const unlockedFresh = unlockAvatarFrame(
+        'bach-long-ho-ly',
+        'Chú mèo đen đã ghi nhớ cái chạm dịu dàng 3 lần của cậu!',
+        { showModal: true }
+      );
+      if (!unlockedFresh) {
+        playAchievementChime();
+        setFireworkBurstKey((prev) => prev + 1);
+        setIsFrameStudioOpen(true);
+      }
       return true;
     }
 
@@ -1172,8 +1265,14 @@ function AppContent() {
   };
 
   const handleSaveUserProfile = (nextProfile: UserProfile) => {
-    setUserProfile(nextProfile);
-    saveUserProfile(nextProfile);
+    const merged: UserProfile = {
+      ...nextProfile,
+      equippedFrameId: avatarFrames.equippedFrameId,
+    };
+    setUserProfile(merged);
+    saveUserProfile(merged);
+    setPreviewAvatarUrl(merged.avatarUrl);
+    setPreviewAvatarIcon(merged.avatarIcon);
   };
 
   const handleLogoutUserProfile = () => {
@@ -1201,9 +1300,6 @@ function AppContent() {
     if (!userProfile) return;
 
     trackCharacterInteraction(characterId, 2);
-    const nextTotalCount = totalLettersSent + 1;
-    const willUnlockNow = !hasUnlockedSoulmateBadge && nextTotalCount >= 3;
-    const badgeActive = hasUnlockedSoulmateBadge || willUnlockNow;
 
     const newLetter: HeartfeltLetter = {
       id: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
@@ -1211,7 +1307,7 @@ function AppContent() {
       authorName: userProfile.displayName,
       authorAvatarUrl: userProfile.avatarUrl,
       authorAvatarIcon: userProfile.avatarIcon,
-      hasSoulmateBadge: badgeActive,
+      authorFrameId: avatarFrames.equippedFrameId,
       content,
       createdAt: Date.now(),
     };
@@ -1226,9 +1322,11 @@ function AppContent() {
       return updated;
     });
 
-    if (willUnlockNow) {
-      unlockSoulmateAchievement(true);
-    }
+    unlockAvatarFrame(
+      'bach-long-ho-ly',
+      'Lá thư tâm tình đầu tiên của cậu đã khai mở Khung Ảnh Bạch Long & Hồ Ly!',
+      { showModal: true }
+    );
   };
 
   const handleDeleteHeartfeltLetter = (characterId: string, letterId: string) => {
@@ -1267,11 +1365,8 @@ function AppContent() {
   };
 
   const handleInspectCharacterFromTarot = (char: CharacterItem) => {
-    trackCharacterInteraction(char.id, 1);
     setIsDestinyModalOpen(false);
-    setOpenedDetailFromMystic(false);
-    setOpenedDetailFromTarot(true);
-    setSelectedCharacter(char);
+    openCharacterProfileModal(char, { fromTarot: true });
   };
 
   const handleBackToTarotFromDetail = () => {
@@ -1288,11 +1383,8 @@ function AppContent() {
   };
 
   const handleInspectCharacterFromMystic = (char: CharacterItem) => {
-    trackCharacterInteraction(char.id, 1);
     setIsMysticCornerOpen(false);
-    setOpenedDetailFromTarot(false);
-    setOpenedDetailFromMystic(true);
-    setSelectedCharacter(char);
+    openCharacterProfileModal(char, { fromMystic: true });
   };
 
   const handleBackToMysticFromDetail = () => {
@@ -1352,21 +1444,11 @@ function AppContent() {
   const openSecretRoom = () => {
     playSecretRoomChime();
     setFireworkBurstKey((prev) => prev + 1);
-    let unlockedFresh = false;
-    setSecretBadges((prev) => {
-      if (prev.nightDecoder) return prev;
-      unlockedFresh = true;
-      const next: SecretBadgesState = {
-        ...prev,
-        nightDecoder: true,
-        unlockedAt: {
-          ...prev.unlockedAt,
-          night_decoder: Date.now(),
-        },
-      };
-      saveSecretBadgesState(next);
-      return next;
-    });
+    const unlockedFresh = unlockAvatarFrame(
+      'hac-long-net-co',
+      'Mật mã dẫn lối vào Căn Phòng Bí Mật đã khai mở Khung Ảnh Hắc Long Nét Cọ!',
+      { showModal: false, showToast: true }
+    );
     setJustUnlockedNightDecoder(unlockedFresh);
     setIsSecretRoomOpen(true);
   };
@@ -1423,44 +1505,38 @@ function AppContent() {
     return () => window.removeEventListener('keydown', handleKeywordListen);
   }, [hasEntered]);
 
+  // Mở khóa Khung Ảnh "Băng Vũ Pha Lê" khi đổi Theme giao diện bên trong trang
+  useEffect(() => {
+    if (prevThemeIdRef.current === activeTheme.id) return;
+    prevThemeIdRef.current = activeTheme.id;
+    if (!hasEntered) return;
+    unlockAvatarFrame(
+      'bang-vu-pha-le',
+      `Cậu vừa chuyển sang không gian "${activeTheme.name}" — mở khóa Khung Ảnh Băng Vũ Pha Lê!`,
+      { showModal: true }
+    );
+  }, [activeTheme.id, activeTheme.name, hasEntered]);
+
   useEffect(() => {
     if (!hasEntered || !isWitchingHourActive) return;
-    setSecretBadges((prev) => {
-      if (prev.nightOwl) return prev;
-      const next: SecretBadgesState = {
-        ...prev,
-        nightOwl: true,
-        unlockedAt: {
-          ...prev.unlockedAt,
-          night_owl: Date.now(),
-        },
-      };
-      saveSecretBadgesState(next);
-      return next;
-    });
+    unlockAvatarFrame(
+      'bang-vu-pha-le',
+      'Khung giờ Đêm Sâu huyền ảo đã đánh thức Khung Ảnh Băng Vũ Pha Lê!',
+      { showModal: false }
+    );
   }, [hasEntered, isWitchingHourActive]);
 
-  // Easter Egg mới #1: Tiếng Thì Thầm Khi Đổi Tab (hoặc không thao tác 60 giây rồi quay lại)
+  // Easter Egg #1: Tiếng Thì Thầm Khi Đổi Tab (hoặc không thao tác 60 giây rồi quay lại)
   const triggerTabWhisper = () => {
     if (CHARACTERS.length === 0) return;
     playWhisperReturnChime();
     const randomChar = CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)];
 
-    let unlockedFresh = false;
-    setSecretBadges((prev) => {
-      if (prev.lostReturner) return prev;
-      unlockedFresh = true;
-      const next: SecretBadgesState = {
-        ...prev,
-        lostReturner: true,
-        unlockedAt: {
-          ...prev.unlockedAt,
-          lost_returner: Date.now(),
-        },
-      };
-      saveSecretBadgesState(next);
-      return next;
-    });
+    const unlockedFresh = unlockAvatarFrame(
+      'hac-long-net-co',
+      'Ngôi nhà đã đón cậu quay lại cùng lời thì thầm đêm khuya!',
+      { showModal: false, showToast: false }
+    );
 
     setTabWhisper({
       id: Date.now(),
@@ -1540,28 +1616,16 @@ function AppContent() {
     };
   }, [hasEntered]);
 
-  // Easter Egg mới #2: Hoàn tất thắp sáng 5 ngôi sao
+  // Hoàn tất thắp sáng 5 ngôi sao -> Mở khóa Long Vân Thủy Mặc
   const handleConstellationComplete = (): boolean => {
-    setFireworkBurstKey((prev) => prev + 1);
-    let unlockedFresh = false;
-    setSecretBadges((prev) => {
-      if (prev.starWeaver) return prev;
-      unlockedFresh = true;
-      const next: SecretBadgesState = {
-        ...prev,
-        starWeaver: true,
-        unlockedAt: {
-          ...prev.unlockedAt,
-          star_weaver: Date.now(),
-        },
-      };
-      saveSecretBadgesState(next);
-      return next;
-    });
-    return unlockedFresh;
+    return unlockAvatarFrame(
+      'long-van-thuy-mac',
+      'Cậu đã nối đủ 5 ánh sao trên bầu trời đêm — mở khóa Khung Ảnh Long Vân Thủy Mặc!',
+      { showModal: true }
+    );
   };
 
-  // Easter Egg mới #3: Nhấn giữ chữ ký "Tần Nhi" (1.65s)
+  // Nhấn giữ chữ ký "Tần Nhi" (1.65s) -> Mở khóa Hắc Long Nét Cọ
   const cancelSignatureHold = () => {
     if (holdRafRef.current !== null) {
       window.cancelAnimationFrame(holdRafRef.current);
@@ -1577,26 +1641,12 @@ function AppContent() {
     if (anchor === 'header') {
       suppressNextTitleClickRef.current = true;
     }
-    playAchievementChime();
-    setFireworkBurstKey((prev) => prev + 1);
-
-    const wasAlreadySoulmate = hasUnlockedSoulmateBadge && secretBadges.signatureSealUnlocked;
-    setHasUnlockedSoulmateBadge(true);
-    saveSoulmateUnlocked(true);
-    setSecretBadges((prev) => {
-      const next: SecretBadgesState = {
-        ...prev,
-        signatureSealUnlocked: true,
-        unlockedAt: {
-          ...prev.unlockedAt,
-          soulmate: prev.unlockedAt.soulmate ?? Date.now(),
-        },
-      };
-      saveSecretBadgesState(next);
-      return next;
-    });
-
-    setJustUnlockedSignatureSeal(!wasAlreadySoulmate);
+    const unlockedFresh = unlockAvatarFrame(
+      'hac-long-net-co',
+      'Con dấu tái bút của Tần Nhi đã khai mở Khung Ảnh Hắc Long Nét Cọ!',
+      { showModal: false, showToast: true }
+    );
+    setJustUnlockedSignatureSeal(unlockedFresh);
     setIsSignatureSealOpen(true);
   };
 
@@ -1633,33 +1683,23 @@ function AppContent() {
     }
   };
 
-  // Easter Egg mới #4: Chuyển chế độ Bạc Ánh Trăng (Moonlight Silver Mode)
+  // Chuyển chế độ Bạc Ánh Trăng -> Mở khóa Băng Vũ Pha Lê
   const toggleMoonlightSilverMode = () => {
     const nextSilver = !isMoonlightSilverMode;
     setIsMoonlightSilverMode(nextSilver);
     playMoonlightShiftChime();
     setFireworkBurstKey((prev) => prev + 1);
 
-    let unlockedFresh = false;
-    setSecretBadges((prev) => {
-      if (prev.moonKeeper) return prev;
-      unlockedFresh = true;
-      const next: SecretBadgesState = {
-        ...prev,
-        moonKeeper: true,
-        unlockedAt: {
-          ...prev.unlockedAt,
-          moon_keeper: Date.now(),
-        },
-      };
-      saveSecretBadgesState(next);
-      return next;
-    });
+    const unlockedFresh = unlockAvatarFrame(
+      'bang-vu-pha-le',
+      'Sắc Bạc Ánh Trăng huyền ảo đã đánh thức Khung Ảnh Băng Vũ Pha Lê!',
+      { showModal: true, showToast: false }
+    );
 
     if (nextSilver) {
       triggerShareToast(
         unlockedFresh
-          ? '🌕 Mặt trăng đã đổi sắc Bạc Ánh Trăng · Mở khóa: Người Gác Trăng!'
+          ? '🌕 Mặt trăng đã đổi sắc Bạc Ánh Trăng · Mở khóa Khung Ảnh Băng Vũ Pha Lê!'
           : '🌕 Mặt trăng đã đổi sắc Bạc Ánh Trăng...'
       );
     } else {
@@ -1698,10 +1738,15 @@ function AppContent() {
       setWitchingBannerDismissed(false);
       playWitchingHourChime();
       setFireworkBurstKey((prev) => prev + 1);
+      const unlockedFresh = unlockAvatarFrame(
+        'bang-vu-pha-le',
+        'Không khí Đêm Sâu đã mở khóa Khung Ảnh Băng Vũ Pha Lê!',
+        { showModal: true, showToast: false }
+      );
       triggerShareToast(
-        secretBadges.nightOwl
-          ? '🌙 Đã bật chế độ Khung Giờ Ma Thuật (Đêm Sâu)!'
-          : '🌙 Đã kích hoạt Đêm Sâu · Mở khóa huy hiệu Cú Đêm Ngôi Nhà Nhỏ!'
+        unlockedFresh
+          ? '🌙 Đã kích hoạt Đêm Sâu · Mở khóa Khung Ảnh Băng Vũ Pha Lê!'
+          : '🌙 Đã bật chế độ Khung Giờ Ma Thuật (Đêm Sâu)!'
       );
     } else {
       playSoftTap('nav');
@@ -1713,10 +1758,7 @@ function AppContent() {
     if (CHARACTERS.length === 0) return;
     playSoftTap('card');
     const chosen = CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)];
-    trackCharacterInteraction(chosen.id, 1);
-    setOpenedDetailFromTarot(false);
-    setOpenedDetailFromMystic(false);
-    setSelectedCharacter(chosen);
+    openCharacterProfileModal(chosen);
   };
 
   return (
@@ -1914,8 +1956,25 @@ function AppContent() {
               )}
             </nav>
 
-            {/* Zone 3: Theme + Góc Tri Kỷ (Tài khoản cục bộ) + Màn chào */}
+            {/* Zone 3: Khung Ảnh + Theme + Góc Tri Kỷ + Màn chào */}
             <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+              <button
+                type="button"
+                onClick={() => {
+                  playSoftTap('tap');
+                  setIsFrameStudioOpen(true);
+                }}
+                aria-label={`Chọn Avatar và Khung Ảnh (${unlockedFramesCount}/${AVATAR_FRAMES.length} đã mở)`}
+                title="Chọn ảnh đại diện & Khung Ảnh Đại Diện"
+                className="inline-flex items-center gap-1.5 min-h-[38px] sm:min-h-[40px] px-2.5 sm:px-3 py-1.5 rounded-xl border border-[#D4AF37]/45 bg-[#14121B] text-[11px] sm:text-xs font-medium text-[#F3E5AB] hover:bg-[#D4AF37]/15 hover:border-[#F3E5AB] transition-all duration-150 whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-[#D4AF37] shrink-0" aria-hidden="true" />
+                <span className="hidden md:inline">Khung Ảnh</span>
+                <span className="tabular-nums text-[10px] sm:text-[11px] text-[#D4AF37]">
+                  {unlockedFramesCount}/{AVATAR_FRAMES.length}
+                </span>
+              </button>
+
               <ThemeSelectorButton />
 
               <button
@@ -1937,17 +1996,13 @@ function AppContent() {
                     <UserAvatarBadge
                       avatarUrl={userProfile.avatarUrl}
                       avatarIcon={userProfile.avatarIcon}
+                      frameId={avatarFrames.equippedFrameId}
                       displayName={userProfile.displayName}
                       size="xs"
                     />
                     <span className="max-w-[74px] sm:max-w-[115px] truncate">
                       {userProfile.displayName}
                     </span>
-                    {hasUnlockedSoulmateBadge && (
-                      <span title="Tri kỷ" className="text-[11px] leading-none shrink-0">
-                        ✨
-                      </span>
-                    )}
                   </>
                 ) : (
                   <>
@@ -1979,10 +2034,10 @@ function AppContent() {
 
         {/* Nội dung chính */}
         <main id="top" className="relative z-10 flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-10">
-          {/* Easter Egg mới #2: Vòm trời 5 ngôi sao ẩn để nối chòm sao */}
+          {/* Vòm trời 5 ngôi sao ẩn để nối chòm sao */}
           <ConstellationSky
             moonlightMode={isMoonlightSilverMode}
-            hasUnlockedStarWeaver={secretBadges.starWeaver}
+            hasUnlockedStarWeaver={Boolean(avatarFrames.unlocked['long-van-thuy-mac'])}
             onConstellationComplete={handleConstellationComplete}
           />
 
@@ -2108,13 +2163,21 @@ function AppContent() {
             onAvatarError={(characterId) =>
               setFailedAvatars((prev) => ({ ...prev, [characterId]: true }))
             }
-            onSelectCharacter={(char) => {
-              trackCharacterInteraction(char.id, 1);
-              setOpenedDetailFromTarot(false);
-              setOpenedDetailFromMystic(false);
-              setSelectedCharacter(char);
-            }}
+            onSelectCharacter={(char) => openCharacterProfileModal(char)}
             onChatLinkClick={(characterId) => trackCharacterInteraction(characterId, 2)}
+          />
+
+          {/* Khu vực Avatar & Chọn Khung Ảnh Đại Diện ngay trong phiên */}
+          <AvatarFrameShowcaseSection
+            avatarUrl={activeAvatarUrl}
+            avatarIcon={activeAvatarIcon}
+            displayName={activeDisplayName}
+            equippedFrameId={avatarFrames.equippedFrameId}
+            unlockedFrames={avatarFrames.unlocked}
+            characterSamples={characterAvatarSamples}
+            onChangeAvatar={handleChangePreviewAvatar}
+            onSelectFrame={handleSelectAvatarFrame}
+            onOpenNotebook={() => setIsSecretNotebookOpen(true)}
           />
 
           {/* Thanh tìm kiếm, Gặp gỡ định mệnh & Bộ lọc thể loại thu gọn */}
@@ -2204,6 +2267,11 @@ function AppContent() {
                     onClick={() => {
                       playSoftTap('card');
                       setIsDualMatchupOpen(true);
+                      unlockAvatarFrame(
+                        'huyet-nguyet-kiem-khach',
+                        'Mở Hai Cánh Cửa Định Mệnh — đánh thức Khung Ảnh Huyết Nguyệt Kiếm Khách!',
+                        { showModal: true }
+                      );
                     }}
                     className="shimmer-gold-btn inline-flex items-center justify-center gap-1.5 min-h-[40px] px-3 sm:px-3.5 py-2 rounded-xl border border-[#D4AF37]/80 bg-gradient-to-r from-[#181520] via-[#241C10] to-[#181520] text-xs font-semibold text-[#F3E5AB] shadow-[0_0_18px_rgba(212,175,55,0.24)] hover:border-[#FFF4C4] active:scale-95 transition-all duration-150 whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFF4C4]"
                   >
@@ -2349,10 +2417,7 @@ function AppContent() {
                         maxTilt={6.5}
                         onClick={() => {
                           playSoftTap('card');
-                          trackCharacterInteraction(char.id, 1);
-                          setOpenedDetailFromTarot(false);
-                          setOpenedDetailFromMystic(false);
-                          setSelectedCharacter(char);
+                          openCharacterProfileModal(char);
                         }}
                         className="shimmer-card-border group h-full bg-[#121218]/92 backdrop-blur-sm border border-[#D4AF37]/25 hover:border-[#D4AF37]/70 rounded-xl sm:rounded-2xl p-2.5 sm:p-4 lg:p-5 flex flex-col justify-between transition-colors duration-200 hover:shadow-[0_0_32px_-6px_rgba(212,175,55,0.32)] cursor-pointer"
                       >
@@ -2671,20 +2736,20 @@ function AppContent() {
 
             <div className="flex flex-wrap items-center justify-center gap-2 pt-1 text-center">
               <p className="text-[11px] sm:text-xs italic tracking-wide text-[#D4AF37]/75 drop-shadow-[0_0_8px_rgba(212,175,55,0.28)] animate-pulse">
-                ✦ Bật mí: Thử chạm vào chú mèo đen 3 lần xem điều kỳ diệu gì xảy ra...
+                ✦ Bật mí: Thử chạm mèo đen 3 lần, lật bài Tarot hoặc đổi Theme để mở khóa Khung Ảnh Đại Diện...
               </p>
-              {hasUnlockedSoulmateBadge && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    playSoftTap('card');
-                    setIsSecretBadgeOpen(true);
-                  }}
-                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#D4AF37]/15 border border-[#D4AF37]/45 text-[11px] font-medium text-[#F3E5AB] hover:border-[#F3E5AB] transition-colors cursor-pointer"
-                >
-                  <span>✨ Tri kỷ của Tần Nhi</span>
-                </button>
-              )}
+              <button
+                type="button"
+                onClick={() => {
+                  playSoftTap('card');
+                  setIsFrameStudioOpen(true);
+                }}
+                className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-[#D4AF37]/15 border border-[#D4AF37]/45 text-[11px] font-medium text-[#F3E5AB] hover:border-[#F3E5AB] transition-colors cursor-pointer"
+              >
+                <span>
+                  ✦ Khung Ảnh Đại Diện ({unlockedFramesCount}/{AVATAR_FRAMES.length})
+                </span>
+              </button>
             </div>
 
             {/* Tận cùng chân trang: Chìa khóa Sổ Tay Bí Mật, Vầng Trăng Đêm Sâu & Ánh Trăng Bạc */}
@@ -2695,7 +2760,7 @@ function AppContent() {
                   playSoftTap('card');
                   setIsSecretNotebookOpen(true);
                 }}
-                aria-label="Mở Bức Thư Dưới Đáy Trang và Sổ Huy Hiệu Bí Mật"
+                aria-label="Mở Bức Thư Dưới Đáy Trang và Bộ Sưu Tập Khung Ảnh"
                 title="Một chiếc chìa khóa vàng nhỏ rơi dưới đáy trang..."
                 className="group inline-flex items-center justify-center w-8 h-8 rounded-full text-[#D4AF37]/50 hover:text-[#FFF4C4] hover:bg-[#D4AF37]/12 hover:shadow-[0_0_16px_rgba(212,175,55,0.38)] active:scale-95 transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]"
               >
@@ -2874,6 +2939,13 @@ function AppContent() {
       <DestinyTarotModal
         isOpen={isDestinyModalOpen}
         characters={CHARACTERS}
+        onCardDrawn={() =>
+          unlockAvatarFrame(
+            'long-van-thuy-mac',
+            'Lá bài Tarot định mệnh đã khai mở Khung Ảnh Long Vân Thủy Mặc!',
+            { showModal: true }
+          )
+        }
         onInspectCharacter={handleInspectCharacterFromTarot}
         onClose={() => setIsDestinyModalOpen(false)}
       />
@@ -2882,6 +2954,13 @@ function AppContent() {
       <MysticCornerModal
         isOpen={isMysticCornerOpen}
         characters={CHARACTERS}
+        onMiniGamePlayed={() =>
+          unlockAvatarFrame(
+            'huyet-nguyet-kiem-khach',
+            'Nghi thức tại Góc Huyền Bí đã đánh thức Khung Ảnh Huyết Nguyệt Kiếm Khách!',
+            { showModal: true }
+          )
+        }
         onOpenCharacterProfile={handleInspectCharacterFromMystic}
         onClose={() => setIsMysticCornerOpen(false)}
       />
@@ -2890,7 +2969,7 @@ function AppContent() {
       <CharacterDetailTarotModal
         character={selectedCharacter}
         userProfile={userProfile}
-        hasSoulmateBadge={hasUnlockedSoulmateBadge}
+        equippedFrameId={avatarFrames.equippedFrameId}
         letters={selectedCharacter ? lettersByChar[selectedCharacter.id] || [] : []}
         openedFromTarot={openedDetailFromTarot}
         onBackToTarot={handleBackToTarotFromDetail}
@@ -2934,21 +3013,50 @@ function AppContent() {
       <SoulmateCornerModal
         isOpen={isProfileModalOpen}
         userProfile={userProfile}
-        hasSoulmateBadge={hasUnlockedSoulmateBadge}
-        totalLettersSent={totalLettersSent}
+        equippedFrameId={avatarFrames.equippedFrameId}
+        unlockedFramesCount={unlockedFramesCount}
+        totalFramesCount={AVATAR_FRAMES.length}
         onSaveProfile={handleSaveUserProfile}
+        onOpenFrameStudio={() => setIsFrameStudioOpen(true)}
         onLogout={handleLogoutUserProfile}
         onClose={() => setIsProfileModalOpen(false)}
       />
 
-      {/* Pháo hoa bụi vàng / bạc & Bảng huy hiệu thành tựu ẩn */}
+      {/* Pháo hoa bụi vàng / bạc & Bảng chúc mừng mở khóa Khung Ảnh */}
       <GoldenFireworks burstKey={fireworkBurstKey} moonlightMode={isMoonlightSilverMode} />
       <SecretBadgeModal
-        isOpen={isSecretBadgeOpen}
-        onClose={() => setIsSecretBadgeOpen(false)}
+        isOpen={Boolean(unlockCelebration)}
+        frameId={unlockCelebration?.frameId ?? null}
+        sourceNote={unlockCelebration?.sourceNote}
+        avatarUrl={activeAvatarUrl}
+        avatarIcon={activeAvatarIcon}
+        displayName={activeDisplayName}
+        isEquipped={Boolean(
+          unlockCelebration && avatarFrames.equippedFrameId === unlockCelebration.frameId
+        )}
+        onEquipFrame={handleSelectAvatarFrame}
+        onClose={() => setUnlockCelebration(null)}
       />
 
-      {/* Easter Egg #1 cũ: 🗝️ Căn Phòng Bí Mật Của Chủ Nhà */}
+      {/* Phòng Chọn Avatar & Khung Ảnh Đại Diện */}
+      <AvatarFrameStudioModal
+        isOpen={isFrameStudioOpen}
+        avatarUrl={activeAvatarUrl}
+        avatarIcon={activeAvatarIcon}
+        displayName={activeDisplayName}
+        equippedFrameId={avatarFrames.equippedFrameId}
+        unlockedFrames={avatarFrames.unlocked}
+        characterSamples={characterAvatarSamples}
+        onChangeAvatar={handleChangePreviewAvatar}
+        onSelectFrame={handleSelectAvatarFrame}
+        onOpenNotebook={() => {
+          setIsFrameStudioOpen(false);
+          setIsSecretNotebookOpen(true);
+        }}
+        onClose={() => setIsFrameStudioOpen(false)}
+      />
+
+      {/* Căn Phòng Bí Mật Của Chủ Nhà */}
       <SecretRoomModal
         isOpen={isSecretRoomOpen}
         justUnlockedBadge={justUnlockedNightDecoder}
@@ -2959,19 +3067,21 @@ function AppContent() {
         onClose={() => setIsSecretRoomOpen(false)}
       />
 
-      {/* Easter Egg #3 cũ: 📜 Bức Thư Dưới Đáy Trang & Sổ Huy Hiệu Bí Mật */}
+      {/* Bức Thư Dưới Đáy Trang & Bộ Sưu Tập Khung Ảnh */}
       <SecretDiaryAndBadgesModal
         isOpen={isSecretNotebookOpen}
-        hasSoulmateBadge={hasUnlockedSoulmateBadge}
-        secretBadges={secretBadges}
+        unlockedFrames={avatarFrames.unlocked}
+        equippedFrameId={avatarFrames.equippedFrameId}
         isWitchingHourActive={isWitchingHourActive}
         isMoonlightSilverMode={isMoonlightSilverMode}
+        onSelectFrame={handleSelectAvatarFrame}
+        onOpenFrameStudio={() => setIsFrameStudioOpen(true)}
         onToggleWitchingHourTest={handleToggleWitchingHourTest}
         onToggleMoonlightSilverMode={toggleMoonlightSilverMode}
         onClose={() => setIsSecretNotebookOpen(false)}
       />
 
-      {/* Easter Egg mới #3: 🖋️ Dấu Ấn Của Chủ Nhân (Nhấn giữ chữ ký Tần Nhi) */}
+      {/* Dấu Ấn Của Chủ Nhân (Nhấn giữ chữ ký Tần Nhi) */}
       <SignatureSealModal
         isOpen={isSignatureSealOpen}
         justUnlockedSoulmate={justUnlockedSignatureSeal}
@@ -2983,30 +3093,22 @@ function AppContent() {
         onClose={() => setIsSignatureSealOpen(false)}
       />
 
-      {/* ⚖️ Hai Cánh Cửa Định Mệnh (Dual Character Matchup) */}
+      {/* Hai Cánh Cửa Định Mệnh (Dual Character Matchup) */}
       <DualCharacterMatchupModal
         isOpen={isDualMatchupOpen}
         characters={CHARACTERS}
-        onInspectCharacter={(char) => {
-          trackCharacterInteraction(char.id, 1);
-          setOpenedDetailFromTarot(false);
-          setOpenedDetailFromMystic(false);
-          setSelectedCharacter(char);
-        }}
+        onInspectCharacter={(char) => openCharacterProfileModal(char)}
         onChatLinkClick={(charId) => trackCharacterInteraction(charId, 2)}
         onClose={() => setIsDualMatchupOpen(false)}
       />
 
-      {/* Easter Egg mới #1: 👻 Tiếng Thì Thầm Khi Đổi Tab / Quay lại sau 60s */}
+      {/* Tiếng Thì Thầm Khi Đổi Tab / Quay lại sau 60s */}
       <TabWhisperToast
         whisper={tabWhisper}
         onInspectCharacter={(char) => {
           playSoftTap('card');
-          trackCharacterInteraction(char.id, 1);
           setTabWhisper(null);
-          setOpenedDetailFromTarot(false);
-          setOpenedDetailFromMystic(false);
-          setSelectedCharacter(char);
+          openCharacterProfileModal(char);
         }}
         onDismiss={() => setTabWhisper(null)}
       />

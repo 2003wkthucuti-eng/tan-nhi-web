@@ -282,8 +282,8 @@ export const ConstellationSky: React.FC<ConstellationSkyProps> = ({
                     <Award className="w-3 h-3" aria-hidden="true" />
                     <span>
                       {justUnlockedBadge
-                        ? 'Mở khóa: Người Nối Ánh Sao!'
-                        : 'Huy hiệu: Người Nối Ánh Sao'}
+                        ? 'Mở khóa khung: Long Vân Thủy Mặc!'
+                        : 'Khung Ảnh: Long Vân Thủy Mặc'}
                     </span>
                   </span>
                 )}

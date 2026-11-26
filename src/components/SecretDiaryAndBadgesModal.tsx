@@ -1,97 +1,35 @@
 import React, { useEffect } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import {
-  Award,
   BookOpen,
+  Check,
   Feather,
-  Ghost,
-  HelpCircle,
   KeyRound,
+  Lock,
   Moon,
   MoonStar,
   Sparkles,
   X,
 } from 'lucide-react';
-import type { SecretBadgeId, SecretBadgesState } from '../types/user';
+import { AVATAR_FRAMES } from '../data/avatarFrames';
+import type { AvatarFrameId } from '../types/user';
+import { playSoftTap } from '../utils/soundEffects';
+import { AvatarFrameThumbnail } from './AvatarFrameStudio';
 import { GoldenStardust } from './GoldenStardust';
 import { HolographicTiltCard } from './HolographicTiltCard';
-import { playSoftTap } from '../utils/soundEffects';
 
 interface SecretDiaryAndBadgesModalProps {
   isOpen: boolean;
-  hasSoulmateBadge: boolean;
-  secretBadges: SecretBadgesState;
+  unlockedFrames: Partial<Record<AvatarFrameId, number>>;
+  equippedFrameId: AvatarFrameId | null;
   isWitchingHourActive: boolean;
   isMoonlightSilverMode: boolean;
+  onSelectFrame: (frameId: AvatarFrameId | null) => void;
+  onOpenFrameStudio: () => void;
   onToggleWitchingHourTest: () => void;
   onToggleMoonlightSilverMode: () => void;
   onClose: () => void;
 }
-
-interface SecretBadgeDefinition {
-  id: SecretBadgeId;
-  title: string;
-  unlockedDesc: string;
-  vagueHint: string;
-  icon: 'cat' | 'key' | 'moon' | 'ghost' | 'star' | 'silver_moon';
-}
-
-const SECRET_BADGE_DEFINITIONS: SecretBadgeDefinition[] = [
-  {
-    id: 'soulmate',
-    title: '✨ Tri Kỷ Của Tần Nhi',
-    unlockedDesc:
-      'Chú mèo đen đã nhớ mặt cậu, hoặc cậu đã chạm giữ đủ lâu để mở con dấu tái bút của Tần Nhi.',
-    vagueHint:
-      'Gợi ý mơ hồ: Thử cưng nựng chú mèo đen 3 lần, gửi 3 lá thư tâm tình... hoặc nhấn giữ thật lâu vào cái tên "Tần Nhi".',
-    icon: 'cat',
-  },
-  {
-    id: 'night_decoder',
-    title: '🗝️ Kẻ Giải Mã Bóng Đêm',
-    unlockedDesc:
-      'Cậu đã tìm ra Căn Phòng Bí Mật của chủ nhà ẩn sau mật mã tên gọi Ngôi Nhà Nhỏ.',
-    vagueHint:
-      'Gợi ý mơ hồ: Thử gõ nhẹ 5 nhịp lên bảng tên "Ngôi Nhà Nhỏ Của Tần Nhi" ở đầu trang, hoặc khẽ gọi tên chủ nhà (tannhi) trên bàn phím.',
-    icon: 'key',
-  },
-  {
-    id: 'night_owl',
-    title: '🌙 Cú Đêm Ngôi Nhà Nhỏ',
-    unlockedDesc:
-      'Cậu đã bước vào Khung Giờ Ma Thuật lúc đêm sâu — khi những hạt bụi vàng tỏa sáng rực rỡ nhất.',
-    vagueHint:
-      'Gợi ý mơ hồ: Ghé thăm ngôi nhà khi đồng hồ điểm 00:00 – 03:00 sáng... hoặc tìm vầng trăng nhỏ bí mật dưới chân trang.',
-    icon: 'moon',
-  },
-  {
-    id: 'lost_returner',
-    title: '👻 Kẻ Lạc Lối Quay Về',
-    unlockedDesc:
-      'Dù có rời tab đi đâu hay đứng lặng một lúc lâu, cậu vẫn quay về lắng nghe lời thì thầm trong căn phòng nhỏ.',
-    vagueHint:
-      'Gợi ý mơ hồ: Thử chuyển sang một tab khác rồi quay trở lại, hoặc ngồi yên lặng khoảng một phút trước khi chạm lại trang.',
-    icon: 'ghost',
-  },
-  {
-    id: 'star_weaver',
-    title: '✨ Người Nối Ánh Sao',
-    unlockedDesc:
-      'Đôi mắt tinh tường của cậu đã thắp sáng đủ 5 ngôi sao ẩn trên vòm trời đầu trang để nhận lời chúc phúc đêm.',
-    vagueHint:
-      'Gợi ý mơ hồ: Ngước nhìn lên khoảng trời phía trên đầu trang, có 5 ngôi sao nhỏ đang chờ được nối lại thành chòm sao.',
-    icon: 'star',
-  },
-  {
-    id: 'moon_keeper',
-    title: '🌕 Người Gác Trăng',
-    unlockedDesc:
-      'Cậu đã đánh thức tiếng vọng dưới ánh trăng, nhuộm toàn bộ ánh kim của ngôi nhà sang sắc Bạc Ánh Trăng huyền ảo.',
-    vagueHint:
-      'Gợi ý mơ hồ: Hãy chạm đúp (Double Click / Double Tap) vào biểu tượng trăng khuyết hoặc ngôi sao trang trí trên trang.',
-    icon: 'silver_moon',
-  },
-];
 
 function formatUnlockedTime(ts?: number): string {
   if (!ts) return 'Đã khai mở';
@@ -109,10 +47,12 @@ function formatUnlockedTime(ts?: number): string {
 
 export const SecretDiaryAndBadgesModal: React.FC<SecretDiaryAndBadgesModalProps> = ({
   isOpen,
-  hasSoulmateBadge,
-  secretBadges,
+  unlockedFrames,
+  equippedFrameId,
   isWitchingHourActive,
   isMoonlightSilverMode,
+  onSelectFrame,
+  onOpenFrameStudio,
   onToggleWitchingHourTest,
   onToggleMoonlightSilverMode,
   onClose,
@@ -134,23 +74,13 @@ export const SecretDiaryAndBadgesModal: React.FC<SecretDiaryAndBadgesModalProps>
     onClose();
   };
 
-  const isBadgeUnlocked = (id: SecretBadgeId): boolean => {
-    if (id === 'soulmate') return hasSoulmateBadge || secretBadges.signatureSealUnlocked;
-    if (id === 'night_decoder') return secretBadges.nightDecoder;
-    if (id === 'night_owl') return secretBadges.nightOwl;
-    if (id === 'lost_returner') return secretBadges.lostReturner;
-    if (id === 'star_weaver') return secretBadges.starWeaver;
-    if (id === 'moon_keeper') return secretBadges.moonKeeper;
-    return false;
-  };
-
-  const unlockedCount = SECRET_BADGE_DEFINITIONS.filter((b) => isBadgeUnlocked(b.id)).length;
+  const unlockedCount = AVATAR_FRAMES.filter((f) => Boolean(unlockedFrames[f.id])).length;
 
   return (
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          key="secret-diary-badges-overlay"
+          key="secret-diary-frames-overlay"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -175,7 +105,6 @@ export const SecretDiaryAndBadgesModal: React.FC<SecretDiaryAndBadgesModalProps>
               disableTilt
               className="rounded-[26px] sm:rounded-[28px] bg-gradient-to-b from-[#17141D] via-[#0C0B10] to-[#141118] border-2 border-[#D4AF37]/80 shadow-[0_28px_84px_rgba(0,0,0,0.95),0_0_52px_rgba(212,175,55,0.28)] p-5 sm:p-7 max-h-[88vh] overflow-y-auto scroll-smooth"
             >
-              {/* Khung giấy cổ viền mảnh ánh kim */}
               <div
                 aria-hidden="true"
                 className="pointer-events-none absolute inset-2.5 rounded-[20px] border border-[#F3E5AB]/25"
@@ -184,14 +113,13 @@ export const SecretDiaryAndBadgesModal: React.FC<SecretDiaryAndBadgesModalProps>
               <button
                 type="button"
                 onClick={handleClose}
-                aria-label="Đóng Bức Thư & Sổ Huy Hiệu Bí Mật"
+                aria-label="Đóng Nhật Ký & Bộ Sưu Tập Khung Ảnh Đại Diện"
                 className="absolute top-4 right-4 z-30 inline-flex items-center justify-center w-9 h-9 rounded-full bg-[#0B0B0F]/90 border border-[#D4AF37]/50 text-[#F3E5AB] hover:border-[#F3E5AB] hover:bg-[#D4AF37]/20 active:scale-95 transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3E5AB]"
               >
                 <X className="w-4 h-4" aria-hidden="true" />
               </button>
 
               <div className="relative z-10 space-y-5">
-                {/* Đầu trang phong cách giấy cổ */}
                 <div className="text-center pr-6 sm:pr-0">
                   <p className="text-[11px] font-medium tracking-[0.2em] uppercase text-[#D4AF37] inline-flex items-center gap-1.5">
                     <KeyRound className="w-3.5 h-3.5" aria-hidden="true" />
@@ -201,7 +129,7 @@ export const SecretDiaryAndBadgesModal: React.FC<SecretDiaryAndBadgesModalProps>
                     id="secret-diary-title"
                     className="mt-1 font-display text-2xl sm:text-3xl font-semibold gold-shimmer-text leading-tight"
                   >
-                    📜 Nhật Ký & Sổ Tay Bí Mật
+                    📜 Nhật Ký & Khung Ảnh Đại Diện
                   </h2>
                 </div>
 
@@ -226,60 +154,58 @@ Mong rằng mỗi đêm ghé thăm, ngôi nhà đều mang lại cho cậu một
                   </p>
                 </section>
 
-                {/* Phần (b): Sổ Tay Bí Mật (Danh sách các huy hiệu ẩn) */}
+                {/* Phần (b): Bộ Sưu Tập Khung Ảnh Đại Diện */}
                 <section className="rounded-2xl bg-[#0B0B0F]/88 border border-[#D4AF37]/35 p-4 sm:p-5">
                   <div className="flex flex-wrap items-center justify-between gap-2 mb-3.5">
                     <div className="flex items-center gap-2">
                       <BookOpen className="w-4 h-4 text-[#D4AF37] shrink-0" aria-hidden="true" />
                       <h3 className="font-display text-lg sm:text-xl font-semibold text-[#F3E5AB]">
-                        (b) Sổ Tay Bí Mật
+                        (b) Bộ Sưu Tập Khung Ảnh
                       </h3>
                     </div>
 
-                    <span className="text-[11px] sm:text-xs font-medium text-[#F3E5AB] px-2.5 py-1 rounded-lg bg-[#D4AF37]/12 border border-[#D4AF37]/40 tabular-nums">
-                      Đã khám phá {unlockedCount}/{SECRET_BADGE_DEFINITIONS.length} bí mật
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[11px] sm:text-xs font-medium text-[#F3E5AB] px-2.5 py-1 rounded-lg bg-[#D4AF37]/12 border border-[#D4AF37]/40 tabular-nums">
+                        Đã mở {unlockedCount}/{AVATAR_FRAMES.length} khung
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          playSoftTap('card');
+                          onClose();
+                          onOpenFrameStudio();
+                        }}
+                        className="text-[11px] font-medium px-2.5 py-1 rounded-lg bg-[#191624] border border-[#D4AF37]/50 text-[#F3E5AB] hover:border-[#F3E5AB] transition-colors cursor-pointer"
+                      >
+                        Thử Avatar
+                      </button>
+                    </div>
                   </div>
 
                   <div className="space-y-3">
-                    {SECRET_BADGE_DEFINITIONS.map((badge) => {
-                      const unlocked = isBadgeUnlocked(badge.id);
-                      const unlockedTimestamp = secretBadges.unlockedAt[badge.id];
+                    {AVATAR_FRAMES.map((frame) => {
+                      const unlockedAt = unlockedFrames[frame.id];
+                      const unlocked = Boolean(unlockedAt);
+                      const isEquipped = equippedFrameId === frame.id;
 
                       return (
                         <div
-                          key={badge.id}
+                          key={frame.id}
                           className={`rounded-xl p-3.5 sm:p-4 border transition-all ${
                             unlocked
-                              ? 'bg-gradient-to-r from-[#1D170B]/95 via-[#151218]/95 to-[#1D170B]/95 border-[#F3E5AB]/70 shadow-[0_0_24px_rgba(212,175,55,0.2)]'
+                              ? 'bg-gradient-to-r from-[#1D170B]/95 via-[#151218]/95 to-[#1D170B]/95 border-[#F3E5AB]/70 shadow-[0_0_24px_rgba(212,175,55,0.18)]'
                               : 'bg-[#101016]/85 border-[#D4AF37]/18 opacity-80'
                           }`}
                         >
-                          <div className="flex items-start gap-3">
-                            {/* Biểu tượng huy hiệu: Sáng rực vàng khi mở khóa, dấu ? mờ khi chưa tìm thấy */}
-                            <div
-                              className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border ${
-                                unlocked
-                                  ? 'bg-gradient-to-br from-[#D4AF37]/30 to-[#1B1508] border-[#F3E5AB]/80 text-[#FFF4C4] shadow-[0_0_16px_rgba(243,229,171,0.38)]'
-                                  : 'bg-[#0B0B0F] border-[#D4AF37]/20 text-[#7A7264]'
-                              }`}
-                            >
-                              {unlocked ? (
-                                badge.icon === 'key' ? (
-                                  <KeyRound className="w-5 h-5" aria-hidden="true" />
-                                ) : badge.icon === 'moon' ? (
-                                  <Moon className="w-5 h-5" aria-hidden="true" />
-                                ) : badge.icon === 'ghost' ? (
-                                  <Ghost className="w-5 h-5" aria-hidden="true" />
-                                ) : badge.icon === 'star' ? (
-                                  <Sparkles className="w-5 h-5" aria-hidden="true" />
-                                ) : badge.icon === 'silver_moon' ? (
-                                  <MoonStar className="w-5 h-5" aria-hidden="true" />
-                                ) : (
-                                  <Award className="w-5 h-5" aria-hidden="true" />
-                                )
-                              ) : (
-                                <HelpCircle className="w-5 h-5" aria-hidden="true" />
+                          <div className="flex items-center gap-3">
+                            <div className="relative w-14 h-14 shrink-0">
+                              <AvatarFrameThumbnail frame={frame} isUnlocked={unlocked} />
+                              {!unlocked && (
+                                <span className="absolute inset-0 flex items-center justify-center">
+                                  <span className="w-6 h-6 rounded-full bg-[#0B0B0F]/85 border border-[#D4AF37]/40 flex items-center justify-center text-[#9E9687]">
+                                    <Lock className="w-3 h-3" aria-hidden="true" />
+                                  </span>
+                                </span>
                               )}
                             </div>
 
@@ -290,7 +216,7 @@ Mong rằng mỗi đêm ghé thăm, ngôi nhà đều mang lại cho cậu một
                                     unlocked ? 'gold-shimmer-text' : 'text-[#8E877A]'
                                   }`}
                                 >
-                                  {unlocked ? badge.title : '??? · Huy hiệu chưa giải mã'}
+                                  {frame.name}
                                 </h4>
 
                                 <span
@@ -300,11 +226,7 @@ Mong rằng mỗi đêm ghé thăm, ngôi nhà đều mang lại cho cậu một
                                       : 'bg-[#0B0B0F] border-[#D4AF37]/20 text-[#7A7264]'
                                   }`}
                                 >
-                                  {unlocked
-                                    ? badge.id === 'soulmate' && !unlockedTimestamp
-                                      ? 'Đã mở khóa'
-                                      : formatUnlockedTime(unlockedTimestamp)
-                                    : 'Chưa tìm thấy'}
+                                  {unlocked ? formatUnlockedTime(unlockedAt) : 'Chưa mở khóa'}
                                 </span>
                               </div>
 
@@ -313,8 +235,28 @@ Mong rằng mỗi đêm ghé thăm, ngôi nhà đều mang lại cho cậu một
                                   unlocked ? 'text-[#E5DEC9]' : 'text-[#9B9385] italic'
                                 }`}
                               >
-                                {unlocked ? badge.unlockedDesc : badge.vagueHint}
+                                {unlocked ? frame.unlockedDesc : `Gợi ý: ${frame.unlockHint}`}
                               </p>
+
+                              {unlocked && (
+                                <div className="mt-2">
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      playSoftTap('card');
+                                      onSelectFrame(isEquipped ? null : frame.id);
+                                    }}
+                                    className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all cursor-pointer ${
+                                      isEquipped
+                                        ? 'bg-[#D4AF37] text-[#0B0B0F]'
+                                        : 'bg-[#171522] border border-[#D4AF37]/50 text-[#F3E5AB] hover:border-[#F3E5AB]'
+                                    }`}
+                                  >
+                                    {isEquipped && <Check className="w-3 h-3" aria-hidden="true" />}
+                                    <span>{isEquipped ? 'Đang đeo (bấm để tháo)' : 'Đeo khung này'}</span>
+                                  </button>
+                                </div>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -323,7 +265,7 @@ Mong rằng mỗi đêm ghé thăm, ngôi nhà đều mang lại cho cậu một
                   </div>
                 </section>
 
-                {/* Chân modal: Nút thử nhanh Khung Giờ Ma Thuật, Đổi sắc Trăng Bạc & Đóng */}
+                {/* Chân modal */}
                 <div className="flex flex-col sm:flex-row flex-wrap items-center justify-between gap-2 pt-1">
                   <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
                     <button
@@ -332,9 +274,7 @@ Mong rằng mỗi đêm ghé thăm, ngôi nhà đều mang lại cho cậu một
                       className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 min-h-[38px] px-3 py-1.5 rounded-xl bg-[#12121A] border border-[#D4AF37]/40 text-[11px] font-medium text-[#DCD4C6] hover:text-[#F3E5AB] hover:border-[#D4AF37]/75 transition-all cursor-pointer"
                     >
                       <Moon className="w-3.5 h-3.5 text-[#D4AF37] shrink-0" aria-hidden="true" />
-                      <span>
-                        {isWitchingHourActive ? 'Tắt Đêm Sâu' : 'Thử Đêm Sâu'}
-                      </span>
+                      <span>{isWitchingHourActive ? 'Tắt Đêm Sâu' : 'Thử Đêm Sâu'}</span>
                     </button>
 
                     <button
@@ -343,9 +283,7 @@ Mong rằng mỗi đêm ghé thăm, ngôi nhà đều mang lại cho cậu một
                       className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 min-h-[38px] px-3 py-1.5 rounded-xl bg-[#12121A] border border-[#D4AF37]/40 text-[11px] font-medium text-[#DCD4C6] hover:text-[#F3E5AB] hover:border-[#D4AF37]/75 transition-all cursor-pointer"
                     >
                       <MoonStar className="w-3.5 h-3.5 text-[#D4AF37] shrink-0" aria-hidden="true" />
-                      <span>
-                        {isMoonlightSilverMode ? 'Về Vàng Gold' : 'Bạc Ánh Trăng'}
-                      </span>
+                      <span>{isMoonlightSilverMode ? 'Về Vàng Gold' : 'Bạc Ánh Trăng'}</span>
                     </button>
                   </div>
 

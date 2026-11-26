@@ -1,35 +1,40 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { Award, Check, LogOut, Sparkles, UserCheck, X } from 'lucide-react';
-import type { DefaultAvatarIconId, UserProfile } from '../types/user';
+import { Check, ImagePlus, LogOut, Sparkles, UserCheck, X } from 'lucide-react';
+import { AVATAR_FRAME_MAP } from '../data/avatarFrames';
+import type { AvatarFrameId, DefaultAvatarIconId, UserProfile } from '../types/user';
+import { playSoftTap } from '../utils/soundEffects';
 import {
+  AvatarFrameInlineTag,
   DEFAULT_AVATAR_OPTIONS,
-  SoulmateInlineBadge,
   UserAvatarBadge,
   UserAvatarIconGlyph,
 } from './UserAvatarBadge';
-import { playSoftTap } from '../utils/soundEffects';
 
 interface SoulmateCornerModalProps {
   isOpen: boolean;
   userProfile: UserProfile | null;
-  hasSoulmateBadge: boolean;
-  totalLettersSent: number;
+  equippedFrameId: AvatarFrameId | null;
+  unlockedFramesCount: number;
+  totalFramesCount: number;
   onSaveProfile: (profile: UserProfile) => void;
+  onOpenFrameStudio: () => void;
   onLogout: () => void;
   onClose: () => void;
 }
 
 /**
- * Góc Tri Kỷ: Tạo / chỉnh sửa tài khoản cục bộ (Tên hiển thị + Link Avatar hoặc chọn Icon mặc định)
- * và theo dõi trạng thái huy hiệu độc quyền "✨ Tri kỷ".
+ * Góc Tri Kỷ: Tạo / chỉnh sửa hồ sơ cục bộ (Tên hiển thị, ảnh tải từ máy / link / biểu tượng)
+ * và xem trước Khung Ảnh Đại Diện đang đeo.
  */
 export const SoulmateCornerModal: React.FC<SoulmateCornerModalProps> = ({
   isOpen,
   userProfile,
-  hasSoulmateBadge,
-  totalLettersSent,
+  equippedFrameId,
+  unlockedFramesCount,
+  totalFramesCount,
   onSaveProfile,
+  onOpenFrameStudio,
   onLogout,
   onClose,
 }) => {
@@ -37,6 +42,7 @@ export const SoulmateCornerModal: React.FC<SoulmateCornerModalProps> = ({
   const [avatarUrl, setAvatarUrl] = useState('');
   const [avatarIcon, setAvatarIcon] = useState<DefaultAvatarIconId>('black-cat');
   const [errorMsg, setErrorMsg] = useState('');
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -63,6 +69,20 @@ export const SoulmateCornerModal: React.FC<SoulmateCornerModalProps> = ({
     onClose();
   };
 
+  const handleLocalUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file || !file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === 'string') {
+        playSoftTap('card');
+        setAvatarUrl(reader.result);
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const cleanedName = displayName.trim();
@@ -76,6 +96,7 @@ export const SoulmateCornerModal: React.FC<SoulmateCornerModalProps> = ({
       displayName: cleanedName.slice(0, 32),
       avatarUrl: avatarUrl.trim(),
       avatarIcon,
+      equippedFrameId,
       createdAt: userProfile?.createdAt || new Date().toISOString(),
     });
     onClose();
@@ -87,7 +108,7 @@ export const SoulmateCornerModal: React.FC<SoulmateCornerModalProps> = ({
     onClose();
   };
 
-  const lettersRemaining = Math.max(0, 3 - totalLettersSent);
+  const equippedFrame = equippedFrameId ? AVATAR_FRAME_MAP[equippedFrameId] ?? null : null;
 
   return (
     <AnimatePresence>
@@ -110,7 +131,7 @@ export const SoulmateCornerModal: React.FC<SoulmateCornerModalProps> = ({
             exit={{ opacity: 0, scale: 0.94, y: 12 }}
             transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-md my-auto rounded-[24px] bg-gradient-to-b from-[#171620] via-[#0E0E15] to-[#13111A] border border-[#D4AF37]/65 shadow-[0_24px_70px_rgba(0,0,0,0.92),0_0_40px_rgba(212,175,55,0.22)] p-5 sm:p-6"
+            className="relative w-full max-w-md my-auto rounded-[24px] bg-gradient-to-b from-[#171620] via-[#0E0E15] to-[#13111A] border border-[#D4AF37]/65 shadow-[0_24px_70px_rgba(0,0,0,0.92),0_0_40px_rgba(212,175,55,0.22)] p-5 sm:p-6 max-h-[90vh] overflow-y-auto"
           >
             <div
               aria-hidden="true"
@@ -126,7 +147,6 @@ export const SoulmateCornerModal: React.FC<SoulmateCornerModalProps> = ({
               <X className="w-4 h-4" aria-hidden="true" />
             </button>
 
-            {/* Header */}
             <div className="relative z-10 text-center pb-4 border-b border-[#D4AF37]/20">
               <p className="text-[10px] font-display tracking-[0.22em] uppercase text-[#D4AF37]">
                 ✦ Thẻ Thành Viên ✦
@@ -139,7 +159,7 @@ export const SoulmateCornerModal: React.FC<SoulmateCornerModalProps> = ({
               </h2>
               <p className="text-xs text-[#B8B0A0] mt-1">
                 {userProfile
-                  ? 'Tùy chỉnh tên hiển thị và dấu ấn riêng khi gửi Hòm Thư Tâm Tình.'
+                  ? 'Tùy chỉnh tên, ảnh đại diện và khung ảnh khi gửi Hòm Thư Tâm Tình.'
                   : 'Tạo hồ sơ nhỏ để viết và lưu lời nhắn riêng cho từng nhân vật.'}
               </p>
             </div>
@@ -149,8 +169,10 @@ export const SoulmateCornerModal: React.FC<SoulmateCornerModalProps> = ({
               <UserAvatarBadge
                 avatarUrl={avatarUrl}
                 avatarIcon={avatarIcon}
+                frameId={equippedFrameId}
                 displayName={displayName || 'Tri kỷ ẩn danh'}
                 size="lg"
+                reserveFrameSpace
               />
               <div className="min-w-0 flex-1">
                 <p className="text-[10px] uppercase tracking-wider text-[#8E877A]">
@@ -160,34 +182,37 @@ export const SoulmateCornerModal: React.FC<SoulmateCornerModalProps> = ({
                   <span className="font-semibold text-sm sm:text-base text-[#F3E5AB] truncate max-w-[175px]">
                     {displayName.trim() || 'Tên hiển thị của cậu'}
                   </span>
-                  {hasSoulmateBadge && <SoulmateInlineBadge />}
+                  {equippedFrameId && <AvatarFrameInlineTag frameId={equippedFrameId} />}
                 </div>
                 <p className="text-[11px] text-[#B8B0A0] mt-0.5">
-                  {hasSoulmateBadge
-                    ? 'Đã sở hữu danh hiệu ✨ Tri kỷ độc quyền'
-                    : 'Chưa mở khóa huy hiệu ✨ Tri kỷ'}
+                  {equippedFrame
+                    ? `Đang đeo khung ${equippedFrame.name}`
+                    : `Đã mở ${unlockedFramesCount}/${totalFramesCount} Khung Ảnh Đại Diện`}
                 </p>
               </div>
             </div>
 
-            {/* Soulmate Badge Progress */}
-            <div className="relative z-10 mt-3 p-3 rounded-xl bg-[#121219]/90 border border-[#D4AF37]/20 flex items-start gap-2.5 text-xs">
-              <Award className="w-4 h-4 text-[#D4AF37] shrink-0 mt-0.5" aria-hidden="true" />
-              <div className="text-[#CFC8B8] leading-relaxed">
-                {hasSoulmateBadge ? (
-                  <span>
-                    Danh hiệu ánh vàng <strong className="text-[#F3E5AB]">✨ Tri kỷ</strong> đang
-                    tự động gắn sau tên của cậu trong mọi Hòm Thư Tâm Tình.
-                  </span>
-                ) : (
-                  <span>
-                    Chạm vào <strong className="text-[#F3E5AB]">chú mèo đen 3 lần</strong> hoặc gửi
-                    thêm <strong className="text-[#F3E5AB]">{lettersRemaining} lá thư</strong> tâm
-                    tình ({totalLettersSent}/3) để mở khóa huy hiệu{' '}
-                    <strong className="text-[#F3E5AB]">✨ Tri kỷ</strong>.
-                  </span>
-                )}
+            {/* Nút mở Phòng Chọn Khung Ảnh Đại Diện */}
+            <div className="relative z-10 mt-3 p-3 rounded-xl bg-[#121219]/90 border border-[#D4AF37]/25 flex items-center justify-between gap-2.5 text-xs">
+              <div className="text-[#CFC8B8] leading-snug">
+                <p className="font-medium text-[#F3E5AB]">Khung Ảnh Đại Diện</p>
+                <p className="text-[11px] text-[#9E9687]">
+                  Đeo & đổi khung từ bộ sưu tập ({unlockedFramesCount}/{totalFramesCount} đã mở)
+                </p>
               </div>
+
+              <button
+                type="button"
+                onClick={() => {
+                  playSoftTap('card');
+                  onClose();
+                  onOpenFrameStudio();
+                }}
+                className="shrink-0 inline-flex items-center gap-1 min-h-[34px] px-3 py-1.5 rounded-xl bg-[#1C1826] border border-[#D4AF37]/55 text-[11px] font-semibold text-[#F3E5AB] hover:border-[#F3E5AB] hover:bg-[#D4AF37]/15 transition-all cursor-pointer"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-[#D4AF37]" aria-hidden="true" />
+                <span>Chọn khung</span>
+              </button>
             </div>
 
             {/* Form */}
@@ -215,18 +240,38 @@ export const SoulmateCornerModal: React.FC<SoulmateCornerModalProps> = ({
               </div>
 
               <div>
-                <label
-                  htmlFor="profile-avatar-url"
-                  className="block text-xs font-medium text-[#E6CD82] mb-1.5"
-                >
-                  Link ảnh đại diện (tùy chọn)
-                </label>
+                <div className="flex items-center justify-between gap-2 mb-1.5">
+                  <label
+                    htmlFor="profile-avatar-url"
+                    className="block text-xs font-medium text-[#E6CD82]"
+                  >
+                    Ảnh đại diện (tải từ máy hoặc dán link)
+                  </label>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleLocalUpload}
+                    className="hidden"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playSoftTap('tap');
+                      fileInputRef.current?.click();
+                    }}
+                    className="inline-flex items-center gap-1 text-[11px] font-medium text-[#F3E5AB] hover:underline underline-offset-2 cursor-pointer"
+                  >
+                    <ImagePlus className="w-3.5 h-3.5 text-[#D4AF37]" aria-hidden="true" />
+                    <span>Tải ảnh lên</span>
+                  </button>
+                </div>
                 <input
                   id="profile-avatar-url"
-                  type="url"
-                  value={avatarUrl}
+                  type="text"
+                  value={avatarUrl.startsWith('data:') ? 'Ảnh đã tải từ máy (trong phiên)' : avatarUrl}
                   onChange={(e) => setAvatarUrl(e.target.value)}
-                  placeholder="Dán link ảnh https://... (để trống nếu dùng icon)"
+                  placeholder="Dán link ảnh https://... hoặc bấm Tải ảnh lên"
                   className="w-full min-h-[40px] px-3.5 py-2 rounded-xl bg-[#0B0B0F] border border-[#D4AF37]/30 text-xs sm:text-sm text-[#F5EFE0] placeholder:text-[#7E776B] focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/60"
                 />
               </div>
@@ -237,13 +282,14 @@ export const SoulmateCornerModal: React.FC<SoulmateCornerModalProps> = ({
                 </span>
                 <div className="grid grid-cols-3 gap-2">
                   {DEFAULT_AVATAR_OPTIONS.map((option) => {
-                    const isSelected = avatarIcon === option.id;
+                    const isSelected = avatarUrl.trim() === '' && avatarIcon === option.id;
                     return (
                       <button
                         key={option.id}
                         type="button"
                         onClick={() => {
                           playSoftTap('tap');
+                          setAvatarUrl('');
                           setAvatarIcon(option.id);
                         }}
                         className={`relative flex flex-col items-center justify-center gap-1 py-2.5 px-2 rounded-xl border text-[11px] font-medium transition-all cursor-pointer ${

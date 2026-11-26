@@ -34,6 +34,7 @@ interface MysticCornerModalProps {
   isOpen: boolean;
   characters: CharacterItem[];
   onOpenCharacterProfile: (character: CharacterItem) => void;
+  onMiniGamePlayed?: () => void;
   onClose: () => void;
 }
 
@@ -270,6 +271,7 @@ export const MysticCornerModal: React.FC<MysticCornerModalProps> = ({
   isOpen,
   characters,
   onOpenCharacterProfile,
+  onMiniGamePlayed,
   onClose,
 }) => {
   const [activeView, setActiveView] = useState<MysticView>('hub');
@@ -390,6 +392,9 @@ export const MysticCornerModal: React.FC<MysticCornerModalProps> = ({
     clearHoldTimer();
     holdSourceRef.current = null;
     setActiveView(next);
+    if (next !== 'hub') {
+      onMiniGamePlayed?.();
+    }
     if (next === 'eavesdrop' && !eavesdropChar) {
       initEavesdropRound();
     }

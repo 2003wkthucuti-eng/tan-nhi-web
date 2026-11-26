@@ -11,6 +11,7 @@ interface DestinyTarotModalProps {
   isOpen: boolean;
   characters: CharacterItem[];
   onInspectCharacter: (character: CharacterItem) => void;
+  onCardDrawn?: () => void;
   onClose: () => void;
 }
 
@@ -40,6 +41,7 @@ export const DestinyTarotModal: React.FC<DestinyTarotModalProps> = ({
   isOpen,
   characters,
   onInspectCharacter,
+  onCardDrawn,
   onClose,
 }) => {
   const [phase, setPhase] = useState<DrawPhase>('choosing');
@@ -104,6 +106,7 @@ export const DestinyTarotModal: React.FC<DestinyTarotModalProps> = ({
     clearTimers();
     revealTimerRef.current = window.setTimeout(() => {
       setPhase('revealed');
+      onCardDrawn?.();
     }, 1100);
   };
 

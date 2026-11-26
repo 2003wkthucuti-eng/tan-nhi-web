@@ -70,11 +70,11 @@ export const TabWhisperToast: React.FC<TabWhisperToastProps> = ({
               {whisper.justUnlockedBadge ? (
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#D4AF37]/20 border border-[#F3E5AB]/50 text-[10px] font-medium text-[#F3E5AB]">
                   <Award className="w-3 h-3 shrink-0" aria-hidden="true" />
-                  <span>Mở khóa: Kẻ Lạc Lối Quay Về</span>
+                  <span>Mở khóa khung: Hắc Long Nét Cọ</span>
                 </span>
               ) : (
                 <span className="text-[10px] text-[#8E877A]">
-                  Huy hiệu: Kẻ Lạc Lối Quay Về
+                  Khung Ảnh: Hắc Long Nét Cọ
                 </span>
               )}
 

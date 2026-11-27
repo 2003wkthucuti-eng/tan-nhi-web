@@ -1315,6 +1315,245 @@ html[data-site-theme]:not([data-site-theme="classic-gold"]) ::-webkit-scrollbar-
   color: #FFFFFF;
 }
 
+/* 7. Joo Jaekyung: Tạp chí võ đài trắng đen, bộ bài tây, găng đấm bốc, đĩa vinyl & mảnh báo */
+[data-site-theme="joo-jaekyung"] {
+  --font-display: "Oswald", "Be Vietnam Pro", system-ui, sans-serif;
+  --font-sans: "Be Vietnam Pro", system-ui, -apple-system, sans-serif;
+  --t-bg: #0A0A0C;
+  --t-bg-rgb: 10, 10, 12;
+  --t-surface: #131317;
+  --t-surface-rgb: 19, 19, 23;
+  --t-surface-alt: #1E1F25;
+  --t-surface-alt-rgb: 30, 31, 37;
+  --t-accent: #D6D8DE;
+  --t-accent-rgb: 214, 216, 222;
+  --t-bright: #FFFFFF;
+  --t-bright-rgb: 255, 255, 255;
+  --t-soft: #E5E7EC;
+  --t-text: #F7F8FA;
+  --t-muted: #C2C5CE;
+  --t-btn-text: #09090B;
+  --t-grad-from: #A6A9B3;
+  --t-grad-to: #FFFFFF;
+  font-family: var(--font-sans);
+}
+
+[data-site-theme="joo-jaekyung"] .font-display {
+  font-family: var(--font-display);
+  letter-spacing: 0.015em;
+}
+
+[data-site-theme="joo-jaekyung"] header {
+  background-color: rgba(10, 10, 12, 0.93) !important;
+  border-bottom: 3px solid rgba(255, 255, 255, 0.78);
+  box-shadow: 0 4px 0 rgba(255, 255, 255, 0.14), 0 12px 26px rgba(0, 0, 0, 0.68);
+}
+
+[data-site-theme="joo-jaekyung"] footer {
+  border-top: 2px dashed rgba(255, 255, 255, 0.42);
+}
+
+[data-site-theme="joo-jaekyung"] .shimmer-card-border,
+[data-site-theme="joo-jaekyung"] section[aria-labelledby="trending-spotlight-heading"] article,
+[data-site-theme="joo-jaekyung"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-\[24px\],
+[data-site-theme="joo-jaekyung"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-\[26px\],
+[data-site-theme="joo-jaekyung"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-\[28px\],
+[data-site-theme="joo-jaekyung"] aside[aria-label="Trình phát nhạc nền"],
+[data-site-theme="joo-jaekyung"] aside[aria-label="Thông báo Khung Giờ Ma Thuật"],
+[data-site-theme="joo-jaekyung"] aside[role="status"],
+[data-site-theme="joo-jaekyung"] nav[aria-label="Phân trang danh sách nhân vật"] > div {
+  border-radius: 0.35rem;
+  background-color: rgba(17, 17, 21, 0.93) !important;
+  background-image:
+    repeating-linear-gradient(
+      -45deg,
+      rgba(255, 255, 255, 0.025) 0px,
+      rgba(255, 255, 255, 0.025) 1px,
+      transparent 1px,
+      transparent 10px
+    ),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.07) 0%, rgba(12, 12, 15, 0.96) 100%) !important;
+  border-width: 2px;
+  border-color: rgba(255, 255, 255, 0.62);
+  outline: 1px dashed rgba(214, 216, 222, 0.32);
+  outline-offset: -6px;
+  box-shadow:
+    3px 3px 0 rgba(255, 255, 255, 0.22),
+    0 16px 34px rgba(0, 0, 0, 0.78);
+}
+
+[data-site-theme="joo-jaekyung"] .shimmer-card-border::after,
+[data-site-theme="joo-jaekyung"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-\[26px\]::after,
+[data-site-theme="joo-jaekyung"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-\[28px\]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    radial-gradient(circle 16px at 92% 9%, rgba(255, 255, 255, 0.14) 0, rgba(255, 255, 255, 0.06) 45%, transparent 66%),
+    linear-gradient(to right, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)) bottom left / 14px 2px no-repeat,
+    linear-gradient(to top, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)) bottom left / 2px 14px no-repeat;
+}
+
+[data-site-theme="joo-jaekyung"] [role="dialog"]:not([aria-label*="Theme"]) section.rounded-2xl,
+[data-site-theme="joo-jaekyung"] [role="dialog"]:not([aria-label*="Theme"]) form.rounded-2xl,
+[data-site-theme="joo-jaekyung"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-2xl:not(.rounded-\[24px\]):not(.rounded-\[26px\]):not(.rounded-\[28px\]),
+[data-site-theme="joo-jaekyung"] [role="dialog"]:not([aria-label*="Theme"]) article.rounded-xl,
+[data-site-theme="joo-jaekyung"] [role="dialog"]:not([aria-label*="Theme"]) div.rounded-xl {
+  border-radius: 0.3rem;
+  background-color: rgba(12, 12, 15, 0.88);
+  border-color: rgba(255, 255, 255, 0.36);
+}
+
+[data-site-theme="joo-jaekyung"] button.rounded-xl,
+[data-site-theme="joo-jaekyung"] button.rounded-lg,
+[data-site-theme="joo-jaekyung"] a.rounded-lg,
+[data-site-theme="joo-jaekyung"] a.rounded-xl,
+[data-site-theme="joo-jaekyung"] input[type="search"],
+[data-site-theme="joo-jaekyung"] textarea {
+  border-radius: 0.28rem;
+}
+
+[data-site-theme="joo-jaekyung"] button.rounded-xl,
+[data-site-theme="joo-jaekyung"] button.rounded-lg,
+[data-site-theme="joo-jaekyung"] a.rounded-lg,
+[data-site-theme="joo-jaekyung"] a.rounded-xl {
+  box-shadow: 2px 2px 0 rgba(255, 255, 255, 0.22);
+}
+
+[data-site-theme="joo-jaekyung"] [role="group"] button[aria-pressed="true"] {
+  background: #FFFFFF !important;
+  color: #09090B !important;
+  border-color: #FFFFFF !important;
+}
+
+[data-site-theme="joo-jaekyung"] span.rounded-md {
+  border-radius: 0.15rem;
+  border-style: dashed;
+  border-color: rgba(255, 255, 255, 0.56);
+  background-color: #101014;
+  color: #FFFFFF;
+}
+
+/* 8. Zhenya: Form hồ sơ đặc vụ / thư mục ảnh nâu kem - xám ấm, thẻ Profile 5 sao & khung ảnh tinh gọn */
+[data-site-theme="zhenya"] {
+  --font-display: "Lexend", "Be Vietnam Pro", system-ui, sans-serif;
+  --font-sans: "Be Vietnam Pro", system-ui, -apple-system, sans-serif;
+  --t-bg: #191410;
+  --t-bg-rgb: 25, 20, 16;
+  --t-surface: #251D17;
+  --t-surface-rgb: 37, 29, 23;
+  --t-surface-alt: #332820;
+  --t-surface-alt-rgb: 51, 40, 32;
+  --t-accent: #DFC7A7;
+  --t-accent-rgb: 223, 199, 167;
+  --t-bright: #FAF2E6;
+  --t-bright-rgb: 250, 242, 230;
+  --t-soft: #EEDBC1;
+  --t-text: #FAF5ED;
+  --t-muted: #D6C8B8;
+  --t-btn-text: #1B140F;
+  --t-grad-from: #B89672;
+  --t-grad-to: #FAF2E6;
+  font-family: var(--font-sans);
+}
+
+[data-site-theme="zhenya"] .font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
+}
+
+[data-site-theme="zhenya"] header {
+  background-color: rgba(25, 20, 16, 0.88) !important;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1.5px solid rgba(250, 242, 230, 0.34);
+  box-shadow: 0 8px 28px rgba(10, 7, 4, 0.52);
+}
+
+[data-site-theme="zhenya"] footer {
+  border-top: 1.5px solid rgba(223, 199, 167, 0.32);
+}
+
+[data-site-theme="zhenya"] .shimmer-card-border,
+[data-site-theme="zhenya"] section[aria-labelledby="trending-spotlight-heading"] article,
+[data-site-theme="zhenya"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-\[24px\],
+[data-site-theme="zhenya"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-\[26px\],
+[data-site-theme="zhenya"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-\[28px\],
+[data-site-theme="zhenya"] aside[aria-label="Trình phát nhạc nền"],
+[data-site-theme="zhenya"] aside[aria-label="Thông báo Khung Giờ Ma Thuật"],
+[data-site-theme="zhenya"] aside[role="status"],
+[data-site-theme="zhenya"] nav[aria-label="Phân trang danh sách nhân vật"] > div {
+  border-radius: 1.35rem;
+  background-color: rgba(37, 29, 23, 0.88) !important;
+  background-image:
+    radial-gradient(ellipse 85% 42% at 50% 0%, rgba(250, 242, 230, 0.14), transparent 72%),
+    linear-gradient(175deg, rgba(140, 114, 88, 0.24) 0%, rgba(33, 26, 20, 0.94) 100%) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-width: 1.5px;
+  border-color: rgba(250, 242, 230, 0.48);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 252, 246, 0.34),
+    0 16px 36px rgba(10, 7, 4, 0.58);
+}
+
+[data-site-theme="zhenya"] .shimmer-card-border::after,
+[data-site-theme="zhenya"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-\[26px\]::after,
+[data-site-theme="zhenya"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-\[28px\]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    radial-gradient(circle 14px at 90% 10%, rgba(250, 242, 230, 0.22), transparent 68%),
+    linear-gradient(90deg, rgba(250, 242, 230, 0.32), rgba(223, 199, 167, 0.16)) 14px 10px / 48px 2px no-repeat;
+}
+
+[data-site-theme="zhenya"] .shimmer-card-border .aspect-square {
+  border-radius: 0.9rem;
+  border-width: 2px;
+  border-color: rgba(250, 242, 230, 0.78);
+  padding: 3px;
+  background-color: rgba(250, 242, 230, 0.12);
+  box-shadow: 0 6px 18px rgba(12, 8, 5, 0.35);
+}
+
+[data-site-theme="zhenya"] [role="dialog"]:not([aria-label*="Theme"]) section.rounded-2xl,
+[data-site-theme="zhenya"] [role="dialog"]:not([aria-label*="Theme"]) form.rounded-2xl,
+[data-site-theme="zhenya"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-2xl:not(.rounded-\[24px\]):not(.rounded-\[26px\]):not(.rounded-\[28px\]),
+[data-site-theme="zhenya"] [role="dialog"]:not([aria-label*="Theme"]) article.rounded-xl,
+[data-site-theme="zhenya"] [role="dialog"]:not([aria-label*="Theme"]) div.rounded-xl {
+  border-radius: 1rem;
+  background-color: rgba(25, 20, 16, 0.78);
+  border-color: rgba(223, 199, 167, 0.36);
+}
+
+[data-site-theme="zhenya"] button.rounded-xl,
+[data-site-theme="zhenya"] button.rounded-lg,
+[data-site-theme="zhenya"] a.rounded-lg,
+[data-site-theme="zhenya"] a.rounded-xl,
+[data-site-theme="zhenya"] input[type="search"],
+[data-site-theme="zhenya"] textarea {
+  border-radius: 0.9rem;
+}
+
+[data-site-theme="zhenya"] [role="group"] button[aria-pressed="true"] {
+  background: #FAF2E6 !important;
+  color: #1B140F !important;
+  border-color: #FAF2E6 !important;
+  box-shadow: 0 4px 14px rgba(250, 242, 230, 0.28);
+}
+
+[data-site-theme="zhenya"] span.rounded-md {
+  border-radius: 9999px;
+  border-color: rgba(250, 242, 230, 0.42);
+  background-color: rgba(94, 73, 56, 0.52);
+  color: #FAF2E6;
+}
+
 /* Áp dụng token cho các Theme mới (trừ mặc định classic-gold) */
 [data-site-theme]:not([data-site-theme="classic-gold"]) {
   background-color: var(--t-bg);

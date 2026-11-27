@@ -262,6 +262,32 @@ export const BlackCatMascot: React.FC<BlackCatMascotProps> = ({
       starBright: '#FFFFFF',
       starWarm: '#CFD4DE',
     },
+    'joo-jaekyung': {
+      gradStart: '#FFFFFF',
+      gradMid: '#D6D8DE',
+      gradEnd: '#4A4D57',
+      bodyFill: '#0B0B0E',
+      eyeFill: '#FFFFFF',
+      pupilFill: '#0A0A0D',
+      noseFill: '#D6D8DE',
+      auraInner: '#FFFFFF',
+      auraMid: '#9EA3AE',
+      starBright: '#FFFFFF',
+      starWarm: '#D6D8DE',
+    },
+    'zhenya': {
+      gradStart: '#FAF2E6',
+      gradMid: '#DFC7A7',
+      gradEnd: '#7C6045',
+      bodyFill: '#EFE6D8',
+      eyeFill: '#8DB8A2',
+      pupilFill: '#1B140F',
+      noseFill: '#9B7C60',
+      auraInner: '#FAF2E6',
+      auraMid: '#DFC7A7',
+      starBright: '#FAF2E6',
+      starWarm: '#DFC7A7',
+    },
   };
 
   const p = paletteMap[effectiveThemeId];
@@ -892,6 +918,62 @@ export const BlackCatMascot: React.FC<BlackCatMascotProps> = ({
         </g>
       )}
 
+      {/* Joo Jaekyung: Đĩa vinyl, lá bài tây bích & găng đấm bốc phía sau mèo đen */}
+      {variant !== 'badge' && effectiveThemeId === 'joo-jaekyung' && (
+        <g aria-hidden="true">
+          {/* Đĩa vinyl trắng đen phía sau */}
+          <circle cx="88" cy="48" r="19" fill="#131317" stroke="#FFFFFF" strokeOpacity="0.6" strokeWidth="1.2" />
+          <circle cx="88" cy="48" r="12" stroke="#D6D8DE" strokeOpacity="0.28" strokeWidth="0.8" />
+          <circle cx="88" cy="48" r="5" fill="#F7F8FA" fillOpacity="0.85" />
+          {/* Lá bài tây A Bích góc trên trái */}
+          <g transform="rotate(-14 23 33)" className="animate-cat-star-1">
+            <rect x="14" y="21" width="17" height="23" rx="2" fill="#F7F8FA" stroke="#0B0B0E" strokeWidth="1.2" />
+            <path d="M22.5 27.5C22.5 27.5 18.5 31 18.5 33.4C18.5 34.8 19.6 35.6 20.8 35.6C21.5 35.6 22.1 35.2 22.5 34.6C22.9 35.2 23.5 35.6 24.2 35.6C25.4 35.6 26.5 34.8 26.5 33.4C26.5 31 22.5 27.5 22.5 27.5ZM21.7 35L20.8 37.5H24.2L23.3 35H21.7Z" fill="#0B0B0E" />
+          </g>
+          {/* Găng đấm bốc nhỏ góc dưới trái */}
+          <g className="animate-cat-star-2">
+            <rect x="16" y="75" width="12" height="10" rx="4" fill="#18191E" stroke="#FFFFFF" strokeWidth="1.2" />
+            <rect x="17.5" y="83.5" width="9" height="4" rx="1" fill="#FFFFFF" />
+          </g>
+        </g>
+      )}
+
+      {/* Zhenya: Thư mục hồ sơ nâu kem, 5 ngôi sao Profile & ánh sao vàng kem */}
+      {variant !== 'badge' && effectiveThemeId === 'zhenya' && (
+        <g aria-hidden="true">
+          <rect
+            x="16"
+            y="18"
+            width="88"
+            height="84"
+            rx="12"
+            fill="#8C7258"
+            fillOpacity="0.14"
+            stroke="#FAF2E6"
+            strokeOpacity="0.45"
+            strokeWidth="1.3"
+          />
+          {/* 5 ngôi sao hồ sơ nhỏ ở viền trên */}
+          <g fill="#FAF2E6" fillOpacity="0.88">
+            <circle cx="44" cy="18" r="1.7" />
+            <circle cx="52" cy="18" r="1.7" />
+            <circle cx="60" cy="18" r="1.7" />
+            <circle cx="68" cy="18" r="1.7" />
+            <circle cx="76" cy="18" r="1.7" />
+          </g>
+          <path
+            d="M22 33L24 38.5L29.5 40.5L24 42.5L22 48L20 42.5L14.5 40.5L20 38.5Z"
+            fill="#FAF2E6"
+            className="animate-cat-star-1"
+          />
+          <path
+            d="M97 38L98.6 42.4L103 44L98.6 45.6L97 50L95.4 45.6L91 44L95.4 42.4Z"
+            fill="#DFC7A7"
+            className="animate-cat-star-2"
+          />
+        </g>
+      )}
+
       {/* Đuôi mèo uốn cong đung đưa mềm mại */}
       <path
         d="M77 95C91 95 101 86 101 75C101 66 93 62 90 67C88 71 92 75 93 78"
@@ -1014,6 +1096,24 @@ export const BlackCatMascot: React.FC<BlackCatMascotProps> = ({
         <g aria-hidden="true">
           <path d="M48 62L55 68L60 64L65 68L72 62" fill="#FFFFFF" stroke="#18191F" strokeWidth="1.2" strokeLinejoin="round" />
           <path d="M58 65H62L63.2 79L60 83L56.8 79L58 65Z" fill="#14151A" stroke="#FFFFFF" strokeWidth="0.8" strokeLinejoin="round" />
+        </g>
+      ) : effectiveThemeId === 'joo-jaekyung' ? (
+        /* Joo Jaekyung: Vòng đai võ đài trắng đen & charm quân bích */
+        <g aria-hidden="true">
+          <path d="M46 62C54 66 66 66 74 62" stroke="#FFFFFF" strokeWidth="2.4" strokeLinecap="round" />
+          <rect x="55" y="64.5" width="10" height="7" rx="1.2" fill="#0B0B0E" stroke="#FFFFFF" strokeWidth="1.1" />
+          <path d="M60 65.8C60 65.8 57.6 67.8 57.6 69.2C57.6 70 58.3 70.5 59 70.5C59.4 70.5 59.8 70.3 60 69.9C60.2 70.3 60.6 70.5 61 70.5C61.7 70.5 62.4 70 62.4 69.2C62.4 67.8 60 65.8 60 65.8Z" fill="#FFFFFF" />
+        </g>
+      ) : effectiveThemeId === 'zhenya' ? (
+        /* Zhenya: Vòng cổ nâu trầm & huy hiệu sao 4 cánh kem sáng */
+        <g aria-hidden="true">
+          <path d="M47 62C54 66 66 66 73 62" stroke="#3B2E24" strokeWidth="2.2" strokeLinecap="round" />
+          <path
+            d="M60 63.2L61.6 66.8L65.2 68.4L61.6 70L60 73.6L58.4 70L54.8 68.4L58.4 66.8Z"
+            fill="#FAF2E6"
+            stroke="#5E4938"
+            strokeWidth="0.9"
+          />
         </g>
       ) : (
         <>

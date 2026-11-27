@@ -427,7 +427,9 @@ export const IntroSealDoors: React.FC<IntroSealDoorsProps> = ({
           themeId === 'pixel-doodles' ||
           themeId === 'sabbath-crew' ||
           themeId === 'night-ride' ||
-          themeId === 'ilay-riegrow';
+          themeId === 'ilay-riegrow' ||
+          themeId === 'joo-jaekyung' ||
+          themeId === 'zhenya';
 
         const cutoutAccentDecor: Partial<Record<SiteThemeId, { left: string; right: string; glow: string }>> = {
           'bien-dem-sua': {
@@ -459,6 +461,16 @@ export const IntroSealDoors: React.FC<IntroSealDoorsProps> = ({
             left: '✦',
             right: '✦',
             glow: 'radial-gradient(circle, rgba(255,255,255,0.4) 0%, rgba(190,198,214,0.22) 52%, transparent 74%)',
+          },
+          'joo-jaekyung': {
+            left: '♠',
+            right: '🥊',
+            glow: 'radial-gradient(circle, rgba(255,255,255,0.38) 0%, rgba(214,216,222,0.22) 52%, transparent 74%)',
+          },
+          'zhenya': {
+            left: '✦',
+            right: '★',
+            glow: 'radial-gradient(circle, rgba(250,242,230,0.44) 0%, rgba(223,199,167,0.26) 52%, transparent 74%)',
           },
         };
 
@@ -753,6 +765,60 @@ export const IntroSealDoors: React.FC<IntroSealDoorsProps> = ({
                         </>
                       )}
 
+                      {themeId === 'joo-jaekyung' && (
+                        <>
+                          {/* Nửa trái: Chân dung chính diện Joo Jaekyung */}
+                          <g mask={`url(#${heartLeftMaskId})`}>
+                            <image
+                              href={activeTheme.bgImageUrl}
+                              x="-135"
+                              y="-212"
+                              width="400"
+                              height="711"
+                              preserveAspectRatio="xMidYMid slice"
+                            />
+                          </g>
+                          {/* Nửa phải: Joo Jaekyung đeo kính */}
+                          <g mask={`url(#${heartRightMaskId})`}>
+                            <image
+                              href={activeTheme.bgImageUrl}
+                              x="-148"
+                              y="4"
+                              width="370"
+                              height="658"
+                              preserveAspectRatio="xMidYMid slice"
+                            />
+                          </g>
+                        </>
+                      )}
+
+                      {themeId === 'zhenya' && (
+                        <>
+                          {/* Nửa trái: Zhenya bìa Profile */}
+                          <g mask={`url(#${heartLeftMaskId})`}>
+                            <image
+                              href={activeTheme.bgImageUrl}
+                              x="-52"
+                              y="2"
+                              width="340"
+                              height="604"
+                              preserveAspectRatio="xMidYMid slice"
+                            />
+                          </g>
+                          {/* Nửa phải: Chân dung cận mặt Zhenya */}
+                          <g mask={`url(#${heartRightMaskId})`}>
+                            <image
+                              href={activeTheme.bgImageUrl}
+                              x="-36"
+                              y="-202"
+                              width="340"
+                              height="604"
+                              preserveAspectRatio="xMidYMid slice"
+                            />
+                          </g>
+                        </>
+                      )}
+
                       <rect x="0" y="0" width="220" height="200" fill={`url(#${heartFadeMaskId})`} />
                     </g>
 
@@ -984,6 +1050,16 @@ const WaxSealArtwork: React.FC = () => {
         )}
         {themeId === 'ilay-riegrow' && (
           <path d="M58.5 58H61.5L62.2 66L60 68.5L57.8 66L58.5 58Z" fill={o0} fillOpacity="0.9" />
+        )}
+        {themeId === 'joo-jaekyung' && (
+          <path
+            d="M60 27.5C60 27.5 56 31 56 33.4C56 34.8 57.1 35.6 58.3 35.6C59 35.6 59.6 35.2 60 34.6C60.4 35.2 61 35.6 61.7 35.6C62.9 35.6 64 34.8 64 33.4C64 31 60 27.5 60 27.5ZM59.2 35L58.3 37.5H61.7L60.8 35H59.2Z"
+            fill={o0}
+            fillOpacity="0.92"
+          />
+        )}
+        {themeId === 'zhenya' && (
+          <path d="M60 27L61.2 30.8L65 32L61.2 33.2L60 37L58.8 33.2L55 32L58.8 30.8Z" fill={o0} fillOpacity="0.95" />
         )}
 
         {/* Đôi mắt sáng nổi bật trên nền khắc đen */}

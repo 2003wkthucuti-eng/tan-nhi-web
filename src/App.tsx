@@ -2152,6 +2152,10 @@ function AppContent() {
                     ? '★ Night Ride · Chuyến xe đêm & thẻ cảm xúc phát sáng'
                     : activeTheme.id === 'ilay-riegrow'
                     ? '✦ Ilay Riegrow Edition · Tạp chí đen trắng sắc lạnh'
+                    : activeTheme.id === 'joo-jaekyung'
+                    ? '🥊 Team Black · Tạp chí võ đài & bộ bài tây trắng đen'
+                    : activeTheme.id === 'zhenya'
+                    ? '★★★★★ Profile · Hồ sơ đặc vụ Zhenya & bộ sưu tập ảnh'
                     : 'Bộ sưu tập nhân vật AI Chatbot'}
                 </p>
                 <h2 className="font-display text-2xl sm:text-3xl lg:text-[40px] font-semibold text-[#F5EFE0] leading-[1.15] [text-wrap:balance]">
@@ -2978,6 +2982,22 @@ function AppContent() {
                       <span className="text-[#F0C975]">★</span>
                       <span className="ml-1 px-1.5 py-[1px] rounded bg-[#F7FAFF] text-[#080A10] font-semibold tracking-normal">
                         Night Ride
+                      </span>
+                    </div>
+                  )}
+                  {activeTheme.id === 'joo-jaekyung' && (
+                    <div aria-hidden="true" className="mt-1 flex items-center gap-1.5 text-[9.5px] text-[#FFFFFF]/90">
+                      <span>♠</span>
+                      <span className="px-1.5 py-[1px] rounded bg-[#FFFFFF] text-[#09090B] font-semibold">
+                        Team Black
+                      </span>
+                    </div>
+                  )}
+                  {activeTheme.id === 'zhenya' && (
+                    <div aria-hidden="true" className="mt-1 flex items-center gap-1.5 text-[9.5px] text-[#FAF2E6]/90">
+                      <span className="tracking-widest">★★★★★</span>
+                      <span className="px-1.5 py-[1px] rounded-full bg-[#FAF2E6] text-[#1B140F] font-semibold">
+                        Profile
                       </span>
                     </div>
                   )}

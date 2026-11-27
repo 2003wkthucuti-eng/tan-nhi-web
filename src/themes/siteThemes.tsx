@@ -25,7 +25,9 @@ export type SiteThemeId =
   | 'pixel-doodles'
   | 'sabbath-crew'
   | 'night-ride'
-  | 'ilay-riegrow';
+  | 'ilay-riegrow'
+  | 'joo-jaekyung'
+  | 'zhenya';
 
 export type ThemeParticleKind =
   | 'star'
@@ -37,7 +39,8 @@ export type ThemeParticleKind =
   | 'jellyfish'
   | 'pixel-heart'
   | 'lightning'
-  | 'noir-star';
+  | 'noir-star'
+  | 'card-suit';
 
 export type ThemeFormVariant =
   | 'default'
@@ -46,7 +49,9 @@ export type ThemeFormVariant =
   | 'pixel-notebook'
   | 'street-crew'
   | 'night-ride'
-  | 'noir-editorial';
+  | 'noir-editorial'
+  | 'ring-magazine'
+  | 'agent-dossier';
 
 export interface SiteThemeDefinition {
   id: SiteThemeId;
@@ -513,6 +518,60 @@ export const SITE_THEMES: SiteThemeDefinition[] = [
     waxOuter: ['#FFFFFF', '#D8DCE4', '#6E7480', '#1D1F24'],
     waxInner: ['#8B919E', '#484D57', '#16171B'],
   },
+  {
+    id: 'joo-jaekyung',
+    name: 'Joo Jaekyung',
+    shortName: 'Jaekyung',
+    tagline: 'Tạp chí võ đài trắng đen, bộ bài tây, găng đấm bốc & đĩa vinyl',
+    mascotLabel: 'Mèo đen dứt khoát bên găng đấm bốc, bài tây & đĩa vinyl',
+    isSpecialTheme: true,
+    formVariant: 'ring-magazine',
+    bgImageUrl: '/assets/aistudio/2cdaef647b4f7e14cd8e60ae61815874_0b9e9ac6.jpg',
+    bgImageOpacity: 0.2,
+    bgColor: '#0A0A0C',
+    surfaceColor: '#131317',
+    accentColor: '#D6D8DE',
+    brightColor: '#FFFFFF',
+    textColor: '#F7F8FA',
+    mutedTextColor: '#C2C5CE',
+    buttonTextColor: '#09090B',
+    swatchFrom: '#17171B',
+    swatchTo: '#FFFFFF',
+    particleKind: 'card-suit',
+    particleColors: ['#FFFFFF', '#B7BAC4'],
+    fireworkPalette: ['#FFFFFF', '#E6E8EE', '#B7BAC4', '#8A8E99', '#F3F4F7'],
+    fogPrimary: 'rgba(214, 216, 222, 0.1)',
+    fogSecondary: 'rgba(255, 255, 255, 0.065)',
+    waxOuter: ['#FFFFFF', '#D8DAE0', '#636670', '#18191D'],
+    waxInner: ['#8A8D96', '#464850', '#141518'],
+  },
+  {
+    id: 'zhenya',
+    name: 'Zhenya',
+    shortName: 'Zhenya',
+    tagline: 'Hồ sơ đặc vụ nâu kem ấm, thẻ Profile 5 sao & ánh sao dịu lạnh',
+    mascotLabel: 'Mèo tông kem mắt xanh lạnh cùng ánh sao 5 cánh hồ sơ',
+    isSpecialTheme: true,
+    formVariant: 'agent-dossier',
+    bgImageUrl: '/assets/aistudio/2ad2773cd288f7881383e8969fb578d9_4a6da8c1.jpg',
+    bgImageOpacity: 0.2,
+    bgColor: '#191410',
+    surfaceColor: '#251D17',
+    accentColor: '#DFC7A7',
+    brightColor: '#FAF2E6',
+    textColor: '#FAF5ED',
+    mutedTextColor: '#D6C8B8',
+    buttonTextColor: '#1B140F',
+    swatchFrom: '#8C7258',
+    swatchTo: '#FAF2E6',
+    particleKind: 'celestial',
+    particleColors: ['#FAF2E6', '#DFC7A7'],
+    fireworkPalette: ['#FFFFFF', '#FAF2E6', '#DFC7A7', '#BFA07A', '#EFE2CE'],
+    fogPrimary: 'rgba(223, 199, 167, 0.13)',
+    fogSecondary: 'rgba(250, 242, 230, 0.08)',
+    waxOuter: ['#FFF7EB', '#E4CCB0', '#967758', '#4A3625'],
+    waxInner: ['#B39270', '#7B5F44', '#38291C'],
+  },
 ];
 
 export const SPECIAL_SITE_THEME_IDS: readonly SiteThemeId[] = [
@@ -522,6 +581,8 @@ export const SPECIAL_SITE_THEME_IDS: readonly SiteThemeId[] = [
   'sabbath-crew',
   'night-ride',
   'ilay-riegrow',
+  'joo-jaekyung',
+  'zhenya',
 ];
 
 export function isSpecialSiteTheme(id: SiteThemeId): boolean {

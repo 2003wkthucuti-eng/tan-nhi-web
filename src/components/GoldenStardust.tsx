@@ -175,6 +175,11 @@ export const GoldenStardust: React.FC<GoldenStardustProps> = ({
                     d="M12 0L13.8 10.2L24 12L13.8 13.8L12 24L10.2 13.8L0 12L10.2 10.2Z"
                     fill={color}
                   />
+                ) : shapeKind === 'card-suit' ? (
+                  <path
+                    d="M12 2.5C12 2.5 5 9.2 5 13.8C5 16.5 7 18.2 9.4 18.2C10.5 18.2 11.4 17.6 12 16.8C12.6 17.6 13.5 18.2 14.6 18.2C17 18.2 19 16.5 19 13.8C19 9.2 12 2.5 12 2.5ZM10.8 17.5L9.2 21.5H14.8L13.2 17.5H10.8Z"
+                    fill={color}
+                  />
                 ) : (
                   <path
                     d="M12 0L14.4 9.6L24 12L14.4 14.4L12 24L9.6 14.4L0 12L9.6 9.6Z"

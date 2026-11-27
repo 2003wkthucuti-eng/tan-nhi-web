@@ -11,8 +11,9 @@ import {
   ChevronDown,
   ChevronLeft,
   ChevronRight,
-  DoorOpen,
+  Gamepad2,
   KeyRound,
+  Menu,
   Moon,
   MoonStar,
   Music,
@@ -26,10 +27,7 @@ import {
   User,
   X,
 } from 'lucide-react';
-import {
-  AvatarFrameShowcaseSection,
-  AvatarFrameStudioModal,
-} from './components/AvatarFrameStudio';
+import { AvatarFrameStudioModal } from './components/AvatarFrameStudio';
 import { BlackCatMascot } from './components/BlackCatMascot';
 import { CharacterDetailTarotModal } from './components/CharacterDetailTarotModal';
 import { ConstellationSky } from './components/ConstellationSky';
@@ -45,10 +43,10 @@ import { MysticalFogOverlay } from './components/MysticalFogOverlay';
 import { SecretBadgeModal } from './components/SecretBadgeModal';
 import { SecretDiaryAndBadgesModal } from './components/SecretDiaryAndBadgesModal';
 import { SecretRoomModal } from './components/SecretRoomModal';
+import { SideMenuDrawer } from './components/SideMenuDrawer';
 import { SignatureSealModal } from './components/SignatureSealModal';
 import { SoulmateCornerModal } from './components/SoulmateCornerModal';
 import { TabWhisperToast, type TabWhisperPayload } from './components/TabWhisperToast';
-import { ThemeSelectorButton } from './components/ThemeSelectorButton';
 import { TrendingSpotlight } from './components/TrendingSpotlight';
 import { UserAvatarBadge } from './components/UserAvatarBadge';
 import { AVATAR_FRAMES, AVATAR_FRAME_MAP } from './data/avatarFrames';
@@ -846,6 +844,7 @@ function AppContent() {
   const [headerCatMessage, setHeaderCatMessage] = useState<string | null>(null);
   const [isDestinyModalOpen, setIsDestinyModalOpen] = useState(false);
   const [isMysticCornerOpen, setIsMysticCornerOpen] = useState(false);
+  const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
   const [selectedCharacter, setSelectedCharacter] = useState<CharacterItem | null>(
     () => initialSharedChar
   );
@@ -1884,11 +1883,25 @@ function AppContent() {
           }`}
         />
 
-        {/* Top Bar 3 vùng rõ ràng */}
+        {/* Top Bar tối giản: Menu 3 gạch góc trên bên trái + Tên trang + Mini Game + Login User */}
         <header className="sticky top-0 z-30 bg-[#0B0B0F]/90 backdrop-blur-md border-b border-[#D4AF37]/20">
           <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2 sm:py-0 sm:h-16 flex flex-wrap sm:flex-nowrap items-center justify-between gap-x-2 gap-y-1.5 sm:gap-6 lg:gap-8">
-            {/* Zone 1: Linh vật mèo đen tương tác + Brand Title */}
+            {/* Góc trên bên trái: Nút Menu 3 gạch + Linh vật mèo đen + Brand Title */}
             <div className="relative flex items-center gap-2 sm:gap-2.5 w-full sm:w-auto sm:min-w-0">
+              <button
+                type="button"
+                onClick={() => {
+                  playSoftTap('nav');
+                  setIsSideMenuOpen(true);
+                }}
+                aria-label="Mở menu chức năng"
+                aria-expanded={isSideMenuOpen}
+                title="Menu chức năng"
+                className="inline-flex items-center justify-center min-w-[38px] min-h-[38px] sm:min-w-[40px] sm:min-h-[40px] rounded-xl border border-[#D4AF37]/45 bg-[#121218] text-[#F3E5AB] hover:bg-[#D4AF37]/15 hover:border-[#F3E5AB] active:scale-95 transition-all duration-150 shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]"
+              >
+                <Menu className="w-4 h-4 sm:w-5 sm:h-5" aria-hidden="true" />
+              </button>
+
               <button
                 type="button"
                 onClick={handleHeaderCatClick}
@@ -1897,7 +1910,7 @@ function AppContent() {
                 className="relative p-0.5 rounded-xl hover:bg-[#D4AF37]/10 active:scale-95 transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] shrink-0"
               >
                 <BlackCatMascot
-                  size={34}
+                  size={32}
                   variant="badge"
                   className="shrink-0 drop-shadow-[0_0_10px_rgba(212,175,55,0.4)]"
                 />
@@ -1963,7 +1976,7 @@ function AppContent() {
                   >
                     <span
                       aria-hidden="true"
-                      className="absolute -top-1.5 left-4 w-3 h-3 rotate-45 bg-[#0B0B0F] border-l border-t border-[#D4AF37]/75"
+                      className="absolute -top-1.5 left-12 w-3 h-3 rotate-45 bg-[#0B0B0F] border-l border-t border-[#D4AF37]/75"
                     />
                     <p className="relative z-10">{headerCatMessage}</p>
                   </motion.div>
@@ -1971,53 +1984,17 @@ function AppContent() {
               </AnimatePresence>
             </div>
 
-            {/* Zone 2: Nav links lọc nhanh thể loại */}
-            <nav
-              aria-label="Điều hướng thể loại"
-              className="hidden lg:flex items-center gap-6 text-sm font-medium text-[#B8B0A0]"
-            >
-              {(['Tất cả', 'Tổng tài', 'Fantasy', 'Cổ trang', 'Chữa lành'] as const).map(
-                (item) => {
-                  const isActive = selectedGenre === item;
-                  return (
-                    <button
-                      key={item}
-                      type="button"
-                      onClick={() => handleSelectGenreFromHeader(item)}
-                      className={`whitespace-nowrap shrink-0 py-1 border-b transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] ${
-                        isActive
-                          ? 'text-[#F3E5AB] border-[#D4AF37]'
-                          : 'text-[#B8B0A0] border-transparent hover:text-[#F3E5AB] hover:border-[#D4AF37]/50'
-                      }`}
-                    >
-                      {item}
-                    </button>
-                  );
-                }
-              )}
-            </nav>
-
-            {/* Zone 3: Khung Ảnh + Theme + Góc Tri Kỷ + Màn chào */}
-            <div className="flex flex-wrap sm:flex-nowrap items-center justify-between sm:justify-end gap-1.5 sm:gap-2 w-full sm:w-auto shrink-0 min-w-0">
+            {/* Thanh chức năng ngoài cùng: Chỉ giữ Mini Game và Login User */}
+            <div className="flex items-center justify-end gap-2 w-full sm:w-auto shrink-0 min-w-0">
               <button
                 type="button"
-                onClick={() => {
-                  playSoftTap('tap');
-                  setIsFrameStudioOpen(true);
-                }}
-                aria-label={`Chọn Avatar và Khung Ảnh (${unlockedFramesCount}/${AVATAR_FRAMES.length} đã mở)`}
-                title="Chọn ảnh đại diện & Khung Ảnh Đại Diện"
-                className="inline-flex items-center gap-1.5 min-h-[34px] sm:min-h-[40px] px-2 sm:px-3 py-1 sm:py-1.5 rounded-xl border border-[#D4AF37]/45 bg-[#14121B] text-[11px] sm:text-xs font-medium text-[#F3E5AB] hover:bg-[#D4AF37]/15 hover:border-[#F3E5AB] transition-all duration-150 whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]"
+                onClick={handleOpenMysticCorner}
+                aria-label="Mở Mini Game"
+                className="shimmer-gold-btn inline-flex items-center justify-center gap-1.5 min-h-[36px] sm:min-h-[40px] px-3 sm:px-3.5 py-1.5 rounded-xl border border-[#D4AF37]/75 bg-gradient-to-r from-[#19150A] via-[#271F0A] to-[#19150A] text-[11px] sm:text-xs font-semibold text-[#F3E5AB] shadow-[0_0_16px_rgba(212,175,55,0.2)] hover:border-[#FFF4C4] hover:shadow-[0_0_24px_rgba(212,175,55,0.38)] active:scale-95 transition-all duration-150 whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3E5AB]"
               >
-                <Sparkles className="w-3.5 h-3.5 text-[#D4AF37] shrink-0" aria-hidden="true" />
-                <span className="sm:hidden">Khung</span>
-                <span className="hidden md:inline">Khung Ảnh</span>
-                <span className="tabular-nums text-[10px] sm:text-[11px] text-[#D4AF37]">
-                  {unlockedFramesCount}/{AVATAR_FRAMES.length}
-                </span>
+                <Gamepad2 className="w-3.5 h-3.5 text-[#D4AF37] shrink-0" aria-hidden="true" />
+                <span>Mini Game</span>
               </button>
-
-              <ThemeSelectorButton />
 
               <button
                 type="button"
@@ -2025,12 +2002,12 @@ function AppContent() {
                   playSoftTap('tap');
                   setIsProfileModalOpen(true);
                 }}
-                aria-label={userProfile ? `Hồ sơ của ${userProfile.displayName}` : 'Mở Góc Tri Kỷ'}
-                title={userProfile ? 'Chỉnh sửa hồ sơ Góc Tri Kỷ' : 'Đăng nhập / Tạo hồ sơ Góc Tri Kỷ'}
-                className={`inline-flex items-center gap-1.5 min-h-[34px] sm:min-h-[40px] px-2 sm:px-3 py-1 sm:py-1.5 rounded-xl border text-[11px] sm:text-xs font-medium transition-all duration-150 whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] ${
+                aria-label={userProfile ? `Hồ sơ của ${userProfile.displayName}` : 'Login User'}
+                title={userProfile ? 'Chỉnh sửa hồ sơ người dùng' : 'Đăng nhập / Tạo hồ sơ người dùng'}
+                className={`inline-flex items-center justify-center gap-1.5 min-h-[36px] sm:min-h-[40px] px-3 sm:px-3.5 py-1.5 rounded-xl border text-[11px] sm:text-xs font-medium transition-all duration-150 whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] ${
                   userProfile
                     ? 'bg-[#17140E] border-[#D4AF37]/65 text-[#F3E5AB] hover:border-[#F3E5AB] shadow-[0_0_14px_rgba(212,175,55,0.16)]'
-                    : 'bg-[#121218] border-[#D4AF37]/40 text-[#F3E5AB] hover:bg-[#D4AF37]/15 hover:border-[#D4AF37]'
+                    : 'bg-[#121218] border-[#D4AF37]/45 text-[#F3E5AB] hover:bg-[#D4AF37]/15 hover:border-[#D4AF37]'
                 }`}
               >
                 {userProfile ? (
@@ -2042,33 +2019,16 @@ function AppContent() {
                       displayName={userProfile.displayName}
                       size="xs"
                     />
-                    <span className="max-w-[68px] sm:max-w-[115px] truncate">
+                    <span className="max-w-[82px] sm:max-w-[120px] truncate">
                       {userProfile.displayName}
                     </span>
                   </>
                 ) : (
                   <>
                     <User className="w-3.5 h-3.5 text-[#D4AF37] shrink-0" aria-hidden="true" />
-                    <span>Góc Tri Kỷ</span>
+                    <span>Login User</span>
                   </>
                 )}
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  playSoftTap('nav');
-                  if (introTimerRef.current) {
-                    window.clearTimeout(introTimerRef.current);
-                  }
-                  setIntroPhase('idle');
-                }}
-                aria-label="Xem lại màn chào"
-                title="Xem lại màn chào"
-                className="inline-flex items-center justify-center gap-1.5 min-w-[34px] min-h-[34px] sm:min-h-[40px] px-2 sm:px-3.5 py-1 sm:py-1.5 rounded-xl border border-[#D4AF37]/35 bg-[#121218] text-xs font-medium text-[#DCD4C6] hover:text-[#F3E5AB] hover:bg-[#D4AF37]/15 hover:border-[#D4AF37] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] transition-colors duration-150 whitespace-nowrap shrink-0 cursor-pointer"
-              >
-                <DoorOpen className="w-3.5 h-3.5 text-[#D4AF37] sm:hidden shrink-0" aria-hidden="true" />
-                <span className="hidden sm:inline">Màn chào</span>
               </button>
             </div>
           </div>
@@ -2185,27 +2145,6 @@ function AppContent() {
                     Đang hiển thị <strong className="text-[#F3E5AB] font-semibold">{filteredCharacters.length}</strong>
                   </span>
                 </div>
-
-                {isMoonlightSilverMode && (
-                  <button
-                    type="button"
-                    onClick={toggleMoonlightSilverMode}
-                    title="Chuyển nhanh về màu vàng Gold truyền thống"
-                    className="inline-flex items-center gap-1.5 min-h-[36px] px-3 py-1.5 rounded-xl bg-[#121622] border border-[#D4AF37]/55 text-[11px] sm:text-xs font-medium text-[#F3E5AB] hover:bg-[#D4AF37]/15 active:scale-95 transition-all whitespace-nowrap shrink-0 cursor-pointer"
-                  >
-                    <MoonStar className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
-                    <span>Về Vàng Gold</span>
-                  </button>
-                )}
-
-                <button
-                  type="button"
-                  onClick={handleShareWebsite}
-                  className="inline-flex items-center gap-1.5 min-h-[36px] px-3 py-1.5 rounded-xl bg-[#121218] border border-[#D4AF37]/50 text-[11px] sm:text-xs font-medium text-[#F3E5AB] hover:bg-[#D4AF37]/15 hover:border-[#F3E5AB] active:scale-95 transition-all whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]"
-                >
-                  <Share2 className="w-3.5 h-3.5 text-[#D4AF37] shrink-0" aria-hidden="true" />
-                  <span>Chia sẻ trang web</span>
-                </button>
               </div>
             </div>
           </section>
@@ -2227,26 +2166,13 @@ function AppContent() {
             onChatLinkClick={(characterId) => trackCharacterInteraction(characterId, 2)}
           />
 
-          {/* Khu vực Avatar & Chọn Khung Ảnh Đại Diện ngay trong phiên */}
-          <AvatarFrameShowcaseSection
-            avatarUrl={activeAvatarUrl}
-            avatarIcon={activeAvatarIcon}
-            displayName={activeDisplayName}
-            equippedFrameId={avatarFrames.equippedFrameId}
-            unlockedFrames={avatarFrames.unlocked}
-            characterSamples={characterAvatarSamples}
-            onChangeAvatar={handleChangePreviewAvatar}
-            onSelectFrame={handleSelectAvatarFrame}
-            onOpenNotebook={() => setIsSecretNotebookOpen(true)}
-          />
-
-          {/* Thanh tìm kiếm, Gặp gỡ định mệnh & Bộ lọc thể loại thu gọn */}
+          {/* Thanh tìm kiếm & Bộ lọc thể loại thu gọn */}
           <section
             id="bo-suu-tap"
             aria-label="Tìm kiếm và lọc nhân vật"
             className="scroll-mt-20 mb-5 sm:mb-7 flex flex-col gap-3"
           >
-            {/* Hàng trên: Thanh tìm kiếm + Xem thêm Tag + Gặp gỡ định mệnh */}
+            {/* Hàng trên: Thanh tìm kiếm + Xem thêm Tag */}
             <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 sm:gap-3">
               <div className="relative w-full sm:w-auto sm:flex-1 sm:max-w-sm">
                 <Search
@@ -2280,63 +2206,28 @@ function AppContent() {
                 )}
               </div>
 
-              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 w-full sm:w-auto">
-                <button
-                  type="button"
-                  onClick={() => {
-                    playSoftTap('tap');
-                    setShowAllTags((prev) => !prev);
-                  }}
-                  aria-expanded={showAllTags}
-                  className={`inline-flex items-center gap-1.5 min-h-[38px] sm:min-h-[40px] px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl border text-[11px] sm:text-xs font-medium whitespace-nowrap transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] ${
-                    showAllTags || selectedGenre !== 'Tất cả'
-                      ? 'bg-[#D4AF37]/15 border-[#D4AF37]/65 text-[#F3E5AB]'
-                      : 'bg-[#121218] border-[#D4AF37]/25 text-[#DCD4C6] hover:border-[#D4AF37]/60 hover:text-[#F3E5AB]'
+              <button
+                type="button"
+                onClick={() => {
+                  playSoftTap('tap');
+                  setShowAllTags((prev) => !prev);
+                }}
+                aria-expanded={showAllTags}
+                className={`inline-flex items-center gap-1.5 min-h-[38px] sm:min-h-[40px] px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl border text-[11px] sm:text-xs font-medium whitespace-nowrap transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] ${
+                  showAllTags || selectedGenre !== 'Tất cả'
+                    ? 'bg-[#D4AF37]/15 border-[#D4AF37]/65 text-[#F3E5AB]'
+                    : 'bg-[#121218] border-[#D4AF37]/25 text-[#DCD4C6] hover:border-[#D4AF37]/60 hover:text-[#F3E5AB]'
+                }`}
+              >
+                <SlidersHorizontal className="w-3.5 h-3.5 text-[#D4AF37] shrink-0" aria-hidden="true" />
+                <span>{showAllTags ? 'Thu gọn' : 'Xem thêm Tag'}</span>
+                <ChevronDown
+                  className={`w-3.5 h-3.5 text-[#D4AF37] transition-transform duration-200 ${
+                    showAllTags ? 'rotate-180' : ''
                   }`}
-                >
-                  <SlidersHorizontal className="w-3.5 h-3.5 text-[#D4AF37] shrink-0" aria-hidden="true" />
-                  <span>{showAllTags ? 'Thu gọn' : 'Xem thêm Tag'}</span>
-                  <ChevronDown
-                    className={`w-3.5 h-3.5 text-[#D4AF37] transition-transform duration-200 ${
-                      showAllTags ? 'rotate-180' : ''
-                    }`}
-                    aria-hidden="true"
-                  />
-                </button>
-
-                <button
-                  type="button"
-                  onClick={handleOpenDestinyModal}
-                  className="shimmer-gold-btn inline-flex items-center justify-center gap-1.5 min-h-[38px] sm:min-h-[40px] px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl border border-[#D4AF37]/75 bg-gradient-to-r from-[#19150A] via-[#271F0A] to-[#19150A] text-[11px] sm:text-xs font-medium text-[#F3E5AB] shadow-[0_0_16px_rgba(212,175,55,0.2)] hover:border-[#F3E5AB] hover:shadow-[0_0_24px_rgba(212,175,55,0.4)] active:scale-95 transition-all duration-150 whitespace-nowrap cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3E5AB]"
-                >
-                  <Sparkles className="w-3.5 h-3.5 text-[#F3E5AB] shrink-0" aria-hidden="true" />
-                  <span>Gặp gỡ định mệnh</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={handleOpenMysticCorner}
-                  className="shimmer-gold-btn inline-flex items-center justify-center gap-1.5 min-h-[38px] sm:min-h-[40px] px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl border border-[#D4AF37]/80 bg-gradient-to-r from-[#1B1422] via-[#281E12] to-[#1A1320] text-[11px] sm:text-xs font-semibold text-[#F3E5AB] shadow-[0_0_18px_rgba(212,175,55,0.24)] hover:border-[#FFF4C4] hover:shadow-[0_0_26px_rgba(243,229,171,0.45)] active:scale-95 transition-all duration-150 whitespace-nowrap cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFF4C4]"
-                >
-                  <span>🔮 Góc Huyền Bí</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    playSoftTap('card');
-                    setIsDualMatchupOpen(true);
-                    unlockAvatarFrame(
-                      'huyet-nguyet-kiem-khach',
-                      'Mở Hai Cánh Cửa Định Mệnh — đánh thức Khung Ảnh Huyết Nguyệt Kiếm Khách!',
-                      { showModal: true }
-                    );
-                  }}
-                  className="shimmer-gold-btn inline-flex items-center justify-center gap-1.5 min-h-[38px] sm:min-h-[40px] px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl border border-[#D4AF37]/80 bg-gradient-to-r from-[#181520] via-[#241C10] to-[#181520] text-[11px] sm:text-xs font-semibold text-[#F3E5AB] shadow-[0_0_18px_rgba(212,175,55,0.24)] hover:border-[#FFF4C4] active:scale-95 transition-all duration-150 whitespace-nowrap cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFF4C4]"
-                >
-                  <span>⚖️ Hai Cánh Cửa</span>
-                </button>
-              </div>
+                  aria-hidden="true"
+                />
+              </button>
             </div>
 
             {/* Lọc Nhanh Theo "Khí Chất Đêm Nay" (Mood & Vibe Filter) */}
@@ -2812,20 +2703,8 @@ function AppContent() {
 
             <div className="flex flex-wrap items-center justify-center gap-2 pt-1 text-center">
               <p className="text-[11px] sm:text-xs italic tracking-wide text-[#D4AF37]/75 drop-shadow-[0_0_8px_rgba(212,175,55,0.28)] animate-pulse">
-                ✦ Bật mí: Thử chạm mèo đen 3 lần, lật bài Tarot hoặc đổi Theme để mở khóa Khung Ảnh Đại Diện...
+                ✦ Bật mí: Mở menu 3 gạch góc trái để đổi Theme, chọn Khung Ảnh Đại Diện hoặc khám phá Góc Huyền Bí...
               </p>
-              <button
-                type="button"
-                onClick={() => {
-                  playSoftTap('card');
-                  setIsFrameStudioOpen(true);
-                }}
-                className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-[#D4AF37]/15 border border-[#D4AF37]/45 text-[11px] font-medium text-[#F3E5AB] hover:border-[#F3E5AB] transition-colors cursor-pointer"
-              >
-                <span>
-                  ✦ Khung Ảnh Đại Diện ({unlockedFramesCount}/{AVATAR_FRAMES.length})
-                </span>
-              </button>
             </div>
 
             {/* Tận cùng chân trang: Chìa khóa Sổ Tay Bí Mật, Vầng Trăng Đêm Sâu & Ánh Trăng Bạc */}
@@ -3082,6 +2961,48 @@ function AppContent() {
           )}
         </div>
       )}
+      {/* Ngăn kéo Menu 3 gạch góc trên bên trái */}
+      <SideMenuDrawer
+        isOpen={isSideMenuOpen}
+        onClose={() => setIsSideMenuOpen(false)}
+        userProfile={userProfile}
+        activeDisplayName={activeDisplayName}
+        activeAvatarUrl={activeAvatarUrl}
+        activeAvatarIcon={activeAvatarIcon}
+        equippedFrameId={avatarFrames.equippedFrameId}
+        unlockedFramesCount={unlockedFramesCount}
+        totalFramesCount={AVATAR_FRAMES.length}
+        selectedGenre={selectedGenre}
+        isWitchingHourActive={isWitchingHourActive}
+        isMoonlightSilverMode={isMoonlightSilverMode}
+        onOpenFrameStudio={() => setIsFrameStudioOpen(true)}
+        onOpenProfileModal={() => setIsProfileModalOpen(true)}
+        onOpenDestinyTarot={handleOpenDestinyModal}
+        onOpenMysticCorner={handleOpenMysticCorner}
+        onOpenDualMatchup={() => {
+          playSoftTap('card');
+          setIsDualMatchupOpen(true);
+          unlockAvatarFrame(
+            'huyet-nguyet-kiem-khach',
+            'Mở Hai Cánh Cửa Định Mệnh — đánh thức Khung Ảnh Huyết Nguyệt Kiếm Khách!',
+            { showModal: true }
+          );
+        }}
+        onOpenSecretNotebook={() => setIsSecretNotebookOpen(true)}
+        onToggleWitchingHour={handleToggleWitchingHourTest}
+        onToggleMoonlightSilver={toggleMoonlightSilverMode}
+        onSelectGenre={(genre) => handleSelectGenreFromHeader(genre)}
+        onShareWebsite={() => {
+          void handleShareWebsite();
+        }}
+        onReplayIntro={() => {
+          if (introTimerRef.current) {
+            window.clearTimeout(introTimerRef.current);
+          }
+          setIntroPhase('idle');
+        }}
+      />
+
       {/* Bàn bốc bài Tarot Gặp Gỡ Định Mệnh */}
       <DestinyTarotModal
         isOpen={isDestinyModalOpen}

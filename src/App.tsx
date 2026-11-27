@@ -2151,7 +2151,7 @@ function AppContent() {
                     : activeTheme.id === 'night-ride'
                     ? '★ Night Ride · Chuyến xe đêm & thẻ cảm xúc phát sáng'
                     : activeTheme.id === 'ilay-riegrow'
-                    ? '✦ Ilay Riegrow Edition · Tạp chí đen trắng sắc lạnh'
+                    ? '✧ Ilay Riegrow · Viền ren trắng, ánh sao & sắc nắng hoàng hôn'
                     : activeTheme.id === 'joo-jaekyung'
                     ? '🥊 Team Black · Tạp chí võ đài & bộ bài tây trắng đen'
                     : activeTheme.id === 'zhenya'
@@ -2160,6 +2160,10 @@ function AppContent() {
                     ? '🎀 Caesar Alexandrovich · Nơ ruy băng satin & ánh nhìn dịu êm'
                     : activeTheme.id === 'sanzu-haruchiyo'
                     ? '✦ Sanzu Haruchiyo · Ngôi sao sọc xoáy & khung truyện trắng đen'
+                    : activeTheme.id === 'yeo-taeju'
+                    ? '✕ Yeo Taeju · Giấy nháp vẽ tay, bật lửa đen & nét doodle cắt dán'
+                    : activeTheme.id === 'be-tho'
+                    ? '🎀 Bé Thỏ · Nơ đỏ sắc nét, hoa hồng nhung & bi số 7'
                     : 'Bộ sưu tập nhân vật AI Chatbot'}
                 </p>
                 <h2 className="font-display text-2xl sm:text-3xl lg:text-[40px] font-semibold text-[#F5EFE0] leading-[1.15] [text-wrap:balance]">
@@ -3018,6 +3022,30 @@ function AppContent() {
                       <span>✦</span>
                       <span className="px-1.5 py-[1px] rounded-[2px] bg-[#FFFFFF] text-[#09090B] font-semibold">
                         Spiral ★
+                      </span>
+                    </div>
+                  )}
+                  {activeTheme.id === 'ilay-riegrow' && (
+                    <div aria-hidden="true" className="mt-1 flex items-center gap-1.5 text-[9.5px] text-[#FFFFFF]/90">
+                      <span>✧</span>
+                      <span className="px-1.5 py-[1px] rounded-full bg-[#FFFFFF] text-[#16111F] font-semibold">
+                        By your side
+                      </span>
+                    </div>
+                  )}
+                  {activeTheme.id === 'yeo-taeju' && (
+                    <div aria-hidden="true" className="mt-1 flex items-center gap-1.5 text-[9.5px] text-[#F6F3EB]/90">
+                      <span>✕</span>
+                      <span className="px-1.5 py-[1px] rounded-[3px] bg-[#F6F3EB] text-[#101113] font-semibold">
+                        Doodle
+                      </span>
+                    </div>
+                  )}
+                  {activeTheme.id === 'be-tho' && (
+                    <div aria-hidden="true" className="mt-1 flex items-center gap-1.5 text-[9.5px] text-[#FFF0F2]/90">
+                      <span>🌹</span>
+                      <span className="px-1.5 py-[1px] rounded-[2px] bg-[#E63946] text-[#FFFFFF] font-semibold">
+                        Red Bow #7
                       </span>
                     </div>
                   )}

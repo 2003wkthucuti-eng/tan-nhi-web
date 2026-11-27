@@ -431,7 +431,9 @@ export const IntroSealDoors: React.FC<IntroSealDoorsProps> = ({
           themeId === 'joo-jaekyung' ||
           themeId === 'zhenya' ||
           themeId === 'caesar' ||
-          themeId === 'sanzu-haruchiyo';
+          themeId === 'sanzu-haruchiyo' ||
+          themeId === 'yeo-taeju' ||
+          themeId === 'be-tho';
 
         const cutoutAccentDecor: Partial<Record<SiteThemeId, { left: string; right: string; glow: string }>> = {
           'bien-dem-sua': {
@@ -460,9 +462,9 @@ export const IntroSealDoors: React.FC<IntroSealDoorsProps> = ({
             glow: 'radial-gradient(circle, rgba(240,201,117,0.44) 0%, rgba(247,250,255,0.24) 52%, transparent 74%)',
           },
           'ilay-riegrow': {
-            left: '✦',
+            left: '✧',
             right: '✦',
-            glow: 'radial-gradient(circle, rgba(255,255,255,0.4) 0%, rgba(190,198,214,0.22) 52%, transparent 74%)',
+            glow: 'radial-gradient(circle, rgba(255,255,255,0.46) 0%, rgba(242,198,182,0.28) 52%, transparent 74%)',
           },
           'joo-jaekyung': {
             left: '♠',
@@ -483,6 +485,16 @@ export const IntroSealDoors: React.FC<IntroSealDoorsProps> = ({
             left: '★',
             right: '🌀',
             glow: 'radial-gradient(circle, rgba(255,255,255,0.42) 0%, rgba(210,214,224,0.24) 52%, transparent 74%)',
+          },
+          'yeo-taeju': {
+            left: '✕',
+            right: '🔥',
+            glow: 'radial-gradient(circle, rgba(246,243,235,0.4) 0%, rgba(214,208,194,0.22) 52%, transparent 74%)',
+          },
+          'be-tho': {
+            left: '🎀',
+            right: '🌹',
+            glow: 'radial-gradient(circle, rgba(230,57,70,0.5) 0%, rgba(255,240,242,0.24) 52%, transparent 74%)',
           },
         };
 
@@ -951,6 +963,349 @@ export const IntroSealDoors: React.FC<IntroSealDoorsProps> = ({
                         strokeLinejoin="round"
                       />
                     </svg>
+                  ) : themeId === 'yeo-taeju' ? (
+                    /* Yeo Taeju: Khung nét vẽ tay / giấy nháp cắt dán doodle */
+                    <svg
+                      viewBox="0 0 220 200"
+                      className="relative w-52 h-48 sm:w-64 sm:h-60 overflow-visible"
+                      style={{
+                        filter: `drop-shadow(0 14px 30px rgba(0,0,0,0.82)) drop-shadow(0 0 18px ${accentColor}40)`,
+                      }}
+                    >
+                      <defs>
+                        <clipPath id={`taejuDoodleClip-${heartUid}`}>
+                          <polygon points="18,16 34,12 52,18 72,11 94,17 114,11 136,17 156,12 178,18 198,13 204,176 184,186 164,179 144,187 122,180 100,188 78,180 56,187 34,179 16,185" />
+                        </clipPath>
+                        <linearGradient id={heartFadeMaskId} x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor={activeTheme.bgColor} stopOpacity="0" />
+                          <stop offset="70%" stopColor={activeTheme.bgColor} stopOpacity="0" />
+                          <stop offset="100%" stopColor={activeTheme.bgColor} stopOpacity="0.92" />
+                        </linearGradient>
+                        <linearGradient id={`${heartLeftMaskId}-grad`} x1="0" y1="0" x2="1" y2="0">
+                          <stop offset="0%" stopColor="#FFFFFF" stopOpacity="1" />
+                          <stop offset="47%" stopColor="#FFFFFF" stopOpacity="1" />
+                          <stop offset="56%" stopColor="#FFFFFF" stopOpacity="0" />
+                          <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0" />
+                        </linearGradient>
+                        <mask id={heartLeftMaskId}>
+                          <rect x="0" y="0" width="220" height="200" fill={`url(#${heartLeftMaskId}-grad)`} />
+                        </mask>
+                        <linearGradient id={`${heartRightMaskId}-grad`} x1="0" y1="0" x2="1" y2="0">
+                          <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0" />
+                          <stop offset="44%" stopColor="#FFFFFF" stopOpacity="0" />
+                          <stop offset="53%" stopColor="#FFFFFF" stopOpacity="1" />
+                          <stop offset="100%" stopColor="#FFFFFF" stopOpacity="1" />
+                        </linearGradient>
+                        <mask id={heartRightMaskId}>
+                          <rect x="0" y="0" width="220" height="200" fill={`url(#${heartRightMaskId}-grad)`} />
+                        </mask>
+                      </defs>
+
+                      {/* Tờ giấy nháp kẻ lưới nghiêng phía sau */}
+                      <rect
+                        x="14"
+                        y="12"
+                        width="192"
+                        height="174"
+                        rx="3"
+                        transform="rotate(-4 110 100)"
+                        fill="#232428"
+                        stroke="#F6F3EB"
+                        strokeOpacity="0.45"
+                        strokeWidth="1.4"
+                        strokeDasharray="6 3"
+                      />
+
+                      <g clipPath={`url(#taejuDoodleClip-${heartUid})`}>
+                        <rect x="0" y="0" width="220" height="200" fill={activeTheme.surfaceColor} />
+                        {/* Nửa trái: Nét nghiêng Yeo Taeju */}
+                        <g mask={`url(#${heartLeftMaskId})`}>
+                          <image
+                            href={activeTheme.bgImageUrl}
+                            x="-34"
+                            y="-208"
+                            width="290"
+                            height="515"
+                            preserveAspectRatio="xMidYMid slice"
+                          />
+                        </g>
+                        {/* Nửa phải: Yeo Taeju cười rạng rỡ */}
+                        <g mask={`url(#${heartRightMaskId})`}>
+                          <image
+                            href={activeTheme.bgImageUrl}
+                            x="-68"
+                            y="-110"
+                            width="275"
+                            height="489"
+                            preserveAspectRatio="xMidYMid slice"
+                          />
+                        </g>
+                        <rect x="0" y="0" width="220" height="200" fill={`url(#${heartFadeMaskId})`} />
+                      </g>
+
+                      {/* Viền nét vẽ tay hai lớp quanh tờ cắt dán */}
+                      <polygon
+                        points="18,16 34,12 52,18 72,11 94,17 114,11 136,17 156,12 178,18 198,13 204,176 184,186 164,179 144,187 122,180 100,188 78,180 56,187 34,179 16,185"
+                        fill="none"
+                        stroke="#F6F3EB"
+                        strokeWidth="2.4"
+                        strokeLinejoin="round"
+                      />
+                      <path
+                        d="M15 21C14 68 15 130 13 179M207 18C209 70 206 128 208 175"
+                        fill="none"
+                        stroke="#D6D0C2"
+                        strokeWidth="1.2"
+                        strokeLinecap="round"
+                        strokeOpacity="0.65"
+                      />
+
+                      {/* Nét gạch X vẽ tay lớn góc trái */}
+                      <path
+                        d="M10 86L30 108M29 85L9 109"
+                        stroke="#F6F3EB"
+                        strokeWidth="3.6"
+                        strokeLinecap="round"
+                      />
+                      <path
+                        d="M10 86L30 108M29 85L9 109"
+                        stroke="#101113"
+                        strokeWidth="1.2"
+                        strokeLinecap="round"
+                      />
+
+                      {/* Doodle bật lửa đen góc trên trái */}
+                      <g transform="translate(22, 2) rotate(-14)">
+                        <rect x="0" y="7" width="16" height="19" rx="2" fill="#18191C" stroke="#F6F3EB" strokeWidth="1.5" />
+                        <path d="M1 7L-4 -1L10 -3L14 6" fill="#2A2B30" stroke="#F6F3EB" strokeWidth="1.3" strokeLinejoin="round" />
+                        <path d="M8 5.5C6.2 3 7.5 0.2 9.6 -1C11 0.8 11.2 3.2 9.6 5.5Z" fill="#F6F3EB" />
+                      </g>
+
+                      {/* Trái tim mắt vẽ tay giữa đỉnh khung */}
+                      <g transform="translate(110, 14)">
+                        <path
+                          d="M0 11C0 11 -13 2 -13 -6C-13 -11 -8.5 -14 -4 -14C-1.5 -14 0 -12 0 -10C0 -12 1.5 -14 4 -14C8.5 -14 13 -11 13 -6C13 2 0 11 0 11Z"
+                          fill="#101113"
+                          stroke="#F6F3EB"
+                          strokeWidth="1.6"
+                        />
+                        <ellipse cx="0" cy="-4" rx="7" ry="4.2" fill="#F6F3EB" />
+                        <circle cx="0" cy="-4" r="2.2" fill="#101113" />
+                      </g>
+
+                      {/* Mặt cười doodle góc trên phải */}
+                      <g transform="translate(188, 16) rotate(12)">
+                        <circle cx="0" cy="0" r="11" fill="#191A1D" stroke="#F6F3EB" strokeWidth="1.7" />
+                        <circle cx="-3.5" cy="-2" r="1.4" fill="#F6F3EB" />
+                        <circle cx="3.5" cy="-2" r="1.4" fill="#F6F3EB" />
+                        <path d="M-4.5 2.5C-2 5.5 2 5.5 4.5 2.5" stroke="#F6F3EB" strokeWidth="1.6" strokeLinecap="round" fill="none" />
+                      </g>
+                    </svg>
+                  ) : themeId === 'be-tho' ? (
+                    /* Bé Thỏ: Khung nơ đỏ & hoa hồng sắc nét phía sau dấu sáp */
+                    <svg
+                      viewBox="0 0 220 200"
+                      className="relative w-52 h-48 sm:w-64 sm:h-60 overflow-visible"
+                      style={{
+                        filter: `drop-shadow(0 14px 32px rgba(0,0,0,0.82)) drop-shadow(0 0 22px ${accentColor}59)`,
+                      }}
+                    >
+                      <defs>
+                        <clipPath id={`beThoCrispClip-${heartUid}`}>
+                          <polygon points="110,16 176,30 198,82 184,152 110,186 36,152 22,82 44,30" />
+                        </clipPath>
+                        <linearGradient id={heartFadeMaskId} x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor={activeTheme.bgColor} stopOpacity="0" />
+                          <stop offset="70%" stopColor={activeTheme.bgColor} stopOpacity="0" />
+                          <stop offset="100%" stopColor={activeTheme.bgColor} stopOpacity="0.92" />
+                        </linearGradient>
+                        <linearGradient id={`${heartLeftMaskId}-grad`} x1="0" y1="0" x2="1" y2="0">
+                          <stop offset="0%" stopColor="#FFFFFF" stopOpacity="1" />
+                          <stop offset="47%" stopColor="#FFFFFF" stopOpacity="1" />
+                          <stop offset="56%" stopColor="#FFFFFF" stopOpacity="0" />
+                          <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0" />
+                        </linearGradient>
+                        <mask id={heartLeftMaskId}>
+                          <rect x="0" y="0" width="220" height="200" fill={`url(#${heartLeftMaskId}-grad)`} />
+                        </mask>
+                        <linearGradient id={`${heartRightMaskId}-grad`} x1="0" y1="0" x2="1" y2="0">
+                          <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0" />
+                          <stop offset="44%" stopColor="#FFFFFF" stopOpacity="0" />
+                          <stop offset="53%" stopColor="#FFFFFF" stopOpacity="1" />
+                          <stop offset="100%" stopColor="#FFFFFF" stopOpacity="1" />
+                        </linearGradient>
+                        <mask id={heartRightMaskId}>
+                          <rect x="0" y="0" width="220" height="200" fill={`url(#${heartRightMaskId}-grad)`} />
+                        </mask>
+                      </defs>
+
+                      {/* Viền ngoài góc cạnh màu đỏ thẫm */}
+                      <polygon
+                        points="110,8 182,24 206,80 190,158 110,194 30,158 14,80 38,24"
+                        fill="#2A0B12"
+                        stroke="#E63946"
+                        strokeWidth="1.8"
+                      />
+
+                      <g clipPath={`url(#beThoCrispClip-${heartUid})`}>
+                        <rect x="0" y="0" width="220" height="200" fill={activeTheme.surfaceColor} />
+                        {/* Nửa trái: Taekjoo gile đỏ */}
+                        <g mask={`url(#${heartLeftMaskId})`}>
+                          <image
+                            href={activeTheme.bgImageUrl}
+                            x="-58"
+                            y="-295"
+                            width="310"
+                            height="551"
+                            preserveAspectRatio="xMidYMid slice"
+                          />
+                        </g>
+                        {/* Nửa phải: Taekjoo nơ đỏ trên tóc & hoa hồng */}
+                        <g mask={`url(#${heartRightMaskId})`}>
+                          <image
+                            href={activeTheme.bgImageUrl}
+                            x="-102"
+                            y="-336"
+                            width="315"
+                            height="560"
+                            preserveAspectRatio="xMidYMid slice"
+                          />
+                        </g>
+                        <rect x="0" y="0" width="220" height="200" fill={`url(#${heartFadeMaskId})`} />
+                      </g>
+
+                      <polygon
+                        points="110,16 176,30 198,82 184,152 110,186 36,152 22,82 44,30"
+                        fill="none"
+                        stroke="#FFF0F2"
+                        strokeWidth="2.4"
+                        strokeLinejoin="miter"
+                      />
+
+                      {/* Nơ đỏ sắc nét lớn trên đỉnh khung */}
+                      <g transform="translate(110, 17)">
+                        <path d="M-4 3L-26 30L-14 26L-2 5Z" fill="#9E1622" stroke="#FFF0F2" strokeWidth="1" />
+                        <path d="M4 3L26 30L14 26L2 5Z" fill="#9E1622" stroke="#FFF0F2" strokeWidth="1" />
+                        <path d="M-3 0L-34 -16L-28 12L-3 4Z" fill="#E63946" stroke="#FFF0F2" strokeWidth="1.3" strokeLinejoin="miter" />
+                        <path d="M3 0L34 -16L28 12L3 4Z" fill="#E63946" stroke="#FFF0F2" strokeWidth="1.3" strokeLinejoin="miter" />
+                        <polygon points="0,-5 6,1 0,7 -6,1" fill="#FFF0F2" stroke="#E63946" strokeWidth="1.4" />
+                      </g>
+
+                      {/* Hoa hồng đỏ sắc nét góc trái & góc phải khung */}
+                      <g transform="translate(28, 146)">
+                        <polygon points="0,-13 5,-6 13,-4 8,3 11,11 0,7 -11,11 -8,3 -13,-4 -5,-6" fill="#C91F2F" stroke="#FFF0F2" strokeWidth="1" />
+                        <path d="M-4 -1C-1.5 -4.5 3 -4.5 4.5 -1C5.5 1.5 3 4 0 4C-2.5 4 -4.5 2 -3.5 0" fill="none" stroke="#FFF0F2" strokeWidth="1.2" strokeLinecap="round" />
+                      </g>
+                      <g transform="translate(192, 146)">
+                        <polygon points="0,-13 5,-6 13,-4 8,3 11,11 0,7 -11,11 -8,3 -13,-4 -5,-6" fill="#C91F2F" stroke="#FFF0F2" strokeWidth="1" />
+                        <path d="M-4 -1C-1.5 -4.5 3 -4.5 4.5 -1C5.5 1.5 3 4 0 4C-2.5 4 -4.5 2 -3.5 0" fill="none" stroke="#FFF0F2" strokeWidth="1.2" strokeLinecap="round" />
+                      </g>
+                    </svg>
+                  ) : themeId === 'ilay-riegrow' ? (
+                    /* Ilay Riegrow: Khung viền ren trắng & ánh sao lấp lánh (không dùng trái tim) */
+                    <svg
+                      viewBox="0 0 220 200"
+                      className="relative w-52 h-48 sm:w-64 sm:h-60 overflow-visible"
+                      style={{
+                        filter: `drop-shadow(0 14px 32px rgba(0,0,0,0.72)) drop-shadow(0 0 24px rgba(255,255,255,0.42))`,
+                      }}
+                    >
+                      <defs>
+                        <clipPath id={`ilayLaceClip-${heartUid}`}>
+                          <rect x="26" y="18" width="168" height="168" rx="84" />
+                        </clipPath>
+                        <linearGradient id={heartFadeMaskId} x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor={activeTheme.bgColor} stopOpacity="0" />
+                          <stop offset="72%" stopColor={activeTheme.bgColor} stopOpacity="0" />
+                          <stop offset="100%" stopColor={activeTheme.bgColor} stopOpacity="0.9" />
+                        </linearGradient>
+                        <linearGradient id={`${heartLeftMaskId}-grad`} x1="0" y1="0" x2="1" y2="0">
+                          <stop offset="0%" stopColor="#FFFFFF" stopOpacity="1" />
+                          <stop offset="47%" stopColor="#FFFFFF" stopOpacity="1" />
+                          <stop offset="56%" stopColor="#FFFFFF" stopOpacity="0" />
+                          <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0" />
+                        </linearGradient>
+                        <mask id={heartLeftMaskId}>
+                          <rect x="0" y="0" width="220" height="200" fill={`url(#${heartLeftMaskId}-grad)`} />
+                        </mask>
+                        <linearGradient id={`${heartRightMaskId}-grad`} x1="0" y1="0" x2="1" y2="0">
+                          <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0" />
+                          <stop offset="44%" stopColor="#FFFFFF" stopOpacity="0" />
+                          <stop offset="53%" stopColor="#FFFFFF" stopOpacity="1" />
+                          <stop offset="100%" stopColor="#FFFFFF" stopOpacity="1" />
+                        </linearGradient>
+                        <mask id={heartRightMaskId}>
+                          <rect x="0" y="0" width="220" height="200" fill={`url(#${heartRightMaskId}-grad)`} />
+                        </mask>
+                      </defs>
+
+                      {/* Vòng ren trắng sò điệp (scalloped lace ring) bao quanh */}
+                      <circle
+                        cx="110"
+                        cy="102"
+                        r="90"
+                        fill="none"
+                        stroke="#FFFFFF"
+                        strokeWidth="9"
+                        strokeDasharray="1.5 9.5"
+                        strokeLinecap="round"
+                        strokeOpacity="0.9"
+                      />
+                      <circle
+                        cx="110"
+                        cy="102"
+                        r="90"
+                        fill="none"
+                        stroke="#F2C6B6"
+                        strokeWidth="2.4"
+                        strokeDasharray="3 8"
+                        strokeLinecap="round"
+                        strokeOpacity="0.7"
+                      />
+
+                      <g clipPath={`url(#ilayLaceClip-${heartUid})`}>
+                        <rect x="26" y="18" width="168" height="168" fill={activeTheme.surfaceColor} />
+                        {/* Nửa trái: Ilay mỉm cười */}
+                        <g mask={`url(#${heartLeftMaskId})`}>
+                          <image
+                            href={activeTheme.bgImageUrl}
+                            x="-8"
+                            y="-4"
+                            width="310"
+                            height="551"
+                            preserveAspectRatio="xMidYMid slice"
+                          />
+                        </g>
+                        {/* Nửa phải: Ilay góc nghiêng dưới ánh nắng */}
+                        <g mask={`url(#${heartRightMaskId})`}>
+                          <image
+                            href={activeTheme.bgImageUrl}
+                            x="-54"
+                            y="-175"
+                            width="285"
+                            height="507"
+                            preserveAspectRatio="xMidYMid slice"
+                          />
+                        </g>
+                        <rect x="26" y="18" width="168" height="168" fill={`url(#${heartFadeMaskId})`} />
+                      </g>
+
+                      {/* Viền khung ren kép trắng tinh khiết */}
+                      <circle cx="110" cy="102" r="84" fill="none" stroke="#FFFFFF" strokeWidth="2.8" strokeOpacity="0.96" />
+                      <circle cx="110" cy="102" r="79" fill="none" stroke="#F2C6B6" strokeWidth="1" strokeDasharray="4 4" strokeOpacity="0.75" />
+
+                      {/* Nơ ren trắng nhỏ xinh trên đỉnh khung */}
+                      <g transform="translate(110, 14)">
+                        <path d="M-3 0L-21 -10C-24 -3 -22 5 -15 8L-3 3Z" fill="#FFFFFF" stroke="#F2C6B6" strokeWidth="1.2" />
+                        <path d="M3 0L21 -10C24 -3 22 5 15 8L3 3Z" fill="#FFFFFF" stroke="#F2C6B6" strokeWidth="1.2" />
+                        <circle cx="0" cy="1" r="4" fill="#FFFFFF" stroke="#F2C6B6" strokeWidth="1.2" />
+                      </g>
+
+                      {/* Ánh sao 4 cánh lấp lánh quanh khung ren */}
+                      <path d="M32 34L34.5 41L41.5 43.5L34.5 46L32 53L29.5 46L22.5 43.5L29.5 41Z" fill="#FFFFFF" />
+                      <path d="M188 38L190 43.5L195.5 45.5L190 47.5L188 53L186 47.5L180.5 45.5L186 43.5Z" fill="#FFFFFF" />
+                      <path d="M184 148L185.8 153L190.8 154.8L185.8 156.6L184 161.6L182.2 156.6L177.2 154.8L182.2 153Z" fill="#F2C6B6" />
+                    </svg>
                   ) : (
                     /* Các Theme đặc biệt trước đó giữ nguyên khung trái tim lớn */
                     <svg
@@ -1076,31 +1431,6 @@ export const IntroSealDoors: React.FC<IntroSealDoorsProps> = ({
                             height="469"
                             preserveAspectRatio="xMidYMid slice"
                           />
-                        )}
-
-                        {themeId === 'ilay-riegrow' && (
-                          <>
-                            <g mask={`url(#${heartLeftMaskId})`}>
-                              <image
-                                href={activeTheme.bgImageUrl}
-                                x="-92"
-                                y="-12"
-                                width="330"
-                                height="587"
-                                preserveAspectRatio="xMidYMid slice"
-                              />
-                            </g>
-                            <g mask={`url(#${heartRightMaskId})`}>
-                              <image
-                                href={activeTheme.bgImageUrl}
-                                x="-105"
-                                y="-156"
-                                width="300"
-                                height="533"
-                                preserveAspectRatio="xMidYMid slice"
-                              />
-                            </g>
-                          </>
                         )}
 
                         {themeId === 'joo-jaekyung' && (
@@ -1358,7 +1688,7 @@ const WaxSealArtwork: React.FC = () => {
           </g>
         )}
         {themeId === 'ilay-riegrow' && (
-          <path d="M58.5 58H61.5L62.2 66L60 68.5L57.8 66L58.5 58Z" fill={o0} fillOpacity="0.9" />
+          <path d="M60 27L61.6 31.4L66 33L61.6 34.6L60 39L58.4 34.6L54 33L58.4 31.4Z" fill={o0} fillOpacity="0.94" />
         )}
         {themeId === 'joo-jaekyung' && (
           <path
@@ -1383,6 +1713,22 @@ const WaxSealArtwork: React.FC = () => {
             fill={o0}
             fillOpacity="0.95"
           />
+        )}
+        {themeId === 'yeo-taeju' && (
+          <path
+            d="M55.5 29L64.5 38M64.5 29L55.5 38"
+            stroke={o0}
+            strokeWidth="2.2"
+            strokeLinecap="round"
+            strokeOpacity="0.94"
+          />
+        )}
+        {themeId === 'be-tho' && (
+          <g fill={o0} fillOpacity="0.95">
+            <path d="M59 59L52 55.5L53 62L59 59.8Z" />
+            <path d="M61 59L68 55.5L67 62L61 59.8Z" />
+            <polygon points="60,57.5 61.6,59.2 60,60.9 58.4,59.2" />
+          </g>
         )}
 
         {/* Đôi mắt sáng nổi bật trên nền khắc đen */}

@@ -1202,41 +1202,44 @@ html[data-site-theme]:not([data-site-theme="classic-gold"]) ::-webkit-scrollbar-
   background-color: rgba(24, 32, 50, 0.72);
 }
 
-/* 6. Ilay Riegrow: Tạp chí đen trắng tương phản cao, góc vuông sắc nét, khung ảnh cắt ghép */
+/* 6. Ilay Riegrow: Viền ren trắng tinh tế, ánh sao 4 cánh lấp lánh & sắc hoàng hôn ấm */
 [data-site-theme="ilay-riegrow"] {
-  --font-display: "Oswald", "Be Vietnam Pro", system-ui, sans-serif;
+  --font-display: "Cormorant Garamond", "Be Vietnam Pro", Georgia, serif;
   --font-sans: "Be Vietnam Pro", system-ui, -apple-system, sans-serif;
-  --t-bg: #070709;
-  --t-bg-rgb: 7, 7, 9;
-  --t-surface: #111115;
-  --t-surface-rgb: 17, 17, 21;
-  --t-surface-alt: #1C1D24;
-  --t-surface-alt-rgb: 28, 29, 36;
-  --t-accent: #CFD4DE;
-  --t-accent-rgb: 207, 212, 222;
+  --t-bg: #12101A;
+  --t-bg-rgb: 18, 16, 26;
+  --t-surface: #1D1827;
+  --t-surface-rgb: 29, 24, 39;
+  --t-surface-alt: #2A2237;
+  --t-surface-alt-rgb: 42, 34, 55;
+  --t-accent: #F2C6B6;
+  --t-accent-rgb: 242, 198, 182;
   --t-bright: #FFFFFF;
   --t-bright-rgb: 255, 255, 255;
-  --t-soft: #E5E8EF;
-  --t-text: #F8F9FB;
-  --t-muted: #C1C6D0;
-  --t-btn-text: #070709;
-  --t-grad-from: #9DA3B0;
+  --t-soft: #F9E3DA;
+  --t-text: #FAF8FC;
+  --t-muted: #D6CEDF;
+  --t-btn-text: #16111F;
+  --t-grad-from: #E2A39A;
   --t-grad-to: #FFFFFF;
   font-family: var(--font-sans);
 }
 
 [data-site-theme="ilay-riegrow"] .font-display {
   font-family: var(--font-display);
-  letter-spacing: 0.02em;
+  letter-spacing: 0.015em;
 }
 
 [data-site-theme="ilay-riegrow"] header {
-  background-color: rgba(7, 7, 9, 0.94) !important;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.72);
+  background-color: rgba(18, 16, 26, 0.88) !important;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.62);
+  box-shadow: 0 8px 28px rgba(10, 8, 18, 0.55);
 }
 
 [data-site-theme="ilay-riegrow"] footer {
-  border-top: 2px solid rgba(255, 255, 255, 0.45);
+  border-top: 2px dotted rgba(255, 255, 255, 0.52);
 }
 
 [data-site-theme="ilay-riegrow"] .shimmer-card-border,
@@ -1248,16 +1251,21 @@ html[data-site-theme]:not([data-site-theme="classic-gold"]) ::-webkit-scrollbar-
 [data-site-theme="ilay-riegrow"] aside[aria-label="Thông báo Khung Giờ Ma Thuật"],
 [data-site-theme="ilay-riegrow"] aside[role="status"],
 [data-site-theme="ilay-riegrow"] nav[aria-label="Phân trang danh sách nhân vật"] > div {
-  border-radius: 2px;
-  background-color: rgba(14, 14, 18, 0.93) !important;
-  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(10, 10, 13, 0.96) 100%) !important;
+  border-radius: 1.45rem;
+  background-color: rgba(29, 24, 39, 0.88) !important;
+  background-image:
+    radial-gradient(ellipse 80% 42% at 50% 0%, rgba(255, 255, 255, 0.14), transparent 72%),
+    linear-gradient(175deg, rgba(242, 198, 182, 0.14) 0%, rgba(22, 18, 32, 0.94) 100%) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-width: 1.5px;
-  border-color: rgba(255, 255, 255, 0.56);
+  border-color: rgba(255, 255, 255, 0.72);
+  outline: 1.5px dotted rgba(255, 255, 255, 0.45);
+  outline-offset: -6px;
   box-shadow:
-    inset 0 0 0 4px rgba(7, 7, 9, 0.9),
-    inset 0 0 0 5px rgba(255, 255, 255, 0.16),
-    4px 4px 0 rgba(255, 255, 255, 0.14),
-    0 16px 34px rgba(0, 0, 0, 0.78);
+    inset 0 1px 0 rgba(255, 255, 255, 0.42),
+    0 14px 34px rgba(10, 8, 18, 0.62),
+    0 0 22px rgba(242, 198, 182, 0.14);
 }
 
 [data-site-theme="ilay-riegrow"] .shimmer-card-border::after,
@@ -1265,22 +1273,22 @@ html[data-site-theme]:not([data-site-theme="classic-gold"]) ::-webkit-scrollbar-
 [data-site-theme="ilay-riegrow"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-\[28px\]::after {
   content: "";
   position: absolute;
-  inset: 7px;
-  border-radius: 0;
+  inset: 0;
+  border-radius: inherit;
   pointer-events: none;
   background:
-    linear-gradient(to right, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.72)) top left / 12px 1.5px no-repeat,
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.72)) top left / 1.5px 12px no-repeat,
-    linear-gradient(to left, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.72)) bottom right / 12px 1.5px no-repeat,
-    linear-gradient(to top, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.72)) bottom right / 1.5px 12px no-repeat;
+    radial-gradient(circle 4px at 50% 100%, rgba(255, 255, 255, 0.65) 60%, transparent 65%) top center / 12px 5px repeat-x,
+    radial-gradient(circle 12px at 90% 10%, rgba(255, 255, 255, 0.28), transparent 68%),
+    radial-gradient(circle 10px at 10% 90%, rgba(242, 198, 182, 0.22), transparent 68%);
 }
 
 [data-site-theme="ilay-riegrow"] .shimmer-card-border .aspect-square {
-  border-radius: 1px;
+  border-radius: 1.15rem;
   border-width: 2px;
-  border-color: rgba(255, 255, 255, 0.78);
+  border-color: rgba(255, 255, 255, 0.85);
   padding: 3px;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 8px 22px rgba(12, 8, 20, 0.45);
 }
 
 [data-site-theme="ilay-riegrow"] [role="dialog"]:not([aria-label*="Theme"]) section.rounded-2xl,
@@ -1288,9 +1296,9 @@ html[data-site-theme]:not([data-site-theme="classic-gold"]) ::-webkit-scrollbar-
 [data-site-theme="ilay-riegrow"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-2xl:not(.rounded-\[24px\]):not(.rounded-\[26px\]):not(.rounded-\[28px\]),
 [data-site-theme="ilay-riegrow"] [role="dialog"]:not([aria-label*="Theme"]) article.rounded-xl,
 [data-site-theme="ilay-riegrow"] [role="dialog"]:not([aria-label*="Theme"]) div.rounded-xl {
-  border-radius: 2px;
-  background-color: rgba(11, 11, 14, 0.88);
-  border-color: rgba(255, 255, 255, 0.34);
+  border-radius: 1.05rem;
+  background-color: rgba(20, 17, 29, 0.82);
+  border-color: rgba(255, 255, 255, 0.36);
 }
 
 [data-site-theme="ilay-riegrow"] button.rounded-xl,
@@ -1299,19 +1307,21 @@ html[data-site-theme]:not([data-site-theme="classic-gold"]) ::-webkit-scrollbar-
 [data-site-theme="ilay-riegrow"] a.rounded-xl,
 [data-site-theme="ilay-riegrow"] input[type="search"],
 [data-site-theme="ilay-riegrow"] textarea {
-  border-radius: 2px;
+  border-radius: 1rem;
 }
 
 [data-site-theme="ilay-riegrow"] [role="group"] button[aria-pressed="true"] {
-  background: #FFFFFF !important;
-  color: #070709 !important;
+  background: linear-gradient(135deg, #FFFFFF, #F2C6B6) !important;
+  color: #16111F !important;
   border-color: #FFFFFF !important;
+  box-shadow: 0 4px 16px rgba(255, 255, 255, 0.3);
 }
 
 [data-site-theme="ilay-riegrow"] span.rounded-md {
-  border-radius: 1px;
-  border-color: rgba(255, 255, 255, 0.5);
-  background-color: #09090C;
+  border-radius: 9999px;
+  border-style: dotted;
+  border-color: rgba(255, 255, 255, 0.65);
+  background-color: rgba(58, 44, 68, 0.62);
   color: #FFFFFF;
 }
 
@@ -1810,6 +1820,252 @@ html[data-site-theme]:not([data-site-theme="classic-gold"]) ::-webkit-scrollbar-
   border-color: rgba(255, 255, 255, 0.6);
   background-color: #111216;
   color: #FFFFFF;
+}
+
+/* 11. Yeo Taeju: Giấy nháp cắt dán vẽ tay, bật lửa đen & nét gạch X doodle */
+[data-site-theme="yeo-taeju"] {
+  --font-display: "Bricolage Grotesque", "Be Vietnam Pro", system-ui, sans-serif;
+  --font-sans: "Be Vietnam Pro", system-ui, -apple-system, sans-serif;
+  --t-bg: #101113;
+  --t-bg-rgb: 16, 17, 19;
+  --t-surface: #191A1D;
+  --t-surface-rgb: 25, 26, 29;
+  --t-surface-alt: #24262A;
+  --t-surface-alt-rgb: 36, 38, 42;
+  --t-accent: #D6D0C2;
+  --t-accent-rgb: 214, 208, 194;
+  --t-bright: #F6F3EB;
+  --t-bright-rgb: 246, 243, 235;
+  --t-soft: #E8E3D6;
+  --t-text: #F7F5EF;
+  --t-muted: #C9C4B8;
+  --t-btn-text: #101113;
+  --t-grad-from: #ACA699;
+  --t-grad-to: #F6F3EB;
+  font-family: var(--font-sans);
+}
+
+[data-site-theme="yeo-taeju"] .font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.015em;
+}
+
+[data-site-theme="yeo-taeju"] header {
+  background-color: rgba(16, 17, 19, 0.93) !important;
+  border-bottom: 2px dashed rgba(246, 243, 235, 0.56);
+  box-shadow: 0 4px 0 rgba(214, 208, 194, 0.14), 0 10px 26px rgba(0, 0, 0, 0.65);
+}
+
+[data-site-theme="yeo-taeju"] footer {
+  border-top: 2px dashed rgba(214, 208, 194, 0.42);
+}
+
+[data-site-theme="yeo-taeju"] .shimmer-card-border,
+[data-site-theme="yeo-taeju"] section[aria-labelledby="trending-spotlight-heading"] article,
+[data-site-theme="yeo-taeju"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-\[24px\],
+[data-site-theme="yeo-taeju"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-\[26px\],
+[data-site-theme="yeo-taeju"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-\[28px\],
+[data-site-theme="yeo-taeju"] aside[aria-label="Trình phát nhạc nền"],
+[data-site-theme="yeo-taeju"] aside[aria-label="Thông báo Khung Giờ Ma Thuật"],
+[data-site-theme="yeo-taeju"] aside[role="status"],
+[data-site-theme="yeo-taeju"] nav[aria-label="Phân trang danh sách nhân vật"] > div {
+  border-radius: 0.45rem;
+  background-color: rgba(25, 26, 29, 0.92) !important;
+  background-image:
+    linear-gradient(rgba(246, 243, 235, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(246, 243, 235, 0.03) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(246, 243, 235, 0.05) 0%, rgba(16, 17, 19, 0.96) 100%) !important;
+  background-size: 16px 16px, 16px 16px, 100% 100% !important;
+  border-width: 1.8px;
+  border-color: rgba(246, 243, 235, 0.58);
+  outline: 1px dashed rgba(214, 208, 194, 0.34);
+  outline-offset: -5px;
+  box-shadow:
+    3px 3px 0 rgba(246, 243, 235, 0.22),
+    0 16px 34px rgba(0, 0, 0, 0.72);
+}
+
+[data-site-theme="yeo-taeju"] .shimmer-card-border::after,
+[data-site-theme="yeo-taeju"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-\[26px\]::after,
+[data-site-theme="yeo-taeju"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-\[28px\]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(246, 243, 235, 0.42) 0px,
+      rgba(246, 243, 235, 0.42) 6px,
+      transparent 6px,
+      transparent 10px
+    ) top center / 100% 2px no-repeat,
+    linear-gradient(135deg, rgba(246, 243, 235, 0.35), rgba(214, 208, 194, 0.14)) bottom right / 36px 8px no-repeat;
+}
+
+[data-site-theme="yeo-taeju"] .shimmer-card-border .aspect-square {
+  border-radius: 0.3rem;
+  border-width: 2px;
+  border-color: rgba(246, 243, 235, 0.76);
+  padding: 3px;
+  background-color: rgba(246, 243, 235, 0.08);
+}
+
+[data-site-theme="yeo-taeju"] [role="dialog"]:not([aria-label*="Theme"]) section.rounded-2xl,
+[data-site-theme="yeo-taeju"] [role="dialog"]:not([aria-label*="Theme"]) form.rounded-2xl,
+[data-site-theme="yeo-taeju"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-2xl:not(.rounded-\[24px\]):not(.rounded-\[26px\]):not(.rounded-\[28px\]),
+[data-site-theme="yeo-taeju"] [role="dialog"]:not([aria-label*="Theme"]) article.rounded-xl,
+[data-site-theme="yeo-taeju"] [role="dialog"]:not([aria-label*="Theme"]) div.rounded-xl {
+  border-radius: 0.35rem;
+  background-color: rgba(16, 17, 19, 0.9);
+  border-color: rgba(214, 208, 194, 0.38);
+}
+
+[data-site-theme="yeo-taeju"] button.rounded-xl,
+[data-site-theme="yeo-taeju"] button.rounded-lg,
+[data-site-theme="yeo-taeju"] a.rounded-lg,
+[data-site-theme="yeo-taeju"] a.rounded-xl,
+[data-site-theme="yeo-taeju"] input[type="search"],
+[data-site-theme="yeo-taeju"] textarea {
+  border-radius: 0.35rem;
+}
+
+[data-site-theme="yeo-taeju"] button.rounded-xl,
+[data-site-theme="yeo-taeju"] button.rounded-lg,
+[data-site-theme="yeo-taeju"] a.rounded-lg,
+[data-site-theme="yeo-taeju"] a.rounded-xl {
+  box-shadow: 2px 2px 0 rgba(246, 243, 235, 0.24);
+}
+
+[data-site-theme="yeo-taeju"] [role="group"] button[aria-pressed="true"] {
+  background: #F6F3EB !important;
+  color: #101113 !important;
+  border-color: #F6F3EB !important;
+}
+
+[data-site-theme="yeo-taeju"] span.rounded-md {
+  border-radius: 0.2rem;
+  border-style: dashed;
+  border-color: rgba(246, 243, 235, 0.55);
+  background-color: #141518;
+  color: #F6F3EB;
+}
+
+/* 12. Bé Thỏ: Nơ đỏ sắc nét, hoa hồng nhung & bí ẩn bàn bida số 7 */
+[data-site-theme="be-tho"] {
+  --font-display: "Oswald", "Be Vietnam Pro", system-ui, sans-serif;
+  --font-sans: "Be Vietnam Pro", system-ui, -apple-system, sans-serif;
+  --t-bg: #13080B;
+  --t-bg-rgb: 19, 8, 11;
+  --t-surface: #1E0D11;
+  --t-surface-rgb: 30, 13, 17;
+  --t-surface-alt: #2E1319;
+  --t-surface-alt-rgb: 46, 19, 25;
+  --t-accent: #E63946;
+  --t-accent-rgb: 230, 57, 70;
+  --t-bright: #FFF0F2;
+  --t-bright-rgb: 255, 240, 242;
+  --t-soft: #FF9EA6;
+  --t-text: #FFF6F6;
+  --t-muted: #DFC4C8;
+  --t-btn-text: #1A070B;
+  --t-grad-from: #FF8590;
+  --t-grad-to: #FFF0F2;
+  font-family: var(--font-sans);
+}
+
+[data-site-theme="be-tho"] .font-display {
+  font-family: var(--font-display);
+  letter-spacing: 0.02em;
+}
+
+[data-site-theme="be-tho"] header {
+  background-color: rgba(19, 8, 11, 0.93) !important;
+  border-bottom: 2px solid rgba(230, 57, 70, 0.72);
+  box-shadow: 0 4px 18px rgba(230, 57, 70, 0.16), 0 10px 28px rgba(0, 0, 0, 0.72);
+}
+
+[data-site-theme="be-tho"] footer {
+  border-top: 2px solid rgba(230, 57, 70, 0.45);
+}
+
+[data-site-theme="be-tho"] .shimmer-card-border,
+[data-site-theme="be-tho"] section[aria-labelledby="trending-spotlight-heading"] article,
+[data-site-theme="be-tho"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-\[24px\],
+[data-site-theme="be-tho"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-\[26px\],
+[data-site-theme="be-tho"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-\[28px\],
+[data-site-theme="be-tho"] aside[aria-label="Trình phát nhạc nền"],
+[data-site-theme="be-tho"] aside[aria-label="Thông báo Khung Giờ Ma Thuật"],
+[data-site-theme="be-tho"] aside[role="status"],
+[data-site-theme="be-tho"] nav[aria-label="Phân trang danh sách nhân vật"] > div {
+  border-radius: 0.4rem;
+  background-color: rgba(28, 11, 15, 0.92) !important;
+  background-image:
+    radial-gradient(ellipse 85% 40% at 50% 0%, rgba(230, 57, 70, 0.2), transparent 70%),
+    linear-gradient(180deg, rgba(168, 24, 38, 0.18) 0%, rgba(18, 7, 10, 0.96) 100%) !important;
+  border-width: 1.8px;
+  border-color: rgba(230, 57, 70, 0.72);
+  outline: 1px solid rgba(255, 240, 242, 0.22);
+  outline-offset: -5px;
+  box-shadow:
+    3px 3px 0 rgba(230, 57, 70, 0.28),
+    0 16px 34px rgba(0, 0, 0, 0.78);
+}
+
+[data-site-theme="be-tho"] .shimmer-card-border::after,
+[data-site-theme="be-tho"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-\[26px\]::after,
+[data-site-theme="be-tho"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-\[28px\]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(230, 57, 70, 0.9), rgba(255, 240, 242, 0.6), rgba(230, 57, 70, 0.9)) top center / 100% 3px no-repeat,
+    linear-gradient(to left, rgba(255, 240, 242, 0.75), rgba(255, 240, 242, 0.75)) bottom right / 14px 2px no-repeat,
+    linear-gradient(to top, rgba(255, 240, 242, 0.75), rgba(255, 240, 242, 0.75)) bottom right / 2px 14px no-repeat;
+}
+
+[data-site-theme="be-tho"] .shimmer-card-border .aspect-square {
+  border-radius: 0.3rem;
+  border-width: 2px;
+  border-color: rgba(230, 57, 70, 0.85);
+  padding: 3px;
+  background-color: rgba(230, 57, 70, 0.14);
+}
+
+[data-site-theme="be-tho"] [role="dialog"]:not([aria-label*="Theme"]) section.rounded-2xl,
+[data-site-theme="be-tho"] [role="dialog"]:not([aria-label*="Theme"]) form.rounded-2xl,
+[data-site-theme="be-tho"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-2xl:not(.rounded-\[24px\]):not(.rounded-\[26px\]):not(.rounded-\[28px\]),
+[data-site-theme="be-tho"] [role="dialog"]:not([aria-label*="Theme"]) article.rounded-xl,
+[data-site-theme="be-tho"] [role="dialog"]:not([aria-label*="Theme"]) div.rounded-xl {
+  border-radius: 0.35rem;
+  background-color: rgba(19, 8, 11, 0.88);
+  border-color: rgba(230, 57, 70, 0.42);
+}
+
+[data-site-theme="be-tho"] button.rounded-xl,
+[data-site-theme="be-tho"] button.rounded-lg,
+[data-site-theme="be-tho"] a.rounded-lg,
+[data-site-theme="be-tho"] a.rounded-xl,
+[data-site-theme="be-tho"] input[type="search"],
+[data-site-theme="be-tho"] textarea {
+  border-radius: 0.3rem;
+}
+
+[data-site-theme="be-tho"] [role="group"] button[aria-pressed="true"] {
+  background: linear-gradient(135deg, #E63946, #B81D2B) !important;
+  color: #FFFFFF !important;
+  border-color: #FFF0F2 !important;
+  box-shadow: 0 4px 16px rgba(230, 57, 70, 0.42);
+}
+
+[data-site-theme="be-tho"] span.rounded-md {
+  border-radius: 0.2rem;
+  border-color: rgba(230, 57, 70, 0.65);
+  background-color: rgba(130, 18, 30, 0.55);
+  color: #FFF0F2;
 }
 
 /* Áp dụng token cho các Theme mới (trừ mặc định classic-gold) */

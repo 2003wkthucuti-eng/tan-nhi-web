@@ -232,6 +232,52 @@ export const GoldenStardust: React.FC<GoldenStardustProps> = ({
                     />
                     <line x1="12" y1="7.5" x2="12" y2="17.5" stroke={color} strokeWidth="1.4" strokeLinecap="round" />
                   </g>
+                ) : shapeKind === 'doodle-x' ? (
+                  <g>
+                    <path
+                      d="M4.5 5.2L19.5 18.8M19.2 4.8L5 19.2"
+                      stroke={color}
+                      strokeWidth="2.8"
+                      strokeLinecap="round"
+                    />
+                    <circle cx="12" cy="12" r="2.2" fill={color} fillOpacity="0.45" />
+                  </g>
+                ) : shapeKind === 'rose-bow' ? (
+                  <g>
+                    <path
+                      d="M10.5 10.5L3 6L4.5 14L10.5 12Z"
+                      fill={color}
+                      stroke="#13080B"
+                      strokeWidth="0.9"
+                      strokeLinejoin="miter"
+                    />
+                    <path
+                      d="M13.5 10.5L21 6L19.5 14L13.5 12Z"
+                      fill={color}
+                      stroke="#13080B"
+                      strokeWidth="0.9"
+                      strokeLinejoin="miter"
+                    />
+                    <path d="M10.5 12.2L6.5 21L9.8 19.2L11.8 12.6Z" fill={color} fillOpacity="0.82" />
+                    <path d="M13.5 12.2L17.5 21L14.2 19.2L12.2 12.6Z" fill={color} fillOpacity="0.82" />
+                    <polygon points="12,8.5 14.2,11.2 12,13.8 9.8,11.2" fill={color} />
+                  </g>
+                ) : shapeKind === 'lace-star' ? (
+                  <g>
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="8.8"
+                      stroke={color}
+                      strokeWidth="1"
+                      strokeDasharray="2.4 2.4"
+                      strokeOpacity="0.65"
+                    />
+                    <path
+                      d="M12 2L14 10L22 12L14 14L12 22L10 14L2 12L10 10Z"
+                      fill={color}
+                    />
+                  </g>
                 ) : (
                   <path
                     d="M12 0L14.4 9.6L24 12L14.4 14.4L12 24L9.6 14.4L0 12L9.6 9.6Z"

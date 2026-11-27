@@ -29,7 +29,9 @@ export type SiteThemeId =
   | 'joo-jaekyung'
   | 'zhenya'
   | 'caesar'
-  | 'sanzu-haruchiyo';
+  | 'sanzu-haruchiyo'
+  | 'yeo-taeju'
+  | 'be-tho';
 
 export type ThemeParticleKind =
   | 'star'
@@ -45,7 +47,10 @@ export type ThemeParticleKind =
   | 'card-suit'
   | 'ribbon-bow'
   | 'spiral-star'
-  | 'butterfly';
+  | 'butterfly'
+  | 'doodle-x'
+  | 'rose-bow'
+  | 'lace-star';
 
 export type ThemeFormVariant =
   | 'default'
@@ -54,11 +59,13 @@ export type ThemeFormVariant =
   | 'pixel-notebook'
   | 'street-crew'
   | 'night-ride'
-  | 'noir-editorial'
+  | 'lace-prism'
   | 'ring-magazine'
   | 'film-dossier'
   | 'ribbon-cameo'
-  | 'manga-spiral';
+  | 'manga-spiral'
+  | 'doodle-receipt'
+  | 'crimson-ribbon';
 
 export interface SiteThemeDefinition {
   id: SiteThemeId;
@@ -502,28 +509,28 @@ export const SITE_THEMES: SiteThemeDefinition[] = [
     id: 'ilay-riegrow',
     name: 'Ilay Riegrow',
     shortName: 'Ilay Riegrow',
-    tagline: 'Tạp chí đen trắng sắc lạnh, khung ảnh cắt ghép & khí chất áp đảo',
-    mascotLabel: 'Mèo bạch kim ánh mắt sắc lạnh đeo cà vạt đen',
+    tagline: 'Viền ren trắng tinh tế, ánh sao lấp lánh & sắc nắng hoàng hôn',
+    mascotLabel: 'Mèo bạch kim cài viền ren trắng nơ nhỏ & ánh sao lấp lánh',
     isSpecialTheme: true,
-    formVariant: 'noir-editorial',
-    bgImageUrl: '/assets/aistudio/2cff0935cb8984f7243f744c5c08d635_870a86b5.jpg',
+    formVariant: 'lace-prism',
+    bgImageUrl: '/assets/aistudio/13f4a7af723732822c93a03d55394a00_5c216ed0.jpg',
     bgImageOpacity: 0.2,
-    bgColor: '#070709',
-    surfaceColor: '#111115',
-    accentColor: '#CFD4DE',
+    bgColor: '#12101A',
+    surfaceColor: '#1D1827',
+    accentColor: '#F2C6B6',
     brightColor: '#FFFFFF',
-    textColor: '#F8F9FB',
-    mutedTextColor: '#C1C6D0',
-    buttonTextColor: '#070709',
-    swatchFrom: '#1E2026',
+    textColor: '#FAF8FC',
+    mutedTextColor: '#D6CEDF',
+    buttonTextColor: '#16111F',
+    swatchFrom: '#D88D89',
     swatchTo: '#FFFFFF',
-    particleKind: 'noir-star',
-    particleColors: ['#FFFFFF', '#AEB5C4'],
-    fireworkPalette: ['#FFFFFF', '#E6E9F0', '#C4CAD6', '#9198A6', '#F4F6FA'],
-    fogPrimary: 'rgba(220, 224, 234, 0.1)',
-    fogSecondary: 'rgba(255, 255, 255, 0.065)',
-    waxOuter: ['#FFFFFF', '#D8DCE4', '#6E7480', '#1D1F24'],
-    waxInner: ['#8B919E', '#484D57', '#16171B'],
+    particleKind: 'lace-star',
+    particleColors: ['#FFFFFF', '#F2C6B6'],
+    fireworkPalette: ['#FFFFFF', '#FFF8F4', '#F2C6B6', '#D9C7F2', '#FFE8D6'],
+    fogPrimary: 'rgba(242, 198, 182, 0.14)',
+    fogSecondary: 'rgba(255, 255, 255, 0.08)',
+    waxOuter: ['#FFFFFF', '#F6DFD6', '#8E7180', '#2E2232'],
+    waxInner: ['#B998A6', '#674D61', '#211828'],
   },
   {
     id: 'joo-jaekyung',
@@ -633,6 +640,60 @@ export const SITE_THEMES: SiteThemeDefinition[] = [
     waxOuter: ['#FFFFFF', '#D5D8E0', '#5E626E', '#16171C'],
     waxInner: ['#8B909E', '#464954', '#131418'],
   },
+  {
+    id: 'yeo-taeju',
+    name: 'Yeo Taeju',
+    shortName: 'Yeo Taeju',
+    tagline: 'Giấy nháp vẽ tay, bật lửa đen & nét doodle cắt dán cá tính',
+    mascotLabel: 'Mèo mực đen bên bật lửa, trái tim mắt vẽ tay & nét gạch X',
+    isSpecialTheme: true,
+    formVariant: 'doodle-receipt',
+    bgImageUrl: '/assets/aistudio/a78986ec97f9a87ca8a084179495dfba_e3b5447f.jpg',
+    bgImageOpacity: 0.2,
+    bgColor: '#101113',
+    surfaceColor: '#191A1D',
+    accentColor: '#D6D0C2',
+    brightColor: '#F6F3EB',
+    textColor: '#F7F5EF',
+    mutedTextColor: '#C9C4B8',
+    buttonTextColor: '#101113',
+    swatchFrom: '#26272B',
+    swatchTo: '#EFECE3',
+    particleKind: 'doodle-x',
+    particleColors: ['#F6F3EB', '#C7C2B6'],
+    fireworkPalette: ['#FFFFFF', '#F6F3EB', '#D6D0C2', '#9A968C', '#E6E1D5'],
+    fogPrimary: 'rgba(214, 208, 194, 0.11)',
+    fogSecondary: 'rgba(246, 243, 235, 0.07)',
+    waxOuter: ['#FAF7F0', '#DFDBD0', '#63615B', '#18191C'],
+    waxInner: ['#8E8A80', '#4A4945', '#151618'],
+  },
+  {
+    id: 'be-tho',
+    name: 'Bé Thỏ',
+    shortName: 'Bé Thỏ',
+    tagline: 'Nơ đỏ sắc nét, hoa hồng nhung & bí ẩn bàn bida số 7',
+    mascotLabel: 'Mèo đen cài nơ đỏ sắc nét bên hoa hồng nhung & bi số 7',
+    isSpecialTheme: true,
+    formVariant: 'crimson-ribbon',
+    bgImageUrl: '/assets/aistudio/f72145644a4114a84ab404c6991588b0_26bb3253.jpg',
+    bgImageOpacity: 0.2,
+    bgColor: '#13080B',
+    surfaceColor: '#1E0D11',
+    accentColor: '#E63946',
+    brightColor: '#FFF0F2',
+    textColor: '#FFF6F6',
+    mutedTextColor: '#DFC4C8',
+    buttonTextColor: '#1A070B',
+    swatchFrom: '#A81826',
+    swatchTo: '#FF7582',
+    particleKind: 'rose-bow',
+    particleColors: ['#FFF0F2', '#E63946'],
+    fireworkPalette: ['#FFFFFF', '#FFF0F2', '#FF6B78', '#E63946', '#B81D2B'],
+    fogPrimary: 'rgba(230, 57, 70, 0.16)',
+    fogSecondary: 'rgba(255, 240, 242, 0.075)',
+    waxOuter: ['#FFF2F3', '#F06A76', '#A61725', '#42070D'],
+    waxInner: ['#CC2434', '#7D0F1B', '#2E0409'],
+  },
 ];
 
 export const SPECIAL_SITE_THEME_IDS: readonly SiteThemeId[] = [
@@ -646,6 +707,8 @@ export const SPECIAL_SITE_THEME_IDS: readonly SiteThemeId[] = [
   'zhenya',
   'caesar',
   'sanzu-haruchiyo',
+  'yeo-taeju',
+  'be-tho',
 ];
 
 export function isSpecialSiteTheme(id: SiteThemeId): boolean {

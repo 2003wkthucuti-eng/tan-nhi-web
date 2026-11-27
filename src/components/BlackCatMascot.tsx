@@ -251,16 +251,16 @@ export const BlackCatMascot: React.FC<BlackCatMascotProps> = ({
     },
     'ilay-riegrow': {
       gradStart: '#FFFFFF',
-      gradMid: '#B8BECA',
-      gradEnd: '#2B2E36',
-      bodyFill: '#ECEEF3',
-      eyeFill: '#14151A',
-      pupilFill: '#FFFFFF',
-      noseFill: '#454A54',
+      gradMid: '#F2C6B6',
+      gradEnd: '#8E7180',
+      bodyFill: '#F3F1F6',
+      eyeFill: '#FCE0CE',
+      pupilFill: '#1B1526',
+      noseFill: '#C78A90',
       auraInner: '#FFFFFF',
-      auraMid: '#9EA5B5',
+      auraMid: '#F2C6B6',
       starBright: '#FFFFFF',
-      starWarm: '#CFD4DE',
+      starWarm: '#F2C6B6',
     },
     'joo-jaekyung': {
       gradStart: '#FFFFFF',
@@ -313,6 +313,32 @@ export const BlackCatMascot: React.FC<BlackCatMascotProps> = ({
       auraMid: '#B2B7C4',
       starBright: '#FFFFFF',
       starWarm: '#D2D6E0',
+    },
+    'yeo-taeju': {
+      gradStart: '#F6F3EB',
+      gradMid: '#D6D0C2',
+      gradEnd: '#52504A',
+      bodyFill: '#121316',
+      eyeFill: '#EFECE3',
+      pupilFill: '#101113',
+      noseFill: '#D6D0C2',
+      auraInner: '#F6F3EB',
+      auraMid: '#C7C2B6',
+      starBright: '#F6F3EB',
+      starWarm: '#D6D0C2',
+    },
+    'be-tho': {
+      gradStart: '#FFF0F2',
+      gradMid: '#E63946',
+      gradEnd: '#8E1520',
+      bodyFill: '#1A0F12',
+      eyeFill: '#FF9AA4',
+      pupilFill: '#1B080D',
+      noseFill: '#E63946',
+      auraInner: '#FFF0F2',
+      auraMid: '#E63946',
+      starBright: '#FFF0F2',
+      starWarm: '#E63946',
     },
   };
 
@@ -910,36 +936,41 @@ export const BlackCatMascot: React.FC<BlackCatMascotProps> = ({
         </g>
       )}
 
-      {/* Ilay Riegrow: Khung tạp chí đen trắng sắc cạnh & sao 4 cánh lạnh */}
+      {/* Ilay Riegrow: Viền ren trắng tinh tế & ánh sao 4 cánh lấp lánh */}
       {variant !== 'badge' && effectiveThemeId === 'ilay-riegrow' && (
         <g aria-hidden="true">
-          <rect
-            x="16"
-            y="16"
-            width="88"
-            height="88"
+          <circle
+            cx="60"
+            cy="55"
+            r="42"
             stroke="#FFFFFF"
-            strokeOpacity="0.42"
-            strokeWidth="1.3"
+            strokeOpacity="0.65"
+            strokeWidth="2.4"
+            strokeDasharray="1.5 5.2"
+            strokeLinecap="round"
           />
-          <rect
-            x="20"
-            y="20"
-            width="80"
-            height="80"
-            stroke="#9EA5B5"
-            strokeOpacity="0.28"
-            strokeWidth="0.9"
+          <circle
+            cx="60"
+            cy="55"
+            r="38"
+            stroke="#F2C6B6"
+            strokeOpacity="0.48"
+            strokeWidth="1"
           />
           <path
-            d="M96 23L97.8 28.2L103 30L97.8 31.8L96 37L94.2 31.8L89 30L94.2 28.2Z"
+            d="M96 22L98 27.6L103.6 29.6L98 31.6L96 37.2L94 31.6L88.4 29.6L94 27.6Z"
             fill="#FFFFFF"
             className="animate-cat-star-1"
           />
           <path
-            d="M23 76L24.4 80.2L28.6 81.6L24.4 83L23 87.2L21.6 83L17.4 81.6L21.6 80.2Z"
-            fill="#CFD4DE"
+            d="M23 28L24.5 32.2L28.7 33.7L24.5 35.2L23 39.4L21.5 35.2L17.3 33.7L21.5 32.2Z"
+            fill="#F2C6B6"
             className="animate-cat-star-2"
+          />
+          <path
+            d="M23 76L24.4 80.2L28.6 81.6L24.4 83L23 87.2L21.6 83L17.4 81.6L21.6 80.2Z"
+            fill="#FFFFFF"
+            className="animate-cat-star-3"
           />
         </g>
       )}
@@ -1079,6 +1110,70 @@ export const BlackCatMascot: React.FC<BlackCatMascotProps> = ({
         </g>
       )}
 
+      {/* Yeo Taeju: Giấy nháp cắt dán, nét gạch X đậm, bật lửa & trái tim mắt vẽ tay */}
+      {variant !== 'badge' && effectiveThemeId === 'yeo-taeju' && (
+        <g aria-hidden="true">
+          <rect
+            x="17"
+            y="16"
+            width="86"
+            height="86"
+            rx="4"
+            transform="rotate(-3 60 59)"
+            stroke="#EFECE3"
+            strokeOpacity="0.34"
+            strokeWidth="1.4"
+            strokeDasharray="6 4"
+          />
+          {/* Nét gạch X vẽ tay bên trái */}
+          <path
+            d="M17 26L29 38M28.5 25.5L17.5 38.5"
+            stroke="#F6F3EB"
+            strokeWidth="2.8"
+            strokeLinecap="round"
+            className="animate-cat-star-1"
+          />
+          {/* Bật lửa nhỏ góc trên phải */}
+          <g transform="translate(88, 22) rotate(14)" className="animate-cat-star-2">
+            <rect x="0" y="7" width="12" height="14" rx="1.5" fill="#18191C" stroke="#F6F3EB" strokeWidth="1.2" />
+            <path d="M1 7L-3 1L8 -1L11 6" fill="#232429" stroke="#F6F3EB" strokeWidth="1.1" strokeLinejoin="round" />
+            <path d="M5.5 5.5C4 3.5 5 1 6.8 0C7.8 1.5 8 3.6 6.8 5.5Z" fill="#F6F3EB" />
+          </g>
+          {/* Mặt cười doodle nhỏ góc dưới trái */}
+          <g transform="translate(15, 74)" className="animate-cat-star-3">
+            <circle cx="8" cy="8" r="7" fill="#191A1D" stroke="#EFECE3" strokeWidth="1.3" />
+            <circle cx="5.8" cy="6.6" r="1" fill="#EFECE3" />
+            <circle cx="10.2" cy="6.6" r="1" fill="#EFECE3" />
+            <path d="M5 10C6.5 12 9.5 12 11 10" stroke="#EFECE3" strokeWidth="1.2" strokeLinecap="round" />
+          </g>
+        </g>
+      )}
+
+      {/* Bé Thỏ: Ngôi sao đỏ sắc nét, bi bida số 7 & hoa hồng nhung đỏ */}
+      {variant !== 'badge' && effectiveThemeId === 'be-tho' && (
+        <g aria-hidden="true">
+          {/* Ngôi sao đỏ sắc nét góc trên trái */}
+          <path
+            d="M22 23L24.5 29.5L31.5 30L26 34.4L27.8 41.2L22 37.4L16.2 41.2L18 34.4L12.5 30L19.5 29.5Z"
+            fill="#E63946"
+            stroke="#FFF0F2"
+            strokeWidth="0.9"
+            className="animate-cat-star-1"
+          />
+          {/* Bi bida số 7 góc trên phải */}
+          <g transform="translate(87, 24)" className="animate-cat-star-2">
+            <circle cx="9" cy="9" r="8.5" fill="#9E1622" stroke="#FFF0F2" strokeWidth="1.1" />
+            <circle cx="9" cy="9" r="4.2" fill="#FFF0F2" />
+            <path d="M7.5 7.4H10.5L8.6 11" stroke="#13080B" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+          </g>
+          {/* Đóa hoa hồng đỏ sắc nét góc dưới trái */}
+          <g transform="translate(14, 73)" className="animate-cat-star-3">
+            <path d="M9 1C13 1 16 4 16 8C16 12 12.5 15 9 15C5.5 15 2 12 2 8C2 4 5 1 9 1Z" fill="#C91F2F" stroke="#FFF0F2" strokeWidth="0.9" />
+            <path d="M6 6.5C7.5 4.8 10.5 4.8 11.8 6.8C12.8 8.4 11.2 10.6 9 10.6C7 10.6 5.8 9 6.6 7.4" stroke="#FFF0F2" strokeWidth="1" fill="none" strokeLinecap="round" />
+          </g>
+        </g>
+      )}
+
       {/* Đuôi mèo uốn cong đung đưa mềm mại */}
       <path
         d="M77 95C91 95 101 86 101 75C101 66 93 62 90 67C88 71 92 75 93 78"
@@ -1197,10 +1292,12 @@ export const BlackCatMascot: React.FC<BlackCatMascotProps> = ({
           <rect x="56.5" y="65" width="7" height="5.5" rx="1" fill="#E54850" stroke="#F2C94C" strokeWidth="1" />
         </g>
       ) : effectiveThemeId === 'ilay-riegrow' ? (
-        /* Ilay Riegrow: Cổ áo sơ mi trắng & cà vạt đen sắc nét */
+        /* Ilay Riegrow: Cổ áo viền ren trắng tinh tế & nơ nhỏ */
         <g aria-hidden="true">
-          <path d="M48 62L55 68L60 64L65 68L72 62" fill="#FFFFFF" stroke="#18191F" strokeWidth="1.2" strokeLinejoin="round" />
-          <path d="M58 65H62L63.2 79L60 83L56.8 79L58 65Z" fill="#14151A" stroke="#FFFFFF" strokeWidth="0.8" strokeLinejoin="round" />
+          <path d="M47 62C51 66.5 55 66.5 58 63C61 66.5 65 66.5 69 63C71 65 73 64 74 62" stroke="#FFFFFF" strokeWidth="2.1" strokeLinecap="round" />
+          <path d="M58.5 65L51 61.5C50.5 64.5 51 67 53 68.5L58.5 66.2Z" fill="#FFFFFF" stroke="#8E7180" strokeWidth="0.8" />
+          <path d="M61.5 65L69 61.5C69.5 64.5 69 67 67 68.5L61.5 66.2Z" fill="#FFFFFF" stroke="#8E7180" strokeWidth="0.8" />
+          <circle cx="60" cy="65.6" r="1.8" fill="#F2C6B6" stroke="#FFFFFF" strokeWidth="0.8" />
         </g>
       ) : effectiveThemeId === 'joo-jaekyung' ? (
         /* Joo Jaekyung: Vòng đai võ đài trắng đen & charm quân bích */
@@ -1232,6 +1329,21 @@ export const BlackCatMascot: React.FC<BlackCatMascotProps> = ({
           <path d="M47 62C54 66 66 66 73 62" stroke="#FFFFFF" strokeWidth="2.1" strokeDasharray="3.5 2.5" strokeLinecap="round" />
           <path d="M58 64H62L63.5 79L60 83L56.5 79L58 64Z" fill="#23252E" stroke="#FFFFFF" strokeWidth="1" strokeLinejoin="round" />
           <circle cx="60" cy="68.5" r="2.8" fill="#FFFFFF" stroke="#09090B" strokeWidth="0.9" />
+        </g>
+      ) : effectiveThemeId === 'yeo-taeju' ? (
+        /* Yeo Taeju: Vòng cổ dây vẽ tay & charm trái tim mắt */
+        <g aria-hidden="true">
+          <path d="M47 62C54 66 66 66 73 62" stroke="#EFECE3" strokeWidth="2" strokeLinecap="round" />
+          <path d="M60 64.5C60 64.5 55.5 67.5 55.5 70C55.5 71.8 57.5 72.8 60 71.2C62.5 72.8 64.5 71.8 64.5 70C64.5 67.5 60 64.5 60 64.5Z" fill="#101113" stroke="#EFECE3" strokeWidth="1" />
+          <circle cx="60" cy="68.5" r="1.4" fill="#EFECE3" />
+        </g>
+      ) : effectiveThemeId === 'be-tho' ? (
+        /* Bé Thỏ: Cổ áo gile đỏ thẫm & nơ bướm đỏ sắc nét */
+        <g aria-hidden="true">
+          <path d="M47 62L55 70L60 65L65 70L73 62" fill="#9E1622" stroke="#FFF0F2" strokeWidth="1.1" strokeLinejoin="round" />
+          <path d="M58.8 64.5L50 60L50.8 68L58.8 65.5Z" fill="#E63946" stroke="#FFF0F2" strokeWidth="0.9" strokeLinejoin="miter" />
+          <path d="M61.2 64.5L70 60L69.2 68L61.2 65.5Z" fill="#E63946" stroke="#FFF0F2" strokeWidth="0.9" strokeLinejoin="miter" />
+          <polygon points="60,62.8 62.2,65 60,67.2 57.8,65" fill="#FFF0F2" stroke="#E63946" strokeWidth="0.8" />
         </g>
       ) : (
         <>
@@ -1381,6 +1493,26 @@ export const BlackCatMascot: React.FC<BlackCatMascotProps> = ({
           <path d="M0 0L-6.5 -3.5C-7.2 -0.5 -6.8 2.5 -4.5 4L0 1.2Z" fill="#F2B5C4" stroke="#FFF5F4" strokeWidth="0.9" />
           <path d="M1.5 0L8 -3.5C8.7 -0.5 8.3 2.5 6 4L1.5 1.2Z" fill="#F2B5C4" stroke="#FFF5F4" strokeWidth="0.9" />
           <circle cx="0.75" cy="0.5" r="1.7" fill="#FFF5F4" stroke="#C88EA0" strokeWidth="0.7" />
+        </g>
+      )}
+
+      {/* Ilay Riegrow: Viền ren trắng nhỏ & kẹp nơ trắng tinh tế trên tai trái */}
+      {effectiveThemeId === 'ilay-riegrow' && (
+        <g aria-hidden="true" transform="translate(46, 31) rotate(-18)">
+          <path d="M0 0L-6 -3C-6.6 -0.2 -6.2 2.2 -4 3.6L0 1Z" fill="#FFFFFF" stroke="#8E7180" strokeWidth="0.8" />
+          <path d="M1.2 0L7.2 -3C7.8 -0.2 7.4 2.2 5.2 3.6L1.2 1Z" fill="#FFFFFF" stroke="#8E7180" strokeWidth="0.8" />
+          <circle cx="0.6" cy="0.5" r="1.5" fill="#F2C6B6" stroke="#FFFFFF" strokeWidth="0.7" />
+        </g>
+      )}
+
+      {/* Bé Thỏ: Nơ đỏ sắc nét kẹp trên tai phải */}
+      {effectiveThemeId === 'be-tho' && (
+        <g aria-hidden="true" transform="translate(73, 31) rotate(16)">
+          <path d="M0 0L-7 -3.8L-5.6 4.2L0 1.2Z" fill="#E63946" stroke="#FFF0F2" strokeWidth="0.9" strokeLinejoin="miter" />
+          <path d="M1.5 0L8.5 -3.8L7.1 4.2L1.5 1.2Z" fill="#E63946" stroke="#FFF0F2" strokeWidth="0.9" strokeLinejoin="miter" />
+          <path d="M0 1.4L-3.2 8.2L-0.6 7L0.6 1.6Z" fill="#B81D2B" />
+          <path d="M1.5 1.4L4.7 8.2L2.1 7L0.9 1.6Z" fill="#B81D2B" />
+          <polygon points="0.75,-1 2.4,0.6 0.75,2.2 -0.9,0.6" fill="#FFF0F2" stroke="#E63946" strokeWidth="0.6" />
         </g>
       )}
 

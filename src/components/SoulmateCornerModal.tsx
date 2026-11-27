@@ -1,15 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { Check, ImagePlus, LogOut, Sparkles, UserCheck, X } from 'lucide-react';
+import { Check, Edit3, ImagePlus, LogOut, Sparkles, UserCheck, X } from 'lucide-react';
 import { AVATAR_FRAME_MAP } from '../data/avatarFrames';
 import type { AvatarFrameId, DefaultAvatarIconId, UserProfile } from '../types/user';
 import { playSoftTap } from '../utils/soundEffects';
+import type { SessionFootprintStats } from './SessionFootprintBar';
 import {
   AvatarFrameInlineTag,
   DEFAULT_AVATAR_OPTIONS,
   UserAvatarBadge,
   UserAvatarIconGlyph,
 } from './UserAvatarBadge';
+import { VisitorIdCard } from './VisitorIdCard';
 
 interface SoulmateCornerModalProps {
   isOpen: boolean;
@@ -17,6 +19,7 @@ interface SoulmateCornerModalProps {
   equippedFrameId: AvatarFrameId | null;
   unlockedFramesCount: number;
   totalFramesCount: number;
+  footprintStats: SessionFootprintStats;
   onSaveProfile: (profile: UserProfile) => void;
   onOpenFrameStudio: () => void;
   onLogout: () => void;
@@ -24,8 +27,9 @@ interface SoulmateCornerModalProps {
 }
 
 /**
- * Góc Tri Kỷ: Tạo / chỉnh sửa hồ sơ cục bộ (Tên hiển thị, ảnh tải từ máy / link / biểu tượng)
- * và xem trước Khung Ảnh Đại Diện đang đeo.
+ * Góc Tri Kỷ & Thẻ Căn Cước Khách Thăm:
+ * - Khi chưa đăng nhập: Nhập tên/biệt danh, ảnh đại diện -> Cấp ngay Thẻ Căn Cước Khách Thăm theo theme đang chọn.
+ * - Khi đã đăng nhập: Hiển thị ngay Thẻ Căn Cước Khách Thăm kèm Nhật Ký Dấu Chân, cho phép chỉnh sửa hoặc đổi khung.
  */
 export const SoulmateCornerModal: React.FC<SoulmateCornerModalProps> = ({
   isOpen,
@@ -33,6 +37,7 @@ export const SoulmateCornerModal: React.FC<SoulmateCornerModalProps> = ({
   equippedFrameId,
   unlockedFramesCount,
   totalFramesCount,
+  footprintStats,
   onSaveProfile,
   onOpenFrameStudio,
   onLogout,
@@ -42,6 +47,7 @@ export const SoulmateCornerModal: React.FC<SoulmateCornerModalProps> = ({
   const [avatarUrl, setAvatarUrl] = useState('');
   const [avatarIcon, setAvatarIcon] = useState<DefaultAvatarIconId>('black-cat');
   const [errorMsg, setErrorMsg] = useState('');
+  const [viewMode, setViewMode] = useState<'card' | 'form'>('form');
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
@@ -50,6 +56,7 @@ export const SoulmateCornerModal: React.FC<SoulmateCornerModalProps> = ({
     setAvatarUrl(userProfile?.avatarUrl ?? '');
     setAvatarIcon(userProfile?.avatarIcon ?? 'black-cat');
     setErrorMsg('');
+    setViewMode(userProfile ? 'card' : 'form');
   }, [isOpen, userProfile]);
 
   useEffect(() => {
@@ -87,7 +94,7 @@ export const SoulmateCornerModal: React.FC<SoulmateCornerModalProps> = ({
     e.preventDefault();
     const cleanedName = displayName.trim();
     if (!cleanedName) {
-      setErrorMsg('Hãy nhập tên hiển thị của cậu nhé.');
+      setErrorMsg('Hãy nhập tên hoặc biệt danh của cậu nhé.');
       return;
     }
 
@@ -99,7 +106,7 @@ export const SoulmateCornerModal: React.FC<SoulmateCornerModalProps> = ({
       equippedFrameId,
       createdAt: userProfile?.createdAt || new Date().toISOString(),
     });
-    onClose();
+    setViewMode('card');
   };
 
   const handleLogoutClick = () => {
@@ -131,7 +138,7 @@ export const SoulmateCornerModal: React.FC<SoulmateCornerModalProps> = ({
             exit={{ opacity: 0, scale: 0.94, y: 12 }}
             transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-md my-auto rounded-[24px] bg-gradient-to-b from-[#171620] via-[#0E0E15] to-[#13111A] border border-[#D4AF37]/65 shadow-[0_24px_70px_rgba(0,0,0,0.92),0_0_40px_rgba(212,175,55,0.22)] p-5 sm:p-6 max-h-[90vh] overflow-y-auto"
+            className="relative w-full max-w-lg my-auto rounded-[24px] bg-gradient-to-b from-[#171620] via-[#0E0E15] to-[#13111A] border border-[#D4AF37]/65 shadow-[0_24px_70px_rgba(0,0,0,0.92),0_0_40px_rgba(212,175,55,0.22)] p-4 sm:p-6 max-h-[90vh] overflow-y-auto"
           >
             <div
               aria-hidden="true"
@@ -142,202 +149,258 @@ export const SoulmateCornerModal: React.FC<SoulmateCornerModalProps> = ({
               type="button"
               onClick={handleClose}
               aria-label="Đóng Góc Tri Kỷ"
-              className="absolute top-3.5 right-3.5 z-20 inline-flex items-center justify-center w-8 h-8 rounded-full bg-[#0B0B0F]/90 border border-[#D4AF37]/45 text-[#F3E5AB] hover:border-[#F3E5AB] hover:bg-[#D4AF37]/20 transition-colors cursor-pointer"
+              className="absolute top-3.5 right-3.5 z-20 inline-flex items-center justify-center w-9 h-9 rounded-full bg-[#0B0B0F]/90 border border-[#D4AF37]/45 text-[#F3E5AB] hover:border-[#F3E5AB] hover:bg-[#D4AF37]/20 transition-colors cursor-pointer"
             >
               <X className="w-4 h-4" aria-hidden="true" />
             </button>
 
-            <div className="relative z-10 text-center pb-4 border-b border-[#D4AF37]/20">
+            <div className="relative z-10 text-center pb-3.5 border-b border-[#D4AF37]/20 pr-6 pl-6">
               <p className="text-[10px] font-display tracking-[0.22em] uppercase text-[#D4AF37]">
-                ✦ Thẻ Thành Viên ✦
+                {viewMode === 'card' ? '✦ Thẻ Căn Cước Khách Thăm ✦' : '✦ Đăng Ký Hồ Sơ Phiên ✦'}
               </p>
               <h2
                 id="soulmate-corner-title"
                 className="font-display text-2xl sm:text-[28px] font-semibold text-[#F3E5AB] mt-0.5"
               >
-                Góc Tri Kỷ
+                {viewMode === 'card' ? 'Thẻ Thành Viên' : 'Góc Tri Kỷ'}
               </h2>
               <p className="text-xs text-[#B8B0A0] mt-1">
-                {userProfile
-                  ? 'Tùy chỉnh tên, ảnh đại diện và khung ảnh khi gửi Hòm Thư Tâm Tình.'
-                  : 'Tạo hồ sơ nhỏ để viết và lưu lời nhắn riêng cho từng nhân vật.'}
+                {viewMode === 'card'
+                  ? 'Tấm thẻ đồng bộ theo sắc thái, phụ kiện và chữ viết của theme hiện tại.'
+                  : 'Nhập biệt danh và chọn ảnh đại diện để nhận Thẻ Căn Cước Khách Thăm trong phiên.'}
               </p>
             </div>
 
-            {/* Live Preview Card */}
-            <div className="relative z-10 mt-4 p-3.5 rounded-xl bg-[#0B0B0F]/85 border border-[#D4AF37]/30 flex items-center gap-3">
-              <UserAvatarBadge
-                avatarUrl={avatarUrl}
-                avatarIcon={avatarIcon}
-                frameId={equippedFrameId}
-                displayName={displayName || 'Tri kỷ ẩn danh'}
-                size="lg"
-                reserveFrameSpace
-              />
-              <div className="min-w-0 flex-1">
-                <p className="text-[10px] uppercase tracking-wider text-[#8E877A]">
-                  Xem trước hiển thị
-                </p>
-                <div className="mt-1 flex flex-wrap items-center gap-1.5">
-                  <span className="font-semibold text-sm sm:text-base text-[#F3E5AB] truncate max-w-[175px]">
-                    {displayName.trim() || 'Tên hiển thị của cậu'}
-                  </span>
-                  {equippedFrameId && <AvatarFrameInlineTag frameId={equippedFrameId} />}
-                </div>
-                <p className="text-[11px] text-[#B8B0A0] mt-0.5">
-                  {equippedFrame
-                    ? `Đang đeo khung ${equippedFrame.name}`
-                    : `Đã mở ${unlockedFramesCount}/${totalFramesCount} Khung Ảnh Đại Diện`}
-                </p>
-              </div>
-            </div>
-
-            {/* Nút mở Phòng Chọn Khung Ảnh Đại Diện */}
-            <div className="relative z-10 mt-3 p-3 rounded-xl bg-[#121219]/90 border border-[#D4AF37]/25 flex items-center justify-between gap-2.5 text-xs">
-              <div className="text-[#CFC8B8] leading-snug">
-                <p className="font-medium text-[#F3E5AB]">Khung Ảnh Đại Diện</p>
-                <p className="text-[11px] text-[#9E9687]">
-                  Đeo & đổi khung từ bộ sưu tập ({unlockedFramesCount}/{totalFramesCount} đã mở)
-                </p>
-              </div>
-
-              <button
-                type="button"
-                onClick={() => {
-                  playSoftTap('card');
-                  onClose();
-                  onOpenFrameStudio();
-                }}
-                className="shrink-0 inline-flex items-center gap-1 min-h-[34px] px-3 py-1.5 rounded-xl bg-[#1C1826] border border-[#D4AF37]/55 text-[11px] font-semibold text-[#F3E5AB] hover:border-[#F3E5AB] hover:bg-[#D4AF37]/15 transition-all cursor-pointer"
-              >
-                <Sparkles className="w-3.5 h-3.5 text-[#D4AF37]" aria-hidden="true" />
-                <span>Chọn khung</span>
-              </button>
-            </div>
-
-            {/* Form */}
-            <form onSubmit={handleSubmit} className="relative z-10 mt-4 space-y-4">
-              <div>
-                <label
-                  htmlFor="profile-display-name"
-                  className="block text-xs font-medium text-[#E6CD82] mb-1.5"
-                >
-                  Tên hiển thị <span className="text-[#D4AF37]">*</span>
-                </label>
-                <input
-                  id="profile-display-name"
-                  type="text"
-                  maxLength={32}
-                  value={displayName}
-                  onChange={(e) => {
-                    setDisplayName(e.target.value);
-                    if (errorMsg) setErrorMsg('');
+            {viewMode === 'card' ? (
+              <div className="relative z-10 mt-4 space-y-3.5">
+                <VisitorIdCard
+                  displayName={displayName || userProfile?.displayName || 'Tri kỷ ẩn danh'}
+                  avatarUrl={avatarUrl}
+                  avatarIcon={avatarIcon}
+                  frameId={equippedFrameId}
+                  createdAt={userProfile?.createdAt}
+                  footprintStats={footprintStats}
+                  onOpenFrameStudio={() => {
+                    playSoftTap('card');
+                    onClose();
+                    onOpenFrameStudio();
                   }}
-                  placeholder="Ví dụ: Tiểu Ly, Mèo Con Đêm..."
-                  className="w-full min-h-[42px] px-3.5 py-2 rounded-xl bg-[#0B0B0F] border border-[#D4AF37]/35 text-base sm:text-sm text-[#F5EFE0] placeholder:text-[#7E776B] focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/60"
                 />
-                {errorMsg && <p className="mt-1 text-xs text-amber-300">{errorMsg}</p>}
-              </div>
 
-              <div>
-                <div className="flex items-center justify-between gap-2 mb-1.5">
-                  <label
-                    htmlFor="profile-avatar-url"
-                    className="block text-xs font-medium text-[#E6CD82]"
-                  >
-                    Ảnh đại diện (tải từ máy hoặc dán link)
-                  </label>
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/*"
-                    onChange={handleLocalUpload}
-                    className="hidden"
-                  />
+                <div className="flex flex-wrap items-center gap-2 pt-1">
                   <button
                     type="button"
                     onClick={() => {
                       playSoftTap('tap');
-                      fileInputRef.current?.click();
+                      setViewMode('form');
                     }}
-                    className="inline-flex items-center gap-1 text-[11px] font-medium text-[#F3E5AB] hover:underline underline-offset-2 cursor-pointer"
+                    className="flex-1 min-w-[130px] inline-flex items-center justify-center gap-1.5 min-h-[42px] px-3.5 py-2 rounded-xl bg-[#14121B] border border-[#D4AF37]/50 text-xs sm:text-sm font-medium text-[#F3E5AB] hover:border-[#F3E5AB] hover:bg-[#D4AF37]/15 transition-all cursor-pointer"
                   >
-                    <ImagePlus className="w-3.5 h-3.5 text-[#D4AF37]" aria-hidden="true" />
-                    <span>Tải ảnh lên</span>
+                    <Edit3 className="w-3.5 h-3.5 text-[#D4AF37] shrink-0" aria-hidden="true" />
+                    <span>Đổi tên & ảnh</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleClose}
+                    className="shimmer-gold-btn flex-1 min-w-[130px] inline-flex items-center justify-center gap-1.5 min-h-[42px] px-4 py-2 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#E6C86E] text-[#0B0B0F] text-xs sm:text-sm font-semibold hover:brightness-110 active:scale-95 transition-all cursor-pointer"
+                  >
+                    <Sparkles className="w-4 h-4 shrink-0" aria-hidden="true" />
+                    <span>Vào nhà dạo chơi</span>
+                  </button>
+
+                  {userProfile && (
+                    <button
+                      type="button"
+                      onClick={handleLogoutClick}
+                      title="Đăng xuất khỏi tài khoản cục bộ"
+                      className="inline-flex items-center justify-center gap-1.5 min-h-[42px] px-3.5 py-2 rounded-xl bg-[#0B0B0F] border border-[#D4AF37]/35 text-xs font-medium text-[#C7C0B2] hover:border-amber-400/70 hover:text-amber-200 transition-colors cursor-pointer"
+                    >
+                      <LogOut className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+                      <span>Đăng xuất</span>
+                    </button>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <>
+                {/* Live Preview Card */}
+                <div className="relative z-10 mt-4 p-3.5 rounded-xl bg-[#0B0B0F]/85 border border-[#D4AF37]/30 flex items-center gap-3">
+                  <UserAvatarBadge
+                    avatarUrl={avatarUrl}
+                    avatarIcon={avatarIcon}
+                    frameId={equippedFrameId}
+                    displayName={displayName || 'Tri kỷ ẩn danh'}
+                    size="lg"
+                    reserveFrameSpace
+                  />
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[10px] uppercase tracking-wider text-[#8E877A]">
+                      Xem trước thẻ khách thăm
+                    </p>
+                    <div className="mt-1 flex flex-wrap items-center gap-1.5">
+                      <span className="font-semibold text-sm sm:text-base text-[#F3E5AB] truncate max-w-[175px]">
+                        {displayName.trim() || 'Tên / biệt danh của cậu'}
+                      </span>
+                      {equippedFrameId && <AvatarFrameInlineTag frameId={equippedFrameId} />}
+                    </div>
+                    <p className="text-[11px] text-[#B8B0A0] mt-0.5">
+                      {equippedFrame
+                        ? `Đang đeo khung ${equippedFrame.name}`
+                        : `Đã mở ${unlockedFramesCount}/${totalFramesCount} Khung Ảnh Đại Diện`}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Nút mở Phòng Chọn Khung Ảnh Đại Diện */}
+                <div className="relative z-10 mt-3 p-3 rounded-xl bg-[#121219]/90 border border-[#D4AF37]/25 flex items-center justify-between gap-2.5 text-xs">
+                  <div className="text-[#CFC8B8] leading-snug min-w-0">
+                    <p className="font-medium text-[#F3E5AB]">Khung Ảnh Đại Diện</p>
+                    <p className="text-[11px] text-[#9E9687]">
+                      Đeo & đổi khung từ bộ sưu tập ({unlockedFramesCount}/{totalFramesCount} đã mở)
+                    </p>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playSoftTap('card');
+                      onClose();
+                      onOpenFrameStudio();
+                    }}
+                    className="shrink-0 inline-flex items-center gap-1 min-h-[36px] px-3 py-1.5 rounded-xl bg-[#1C1826] border border-[#D4AF37]/55 text-[11px] font-semibold text-[#F3E5AB] hover:border-[#F3E5AB] hover:bg-[#D4AF37]/15 transition-all cursor-pointer"
+                  >
+                    <Sparkles className="w-3.5 h-3.5 text-[#D4AF37]" aria-hidden="true" />
+                    <span>Chọn khung</span>
                   </button>
                 </div>
-                <input
-                  id="profile-avatar-url"
-                  type="text"
-                  value={avatarUrl.startsWith('data:') ? 'Ảnh đã tải từ máy (trong phiên)' : avatarUrl}
-                  onChange={(e) => setAvatarUrl(e.target.value)}
-                  placeholder="Dán link ảnh https://... hoặc bấm Tải ảnh lên"
-                  className="w-full min-h-[40px] px-3.5 py-2 rounded-xl bg-[#0B0B0F] border border-[#D4AF37]/30 text-base sm:text-sm text-[#F5EFE0] placeholder:text-[#7E776B] focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/60"
-                />
-              </div>
 
-              <div>
-                <span className="block text-xs font-medium text-[#E6CD82] mb-2">
-                  Hoặc chọn biểu tượng mặc định
-                </span>
-                <div className="grid grid-cols-3 gap-2">
-                  {DEFAULT_AVATAR_OPTIONS.map((option) => {
-                    const isSelected = avatarUrl.trim() === '' && avatarIcon === option.id;
-                    return (
+                {/* Form */}
+                <form onSubmit={handleSubmit} className="relative z-10 mt-4 space-y-4">
+                  <div>
+                    <label
+                      htmlFor="profile-display-name"
+                      className="block text-xs font-medium text-[#E6CD82] mb-1.5"
+                    >
+                      Tên hoặc biệt danh <span className="text-[#D4AF37]">*</span>
+                    </label>
+                    <input
+                      id="profile-display-name"
+                      type="text"
+                      maxLength={32}
+                      value={displayName}
+                      onChange={(e) => {
+                        setDisplayName(e.target.value);
+                        if (errorMsg) setErrorMsg('');
+                      }}
+                      placeholder="Ví dụ: Tiểu Ly, Mèo Con Đêm..."
+                      className="w-full min-h-[42px] px-3.5 py-2 rounded-xl bg-[#0B0B0F] border border-[#D4AF37]/35 text-base sm:text-sm text-[#F5EFE0] placeholder:text-[#7E776B] focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/60"
+                    />
+                    {errorMsg && <p className="mt-1 text-xs text-amber-300">{errorMsg}</p>}
+                  </div>
+
+                  <div>
+                    <div className="flex items-center justify-between gap-2 mb-1.5">
+                      <label
+                        htmlFor="profile-avatar-url"
+                        className="block text-xs font-medium text-[#E6CD82]"
+                      >
+                        Ảnh đại diện (tải từ máy hoặc dán link)
+                      </label>
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/*"
+                        onChange={handleLocalUpload}
+                        className="hidden"
+                      />
                       <button
-                        key={option.id}
                         type="button"
                         onClick={() => {
                           playSoftTap('tap');
-                          setAvatarUrl('');
-                          setAvatarIcon(option.id);
+                          fileInputRef.current?.click();
                         }}
-                        className={`relative flex flex-col items-center justify-center gap-1 py-2.5 px-2 rounded-xl border text-[11px] font-medium transition-all cursor-pointer ${
-                          isSelected
-                            ? 'bg-[#D4AF37]/18 border-[#F3E5AB] text-[#F3E5AB] shadow-[0_0_14px_rgba(212,175,55,0.25)]'
-                            : 'bg-[#0B0B0F]/90 border-[#D4AF37]/25 text-[#B8B0A0] hover:border-[#D4AF37]/60 hover:text-[#F3E5AB]'
-                        }`}
+                        className="inline-flex items-center gap-1 text-[11px] font-medium text-[#F3E5AB] hover:underline underline-offset-2 cursor-pointer"
                       >
-                        <UserAvatarIconGlyph iconId={option.id} size="sm" />
-                        <span className="truncate max-w-full">{option.label}</span>
-                        {isSelected && (
-                          <Check
-                            className="w-3 h-3 text-[#F3E5AB] absolute top-1.5 right-1.5"
-                            aria-hidden="true"
-                          />
-                        )}
+                        <ImagePlus className="w-3.5 h-3.5 text-[#D4AF37]" aria-hidden="true" />
+                        <span>Tải ảnh lên</span>
                       </button>
-                    );
-                  })}
-                </div>
-              </div>
+                    </div>
+                    <input
+                      id="profile-avatar-url"
+                      type="text"
+                      value={avatarUrl.startsWith('data:') ? 'Ảnh đã tải từ máy (trong phiên)' : avatarUrl}
+                      onChange={(e) => setAvatarUrl(e.target.value)}
+                      placeholder="Dán link ảnh https://... hoặc bấm Tải ảnh lên"
+                      className="w-full min-h-[40px] px-3.5 py-2 rounded-xl bg-[#0B0B0F] border border-[#D4AF37]/30 text-base sm:text-sm text-[#F5EFE0] placeholder:text-[#7E776B] focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/60"
+                    />
+                  </div>
 
-              <div className="pt-2 flex items-center gap-2.5">
-                <button
-                  type="submit"
-                  className="shimmer-gold-btn flex-1 inline-flex items-center justify-center gap-1.5 min-h-[42px] px-4 py-2 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#E6C86E] text-[#0B0B0F] text-xs sm:text-sm font-semibold hover:brightness-110 active:scale-95 transition-all cursor-pointer"
-                >
-                  {userProfile ? (
-                    <UserCheck className="w-4 h-4 shrink-0" aria-hidden="true" />
-                  ) : (
-                    <Sparkles className="w-4 h-4 shrink-0" aria-hidden="true" />
-                  )}
-                  <span>{userProfile ? 'Lưu thay đổi' : 'Xác nhận hồ sơ'}</span>
-                </button>
+                  <div>
+                    <span className="block text-xs font-medium text-[#E6CD82] mb-2">
+                      Hoặc chọn biểu tượng mặc định
+                    </span>
+                    <div className="grid grid-cols-3 gap-2">
+                      {DEFAULT_AVATAR_OPTIONS.map((option) => {
+                        const isSelected = avatarUrl.trim() === '' && avatarIcon === option.id;
+                        return (
+                          <button
+                            key={option.id}
+                            type="button"
+                            onClick={() => {
+                              playSoftTap('tap');
+                              setAvatarUrl('');
+                              setAvatarIcon(option.id);
+                            }}
+                            className={`relative flex flex-col items-center justify-center gap-1 py-2.5 px-2 rounded-xl border text-[11px] font-medium transition-all cursor-pointer ${
+                              isSelected
+                                ? 'bg-[#D4AF37]/18 border-[#F3E5AB] text-[#F3E5AB] shadow-[0_0_14px_rgba(212,175,55,0.25)]'
+                                : 'bg-[#0B0B0F]/90 border-[#D4AF37]/25 text-[#B8B0A0] hover:border-[#D4AF37]/60 hover:text-[#F3E5AB]'
+                            }`}
+                          >
+                            <UserAvatarIconGlyph iconId={option.id} size="sm" />
+                            <span className="truncate max-w-full">{option.label}</span>
+                            {isSelected && (
+                              <Check
+                                className="w-3 h-3 text-[#F3E5AB] absolute top-1.5 right-1.5"
+                                aria-hidden="true"
+                              />
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
 
-                {userProfile && (
-                  <button
-                    type="button"
-                    onClick={handleLogoutClick}
-                    title="Đăng xuất khỏi tài khoản cục bộ"
-                    className="inline-flex items-center justify-center gap-1.5 min-h-[42px] px-3.5 py-2 rounded-xl bg-[#0B0B0F] border border-[#D4AF37]/35 text-xs font-medium text-[#C7C0B2] hover:border-amber-400/70 hover:text-amber-200 transition-colors cursor-pointer"
-                  >
-                    <LogOut className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
-                    <span>Đăng xuất</span>
-                  </button>
-                )}
-              </div>
-            </form>
+                  <div className="pt-2 flex flex-wrap items-center gap-2">
+                    <button
+                      type="submit"
+                      className="shimmer-gold-btn flex-1 min-w-[150px] inline-flex items-center justify-center gap-1.5 min-h-[42px] px-4 py-2 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#E6C86E] text-[#0B0B0F] text-xs sm:text-sm font-semibold hover:brightness-110 active:scale-95 transition-all cursor-pointer"
+                    >
+                      {userProfile ? (
+                        <UserCheck className="w-4 h-4 shrink-0" aria-hidden="true" />
+                      ) : (
+                        <Sparkles className="w-4 h-4 shrink-0" aria-hidden="true" />
+                      )}
+                      <span>{userProfile ? 'Lưu & xem Thẻ' : 'Nhận Thẻ Khách Thăm'}</span>
+                    </button>
+
+                    {userProfile && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          playSoftTap('nav');
+                          setViewMode('card');
+                        }}
+                        className="inline-flex items-center justify-center min-h-[42px] px-3.5 py-2 rounded-xl bg-[#0B0B0F] border border-[#D4AF37]/35 text-xs font-medium text-[#DCD4C6] hover:border-[#D4AF37] hover:text-[#F3E5AB] transition-colors cursor-pointer"
+                      >
+                        Xem Thẻ
+                      </button>
+                    )}
+                  </div>
+                </form>
+              </>
+            )}
           </motion.div>
         </motion.div>
       )}

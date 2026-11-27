@@ -3,8 +3,10 @@ import { AnimatePresence, motion } from 'motion/react';
 import {
   Check,
   ChevronDown,
+  Coffee,
   DoorOpen,
   KeyRound,
+  Mail,
   Moon,
   MoonStar,
   Palette,
@@ -20,6 +22,7 @@ import { getThemeOriginFromEvent, useSiteTheme } from '../themes/siteThemes';
 import type { AvatarFrameId, DefaultAvatarIconId, UserProfile } from '../types/user';
 import { playSoftTap } from '../utils/soundEffects';
 import { BlackCatMascot } from './BlackCatMascot';
+import { SessionFootprintBar, type SessionFootprintStats } from './SessionFootprintBar';
 import { UserAvatarBadge } from './UserAvatarBadge';
 
 const QUICK_GENRES = ['Tất cả', 'Tổng tài', 'Fantasy', 'Cổ trang', 'Chữa lành'] as const;
@@ -34,6 +37,7 @@ export interface SideMenuDrawerProps {
   equippedFrameId: AvatarFrameId | null;
   unlockedFramesCount: number;
   totalFramesCount: number;
+  footprintStats: SessionFootprintStats;
   selectedGenre: string;
   isWitchingHourActive: boolean;
   isMoonlightSilverMode: boolean;
@@ -42,6 +46,8 @@ export interface SideMenuDrawerProps {
   onOpenDestinyTarot: () => void;
   onOpenMysticCorner: () => void;
   onOpenDualMatchup: () => void;
+  onOpenWhisperMailbox: () => void;
+  onOpenMoodDrinkBar: () => void;
   onOpenSecretNotebook: () => void;
   onToggleWitchingHour: () => void;
   onToggleMoonlightSilver: () => void;
@@ -60,6 +66,7 @@ export const SideMenuDrawer: React.FC<SideMenuDrawerProps> = ({
   equippedFrameId,
   unlockedFramesCount,
   totalFramesCount,
+  footprintStats,
   selectedGenre,
   isWitchingHourActive,
   isMoonlightSilverMode,
@@ -68,6 +75,8 @@ export const SideMenuDrawer: React.FC<SideMenuDrawerProps> = ({
   onOpenDestinyTarot,
   onOpenMysticCorner,
   onOpenDualMatchup,
+  onOpenWhisperMailbox,
+  onOpenMoodDrinkBar,
   onOpenSecretNotebook,
   onToggleWitchingHour,
   onToggleMoonlightSilver,
@@ -249,14 +258,19 @@ export const SideMenuDrawer: React.FC<SideMenuDrawerProps> = ({
                   >
                     <span className="flex items-center gap-2 min-w-0">
                       <User className="w-4 h-4 text-[#D4AF37] shrink-0" aria-hidden="true" />
-                      <span className="truncate">Góc Tri Kỷ</span>
+                      <span className="truncate">
+                        {userProfile ? 'Thẻ Căn Cước Khách Thăm' : 'Góc Tri Kỷ (Nhận Thẻ)'}
+                      </span>
                     </span>
                     <span className="text-[11px] text-[#B8B0A0] shrink-0">
-                      {userProfile ? 'Chỉnh sửa' : 'Đăng nhập'}
+                      {userProfile ? 'Xem thẻ' : 'Đăng nhập'}
                     </span>
                   </button>
                 </div>
               </section>
+
+              {/* 1b. Nhật Ký Dấu Chân trong phiên */}
+              <SessionFootprintBar {...footprintStats} variant="drawer" />
 
               {/* 2. Trải nghiệm đặc biệt */}
               <section
@@ -266,6 +280,36 @@ export const SideMenuDrawer: React.FC<SideMenuDrawerProps> = ({
                 <p className="text-[10px] font-medium tracking-widest uppercase text-[#D4AF37] px-0.5">
                   ✦ Khám phá & Nghi thức
                 </p>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    playSoftTap('card');
+                    runAndClose(onOpenWhisperMailbox);
+                  }}
+                  className="w-full flex items-center justify-between gap-2 min-h-[42px] px-3 py-2 rounded-xl bg-[#15121A] border border-[#D4AF37]/40 text-xs font-medium text-[#F3E5AB] hover:bg-[#D4AF37]/15 hover:border-[#F3E5AB] transition-all cursor-pointer"
+                >
+                  <span className="flex items-center gap-2 min-w-0">
+                    <Mail className="w-4 h-4 text-[#D4AF37] shrink-0" aria-hidden="true" />
+                    <span className="truncate">💌 Hộp Thư Thì Thầm</span>
+                  </span>
+                  <span className="text-[11px] text-[#B8B0A0] shrink-0">Dấu sáp</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    playSoftTap('card');
+                    runAndClose(onOpenMoodDrinkBar);
+                  }}
+                  className="w-full flex items-center justify-between gap-2 min-h-[42px] px-3 py-2 rounded-xl bg-[#15121A] border border-[#D4AF37]/40 text-xs font-medium text-[#F3E5AB] hover:bg-[#D4AF37]/15 hover:border-[#F3E5AB] transition-all cursor-pointer"
+                >
+                  <span className="flex items-center gap-2 min-w-0">
+                    <Coffee className="w-4 h-4 text-[#D4AF37] shrink-0" aria-hidden="true" />
+                    <span className="truncate">🍸 Quầy Đồ Uống Tâm Trạng</span>
+                  </span>
+                  <span className="text-[11px] text-[#B8B0A0] shrink-0">Theo vibe</span>
+                </button>
 
                 <button
                   type="button"

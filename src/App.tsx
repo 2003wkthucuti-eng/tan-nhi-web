@@ -40,17 +40,25 @@ import { HolographicTiltCard } from './components/HolographicTiltCard';
 import { IntroSealDoors, type IntroPhase } from './components/IntroSealDoors';
 import { MysticCornerModal } from './components/MysticCornerModal';
 import { MysticalFogOverlay } from './components/MysticalFogOverlay';
+import { MoodDrinkBarModal } from './components/MoodDrinkBarModal';
 import { SecretBadgeModal } from './components/SecretBadgeModal';
 import { SecretDiaryAndBadgesModal } from './components/SecretDiaryAndBadgesModal';
 import { SecretRoomModal } from './components/SecretRoomModal';
+import type { SessionFootprintStats } from './components/SessionFootprintBar';
 import { SideMenuDrawer } from './components/SideMenuDrawer';
 import { SignatureSealModal } from './components/SignatureSealModal';
 import { SoulmateCornerModal } from './components/SoulmateCornerModal';
 import { TabWhisperToast, type TabWhisperPayload } from './components/TabWhisperToast';
 import { TrendingSpotlight } from './components/TrendingSpotlight';
 import { UserAvatarBadge } from './components/UserAvatarBadge';
+import { WhisperMailboxModal } from './components/WhisperMailboxModal';
 import { AVATAR_FRAMES, AVATAR_FRAME_MAP } from './data/avatarFrames';
-import { SiteThemeProvider, useSiteTheme } from './themes/siteThemes';
+import {
+  SITE_THEMES,
+  SiteThemeProvider,
+  useSiteTheme,
+  type SiteThemeId,
+} from './themes/siteThemes';
 import {
   loadHeartfeltLetters,
   loadUserProfile,
@@ -893,6 +901,12 @@ function AppContent() {
   const [tabWhisper, setTabWhisper] = useState<TabWhisperPayload | null>(null);
   const [selectedMood, setSelectedMood] = useState<MoodVibeType>('Tất cả');
   const [isDualMatchupOpen, setIsDualMatchupOpen] = useState(false);
+  const [isWhisperMailboxOpen, setIsWhisperMailboxOpen] = useState(false);
+  const [isMoodDrinkBarOpen, setIsMoodDrinkBarOpen] = useState(false);
+  const [viewedCharacterIds, setViewedCharacterIds] = useState<string[]>(() =>
+    initialSharedChar ? [initialSharedChar.id] : []
+  );
+  const [triedThemeIds, setTriedThemeIds] = useState<SiteThemeId[]>(() => [activeTheme.id]);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const shouldPlayRef = useRef(false);
@@ -927,6 +941,17 @@ function AppContent() {
   const unlockedFramesCount = useMemo(
     () => AVATAR_FRAMES.filter((f) => Boolean(avatarFrames.unlocked[f.id])).length,
     [avatarFrames.unlocked]
+  );
+  const footprintStats = useMemo<SessionFootprintStats>(
+    () => ({
+      viewedCharactersCount: viewedCharacterIds.length,
+      totalCharactersCount: CHARACTERS.length,
+      triedThemesCount: triedThemeIds.length,
+      totalThemesCount: SITE_THEMES.length,
+      unlockedFramesCount,
+      totalFramesCount: AVATAR_FRAMES.length,
+    }),
+    [viewedCharacterIds.length, triedThemeIds.length, unlockedFramesCount]
   );
   const activeAvatarUrl = userProfile?.avatarUrl || previewAvatarUrl;
   const activeAvatarIcon = userProfile?.avatarIcon ?? previewAvatarIcon;
@@ -1247,6 +1272,7 @@ function AppContent() {
     source: { fromTarot?: boolean; fromMystic?: boolean } = {}
   ) => {
     trackCharacterInteraction(char.id, 1);
+    setViewedCharacterIds((prev) => (prev.includes(char.id) ? prev : [...prev, char.id]));
     setOpenedDetailFromTarot(Boolean(source.fromTarot));
     setOpenedDetailFromMystic(Boolean(source.fromMystic));
     setSelectedCharacter(char);
@@ -1545,8 +1571,9 @@ function AppContent() {
     return () => window.removeEventListener('keydown', handleKeywordListen);
   }, [hasEntered]);
 
-  // Mở khóa Khung Ảnh "Băng Vũ Pha Lê" khi đổi Theme giao diện bên trong trang
+  // Ghi nhận mọi theme đã thử trong phiên & mở khóa Khung Ảnh "Băng Vũ Pha Lê" khi đổi Theme
   useEffect(() => {
+    setTriedThemeIds((prev) => (prev.includes(activeTheme.id) ? prev : [...prev, activeTheme.id]));
     if (prevThemeIdRef.current === activeTheme.id) return;
     prevThemeIdRef.current = activeTheme.id;
     if (!hasEntered) return;
@@ -2972,6 +2999,7 @@ function AppContent() {
         equippedFrameId={avatarFrames.equippedFrameId}
         unlockedFramesCount={unlockedFramesCount}
         totalFramesCount={AVATAR_FRAMES.length}
+        footprintStats={footprintStats}
         selectedGenre={selectedGenre}
         isWitchingHourActive={isWitchingHourActive}
         isMoonlightSilverMode={isMoonlightSilverMode}
@@ -2987,6 +3015,14 @@ function AppContent() {
             'Mở Hai Cánh Cửa Định Mệnh — đánh thức Khung Ảnh Huyết Nguyệt Kiếm Khách!',
             { showModal: true }
           );
+        }}
+        onOpenWhisperMailbox={() => {
+          playSoftTap('card');
+          setIsWhisperMailboxOpen(true);
+        }}
+        onOpenMoodDrinkBar={() => {
+          playSoftTap('card');
+          setIsMoodDrinkBarOpen(true);
         }}
         onOpenSecretNotebook={() => setIsSecretNotebookOpen(true)}
         onToggleWitchingHour={handleToggleWitchingHourTest}
@@ -3077,13 +3113,14 @@ function AppContent() {
         )}
       </AnimatePresence>
 
-      {/* Modal Góc Tri Kỷ: Tạo / chỉnh sửa tài khoản cục bộ */}
+      {/* Modal Góc Tri Kỷ & Thẻ Căn Cước Khách Thăm */}
       <SoulmateCornerModal
         isOpen={isProfileModalOpen}
         userProfile={userProfile}
         equippedFrameId={avatarFrames.equippedFrameId}
         unlockedFramesCount={unlockedFramesCount}
         totalFramesCount={AVATAR_FRAMES.length}
+        footprintStats={footprintStats}
         onSaveProfile={handleSaveUserProfile}
         onOpenFrameStudio={() => setIsFrameStudioOpen(true)}
         onLogout={handleLogoutUserProfile}
@@ -3168,6 +3205,33 @@ function AppContent() {
         onInspectCharacter={(char) => openCharacterProfileModal(char)}
         onChatLinkClick={(charId) => trackCharacterInteraction(charId, 2)}
         onClose={() => setIsDualMatchupOpen(false)}
+      />
+
+      {/* Hộp Thư Thì Thầm (Phong bì niêm phong dấu sáp) */}
+      <WhisperMailboxModal
+        isOpen={isWhisperMailboxOpen}
+        characters={CHARACTERS}
+        onInspectCharacter={(char) => openCharacterProfileModal(char)}
+        onEnvelopeOpened={() => {
+          unlockAvatarFrame(
+            'hac-long-net-co',
+            'Phong bì dấu sáp trong Hộp Thư Thì Thầm đã mở khóa Khung Ảnh Hắc Long Nét Cọ!',
+            { showModal: false, showToast: true }
+          );
+        }}
+        onClose={() => setIsWhisperMailboxOpen(false)}
+      />
+
+      {/* Quầy Đồ Uống Tâm Trạng (Pha chế theo vibe theme & cơ hội mở khóa Khung Ảnh) */}
+      <MoodDrinkBarModal
+        isOpen={isMoodDrinkBarOpen}
+        displayName={activeDisplayName}
+        unlockedFrames={avatarFrames.unlocked}
+        onOrderUnlockFrame={(frameId, sourceNote) =>
+          unlockAvatarFrame(frameId, sourceNote, { showModal: false, showToast: true })
+        }
+        onOpenFrameStudio={() => setIsFrameStudioOpen(true)}
+        onClose={() => setIsMoodDrinkBarOpen(false)}
       />
 
       {/* Tiếng Thì Thầm Khi Đổi Tab / Quay lại sau 60s */}

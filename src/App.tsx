@@ -1806,7 +1806,7 @@ function AppContent() {
     <div
       data-site-theme={activeTheme.id}
       data-form-variant={activeTheme.formVariant ?? 'default'}
-      className={`min-h-screen bg-[#0B0B0F] text-[#F5EFE0] relative selection:bg-[#D4AF37]/30 selection:text-[#F3E5AB] transition-colors duration-500 ${
+      className={`min-h-screen w-full max-w-full overflow-x-clip bg-[#0B0B0F] text-[#F5EFE0] relative selection:bg-[#D4AF37]/30 selection:text-[#F3E5AB] transition-colors duration-500 ${
         isMoonlightSilverMode ? 'moonlight-silver-mode' : ''
       }`}
     >
@@ -1835,7 +1835,7 @@ function AppContent() {
       {/* Giao diện Trang chủ */}
       <div
         aria-hidden={!hasEntered}
-        className={`relative min-h-screen flex flex-col transition-opacity duration-500 ${
+        className={`relative min-h-screen w-full max-w-full overflow-x-clip flex flex-col transition-opacity duration-500 ${
           hasEntered ? 'opacity-100' : 'opacity-0 pointer-events-none h-screen overflow-hidden'
         }`}
       >
@@ -1886,9 +1886,9 @@ function AppContent() {
 
         {/* Top Bar 3 vùng rõ ràng */}
         <header className="sticky top-0 z-30 bg-[#0B0B0F]/90 backdrop-blur-md border-b border-[#D4AF37]/20">
-          <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-2 sm:gap-8">
+          <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2 sm:py-0 sm:h-16 flex flex-wrap sm:flex-nowrap items-center justify-between gap-x-2 gap-y-1.5 sm:gap-6 lg:gap-8">
             {/* Zone 1: Linh vật mèo đen tương tác + Brand Title */}
-            <div className="relative flex items-center gap-1.5 sm:gap-2.5 min-w-0">
+            <div className="relative flex items-center gap-2 sm:gap-2.5 w-full sm:w-auto sm:min-w-0">
               <button
                 type="button"
                 onClick={handleHeaderCatClick}
@@ -1906,9 +1906,9 @@ function AppContent() {
               <a
                 href="#top"
                 onClick={handleTitleLogoClick}
-                className="min-w-0 truncate focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] rounded-lg py-1"
+                className="min-w-0 flex-1 sm:flex-initial focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] rounded-lg py-0.5 sm:py-1"
               >
-                <span className="font-display text-[17px] sm:text-2xl font-semibold tracking-tight gold-shimmer-text">
+                <span className="font-display text-[16px] sm:text-xl lg:text-2xl font-semibold tracking-tight leading-tight gold-shimmer-text block sm:inline break-words">
                   Ngôi Nhà Nhỏ Của{' '}
                   <span
                     onPointerDown={(e) => startSignatureHold('header', e)}
@@ -1959,7 +1959,7 @@ function AppContent() {
                     exit={{ opacity: 0, y: -4, scale: 0.96 }}
                     transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
                     role="status"
-                    className="absolute left-0 top-full mt-2.5 z-50 w-64 sm:w-72 rounded-xl bg-[#0B0B0F]/95 backdrop-blur-md border border-[#D4AF37]/75 px-3.5 py-2.5 text-xs leading-relaxed text-[#F3E5AB] shadow-[0_12px_30px_rgba(0,0,0,0.85),0_0_20px_rgba(212,175,55,0.22)]"
+                    className="absolute left-0 top-full mt-2.5 z-50 w-[min(17rem,calc(100vw-1.5rem))] sm:w-72 rounded-xl bg-[#0B0B0F]/95 backdrop-blur-md border border-[#D4AF37]/75 px-3.5 py-2.5 text-xs leading-relaxed text-[#F3E5AB] shadow-[0_12px_30px_rgba(0,0,0,0.85),0_0_20px_rgba(212,175,55,0.22)]"
                   >
                     <span
                       aria-hidden="true"
@@ -1998,7 +1998,7 @@ function AppContent() {
             </nav>
 
             {/* Zone 3: Khung Ảnh + Theme + Góc Tri Kỷ + Màn chào */}
-            <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+            <div className="flex flex-wrap sm:flex-nowrap items-center justify-between sm:justify-end gap-1.5 sm:gap-2 w-full sm:w-auto shrink-0 min-w-0">
               <button
                 type="button"
                 onClick={() => {
@@ -2007,9 +2007,10 @@ function AppContent() {
                 }}
                 aria-label={`Chọn Avatar và Khung Ảnh (${unlockedFramesCount}/${AVATAR_FRAMES.length} đã mở)`}
                 title="Chọn ảnh đại diện & Khung Ảnh Đại Diện"
-                className="inline-flex items-center gap-1.5 min-h-[38px] sm:min-h-[40px] px-2.5 sm:px-3 py-1.5 rounded-xl border border-[#D4AF37]/45 bg-[#14121B] text-[11px] sm:text-xs font-medium text-[#F3E5AB] hover:bg-[#D4AF37]/15 hover:border-[#F3E5AB] transition-all duration-150 whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]"
+                className="inline-flex items-center gap-1.5 min-h-[34px] sm:min-h-[40px] px-2 sm:px-3 py-1 sm:py-1.5 rounded-xl border border-[#D4AF37]/45 bg-[#14121B] text-[11px] sm:text-xs font-medium text-[#F3E5AB] hover:bg-[#D4AF37]/15 hover:border-[#F3E5AB] transition-all duration-150 whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]"
               >
                 <Sparkles className="w-3.5 h-3.5 text-[#D4AF37] shrink-0" aria-hidden="true" />
+                <span className="sm:hidden">Khung</span>
                 <span className="hidden md:inline">Khung Ảnh</span>
                 <span className="tabular-nums text-[10px] sm:text-[11px] text-[#D4AF37]">
                   {unlockedFramesCount}/{AVATAR_FRAMES.length}
@@ -2026,7 +2027,7 @@ function AppContent() {
                 }}
                 aria-label={userProfile ? `Hồ sơ của ${userProfile.displayName}` : 'Mở Góc Tri Kỷ'}
                 title={userProfile ? 'Chỉnh sửa hồ sơ Góc Tri Kỷ' : 'Đăng nhập / Tạo hồ sơ Góc Tri Kỷ'}
-                className={`inline-flex items-center gap-1.5 min-h-[38px] sm:min-h-[40px] px-2.5 sm:px-3 py-1.5 rounded-xl border text-[11px] sm:text-xs font-medium transition-all duration-150 whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] ${
+                className={`inline-flex items-center gap-1.5 min-h-[34px] sm:min-h-[40px] px-2 sm:px-3 py-1 sm:py-1.5 rounded-xl border text-[11px] sm:text-xs font-medium transition-all duration-150 whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] ${
                   userProfile
                     ? 'bg-[#17140E] border-[#D4AF37]/65 text-[#F3E5AB] hover:border-[#F3E5AB] shadow-[0_0_14px_rgba(212,175,55,0.16)]'
                     : 'bg-[#121218] border-[#D4AF37]/40 text-[#F3E5AB] hover:bg-[#D4AF37]/15 hover:border-[#D4AF37]'
@@ -2041,7 +2042,7 @@ function AppContent() {
                       displayName={userProfile.displayName}
                       size="xs"
                     />
-                    <span className="max-w-[74px] sm:max-w-[115px] truncate">
+                    <span className="max-w-[68px] sm:max-w-[115px] truncate">
                       {userProfile.displayName}
                     </span>
                   </>
@@ -2064,7 +2065,7 @@ function AppContent() {
                 }}
                 aria-label="Xem lại màn chào"
                 title="Xem lại màn chào"
-                className="inline-flex items-center justify-center gap-1.5 min-w-[38px] min-h-[38px] sm:min-h-[40px] px-2 sm:px-3.5 py-1.5 rounded-xl border border-[#D4AF37]/35 bg-[#121218] text-xs font-medium text-[#DCD4C6] hover:text-[#F3E5AB] hover:bg-[#D4AF37]/15 hover:border-[#D4AF37] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] transition-colors duration-150 whitespace-nowrap shrink-0 cursor-pointer"
+                className="inline-flex items-center justify-center gap-1.5 min-w-[34px] min-h-[34px] sm:min-h-[40px] px-2 sm:px-3.5 py-1 sm:py-1.5 rounded-xl border border-[#D4AF37]/35 bg-[#121218] text-xs font-medium text-[#DCD4C6] hover:text-[#F3E5AB] hover:bg-[#D4AF37]/15 hover:border-[#D4AF37] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] transition-colors duration-150 whitespace-nowrap shrink-0 cursor-pointer"
               >
                 <DoorOpen className="w-3.5 h-3.5 text-[#D4AF37] sm:hidden shrink-0" aria-hidden="true" />
                 <span className="hidden sm:inline">Màn chào</span>
@@ -2261,7 +2262,7 @@ function AppContent() {
                   }}
                   placeholder="Tìm theo tên nhân vật..."
                   aria-label="Tìm kiếm theo tên nhân vật"
-                  className="w-full min-h-[40px] pl-9 pr-9 py-2 rounded-xl bg-[#121218] border border-[#D4AF37]/25 text-xs sm:text-sm text-[#F5EFE0] placeholder:text-[#8E877A] focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/60 transition-colors"
+                  className="w-full min-h-[42px] sm:min-h-[40px] pl-9 pr-9 py-2 rounded-xl bg-[#121218] border border-[#D4AF37]/25 text-base sm:text-sm text-[#F5EFE0] placeholder:text-[#8E877A] focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/60 transition-colors"
                 />
                 {searchQuery && (
                   <button
@@ -2279,7 +2280,7 @@ function AppContent() {
                 )}
               </div>
 
-              <div className="flex flex-wrap items-center gap-2 shrink-0 w-full sm:w-auto justify-between sm:justify-start">
+              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 w-full sm:w-auto">
                 <button
                   type="button"
                   onClick={() => {
@@ -2287,7 +2288,7 @@ function AppContent() {
                     setShowAllTags((prev) => !prev);
                   }}
                   aria-expanded={showAllTags}
-                  className={`inline-flex items-center gap-1.5 min-h-[40px] px-3 sm:px-3.5 py-2 rounded-xl border text-xs font-medium whitespace-nowrap shrink-0 transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] ${
+                  className={`inline-flex items-center gap-1.5 min-h-[38px] sm:min-h-[40px] px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl border text-[11px] sm:text-xs font-medium whitespace-nowrap transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] ${
                     showAllTags || selectedGenre !== 'Tất cả'
                       ? 'bg-[#D4AF37]/15 border-[#D4AF37]/65 text-[#F3E5AB]'
                       : 'bg-[#121218] border-[#D4AF37]/25 text-[#DCD4C6] hover:border-[#D4AF37]/60 hover:text-[#F3E5AB]'
@@ -2303,40 +2304,38 @@ function AppContent() {
                   />
                 </button>
 
-                <div className="flex items-center gap-2 shrink-0">
-                  <button
-                    type="button"
-                    onClick={handleOpenDestinyModal}
-                    className="shimmer-gold-btn inline-flex items-center justify-center gap-1.5 min-h-[40px] px-3 sm:px-3.5 py-2 rounded-xl border border-[#D4AF37]/75 bg-gradient-to-r from-[#19150A] via-[#271F0A] to-[#19150A] text-xs font-medium text-[#F3E5AB] shadow-[0_0_16px_rgba(212,175,55,0.2)] hover:border-[#F3E5AB] hover:shadow-[0_0_24px_rgba(212,175,55,0.4)] active:scale-95 transition-all duration-150 whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3E5AB]"
-                  >
-                    <Sparkles className="w-3.5 h-3.5 text-[#F3E5AB] shrink-0" aria-hidden="true" />
-                    <span>Gặp gỡ định mệnh</span>
-                  </button>
+                <button
+                  type="button"
+                  onClick={handleOpenDestinyModal}
+                  className="shimmer-gold-btn inline-flex items-center justify-center gap-1.5 min-h-[38px] sm:min-h-[40px] px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl border border-[#D4AF37]/75 bg-gradient-to-r from-[#19150A] via-[#271F0A] to-[#19150A] text-[11px] sm:text-xs font-medium text-[#F3E5AB] shadow-[0_0_16px_rgba(212,175,55,0.2)] hover:border-[#F3E5AB] hover:shadow-[0_0_24px_rgba(212,175,55,0.4)] active:scale-95 transition-all duration-150 whitespace-nowrap cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3E5AB]"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-[#F3E5AB] shrink-0" aria-hidden="true" />
+                  <span>Gặp gỡ định mệnh</span>
+                </button>
 
-                  <button
-                    type="button"
-                    onClick={handleOpenMysticCorner}
-                    className="shimmer-gold-btn inline-flex items-center justify-center gap-1.5 min-h-[40px] px-3 sm:px-3.5 py-2 rounded-xl border border-[#D4AF37]/80 bg-gradient-to-r from-[#1B1422] via-[#281E12] to-[#1A1320] text-xs font-semibold text-[#F3E5AB] shadow-[0_0_18px_rgba(212,175,55,0.24)] hover:border-[#FFF4C4] hover:shadow-[0_0_26px_rgba(243,229,171,0.45)] active:scale-95 transition-all duration-150 whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFF4C4]"
-                  >
-                    <span>🔮 Góc Huyền Bí</span>
-                  </button>
+                <button
+                  type="button"
+                  onClick={handleOpenMysticCorner}
+                  className="shimmer-gold-btn inline-flex items-center justify-center gap-1.5 min-h-[38px] sm:min-h-[40px] px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl border border-[#D4AF37]/80 bg-gradient-to-r from-[#1B1422] via-[#281E12] to-[#1A1320] text-[11px] sm:text-xs font-semibold text-[#F3E5AB] shadow-[0_0_18px_rgba(212,175,55,0.24)] hover:border-[#FFF4C4] hover:shadow-[0_0_26px_rgba(243,229,171,0.45)] active:scale-95 transition-all duration-150 whitespace-nowrap cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFF4C4]"
+                >
+                  <span>🔮 Góc Huyền Bí</span>
+                </button>
 
-                  <button
-                    type="button"
-                    onClick={() => {
-                      playSoftTap('card');
-                      setIsDualMatchupOpen(true);
-                      unlockAvatarFrame(
-                        'huyet-nguyet-kiem-khach',
-                        'Mở Hai Cánh Cửa Định Mệnh — đánh thức Khung Ảnh Huyết Nguyệt Kiếm Khách!',
-                        { showModal: true }
-                      );
-                    }}
-                    className="shimmer-gold-btn inline-flex items-center justify-center gap-1.5 min-h-[40px] px-3 sm:px-3.5 py-2 rounded-xl border border-[#D4AF37]/80 bg-gradient-to-r from-[#181520] via-[#241C10] to-[#181520] text-xs font-semibold text-[#F3E5AB] shadow-[0_0_18px_rgba(212,175,55,0.24)] hover:border-[#FFF4C4] active:scale-95 transition-all duration-150 whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFF4C4]"
-                  >
-                    <span>⚖️ Hai Cánh Cửa</span>
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    playSoftTap('card');
+                    setIsDualMatchupOpen(true);
+                    unlockAvatarFrame(
+                      'huyet-nguyet-kiem-khach',
+                      'Mở Hai Cánh Cửa Định Mệnh — đánh thức Khung Ảnh Huyết Nguyệt Kiếm Khách!',
+                      { showModal: true }
+                    );
+                  }}
+                  className="shimmer-gold-btn inline-flex items-center justify-center gap-1.5 min-h-[38px] sm:min-h-[40px] px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl border border-[#D4AF37]/80 bg-gradient-to-r from-[#181520] via-[#241C10] to-[#181520] text-[11px] sm:text-xs font-semibold text-[#F3E5AB] shadow-[0_0_18px_rgba(212,175,55,0.24)] hover:border-[#FFF4C4] active:scale-95 transition-all duration-150 whitespace-nowrap cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFF4C4]"
+                >
+                  <span>⚖️ Hai Cánh Cửa</span>
+                </button>
               </div>
             </div>
 
@@ -2345,7 +2344,7 @@ function AppContent() {
               <div
                 role="group"
                 aria-label="Lọc theo khí chất đêm nay"
-                className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5"
+                className="flex flex-wrap items-center gap-1.5 flex-1 min-w-0 py-0.5"
               >
                 {MOOD_FILTERS.map((mood) => {
                   const isActive = selectedMood === mood;
@@ -2366,7 +2365,7 @@ function AppContent() {
                         }
                       }}
                       aria-pressed={isActive}
-                      className={`min-h-[32px] px-3 py-1 rounded-xl text-[11px] sm:text-xs font-medium whitespace-nowrap shrink-0 transition-all cursor-pointer ${
+                      className={`max-w-full min-h-[34px] px-2.5 sm:px-3 py-1 rounded-xl text-[11px] sm:text-xs font-medium leading-tight text-center transition-all cursor-pointer ${
                         isActive
                           ? 'bg-gradient-to-r from-[#D4AF37] to-[#E6C86E] text-[#0B0B0F] font-semibold shadow-[0_0_12px_rgba(212,175,55,0.32)]'
                           : 'bg-[#14121B] border border-[#D4AF37]/35 text-[#DCD4C6] hover:border-[#D4AF37]/75 hover:text-[#F3E5AB]'
@@ -2381,7 +2380,7 @@ function AppContent() {
               <button
                 type="button"
                 onClick={handleRandomPickInMood}
-                className="shimmer-gold-btn inline-flex items-center gap-1 min-h-[32px] px-3 py-1 rounded-xl bg-[#19150A] border border-[#D4AF37]/65 text-[11px] font-semibold text-[#F3E5AB] hover:border-[#FFF4C4] active:scale-95 transition-all whitespace-nowrap shrink-0 cursor-pointer"
+                className="shimmer-gold-btn inline-flex items-center gap-1 min-h-[34px] px-3 py-1 rounded-xl bg-[#19150A] border border-[#D4AF37]/65 text-[11px] font-semibold text-[#F3E5AB] hover:border-[#FFF4C4] active:scale-95 transition-all whitespace-nowrap shrink-0 cursor-pointer"
               >
                 <span>🎲 Bốc ngẫu nhiên</span>
               </button>
@@ -2389,11 +2388,11 @@ function AppContent() {
 
             {/* Danh sách Tag: Mặc định 1 hàng ngang vuốt trượt mượt, bấm nút sẽ xổ gọn toàn bộ */}
             {!showAllTags ? (
-              <div className="relative">
+              <div className="relative w-full max-w-full overflow-hidden">
                 <div
                   role="group"
                   aria-label="Lọc nhanh theo thể loại"
-                  className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 pr-4"
+                  className="flex items-center gap-1.5 w-full min-w-0 overflow-x-auto no-scrollbar py-0.5 pr-4"
                 >
                   {GENRE_FILTERS.map((genre) => {
                     const isActive = selectedGenre === genre;
@@ -2457,7 +2456,7 @@ function AppContent() {
             <>
               <section
                 aria-label="Danh sách nhân vật"
-                className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 lg:gap-6"
+                className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2.5 sm:gap-5 lg:gap-6"
               >
                 {paginatedCharacters.map((char, index) => {
                   const hasDoki = Boolean(char.dokiLink && char.dokiLink.trim() !== '');
@@ -2471,6 +2470,7 @@ function AppContent() {
                   return (
                     <motion.article
                       key={`${char.id}-p${safeCurrentPage}`}
+                      className="min-w-0"
                       initial={{ opacity: 0, y: 18 }}
                       animate={hasEntered ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
                       transition={{
@@ -2485,7 +2485,7 @@ function AppContent() {
                           playSoftTap('card');
                           openCharacterProfileModal(char);
                         }}
-                        className="shimmer-card-border group h-full bg-[#121218]/92 backdrop-blur-sm border border-[#D4AF37]/25 hover:border-[#D4AF37]/70 rounded-xl sm:rounded-2xl p-2.5 sm:p-4 lg:p-5 flex flex-col justify-between transition-colors duration-200 hover:shadow-[0_0_32px_-6px_rgba(212,175,55,0.32)] cursor-pointer"
+                        className="shimmer-card-border group h-full min-w-0 w-full overflow-hidden bg-[#121218]/92 backdrop-blur-sm border border-[#D4AF37]/25 hover:border-[#D4AF37]/70 rounded-xl sm:rounded-2xl p-2.5 sm:p-4 lg:p-5 flex flex-col justify-between transition-colors duration-200 hover:shadow-[0_0_32px_-6px_rgba(212,175,55,0.32)] cursor-pointer"
                       >
                     <div>
                       {/* 1. Ảnh đại diện vuông bo góc tinh tế trên cùng */}
@@ -2519,8 +2519,8 @@ function AppContent() {
                       </div>
 
                       {/* 2. Tên nhân vật nổi bật, thông tin phụ & câu thoại ngắn đặt trong ngoặc kép */}
-                      <div className="mt-2.5 sm:mt-3.5">
-                        <h3 className="font-display text-[17px] sm:text-xl lg:text-2xl font-semibold text-[#F3E5AB] tracking-tight leading-snug">
+                      <div className="mt-2.5 sm:mt-3.5 min-w-0">
+                        <h3 className="font-display text-[15px] sm:text-xl lg:text-2xl font-semibold text-[#F3E5AB] tracking-tight leading-snug break-words">
                           {primaryName}
                         </h3>
                         {secondaryName && (
@@ -2539,7 +2539,7 @@ function AppContent() {
                           {char.tags.map((tag) => (
                             <span
                               key={tag}
-                              className="inline-flex items-center px-1.5 sm:px-2 py-0.5 rounded-md bg-[#0B0B0F]/90 border border-[#D4AF37]/30 text-[10px] sm:text-[11px] font-medium text-[#E6CD82] leading-tight"
+                              className="inline-flex items-center max-w-full break-words px-1.5 sm:px-2 py-0.5 rounded-md bg-[#0B0B0F]/90 border border-[#D4AF37]/30 text-[10px] sm:text-[11px] font-medium text-[#E6CD82] leading-tight"
                             >
                               {tag}
                             </span>
@@ -2574,7 +2574,7 @@ function AppContent() {
                                   { showModal: false, showToast: true }
                                 );
                               }}
-                              className={`shimmer-gold-btn inline-flex items-center justify-center gap-1 min-h-[36px] sm:min-h-[40px] px-1.5 sm:px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-[#D4AF37] to-[#E6C86E] text-[#0B0B0F] text-[11px] sm:text-xs font-semibold whitespace-nowrap hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3E5AB] transition-all duration-150 ${
+                              className={`shimmer-gold-btn inline-flex items-center justify-center gap-1 min-w-0 min-h-[36px] sm:min-h-[40px] px-1 sm:px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-[#D4AF37] to-[#E6C86E] text-[#0B0B0F] text-[10.5px] sm:text-xs font-semibold whitespace-nowrap hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3E5AB] transition-all duration-150 ${
                                 !hasBothLinks ? 'w-full' : ''
                               }`}
                             >
@@ -2610,7 +2610,7 @@ function AppContent() {
                                   { showModal: false, showToast: true }
                                 );
                               }}
-                              className={`inline-flex items-center justify-center gap-1 min-h-[36px] sm:min-h-[40px] px-1.5 sm:px-2.5 py-1.5 rounded-lg bg-[#0B0B0F] border border-[#D4AF37]/60 text-[#F3E5AB] text-[11px] sm:text-xs font-medium whitespace-nowrap hover:bg-[#D4AF37]/15 hover:border-[#F3E5AB] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] transition-all duration-150 ${
+                              className={`inline-flex items-center justify-center gap-1 min-w-0 min-h-[36px] sm:min-h-[40px] px-1 sm:px-2.5 py-1.5 rounded-lg bg-[#0B0B0F] border border-[#D4AF37]/60 text-[#F3E5AB] text-[10.5px] sm:text-xs font-medium whitespace-nowrap hover:bg-[#D4AF37]/15 hover:border-[#F3E5AB] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] transition-all duration-150 ${
                                 !hasBothLinks ? 'w-full' : ''
                               }`}
                             >
@@ -2659,13 +2659,13 @@ function AppContent() {
                   aria-label="Phân trang danh sách nhân vật"
                   className="mt-8 sm:mt-10 flex flex-col items-center gap-3"
                 >
-                  <div className="inline-flex items-center gap-1.5 sm:gap-2 p-1.5 rounded-2xl bg-[#121218]/92 border border-[#D4AF37]/25 shadow-[0_6px_24px_rgba(0,0,0,0.45)]">
+                  <div className="inline-flex max-w-full overflow-x-auto no-scrollbar items-center gap-1 sm:gap-2 p-1.5 rounded-2xl bg-[#121218]/92 border border-[#D4AF37]/25 shadow-[0_6px_24px_rgba(0,0,0,0.45)]">
                     <button
                       type="button"
                       onClick={() => handlePageChange(safeCurrentPage - 1)}
                       disabled={safeCurrentPage === 1}
                       aria-label="Trang trước"
-                      className="inline-flex items-center justify-center min-w-[38px] min-h-[38px] sm:px-3 rounded-xl border border-transparent text-xs font-medium text-[#F3E5AB] hover:border-[#D4AF37]/45 hover:bg-[#D4AF37]/10 disabled:opacity-35 disabled:pointer-events-none transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]"
+                      className="inline-flex items-center justify-center min-w-[34px] min-h-[34px] sm:min-w-[38px] sm:min-h-[38px] sm:px-3 rounded-xl border border-transparent text-xs font-medium text-[#F3E5AB] hover:border-[#D4AF37]/45 hover:bg-[#D4AF37]/10 disabled:opacity-35 disabled:pointer-events-none transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] shrink-0"
                     >
                       <ChevronLeft className="w-4 h-4 shrink-0" aria-hidden="true" />
                       <span className="hidden sm:inline ml-1 whitespace-nowrap">Trang trước</span>
@@ -2677,7 +2677,7 @@ function AppContent() {
                           <span
                             key={`ellipsis-${idx}`}
                             aria-hidden="true"
-                            className="px-1.5 text-xs text-[#8E877A] select-none"
+                            className="px-1 text-xs text-[#8E877A] select-none"
                           >
                             …
                           </span>
@@ -2688,7 +2688,7 @@ function AppContent() {
                             onClick={() => handlePageChange(item)}
                             aria-current={item === safeCurrentPage ? 'page' : undefined}
                             aria-label={`Trang ${item}`}
-                            className={`min-w-[36px] min-h-[36px] px-2.5 rounded-xl text-xs sm:text-sm tabular-nums transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] ${
+                            className={`min-w-[32px] min-h-[34px] sm:min-w-[36px] sm:min-h-[36px] px-2 sm:px-2.5 rounded-xl text-xs sm:text-sm tabular-nums transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] shrink-0 ${
                               item === safeCurrentPage
                                 ? 'bg-gradient-to-br from-[#D4AF37] to-[#E6C86E] text-[#0B0B0F] font-semibold shadow-[0_0_16px_rgba(212,175,55,0.32)]'
                                 : 'text-[#DCD4C6] hover:text-[#F3E5AB] hover:bg-[#D4AF37]/12'
@@ -3147,9 +3147,9 @@ function AppContent() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.96 }}
             transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed bottom-24 sm:bottom-8 left-1/2 -translate-x-1/2 z-[60] pointer-events-none max-w-[calc(100vw-2rem)]"
+            className="fixed bottom-24 sm:bottom-8 left-1/2 -translate-x-1/2 z-[60] pointer-events-none w-max max-w-[calc(100vw-2rem)]"
           >
-            <div className="px-4 py-2.5 rounded-2xl bg-[#121218]/95 backdrop-blur-md border border-[#D4AF37]/80 text-xs sm:text-sm font-medium text-[#F3E5AB] shadow-[0_14px_36px_rgba(0,0,0,0.88),0_0_24px_rgba(212,175,55,0.3)] whitespace-nowrap">
+            <div className="px-4 py-2.5 rounded-2xl bg-[#121218]/95 backdrop-blur-md border border-[#D4AF37]/80 text-xs sm:text-sm font-medium text-[#F3E5AB] shadow-[0_14px_36px_rgba(0,0,0,0.88),0_0_24px_rgba(212,175,55,0.3)] text-center leading-snug break-words">
               {shareToast}
             </div>
           </motion.div>

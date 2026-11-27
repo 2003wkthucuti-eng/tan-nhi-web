@@ -42,17 +42,17 @@ export const ThemeSelectorButton: React.FC = () => {
         aria-expanded={isOpen}
         aria-label={`Đổi Theme giao diện (hiện tại: ${activeTheme.name})`}
         title={`Theme: ${activeTheme.name}`}
-        className="inline-flex items-center justify-center gap-1.5 min-w-[38px] min-h-[38px] sm:min-h-[40px] px-2 sm:px-3 py-1.5 rounded-xl border border-[#D4AF37]/35 bg-[#121218] text-[11px] sm:text-xs font-medium text-[#F3E5AB] hover:bg-[#D4AF37]/15 hover:border-[#D4AF37] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] transition-all duration-150 whitespace-nowrap shrink-0 cursor-pointer"
+        className="inline-flex items-center justify-center gap-1.5 min-w-[34px] min-h-[34px] sm:min-h-[40px] px-2 sm:px-3 py-1 sm:py-1.5 rounded-xl border border-[#D4AF37]/35 bg-[#121218] text-[11px] sm:text-xs font-medium text-[#F3E5AB] hover:bg-[#D4AF37]/15 hover:border-[#D4AF37] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] transition-all duration-150 whitespace-nowrap shrink-0 cursor-pointer"
       >
         <span
           aria-hidden="true"
           style={{
             background: `linear-gradient(135deg, ${activeTheme.swatchFrom}, ${activeTheme.swatchTo})`,
           }}
-          className="w-3 h-3 rounded-full border border-white/30 shrink-0"
+          className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full border border-white/30 shrink-0"
         />
         <Palette className="w-3.5 h-3.5 text-[#D4AF37] hidden sm:inline shrink-0" aria-hidden="true" />
-        <span className="hidden md:inline max-w-[92px] truncate">{activeTheme.shortName}</span>
+        <span className="max-w-[74px] sm:max-w-[92px] truncate">{activeTheme.shortName}</span>
       </button>
 
       <AnimatePresence>
@@ -64,7 +64,7 @@ export const ThemeSelectorButton: React.FC = () => {
             transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
             role="dialog"
             aria-label="Danh sách Theme"
-            className="absolute right-0 top-full mt-2 z-50 w-[228px] sm:w-[248px] rounded-2xl bg-[#121218]/96 backdrop-blur-xl border border-[#D4AF37]/60 p-2.5 shadow-[0_18px_42px_rgba(0,0,0,0.88),0_0_24px_rgba(212,175,55,0.22)]"
+            className="fixed right-3 top-[86px] sm:absolute sm:right-0 sm:top-full sm:mt-2 z-50 w-[min(248px,calc(100vw-1.5rem))] rounded-2xl bg-[#121218]/96 backdrop-blur-xl border border-[#D4AF37]/60 p-2.5 shadow-[0_18px_42px_rgba(0,0,0,0.88),0_0_24px_rgba(212,175,55,0.22)]"
           >
             <div className="flex items-center justify-between gap-1.5 pb-1.5 mb-2 border-b border-[#D4AF37]/20">
               <span className="text-[11px] font-semibold tracking-wide text-[#F3E5AB] pl-0.5">

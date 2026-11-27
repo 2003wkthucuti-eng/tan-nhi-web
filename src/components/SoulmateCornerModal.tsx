@@ -234,7 +234,7 @@ export const SoulmateCornerModal: React.FC<SoulmateCornerModalProps> = ({
                     if (errorMsg) setErrorMsg('');
                   }}
                   placeholder="Ví dụ: Tiểu Ly, Mèo Con Đêm..."
-                  className="w-full min-h-[42px] px-3.5 py-2 rounded-xl bg-[#0B0B0F] border border-[#D4AF37]/35 text-sm text-[#F5EFE0] placeholder:text-[#7E776B] focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/60"
+                  className="w-full min-h-[42px] px-3.5 py-2 rounded-xl bg-[#0B0B0F] border border-[#D4AF37]/35 text-base sm:text-sm text-[#F5EFE0] placeholder:text-[#7E776B] focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/60"
                 />
                 {errorMsg && <p className="mt-1 text-xs text-amber-300">{errorMsg}</p>}
               </div>
@@ -272,7 +272,7 @@ export const SoulmateCornerModal: React.FC<SoulmateCornerModalProps> = ({
                   value={avatarUrl.startsWith('data:') ? 'Ảnh đã tải từ máy (trong phiên)' : avatarUrl}
                   onChange={(e) => setAvatarUrl(e.target.value)}
                   placeholder="Dán link ảnh https://... hoặc bấm Tải ảnh lên"
-                  className="w-full min-h-[40px] px-3.5 py-2 rounded-xl bg-[#0B0B0F] border border-[#D4AF37]/30 text-xs sm:text-sm text-[#F5EFE0] placeholder:text-[#7E776B] focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/60"
+                  className="w-full min-h-[40px] px-3.5 py-2 rounded-xl bg-[#0B0B0F] border border-[#D4AF37]/30 text-base sm:text-sm text-[#F5EFE0] placeholder:text-[#7E776B] focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/60"
                 />
               </div>
 

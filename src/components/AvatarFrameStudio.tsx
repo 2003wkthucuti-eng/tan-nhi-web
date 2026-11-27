@@ -501,7 +501,7 @@ export const AvatarFrameShowcaseSection: React.FC<AvatarFrameStudioProps> = (pro
     >
       {/* Thanh tiêu đề thu gọn / mở rộng */}
       <div className="px-4 py-3 sm:px-5 sm:py-3.5 border-b border-[#D4AF37]/18 flex flex-wrap items-center justify-between gap-2">
-        <div className="flex items-center gap-2.5 min-w-0">
+        <div className="flex items-center gap-2.5 min-w-0 flex-1">
           <UserAvatarBadge
             avatarUrl={props.avatarUrl}
             avatarIcon={props.avatarIcon}

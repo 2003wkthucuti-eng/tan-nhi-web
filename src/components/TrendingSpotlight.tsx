@@ -97,7 +97,7 @@ export const TrendingSpotlight: React.FC<TrendingSpotlightProps> = ({
                 tabIndex={0}
                 role="button"
                 aria-label={`Mở hồ sơ nhân vật nổi bật hạng ${rank}: ${primaryName}`}
-                className="group relative rounded-2xl bg-[#121218]/92 border border-[#D4AF37]/30 hover:border-[#D4AF37]/75 p-3.5 sm:p-4 flex items-center gap-3.5 transition-all duration-200 hover:shadow-[0_0_28px_-6px_rgba(212,175,55,0.28)] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3E5AB]"
+                className="group relative min-w-0 w-full overflow-hidden rounded-2xl bg-[#121218]/92 border border-[#D4AF37]/30 hover:border-[#D4AF37]/75 p-3.5 sm:p-4 flex items-center gap-3.5 transition-all duration-200 hover:shadow-[0_0_28px_-6px_rgba(212,175,55,0.28)] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3E5AB]"
               >
                 {/* Ảnh đại diện vuông đồng bộ */}
                 <div className="relative w-[72px] h-[72px] sm:w-20 sm:h-20 rounded-xl overflow-hidden bg-[#0B0B0F] border border-[#D4AF37]/45 group-hover:border-[#F3E5AB]/80 shrink-0 flex items-center justify-center">

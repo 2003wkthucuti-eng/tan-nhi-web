@@ -661,7 +661,7 @@ export const CharacterDetailTarotModal: React.FC<CharacterDetailTarotModalProps>
                             value={draftLetter}
                             onChange={(e) => setDraftLetter(e.target.value)}
                             placeholder={`Gửi một lời nhắn tâm tình riêng tới ${primaryName}...`}
-                            className="w-full rounded-xl bg-[#12121A] border border-[#D4AF37]/30 px-3 py-2.5 text-xs sm:text-sm text-[#F5EFE0] placeholder:text-[#7E776B] focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/50 resize-none"
+                            className="w-full rounded-xl bg-[#12121A] border border-[#D4AF37]/30 px-3 py-2.5 text-base sm:text-sm text-[#F5EFE0] placeholder:text-[#7E776B] focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/50 resize-none"
                           />
 
                           <div className="flex items-center justify-between gap-2">

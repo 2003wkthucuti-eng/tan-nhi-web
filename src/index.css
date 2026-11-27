@@ -11,6 +11,30 @@
     background-color: #0B0B0F;
     color: #F5EFE0;
     scroll-behavior: smooth;
+    overflow-x: clip;
+    max-width: 100%;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    overflow-x: clip;
+    max-width: 100%;
+    min-height: 100dvh;
+  }
+
+  #root {
+    max-width: 100%;
+    overflow-x: clip;
+  }
+
+  /* Tránh trình duyệt mobile (đặc biệt iOS Safari) tự động phóng to khi chạm vào ô nhập liệu */
+  @media (max-width: 639px) {
+    input:not([type="file"]):not([type="checkbox"]):not([type="radio"]),
+    textarea,
+    select {
+      font-size: 16px;
+    }
   }
 
   ::-webkit-scrollbar {
@@ -2752,5 +2776,42 @@ html[data-site-theme]:not([data-site-theme="classic-gold"]) ::-webkit-scrollbar-
 [data-site-theme].moonlight-silver-mode [class~="border-[#F3E5AB]/80"] {
   border-color: rgba(226, 238, 255, 0.7);
 }
+
+/* ============================================================================
+   CÂN CHỈNH TỶ LỆ & FONT CHỮ TRÊN ĐIỆN THOẠI (KHÔNG TRÀN NGANG / KHÔNG PHÓNG TO)
+   ============================================================================ */
+@media (max-width: 639px) {
+  [data-site-theme] {
+    font-size: 14.5px;
+  }
+
+  [data-site-theme] .font-display {
+    letter-spacing: 0.005em;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  /* Giữ kích thước chữ hiển thị gọn gàng cho các font rộng (Oswald, Chakra Petch, Bricolage Grotesque) */
+  [data-site-theme="sabbath-crew"] .font-display,
+  [data-site-theme="night-ride"] .font-display,
+  [data-site-theme="joo-jaekyung"] .font-display,
+  [data-site-theme="sanzu-haruchiyo"] .font-display,
+  [data-site-theme="yeo-taeju"] .font-display,
+  [data-site-theme="be-tho"] .font-display {
+    letter-spacing: 0.004em;
+    line-height: 1.2;
+  }
+
+  /* Tránh nút bấm & thẻ tag có shadow/nghiêng đẩy rộng khung trên mobile */
+  [data-site-theme] .shimmer-card-border {
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  [data-site-theme="sabbath-crew"] span.rounded-md {
+    transform: none;
+  }
+}
+
 
 

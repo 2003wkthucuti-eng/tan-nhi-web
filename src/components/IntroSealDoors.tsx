@@ -174,7 +174,7 @@ export const IntroSealDoors: React.FC<IntroSealDoorsProps> = ({
                 borderColor: `${accentColor}75`,
                 boxShadow: `0 18px 42px rgba(0,0,0,0.88), 0 0 24px ${accentColor}2A`,
               }}
-              className="mt-2 w-[228px] sm:w-[248px] rounded-2xl border backdrop-blur-xl p-2.5"
+              className="mt-2 w-[min(228px,calc(100vw-1.75rem))] sm:w-[248px] rounded-2xl border backdrop-blur-xl p-2.5"
             >
               <div
                 style={{ borderBottomColor: `${accentColor}24` }}
@@ -502,21 +502,21 @@ export const IntroSealDoors: React.FC<IntroSealDoorsProps> = ({
 
         return (
           <div
-            className={`relative z-30 h-full flex flex-col items-center justify-center px-5 sm:px-6 text-center ${
+            className={`relative z-30 h-full w-full max-w-full overflow-y-auto overflow-x-hidden no-scrollbar flex flex-col items-center justify-center px-4 sm:px-6 text-center ${
               hasCutoutShowcase
-                ? 'pt-12 pb-6 sm:pt-14 sm:pb-8'
+                ? 'pt-14 pb-6 sm:pt-14 sm:pb-8'
                 : 'pt-16 pb-8 sm:pt-20 sm:pb-10'
             }`}
           >
             <motion.div
               animate={{ opacity: isOpening ? 0 : 1, y: isOpening ? -10 : 0 }}
               transition={{ duration: 0.35, ease: 'easeOut' }}
-              className="flex flex-col items-center max-w-xl mx-auto"
+              className="flex flex-col items-center w-full max-w-xl mx-auto"
             >
               <div
                 style={{ filter: `drop-shadow(0 0 24px ${accentColor}52)` }}
                 className={`animate-cat-float transition-all duration-300 ${
-                  hasCutoutShowcase ? 'mb-2 sm:mb-3 scale-90 sm:scale-95' : 'mb-3.5 sm:mb-4'
+                  hasCutoutShowcase ? 'mb-1.5 sm:mb-3 scale-[0.82] sm:scale-95' : 'mb-3.5 sm:mb-4'
                 }`}
               >
                 <BlackCatMascot size={108} variant="hero" />
@@ -524,18 +524,18 @@ export const IntroSealDoors: React.FC<IntroSealDoorsProps> = ({
 
               <p
                 style={{ color: accentColor }}
-                className="text-xs sm:text-sm font-medium tracking-widest mb-1.5 sm:mb-2 transition-colors duration-300"
+                className="text-[11px] sm:text-sm font-medium tracking-widest mb-1.5 sm:mb-2 transition-colors duration-300"
               >
                 {activeTheme.tagline}
               </p>
 
-              <h1 className="font-display text-3xl sm:text-5xl md:text-6xl font-semibold tracking-tight leading-[1.12] [text-wrap:balance] gold-shimmer-text">
+              <h1 className="font-display text-[26px] sm:text-5xl md:text-6xl font-semibold tracking-tight leading-[1.14] [text-wrap:balance] break-words max-w-full gold-shimmer-text">
                 Ngôi Nhà Nhỏ Của Tần Nhi
               </h1>
 
               <div
                 className={`w-24 h-px transition-all duration-300 ${
-                  hasCutoutShowcase ? 'my-2.5 sm:my-3.5' : 'my-4 sm:my-5'
+                  hasCutoutShowcase ? 'my-2 sm:my-3.5' : 'my-4 sm:my-5'
                 }`}
                 style={{
                   background: `linear-gradient(to right, transparent, ${accentColor}B3, transparent)`,
@@ -546,7 +546,7 @@ export const IntroSealDoors: React.FC<IntroSealDoorsProps> = ({
               <p
                 style={{ color: activeTheme.mutedTextColor }}
                 className={`text-xs sm:text-base leading-relaxed max-w-md transition-colors duration-300 ${
-                  hasCutoutShowcase ? 'mb-3 sm:mb-4' : 'mb-6 sm:mb-8'
+                  hasCutoutShowcase ? 'mb-2.5 sm:mb-4' : 'mb-6 sm:mb-8'
                 }`}
               >
                 Nơi lưu giữ những nhân vật AI Chatbot dịu dàng và bí ẩn, luôn đợi bạn ghé thăm sau một ngày dài.
@@ -575,14 +575,14 @@ export const IntroSealDoors: React.FC<IntroSealDoorsProps> = ({
                         'radial-gradient(circle, rgba(246,240,228,0.45) 0%, rgba(223,149,165,0.28) 48%, transparent 74%)',
                     }}
                   />
-                  <span className="absolute -left-4 top-5 text-lg text-[#F6F0E4] drop-shadow-[0_0_8px_rgba(246,240,228,0.85)] animate-pulse">
+                  <span className="absolute left-0 sm:-left-4 top-5 text-lg text-[#F6F0E4] drop-shadow-[0_0_8px_rgba(246,240,228,0.85)] animate-pulse">
                     ✦
                   </span>
-                  <span className="absolute -right-4 top-8 text-base text-[#DF95A5] drop-shadow-[0_0_8px_rgba(223,149,165,0.85)] animate-pulse">
+                  <span className="absolute right-0 sm:-right-4 top-8 text-base text-[#DF95A5] drop-shadow-[0_0_8px_rgba(223,149,165,0.85)] animate-pulse">
                     ★
                   </span>
                   <div
-                    className="relative w-40 h-44 sm:w-52 sm:h-56 rounded-t-[999px] rounded-b-[28px] overflow-hidden border-[3px] border-[#F6F0E4]/90 shadow-[0_14px_34px_rgba(0,0,0,0.72),0_0_24px_rgba(246,240,228,0.28)]"
+                    className="relative w-36 h-40 sm:w-52 sm:h-56 max-w-full rounded-t-[999px] rounded-b-[28px] overflow-hidden border-[3px] border-[#F6F0E4]/90 shadow-[0_14px_34px_rgba(0,0,0,0.72),0_0_24px_rgba(246,240,228,0.28)]"
                     style={{
                       backgroundColor: '#1E1D24',
                       backgroundImage:
@@ -622,13 +622,13 @@ export const IntroSealDoors: React.FC<IntroSealDoorsProps> = ({
                   />
                   <span
                     style={{ color: brightColor }}
-                    className="absolute -left-2 sm:-left-4 top-6 text-base sm:text-lg drop-shadow-[0_0_10px_rgba(255,255,255,0.65)] animate-pulse"
+                    className="absolute left-0 sm:-left-4 top-6 text-base sm:text-lg drop-shadow-[0_0_10px_rgba(255,255,255,0.65)] animate-pulse"
                   >
                     {specialDecor.left}
                   </span>
                   <span
                     style={{ color: accentColor }}
-                    className="absolute -right-2 sm:-right-4 top-8 text-base sm:text-lg drop-shadow-[0_0_10px_rgba(255,255,255,0.65)] animate-pulse"
+                    className="absolute right-0 sm:-right-4 top-8 text-base sm:text-lg drop-shadow-[0_0_10px_rgba(255,255,255,0.65)] animate-pulse"
                   >
                     {specialDecor.right}
                   </span>
@@ -637,7 +637,7 @@ export const IntroSealDoors: React.FC<IntroSealDoorsProps> = ({
                     /* Caesar: Khung nơ ruy băng mềm mại phía sau dấu sáp */
                     <svg
                       viewBox="0 0 220 200"
-                      className="relative w-52 h-48 sm:w-64 sm:h-60 overflow-visible"
+                      className="relative w-44 h-40 sm:w-64 sm:h-60 max-w-full overflow-visible"
                       style={{
                         filter: `drop-shadow(0 14px 32px rgba(0,0,0,0.68)) drop-shadow(0 0 20px ${accentColor}59)`,
                       }}
@@ -752,7 +752,7 @@ export const IntroSealDoors: React.FC<IntroSealDoorsProps> = ({
                     /* Sanzu Haruchiyo: Khung sao sọc xoáy góc cạnh phía sau dấu sáp */
                     <svg
                       viewBox="0 0 220 200"
-                      className="relative w-52 h-48 sm:w-64 sm:h-60 overflow-visible"
+                      className="relative w-44 h-40 sm:w-64 sm:h-60 max-w-full overflow-visible"
                       style={{
                         filter: `drop-shadow(0 14px 32px rgba(0,0,0,0.8)) drop-shadow(0 0 20px rgba(255,255,255,0.34))`,
                       }}
@@ -854,7 +854,7 @@ export const IntroSealDoors: React.FC<IntroSealDoorsProps> = ({
                     /* Zhenya: Khung thẻ phim / hồ sơ cổ điển (cuộn phim noir + băng keo + kẹp giấy) */
                     <svg
                       viewBox="0 0 220 200"
-                      className="relative w-52 h-48 sm:w-64 sm:h-60 overflow-visible"
+                      className="relative w-44 h-40 sm:w-64 sm:h-60 max-w-full overflow-visible"
                       style={{
                         filter: `drop-shadow(0 14px 32px rgba(0,0,0,0.82)) drop-shadow(0 0 18px ${accentColor}40)`,
                       }}
@@ -967,7 +967,7 @@ export const IntroSealDoors: React.FC<IntroSealDoorsProps> = ({
                     /* Yeo Taeju: Khung nét vẽ tay / giấy nháp cắt dán doodle */
                     <svg
                       viewBox="0 0 220 200"
-                      className="relative w-52 h-48 sm:w-64 sm:h-60 overflow-visible"
+                      className="relative w-44 h-40 sm:w-64 sm:h-60 max-w-full overflow-visible"
                       style={{
                         filter: `drop-shadow(0 14px 30px rgba(0,0,0,0.82)) drop-shadow(0 0 18px ${accentColor}40)`,
                       }}
@@ -1105,7 +1105,7 @@ export const IntroSealDoors: React.FC<IntroSealDoorsProps> = ({
                     /* Bé Thỏ: Khung nơ đỏ & hoa hồng sắc nét phía sau dấu sáp */
                     <svg
                       viewBox="0 0 220 200"
-                      className="relative w-52 h-48 sm:w-64 sm:h-60 overflow-visible"
+                      className="relative w-44 h-40 sm:w-64 sm:h-60 max-w-full overflow-visible"
                       style={{
                         filter: `drop-shadow(0 14px 32px rgba(0,0,0,0.82)) drop-shadow(0 0 22px ${accentColor}59)`,
                       }}
@@ -1205,7 +1205,7 @@ export const IntroSealDoors: React.FC<IntroSealDoorsProps> = ({
                     /* Ilay Riegrow: Khung viền ren trắng & ánh sao lấp lánh (không dùng trái tim) */
                     <svg
                       viewBox="0 0 220 200"
-                      className="relative w-52 h-48 sm:w-64 sm:h-60 overflow-visible"
+                      className="relative w-44 h-40 sm:w-64 sm:h-60 max-w-full overflow-visible"
                       style={{
                         filter: `drop-shadow(0 14px 32px rgba(0,0,0,0.72)) drop-shadow(0 0 24px rgba(255,255,255,0.42))`,
                       }}
@@ -1310,7 +1310,7 @@ export const IntroSealDoors: React.FC<IntroSealDoorsProps> = ({
                     /* Các Theme đặc biệt trước đó giữ nguyên khung trái tim lớn */
                     <svg
                       viewBox="0 0 220 200"
-                      className="relative w-52 h-48 sm:w-64 sm:h-60 overflow-visible"
+                      className="relative w-44 h-40 sm:w-64 sm:h-60 max-w-full overflow-visible"
                       style={{
                         filter: `drop-shadow(0 14px 32px rgba(0,0,0,0.72)) drop-shadow(0 0 20px ${accentColor}4D)`,
                       }}

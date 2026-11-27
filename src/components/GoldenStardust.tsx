@@ -165,6 +165,16 @@ export const GoldenStardust: React.FC<GoldenStardustProps> = ({
                     d="M5 6H9V8H11V10H13V8H15V6H19V8H21V13H19V15H17V17H15V19H13V21H11V19H9V17H7V15H5V13H3V8H5V6Z"
                     fill={color}
                   />
+                ) : shapeKind === 'lightning' ? (
+                  <path
+                    d="M13.5 1.5L4.5 13H11L9.5 22.5L19.5 10.5H13L13.5 1.5Z"
+                    fill={color}
+                  />
+                ) : shapeKind === 'noir-star' ? (
+                  <path
+                    d="M12 0L13.8 10.2L24 12L13.8 13.8L12 24L10.2 13.8L0 12L10.2 10.2Z"
+                    fill={color}
+                  />
                 ) : (
                   <path
                     d="M12 0L14.4 9.6L24 12L14.4 14.4L12 24L9.6 14.4L0 12L9.6 9.6Z"

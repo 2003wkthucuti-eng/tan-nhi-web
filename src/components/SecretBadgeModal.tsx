@@ -100,7 +100,7 @@ export const SecretBadgeModal: React.FC<SecretBadgeModalProps> = ({
                 </div>
 
                 {/* Xem trước trực tiếp Avatar đang đeo Khung mới mở khóa */}
-                <div className="relative flex items-center justify-center min-h-[168px] my-1">
+                <div className="relative flex items-center justify-center min-h-[196px] sm:min-h-[214px] py-2 my-1">
                   <div
                     aria-hidden="true"
                     style={{

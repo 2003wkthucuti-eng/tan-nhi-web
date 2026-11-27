@@ -22,7 +22,10 @@ export type SiteThemeId =
   | 'collage-hai-be'
   | 'bien-dem-sua'
   | 'bao-cu-nhac'
-  | 'pixel-doodles';
+  | 'pixel-doodles'
+  | 'sabbath-crew'
+  | 'night-ride'
+  | 'ilay-riegrow';
 
 export type ThemeParticleKind =
   | 'star'
@@ -32,13 +35,18 @@ export type ThemeParticleKind =
   | 'celestial'
   | 'bubble'
   | 'jellyfish'
-  | 'pixel-heart';
+  | 'pixel-heart'
+  | 'lightning'
+  | 'noir-star';
 
 export type ThemeFormVariant =
   | 'default'
   | 'jellyfish-sea'
   | 'vintage-newspaper'
-  | 'pixel-notebook';
+  | 'pixel-notebook'
+  | 'street-crew'
+  | 'night-ride'
+  | 'noir-editorial';
 
 export interface SiteThemeDefinition {
   id: SiteThemeId;
@@ -424,12 +432,96 @@ export const SITE_THEMES: SiteThemeDefinition[] = [
     waxOuter: ['#FFF6F9', '#F8B1CE', '#CE6692', '#6C2846'],
     waxInner: ['#E882AD', '#B34D79', '#5B1F3A'],
   },
+  {
+    id: 'sabbath-crew',
+    name: 'Wind Breaker — Sabbath Crew',
+    shortName: 'Sabbath Crew',
+    tagline: 'Sticker đường phố, dây xích gai & tinh thần Sabbath Crew',
+    mascotLabel: 'Mèo đường phố đội mũ len & dây xích bạc',
+    isSpecialTheme: true,
+    formVariant: 'street-crew',
+    bgImageUrl: '/assets/aistudio/e29cb9e1d1419041e90c688169ccbc10_d90aeb35.jpg',
+    bgImageOpacity: 0.2,
+    bgColor: '#0D0C0F',
+    surfaceColor: '#17151A',
+    accentColor: '#E54850',
+    brightColor: '#F5E9C8',
+    textColor: '#F6F3EC',
+    mutedTextColor: '#CFC8BC',
+    buttonTextColor: '#0D0C0F',
+    swatchFrom: '#C8343C',
+    swatchTo: '#F2C94C',
+    particleKind: 'lightning',
+    particleColors: ['#F2C94C', '#E54850'],
+    fireworkPalette: ['#FFF6D6', '#F2C94C', '#E54850', '#F6F3EC', '#C8343C'],
+    fogPrimary: 'rgba(229, 72, 80, 0.14)',
+    fogSecondary: 'rgba(242, 201, 76, 0.085)',
+    waxOuter: ['#FFF4D4', '#F2C94C', '#B82D35', '#4D1115'],
+    waxInner: ['#D13B43', '#871E25', '#3A0B0F'],
+  },
+  {
+    id: 'night-ride',
+    name: 'Wind Breaker — Night Ride',
+    shortName: 'Night Ride',
+    tagline: 'Chuyến xe đêm dưới đèn đường vàng & thẻ cảm xúc phát sáng',
+    mascotLabel: 'Mèo đêm khuya đeo kính râm cùng 3 ngôi sao sáng',
+    isSpecialTheme: true,
+    formVariant: 'night-ride',
+    bgImageUrl: '/assets/aistudio/62cee9778e3fe59f56688a1bb47f75f5_7b336475.jpg',
+    bgImageOpacity: 0.2,
+    bgColor: '#080A10',
+    surfaceColor: '#10141E',
+    accentColor: '#F0C975',
+    brightColor: '#F7FAFF',
+    textColor: '#F6F9FF',
+    mutedTextColor: '#C2CCE0',
+    buttonTextColor: '#080A10',
+    swatchFrom: '#1C263B',
+    swatchTo: '#F7FAFF',
+    particleKind: 'star',
+    particleColors: ['#F7FAFF', '#F0C975'],
+    fireworkPalette: ['#FFFFFF', '#F7FAFF', '#F0C975', '#9EB5DA', '#FFE7AE'],
+    fogPrimary: 'rgba(240, 201, 117, 0.12)',
+    fogSecondary: 'rgba(247, 250, 255, 0.08)',
+    waxOuter: ['#FFFFFF', '#F0C975', '#526282', '#171E2E'],
+    waxInner: ['#7B8EAE', '#384663', '#131926'],
+  },
+  {
+    id: 'ilay-riegrow',
+    name: 'Ilay Riegrow',
+    shortName: 'Ilay Riegrow',
+    tagline: 'Tạp chí đen trắng sắc lạnh, khung ảnh cắt ghép & khí chất áp đảo',
+    mascotLabel: 'Mèo bạch kim ánh mắt sắc lạnh đeo cà vạt đen',
+    isSpecialTheme: true,
+    formVariant: 'noir-editorial',
+    bgImageUrl: '/assets/aistudio/2cff0935cb8984f7243f744c5c08d635_870a86b5.jpg',
+    bgImageOpacity: 0.2,
+    bgColor: '#070709',
+    surfaceColor: '#111115',
+    accentColor: '#CFD4DE',
+    brightColor: '#FFFFFF',
+    textColor: '#F8F9FB',
+    mutedTextColor: '#C1C6D0',
+    buttonTextColor: '#070709',
+    swatchFrom: '#1E2026',
+    swatchTo: '#FFFFFF',
+    particleKind: 'noir-star',
+    particleColors: ['#FFFFFF', '#AEB5C4'],
+    fireworkPalette: ['#FFFFFF', '#E6E9F0', '#C4CAD6', '#9198A6', '#F4F6FA'],
+    fogPrimary: 'rgba(220, 224, 234, 0.1)',
+    fogSecondary: 'rgba(255, 255, 255, 0.065)',
+    waxOuter: ['#FFFFFF', '#D8DCE4', '#6E7480', '#1D1F24'],
+    waxInner: ['#8B919E', '#484D57', '#16171B'],
+  },
 ];
 
 export const SPECIAL_SITE_THEME_IDS: readonly SiteThemeId[] = [
   'bien-dem-sua',
   'bao-cu-nhac',
   'pixel-doodles',
+  'sabbath-crew',
+  'night-ride',
+  'ilay-riegrow',
 ];
 
 export function isSpecialSiteTheme(id: SiteThemeId): boolean {

@@ -100,7 +100,13 @@ export const AvatarFrameThumbnail: React.FC<{
       {/* Vòng tròn tâm mờ phía sau để người dùng thấy rõ độ trong suốt của tâm khung */}
       <div
         aria-hidden="true"
-        className="w-[54%] h-[54%] rounded-full border border-dashed border-[#D4AF37]/30 bg-radial from-[#1F1C2A]/85 to-[#0B0B10]/90"
+        style={{
+          left: `${frame.centerX * 100}%`,
+          top: `${frame.centerY * 100}%`,
+          width: `${Math.min(64, Math.max(32, frame.avatarDiameterRatio * 96))}%`,
+          height: `${Math.min(64, Math.max(32, frame.avatarDiameterRatio * 96))}%`,
+        }}
+        className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full border border-dashed border-[#D4AF37]/30 bg-radial from-[#1F1C2A]/85 to-[#0B0B10]/90"
       />
       <img
         src={processedUrl || frame.imageUrl}
@@ -184,7 +190,7 @@ const AvatarFrameStudioBody: React.FC<
     >
       {/* Khối trái: Xem trước Avatar + Tải ảnh từ máy / Chọn ảnh mẫu */}
       <div className="rounded-2xl bg-[#0B0B0F]/82 border border-[#D4AF37]/30 p-4 flex flex-col items-center text-center">
-        <div className="relative flex items-center justify-center min-h-[164px] sm:min-h-[184px] w-full">
+        <div className="relative flex items-center justify-center min-h-[204px] sm:min-h-[224px] w-full py-2">
           <div
             aria-hidden="true"
             style={{

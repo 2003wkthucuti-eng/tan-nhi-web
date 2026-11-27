@@ -114,8 +114,26 @@ export const UserAvatarBadge: React.FC<UserAvatarBadgeProps> = ({
   const txPct = frameDef ? `${-(frameDef.centerX * 100).toFixed(2)}%` : '-50%';
   const tyPct = frameDef ? `${-(frameDef.centerY * 100).toFixed(2)}%` : '-50%';
 
+  // Giữ khung có đôi cánh/vương miện rộng (tỷ lệ tâm nhỏ) không bị tràn hay cắt mép trên màn hình nhỏ
+  const badgeScale =
+    hasFrame && frameDef
+      ? reserveFrameSpace && frameDef.avatarDiameterRatio < 0.48
+        ? Math.max(0.68, frameDef.avatarDiameterRatio / 0.5)
+        : !reserveFrameSpace && frameDef.avatarDiameterRatio < 0.45
+          ? 0.8
+          : 1
+      : 1;
+
   return (
     <div
+      style={
+        badgeScale < 1
+          ? {
+              transform: `scale(${badgeScale.toFixed(3)})`,
+              transformOrigin: 'center center',
+            }
+          : undefined
+      }
       className={`relative inline-flex items-center justify-center shrink-0 ${
         SIZE_CLASSES[size]
       } ${hasFrame && reserveFrameSpace ? RESERVE_MARGIN_CLASSES[size] : ''} ${className}`}
@@ -163,7 +181,9 @@ export const UserAvatarBadge: React.FC<UserAvatarBadgeProps> = ({
             filter:
               frameDef.cutoutMode === 'ink-white'
                 ? 'drop-shadow(0 0 2px rgba(255,248,236,0.78)) drop-shadow(0 0 6px rgba(255,244,224,0.34))'
-                : 'drop-shadow(0 2px 8px rgba(0,0,0,0.55))',
+                : frameDef.cutoutMode === 'light-ring'
+                  ? 'drop-shadow(0 2px 8px rgba(0,0,0,0.48)) drop-shadow(0 0 4px rgba(241,200,110,0.28))'
+                  : 'drop-shadow(0 2px 8px rgba(0,0,0,0.55))',
           }}
           className="pointer-events-none select-none absolute z-10 object-contain"
         />

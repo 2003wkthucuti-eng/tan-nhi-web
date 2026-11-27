@@ -424,7 +424,10 @@ export const IntroSealDoors: React.FC<IntroSealDoorsProps> = ({
           themeId === 'collage-hai-be' ||
           themeId === 'bien-dem-sua' ||
           themeId === 'bao-cu-nhac' ||
-          themeId === 'pixel-doodles';
+          themeId === 'pixel-doodles' ||
+          themeId === 'sabbath-crew' ||
+          themeId === 'night-ride' ||
+          themeId === 'ilay-riegrow';
 
         const cutoutAccentDecor: Partial<Record<SiteThemeId, { left: string; right: string; glow: string }>> = {
           'bien-dem-sua': {
@@ -441,6 +444,21 @@ export const IntroSealDoors: React.FC<IntroSealDoorsProps> = ({
             left: '♡',
             right: '♥',
             glow: 'radial-gradient(circle, rgba(247,154,192,0.48) 0%, rgba(255,242,246,0.28) 52%, transparent 74%)',
+          },
+          'sabbath-crew': {
+            left: '⚡',
+            right: '★',
+            glow: 'radial-gradient(circle, rgba(229,72,80,0.48) 0%, rgba(242,201,76,0.24) 52%, transparent 74%)',
+          },
+          'night-ride': {
+            left: '★',
+            right: '★',
+            glow: 'radial-gradient(circle, rgba(240,201,117,0.44) 0%, rgba(247,250,255,0.24) 52%, transparent 74%)',
+          },
+          'ilay-riegrow': {
+            left: '✦',
+            right: '✦',
+            glow: 'radial-gradient(circle, rgba(255,255,255,0.4) 0%, rgba(190,198,214,0.22) 52%, transparent 74%)',
           },
         };
 
@@ -670,6 +688,71 @@ export const IntroSealDoors: React.FC<IntroSealDoorsProps> = ({
                         />
                       )}
 
+                      {themeId === 'sabbath-crew' && (
+                        <>
+                          {/* Nửa trái: Khung chân dung thành viên Sabbath Crew */}
+                          <g mask={`url(#${heartLeftMaskId})`}>
+                            <image
+                              href={activeTheme.bgImageUrl}
+                              x="-16"
+                              y="4"
+                              width="440"
+                              height="782"
+                              preserveAspectRatio="xMidYMid slice"
+                            />
+                          </g>
+                          {/* Nửa phải: Hai thành viên ngồi cùng nhau dưới ánh đèn đường */}
+                          <g mask={`url(#${heartRightMaskId})`}>
+                            <image
+                              href={activeTheme.bgImageUrl}
+                              x="-125"
+                              y="-85"
+                              width="480"
+                              height="853"
+                              preserveAspectRatio="xMidYMid slice"
+                            />
+                          </g>
+                        </>
+                      )}
+
+                      {themeId === 'night-ride' && (
+                        <image
+                          href={activeTheme.bgImageUrl}
+                          x="-22"
+                          y="-12"
+                          width="264"
+                          height="469"
+                          preserveAspectRatio="xMidYMid slice"
+                        />
+                      )}
+
+                      {themeId === 'ilay-riegrow' && (
+                        <>
+                          {/* Nửa trái: Chân dung cận mặt trong khung tròn */}
+                          <g mask={`url(#${heartLeftMaskId})`}>
+                            <image
+                              href={activeTheme.bgImageUrl}
+                              x="-92"
+                              y="-12"
+                              width="330"
+                              height="587"
+                              preserveAspectRatio="xMidYMid slice"
+                            />
+                          </g>
+                          {/* Nửa phải: Ilay Riegrow trong bộ vest đen trắng */}
+                          <g mask={`url(#${heartRightMaskId})`}>
+                            <image
+                              href={activeTheme.bgImageUrl}
+                              x="-105"
+                              y="-156"
+                              width="300"
+                              height="533"
+                              preserveAspectRatio="xMidYMid slice"
+                            />
+                          </g>
+                        </>
+                      )}
+
                       <rect x="0" y="0" width="220" height="200" fill={`url(#${heartFadeMaskId})`} />
                     </g>
 
@@ -687,7 +770,9 @@ export const IntroSealDoors: React.FC<IntroSealDoorsProps> = ({
                       stroke={accentColor}
                       strokeWidth="1.2"
                       strokeOpacity="0.55"
-                      strokeDasharray={themeId === 'pixel-doodles' ? '5 4' : undefined}
+                      strokeDasharray={
+                        themeId === 'pixel-doodles' || themeId === 'sabbath-crew' ? '5 4' : undefined
+                      }
                     />
                   </svg>
                 </motion.div>
@@ -886,6 +971,19 @@ const WaxSealArtwork: React.FC = () => {
         )}
         {themeId === 'pixel-doodles' && (
           <path d="M58 29H60V30.5H61.5V29H63.5V31.5H61.5V33H60V34.5H58.5V33H57V31.5H56.5V29H58Z" fill={o0} fillOpacity="0.92" />
+        )}
+        {themeId === 'sabbath-crew' && (
+          <path d="M61 28L56.5 34.5H60L59 40L64 33H60.5L61 28Z" fill={o0} fillOpacity="0.92" />
+        )}
+        {themeId === 'night-ride' && (
+          <g fill={o0} fillOpacity="0.9">
+            <circle cx="51" cy="31" r="1.4" />
+            <circle cx="60" cy="29" r="1.7" />
+            <circle cx="69" cy="31" r="1.4" />
+          </g>
+        )}
+        {themeId === 'ilay-riegrow' && (
+          <path d="M58.5 58H61.5L62.2 66L60 68.5L57.8 66L58.5 58Z" fill={o0} fillOpacity="0.9" />
         )}
 
         {/* Đôi mắt sáng nổi bật trên nền khắc đen */}

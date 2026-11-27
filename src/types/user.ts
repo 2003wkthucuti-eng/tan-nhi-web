@@ -11,7 +11,12 @@ export type AvatarFrameId =
   | 'bach-long-ho-ly'
   | 'long-van-thuy-mac'
   | 'huyet-nguyet-kiem-khach'
-  | 'hac-long-net-co';
+  | 'hac-long-net-co'
+  | 'kim-lien-pho-do'
+  | 'day-gai-ban-tay'
+  | 'ren-trang-you-fool'
+  | 'buom-trang-ngoc-trai'
+  | 'thien-vu-vuong-mien';
 
 export interface AvatarFramesState {
   unlocked: Partial<Record<AvatarFrameId, number>>;

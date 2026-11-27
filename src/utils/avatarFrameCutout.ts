@@ -18,10 +18,11 @@ function processDarkRingCutout(
   const cy = Math.max(0, Math.min(height - 1, Math.round(frame.centerY * height)));
   const minDim = Math.min(width, height);
 
-  // Giới hạn bán kính để không ăn nhầm vùng tối của áo giáp/kiếm khách trên vòng khung
-  const maxInnerRadius = minDim * (frame.avatarDiameterRatio * 0.56);
+  const innerThreshold = frame.darkThreshold ?? 34;
+  const outerThreshold = Math.max(28, innerThreshold - 4);
+  const maxInnerRadius = minDim * (frame.cutoutInnerRadiusRatio ?? frame.avatarDiameterRatio * 0.56);
   const maxInnerRadiusSq = maxInnerRadius * maxInnerRadius;
-  const minOuterRadius = minDim * (frame.avatarDiameterRatio * 0.52);
+  const minOuterRadius = minDim * (frame.cutoutOuterRadiusRatio ?? frame.avatarDiameterRatio * 0.52);
   const minOuterRadiusSq = minOuterRadius * minOuterRadius;
 
   const isDarkPixel = (idx4: number, maxThreshold: number) => {
@@ -29,7 +30,7 @@ function processDarkRingCutout(
     const g = data[idx4 + 1];
     const b = data[idx4 + 2];
     const lum = r * 0.299 + g * 0.587 + b * 0.114;
-    return lum <= maxThreshold && Math.max(r, g, b) <= maxThreshold + 12;
+    return lum <= maxThreshold && Math.max(r, g, b) <= maxThreshold + 20;
   };
 
   // Pass 1: Xóa sạch tâm đen ở giữa khung để lộ avatar bên trong
@@ -61,9 +62,26 @@ function processDarkRingCutout(
       const dx = nx - cx;
       const dy = ny - cy;
       if (dx * dx + dy * dy > maxInnerRadiusSq) continue;
-      if (isDarkPixel(n * 4, 34)) {
+      if (isDarkPixel(n * 4, innerThreshold)) {
         visited[n] = 1;
         queue[tail++] = n;
+      }
+    }
+  }
+
+  // Pass 1b (tuỳ chọn): Xóa các ô tối khép kín bên trong vòng tâm (như lỗ mạng nhện ren trắng)
+  if (frame.clearEnclosedInnerDark) {
+    const innerScanSq = maxInnerRadius * 0.94 * (maxInnerRadius * 0.94);
+    for (let y = 0; y < height; y += 1) {
+      const dy = y - cy;
+      for (let x = 0; x < width; x += 1) {
+        const dx = x - cx;
+        if (dx * dx + dy * dy > innerScanSq) continue;
+        const p = y * width + x;
+        if (!visited[p] && isDarkPixel(p * 4, innerThreshold)) {
+          visited[p] = 1;
+          data[p * 4 + 3] = 0;
+        }
       }
     }
   }
@@ -74,7 +92,7 @@ function processDarkRingCutout(
   const seedOuter = (x: number, y: number) => {
     const p = y * width + x;
     if (visited[p]) return;
-    if (isDarkPixel(p * 4, 30)) {
+    if (isDarkPixel(p * 4, outerThreshold)) {
       visited[p] = 1;
       queue[tail++] = p;
     }
@@ -110,7 +128,7 @@ function processDarkRingCutout(
       const dx = nx - cx;
       const dy = ny - cy;
       if (dx * dx + dy * dy < minOuterRadiusSq) continue;
-      if (isDarkPixel(n * 4, 30)) {
+      if (isDarkPixel(n * 4, outerThreshold)) {
         visited[n] = 1;
         queue[tail++] = n;
       }
@@ -118,6 +136,145 @@ function processDarkRingCutout(
   }
 
   // Pass 3: Làm mềm mép viền 1px tiếp giáp vùng vừa xóa để không bị răng cưa đen
+  const softEdges: Array<{ idx4: number; alpha: number }> = [];
+  const edgeMaxLum = Math.max(68, innerThreshold + 34);
+  for (let y = 1; y < height - 1; y += 1) {
+    for (let x = 1; x < width - 1; x += 1) {
+      const p = y * width + x;
+      const idx4 = p * 4;
+      if (data[idx4 + 3] === 0) continue;
+      const hasClearedNeighbor =
+        data[(p - 1) * 4 + 3] === 0 ||
+        data[(p + 1) * 4 + 3] === 0 ||
+        data[(p - width) * 4 + 3] === 0 ||
+        data[(p + width) * 4 + 3] === 0;
+      if (!hasClearedNeighbor) continue;
+
+      const lum = data[idx4] * 0.299 + data[idx4 + 1] * 0.587 + data[idx4 + 2] * 0.114;
+      if (lum < edgeMaxLum) {
+        const ratio = Math.max(0, Math.min(1, (lum - 16) / (edgeMaxLum - 16)));
+        softEdges.push({ idx4, alpha: Math.round(ratio * 255) });
+      }
+    }
+  }
+  for (let i = 0; i < softEdges.length; i += 1) {
+    data[softEdges[i].idx4 + 3] = softEdges[i].alpha;
+  }
+}
+
+function processLightRingCutout(
+  data: Uint8ClampedArray,
+  width: number,
+  height: number,
+  frame: AvatarFrameDefinition
+): void {
+  const total = width * height;
+  const visited = new Uint8Array(total);
+  const queue = new Int32Array(total);
+
+  const cx = Math.max(0, Math.min(width - 1, Math.round(frame.centerX * width)));
+  const cy = Math.max(0, Math.min(height - 1, Math.round(frame.centerY * height)));
+  const minDim = Math.min(width, height);
+
+  const minLightLum = frame.lightThreshold ?? 232;
+  const maxInnerRadius = minDim * (frame.cutoutInnerRadiusRatio ?? frame.avatarDiameterRatio * 0.6);
+  const maxInnerRadiusSq = maxInnerRadius * maxInnerRadius;
+  const minOuterRadius = minDim * (frame.cutoutOuterRadiusRatio ?? frame.avatarDiameterRatio * 0.54);
+  const minOuterRadiusSq = minOuterRadius * minOuterRadius;
+
+  const isLightPixel = (idx4: number, minLum: number) => {
+    const r = data[idx4];
+    const g = data[idx4 + 1];
+    const b = data[idx4 + 2];
+    const lum = r * 0.299 + g * 0.587 + b * 0.114;
+    return lum >= minLum && Math.min(r, g, b) >= minLum - 14;
+  };
+
+  // Pass 1: Xóa tâm trắng ở giữa để giữ nguyên mây sáng và hào quang trên vành khung
+  let head = 0;
+  let tail = 0;
+  const startIdx = cy * width + cx;
+  visited[startIdx] = 1;
+  queue[tail++] = startIdx;
+
+  while (head < tail) {
+    const p = queue[head++];
+    const px = p % width;
+    const py = (p - px) / width;
+    data[p * 4 + 3] = 0;
+
+    const neighbors = [
+      px > 0 ? p - 1 : -1,
+      px < width - 1 ? p + 1 : -1,
+      py > 0 ? p - width : -1,
+      py < height - 1 ? p + width : -1,
+    ];
+
+    for (let i = 0; i < 4; i += 1) {
+      const n = neighbors[i];
+      if (n < 0 || visited[n]) continue;
+      const nx = n % width;
+      const ny = (n - nx) / width;
+      const dx = nx - cx;
+      const dy = ny - cy;
+      if (dx * dx + dy * dy > maxInnerRadiusSq) continue;
+      if (isLightPixel(n * 4, minLightLum)) {
+        visited[n] = 1;
+        queue[tail++] = n;
+      }
+    }
+  }
+
+  // Pass 2: Xóa nền trắng bên ngoài viền tròn
+  head = 0;
+  tail = 0;
+  const seedOuter = (x: number, y: number) => {
+    const p = y * width + x;
+    if (visited[p]) return;
+    if (isLightPixel(p * 4, minLightLum)) {
+      visited[p] = 1;
+      queue[tail++] = p;
+    }
+  };
+
+  for (let x = 0; x < width; x += 1) {
+    seedOuter(x, 0);
+    seedOuter(x, height - 1);
+  }
+  for (let y = 0; y < height; y += 1) {
+    seedOuter(0, y);
+    seedOuter(width - 1, y);
+  }
+
+  while (head < tail) {
+    const p = queue[head++];
+    const px = p % width;
+    const py = (p - px) / width;
+    data[p * 4 + 3] = 0;
+
+    const neighbors = [
+      px > 0 ? p - 1 : -1,
+      px < width - 1 ? p + 1 : -1,
+      py > 0 ? p - width : -1,
+      py < height - 1 ? p + width : -1,
+    ];
+
+    for (let i = 0; i < 4; i += 1) {
+      const n = neighbors[i];
+      if (n < 0 || visited[n]) continue;
+      const nx = n % width;
+      const ny = (n - nx) / width;
+      const dx = nx - cx;
+      const dy = ny - cy;
+      if (dx * dx + dy * dy < minOuterRadiusSq) continue;
+      if (isLightPixel(n * 4, minLightLum)) {
+        visited[n] = 1;
+        queue[tail++] = n;
+      }
+    }
+  }
+
+  // Pass 3: Làm mềm mép viền trắng 1px để khung mượt trên nền tối
   const softEdges: Array<{ idx4: number; alpha: number }> = [];
   for (let y = 1; y < height - 1; y += 1) {
     for (let x = 1; x < width - 1; x += 1) {
@@ -132,8 +289,8 @@ function processDarkRingCutout(
       if (!hasClearedNeighbor) continue;
 
       const lum = data[idx4] * 0.299 + data[idx4 + 1] * 0.587 + data[idx4 + 2] * 0.114;
-      if (lum < 68) {
-        const ratio = Math.max(0, Math.min(1, (lum - 18) / 50));
+      if (lum > 180) {
+        const ratio = Math.max(0, Math.min(1, (242 - lum) / 62));
         softEdges.push({ idx4, alpha: Math.round(ratio * 255) });
       }
     }
@@ -180,7 +337,7 @@ export function getProcessedAvatarFrameUrl(frame: AvatarFrameDefinition): Promis
     img.crossOrigin = 'anonymous';
     img.onload = () => {
       try {
-        const targetSize = 420;
+        const targetSize = 480;
         const aspect = img.naturalHeight > 0 ? img.naturalWidth / img.naturalHeight : 1;
         const width = aspect >= 1 ? targetSize : Math.round(targetSize * aspect);
         const height = aspect >= 1 ? Math.round(targetSize / aspect) : targetSize;
@@ -198,6 +355,8 @@ export function getProcessedAvatarFrameUrl(frame: AvatarFrameDefinition): Promis
         const imageData = ctx.getImageData(0, 0, width, height);
         if (frame.cutoutMode === 'ink-white') {
           processInkWhiteCutout(imageData.data);
+        } else if (frame.cutoutMode === 'light-ring') {
+          processLightRingCutout(imageData.data, width, height, frame);
         } else {
           processDarkRingCutout(imageData.data, width, height, frame);
         }

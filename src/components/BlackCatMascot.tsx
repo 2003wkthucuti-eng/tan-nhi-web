@@ -223,6 +223,45 @@ export const BlackCatMascot: React.FC<BlackCatMascotProps> = ({
       starBright: '#FFF2F6',
       starWarm: '#F79AC0',
     },
+    'sabbath-crew': {
+      gradStart: '#F5E9C8',
+      gradMid: '#E54850',
+      gradEnd: '#9E252D',
+      bodyFill: '#121015',
+      eyeFill: '#F2C94C',
+      pupilFill: '#0D0C0F',
+      noseFill: '#E54850',
+      auraInner: '#F2C94C',
+      auraMid: '#E54850',
+      starBright: '#F2C94C',
+      starWarm: '#E54850',
+    },
+    'night-ride': {
+      gradStart: '#F7FAFF',
+      gradMid: '#F0C975',
+      gradEnd: '#3B4D70',
+      bodyFill: '#0B101B',
+      eyeFill: '#F0C975',
+      pupilFill: '#080A10',
+      noseFill: '#F7FAFF',
+      auraInner: '#F0C975',
+      auraMid: '#526A94',
+      starBright: '#F7FAFF',
+      starWarm: '#F0C975',
+    },
+    'ilay-riegrow': {
+      gradStart: '#FFFFFF',
+      gradMid: '#B8BECA',
+      gradEnd: '#2B2E36',
+      bodyFill: '#ECEEF3',
+      eyeFill: '#14151A',
+      pupilFill: '#FFFFFF',
+      noseFill: '#454A54',
+      auraInner: '#FFFFFF',
+      auraMid: '#9EA5B5',
+      starBright: '#FFFFFF',
+      starWarm: '#CFD4DE',
+    },
   };
 
   const p = paletteMap[effectiveThemeId];
@@ -756,6 +795,103 @@ export const BlackCatMascot: React.FC<BlackCatMascotProps> = ({
         </g>
       )}
 
+      {/* Sabbath Crew: Tia sét vàng & sticker đường phố sau lưng mèo */}
+      {variant !== 'badge' && effectiveThemeId === 'sabbath-crew' && (
+        <g aria-hidden="true">
+          <rect
+            x="17"
+            y="17"
+            width="86"
+            height="86"
+            rx="10"
+            transform="rotate(-3 60 60)"
+            stroke="#F5E9C8"
+            strokeOpacity="0.28"
+            strokeWidth="1.4"
+            strokeDasharray="8 5"
+          />
+          <path
+            d="M23 27L16 39H22L20 49L29 36H23L23 27Z"
+            fill="#F2C94C"
+            className="animate-cat-star-1"
+          />
+          <path
+            d="M99 30L94 39H98.5L97 47L104 37H99.5L99 30Z"
+            fill="#E54850"
+            className="animate-cat-star-2"
+          />
+          <path
+            d="M20 77L26 83M26 77L20 83"
+            stroke="#F5E9C8"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            className="animate-cat-star-3"
+          />
+        </g>
+      )}
+
+      {/* Night Ride: Ánh đèn đường đêm & 3 ngôi sao sáng */}
+      {variant !== 'badge' && effectiveThemeId === 'night-ride' && (
+        <g aria-hidden="true">
+          <path
+            d="M20 35C32 18 88 18 100 35"
+            stroke="#F0C975"
+            strokeOpacity="0.42"
+            strokeWidth="1.4"
+            strokeLinecap="round"
+          />
+          <path
+            d="M24 27L25.4 30.8L29.4 31L26.2 33.4L27.3 37.2L24 35L20.7 37.2L21.8 33.4L18.6 31L22.6 30.8Z"
+            fill="#F7FAFF"
+            className="animate-cat-star-1"
+          />
+          <path
+            d="M60 12L61.2 15.2L64.6 15.4L61.9 17.5L62.8 20.8L60 18.9L57.2 20.8L58.1 17.5L55.4 15.4L58.8 15.2Z"
+            fill="#F0C975"
+            className="animate-cat-star-2"
+          />
+          <path
+            d="M96 27L97.4 30.8L101.4 31L98.2 33.4L99.3 37.2L96 35L92.7 37.2L93.8 33.4L90.6 31L94.6 30.8Z"
+            fill="#F7FAFF"
+            className="animate-cat-star-3"
+          />
+        </g>
+      )}
+
+      {/* Ilay Riegrow: Khung tạp chí đen trắng sắc cạnh & sao 4 cánh lạnh */}
+      {variant !== 'badge' && effectiveThemeId === 'ilay-riegrow' && (
+        <g aria-hidden="true">
+          <rect
+            x="16"
+            y="16"
+            width="88"
+            height="88"
+            stroke="#FFFFFF"
+            strokeOpacity="0.42"
+            strokeWidth="1.3"
+          />
+          <rect
+            x="20"
+            y="20"
+            width="80"
+            height="80"
+            stroke="#9EA5B5"
+            strokeOpacity="0.28"
+            strokeWidth="0.9"
+          />
+          <path
+            d="M96 23L97.8 28.2L103 30L97.8 31.8L96 37L94.2 31.8L89 30L94.2 28.2Z"
+            fill="#FFFFFF"
+            className="animate-cat-star-1"
+          />
+          <path
+            d="M23 76L24.4 80.2L28.6 81.6L24.4 83L23 87.2L21.6 83L17.4 81.6L21.6 80.2Z"
+            fill="#CFD4DE"
+            className="animate-cat-star-2"
+          />
+        </g>
+      )}
+
       {/* Đuôi mèo uốn cong đung đưa mềm mại */}
       <path
         d="M77 95C91 95 101 86 101 75C101 66 93 62 90 67C88 71 92 75 93 78"
@@ -866,6 +1002,18 @@ export const BlackCatMascot: React.FC<BlackCatMascotProps> = ({
             stroke="#F6F0E4"
             strokeWidth="0.9"
           />
+        </g>
+      ) : effectiveThemeId === 'sabbath-crew' ? (
+        /* Sabbath Crew: Dây xích bạc & tag crew đỏ vàng */
+        <g aria-hidden="true">
+          <path d="M46 62C54 67 66 67 74 62" stroke="#E2E5EC" strokeWidth="2.4" strokeDasharray="3.2 2.2" strokeLinecap="round" />
+          <rect x="56.5" y="65" width="7" height="5.5" rx="1" fill="#E54850" stroke="#F2C94C" strokeWidth="1" />
+        </g>
+      ) : effectiveThemeId === 'ilay-riegrow' ? (
+        /* Ilay Riegrow: Cổ áo sơ mi trắng & cà vạt đen sắc nét */
+        <g aria-hidden="true">
+          <path d="M48 62L55 68L60 64L65 68L72 62" fill="#FFFFFF" stroke="#18191F" strokeWidth="1.2" strokeLinejoin="round" />
+          <path d="M58 65H62L63.2 79L60 83L56.8 79L58 65Z" fill="#14151A" stroke="#FFFFFF" strokeWidth="0.8" strokeLinejoin="round" />
         </g>
       ) : (
         <>
@@ -982,6 +1130,30 @@ export const BlackCatMascot: React.FC<BlackCatMascotProps> = ({
           {/* Kính tròn vintage mắt phải */}
           <circle cx="69.5" cy="48" r="6" stroke="#CFA972" strokeWidth="1.4" fill="#F5E9D3" fillOpacity="0.08" />
           <path d="M75.5 48C79 51 80 57 78 63" stroke="#CFA972" strokeWidth="0.9" strokeDasharray="2 1.5" strokeLinecap="round" />
+        </g>
+      )}
+
+      {/* Sabbath Crew: Mũ len đường phố & tag vàng */}
+      {effectiveThemeId === 'sabbath-crew' && (
+        <g aria-hidden="true">
+          <path
+            d="M44 35C45 24 52 20 60 20C68 20 75 24 76 35C68 33 52 33 44 35Z"
+            fill="#B82D35"
+            stroke="#F5E9C8"
+            strokeWidth="1.3"
+            strokeLinejoin="round"
+          />
+          <path d="M44 33.5C53 31.5 67 31.5 76 33.5" stroke="#F2C94C" strokeWidth="1.6" strokeLinecap="round" />
+          <rect x="65" y="29.5" width="6" height="4" rx="0.8" fill="#F2C94C" />
+        </g>
+      )}
+
+      {/* Night Ride: Kính đêm gọng sáng trên trán mèo */}
+      {effectiveThemeId === 'night-ride' && (
+        <g aria-hidden="true">
+          <rect x="43" y="34" width="14" height="6.5" rx="2.5" fill="#182238" stroke="#F0C975" strokeWidth="1.2" />
+          <rect x="63" y="34" width="14" height="6.5" rx="2.5" fill="#182238" stroke="#F0C975" strokeWidth="1.2" />
+          <line x1="57" y1="37" x2="63" y2="37" stroke="#F7FAFF" strokeWidth="1.2" />
         </g>
       )}
 

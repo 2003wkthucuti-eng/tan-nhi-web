@@ -1031,6 +1031,11 @@ function AppContent() {
         setIsPlaying(false);
         shouldPlayRef.current = false;
       });
+      unlockAvatarFrame(
+        'buom-trang-ngoc-trai',
+        'Giai điệu đêm khuya vừa ngân lên — mở khóa Khung Ảnh Bướm Trăng Ngọc Trai!',
+        { showModal: true }
+      );
     } else {
       shouldPlayRef.current = false;
       audio.pause();
@@ -1042,6 +1047,12 @@ function AppContent() {
     if (PLAYLIST.length === 0) return;
     shouldPlayRef.current = true;
     errorStreakRef.current = 0;
+
+    unlockAvatarFrame(
+      'buom-trang-ngoc-trai',
+      'Chuyển sang giai điệu mới trong đêm — mở khóa Khung Ảnh Bướm Trăng Ngọc Trai!',
+      { showModal: true }
+    );
 
     if (PLAYLIST.length === 1 && audioRef.current) {
       audioRef.current.currentTime = 0;
@@ -1117,6 +1128,11 @@ function AppContent() {
   const handleRandomPickInMood = () => {
     if (filteredCharacters.length === 0) return;
     playSoftTap('card');
+    unlockAvatarFrame(
+      'day-gai-ban-tay',
+      'Lần bốc ngẫu nhiên theo khí chất đã mở khóa Khung Ảnh Dây Gai & Bàn Tay!',
+      { showModal: false, showToast: true }
+    );
     const chosen = filteredCharacters[Math.floor(Math.random() * filteredCharacters.length)];
     openCharacterProfileModal(chosen);
   };
@@ -1141,6 +1157,11 @@ function AppContent() {
     if (clamped === safeCurrentPage) return;
     playSoftTap('nav');
     setCurrentPage(clamped);
+    unlockAvatarFrame(
+      'thien-vu-vuong-mien',
+      'Bước sang trang mới khám phá thêm tâm hồn — mở khóa Khung Ảnh Thiên Vũ Vương Miện!',
+      { showModal: true }
+    );
     const galleryEl = document.getElementById('bo-suu-tap');
     if (galleryEl) {
       galleryEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -1215,6 +1236,11 @@ function AppContent() {
       setUserProfile(updated);
       saveUserProfile(updated);
     }
+    unlockAvatarFrame(
+      'ren-trang-you-fool',
+      'Cậu vừa thử đổi ảnh chân dung riêng — mở khóa Khung Ảnh Ren Trắng You Fool!',
+      { showModal: false, showToast: true }
+    );
   };
 
   const openCharacterProfileModal = (
@@ -1273,6 +1299,11 @@ function AppContent() {
     saveUserProfile(merged);
     setPreviewAvatarUrl(merged.avatarUrl);
     setPreviewAvatarIcon(merged.avatarIcon);
+    unlockAvatarFrame(
+      'ren-trang-you-fool',
+      `Hồ sơ Góc Tri Kỷ của ${merged.displayName} đã lưu dấu — mở khóa Khung Ảnh Ren Trắng You Fool!`,
+      { showModal: true }
+    );
   };
 
   const handleLogoutUserProfile = () => {
@@ -1419,6 +1450,11 @@ function AppContent() {
     } else if (outcome === 'shared') {
       triggerShareToast('✨ Đã mở chia sẻ nhân vật!');
     }
+    unlockAvatarFrame(
+      'kim-lien-pho-do',
+      'Cậu vừa lan tỏa câu chuyện nhân vật — mở khóa Khung Ảnh Kim Liên & Phổ Độ!',
+      { showModal: true }
+    );
   };
 
   const handleShareWebsite = async () => {
@@ -1434,6 +1470,11 @@ function AppContent() {
     } else if (outcome === 'shared') {
       triggerShareToast('✨ Đã chia sẻ Ngôi Nhà Nhỏ Của Tần Nhi!');
     }
+    unlockAvatarFrame(
+      'kim-lien-pho-do',
+      'Cậu vừa chia sẻ Ngôi Nhà Nhỏ Của Tần Nhi — mở khóa Khung Ảnh Kim Liên & Phổ Độ!',
+      { showModal: true }
+    );
   };
 
   const handleScrollToTop = () => {
@@ -2105,6 +2146,12 @@ function AppContent() {
                     ? '🗞️ Nhật báo cổ điển Tần Nhi · Số đặc biệt'
                     : activeTheme.id === 'pixel-doodles'
                     ? '♡ Sổ tay Pixel Doodle & sticker đáng yêu ♡'
+                    : activeTheme.id === 'sabbath-crew'
+                    ? '⚡ Sabbath Crew · Góc đường phố & nhân vật nổi bật'
+                    : activeTheme.id === 'night-ride'
+                    ? '★ Night Ride · Chuyến xe đêm & thẻ cảm xúc phát sáng'
+                    : activeTheme.id === 'ilay-riegrow'
+                    ? '✦ Ilay Riegrow Edition · Tạp chí đen trắng sắc lạnh'
                     : 'Bộ sưu tập nhân vật AI Chatbot'}
                 </p>
                 <h2 className="font-display text-2xl sm:text-3xl lg:text-[40px] font-semibold text-[#F5EFE0] leading-[1.15] [text-wrap:balance]">
@@ -2298,6 +2345,13 @@ function AppContent() {
                         playSoftTap('tap');
                         setSelectedMood(mood);
                         setCurrentPage(1);
+                        if (mood !== 'Tất cả') {
+                          unlockAvatarFrame(
+                            'day-gai-ban-tay',
+                            `Khí chất "${mood}" vừa được chọn — mở khóa Khung Ảnh Dây Gai & Bàn Tay!`,
+                            { showModal: true }
+                          );
+                        }
                       }}
                       aria-pressed={isActive}
                       className={`min-h-[32px] px-3 py-1 rounded-xl text-[11px] sm:text-xs font-medium whitespace-nowrap shrink-0 transition-all cursor-pointer ${
@@ -2502,6 +2556,11 @@ function AppContent() {
                                 e.stopPropagation();
                                 playSoftTap('card');
                                 trackCharacterInteraction(char.id, 2);
+                                unlockAvatarFrame(
+                                  'kim-lien-pho-do',
+                                  'Bước qua cánh cổng DokiChat — mở khóa Khung Ảnh Kim Liên & Phổ Độ!',
+                                  { showModal: false, showToast: true }
+                                );
                               }}
                               className={`shimmer-gold-btn inline-flex items-center justify-center gap-1 min-h-[36px] sm:min-h-[40px] px-1.5 sm:px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-[#D4AF37] to-[#E6C86E] text-[#0B0B0F] text-[11px] sm:text-xs font-semibold whitespace-nowrap hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F3E5AB] transition-all duration-150 ${
                                 !hasBothLinks ? 'w-full' : ''
@@ -2533,6 +2592,11 @@ function AppContent() {
                                 e.stopPropagation();
                                 playSoftTap('card');
                                 trackCharacterInteraction(char.id, 2);
+                                unlockAvatarFrame(
+                                  'kim-lien-pho-do',
+                                  'Bước qua cánh cổng GGAI — mở khóa Khung Ảnh Kim Liên & Phổ Độ!',
+                                  { showModal: false, showToast: true }
+                                );
                               }}
                               className={`inline-flex items-center justify-center gap-1 min-h-[36px] sm:min-h-[40px] px-1.5 sm:px-2.5 py-1.5 rounded-lg bg-[#0B0B0F] border border-[#D4AF37]/60 text-[#F3E5AB] text-[11px] sm:text-xs font-medium whitespace-nowrap hover:bg-[#D4AF37]/15 hover:border-[#F3E5AB] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] transition-all duration-150 ${
                                 !hasBothLinks ? 'w-full' : ''
@@ -2759,6 +2823,11 @@ function AppContent() {
                 onClick={() => {
                   playSoftTap('card');
                   setIsSecretNotebookOpen(true);
+                  unlockAvatarFrame(
+                    'thien-vu-vuong-mien',
+                    'Chiếc chìa khóa bí mật dưới đáy trang đã mở khóa Khung Ảnh Thiên Vũ Vương Miện!',
+                    { showModal: false, showToast: true }
+                  );
                 }}
                 aria-label="Mở Bức Thư Dưới Đáy Trang và Bộ Sưu Tập Khung Ảnh"
                 title="Một chiếc chìa khóa vàng nhỏ rơi dưới đáy trang..."
@@ -2900,6 +2969,16 @@ function AppContent() {
                         <span className="absolute left-[40%] top-1/2 -translate-y-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-[#F5E9D3] shadow-[0_0_6px_rgba(245,233,211,0.75)]" />
                       </div>
                       <span className="text-[9px] text-[#CFC2B0] tabular-nums">20:25</span>
+                    </div>
+                  )}
+                  {activeTheme.id === 'night-ride' && (
+                    <div aria-hidden="true" className="mt-1 flex items-center gap-1.5 text-[9.5px] text-[#F7FAFF]/90 tracking-widest">
+                      <span>★</span>
+                      <span>★</span>
+                      <span className="text-[#F0C975]">★</span>
+                      <span className="ml-1 px-1.5 py-[1px] rounded bg-[#F7FAFF] text-[#080A10] font-semibold tracking-normal">
+                        Night Ride
+                      </span>
                     </div>
                   )}
                 </div>

@@ -977,6 +977,344 @@ html[data-site-theme]:not([data-site-theme="classic-gold"]) ::-webkit-scrollbar-
   background-color: rgba(49, 33, 43, 0.75);
 }
 
+/* 4. Wind Breaker — Sabbath Crew: Form đường phố / sticker, viền xích gai & tia sét */
+[data-site-theme="sabbath-crew"] {
+  --font-display: "Oswald", "Be Vietnam Pro", system-ui, sans-serif;
+  --font-sans: "Be Vietnam Pro", system-ui, -apple-system, sans-serif;
+  --t-bg: #0D0C0F;
+  --t-bg-rgb: 13, 12, 15;
+  --t-surface: #17151A;
+  --t-surface-rgb: 23, 21, 26;
+  --t-surface-alt: #241D22;
+  --t-surface-alt-rgb: 36, 29, 34;
+  --t-accent: #E54850;
+  --t-accent-rgb: 229, 72, 80;
+  --t-bright: #F5E9C8;
+  --t-bright-rgb: 245, 233, 200;
+  --t-soft: #F2C94C;
+  --t-text: #F6F3EC;
+  --t-muted: #CFC8BC;
+  --t-btn-text: #0D0C0F;
+  --t-grad-from: #C8343C;
+  --t-grad-to: #F2C94C;
+  font-family: var(--font-sans);
+}
+
+[data-site-theme="sabbath-crew"] .font-display {
+  font-family: var(--font-display);
+  letter-spacing: 0.015em;
+}
+
+[data-site-theme="sabbath-crew"] header {
+  background-color: rgba(15, 13, 17, 0.92) !important;
+  border-bottom: 2px solid rgba(229, 72, 80, 0.65);
+  box-shadow: 0 4px 0 rgba(242, 201, 76, 0.18), 0 12px 26px rgba(0, 0, 0, 0.65);
+}
+
+[data-site-theme="sabbath-crew"] footer {
+  border-top: 2px dashed rgba(242, 201, 76, 0.42);
+}
+
+[data-site-theme="sabbath-crew"] .shimmer-card-border,
+[data-site-theme="sabbath-crew"] section[aria-labelledby="trending-spotlight-heading"] article,
+[data-site-theme="sabbath-crew"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-\[24px\],
+[data-site-theme="sabbath-crew"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-\[26px\],
+[data-site-theme="sabbath-crew"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-\[28px\],
+[data-site-theme="sabbath-crew"] aside[aria-label="Trình phát nhạc nền"],
+[data-site-theme="sabbath-crew"] aside[aria-label="Thông báo Khung Giờ Ma Thuật"],
+[data-site-theme="sabbath-crew"] aside[role="status"],
+[data-site-theme="sabbath-crew"] nav[aria-label="Phân trang danh sách nhân vật"] > div {
+  border-radius: 0.55rem;
+  background-color: rgba(21, 19, 24, 0.92) !important;
+  background-image:
+    radial-gradient(rgba(245, 233, 200, 0.055) 1px, transparent 1px),
+    linear-gradient(155deg, rgba(229, 72, 80, 0.1) 0%, rgba(19, 17, 22, 0.95) 55%, rgba(242, 201, 76, 0.06) 100%) !important;
+  background-size: 14px 14px, 100% 100% !important;
+  border-width: 2px;
+  border-color: rgba(245, 233, 200, 0.42);
+  outline: 1.5px dashed rgba(242, 201, 76, 0.38);
+  outline-offset: -6px;
+  box-shadow:
+    4px 4px 0 rgba(229, 72, 80, 0.48),
+    0 14px 30px rgba(0, 0, 0, 0.72);
+}
+
+[data-site-theme="sabbath-crew"] .shimmer-card-border::after,
+[data-site-theme="sabbath-crew"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-\[26px\]::after,
+[data-site-theme="sabbath-crew"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-\[28px\]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    linear-gradient(135deg, rgba(242, 201, 76, 0.24) 0 10px, transparent 10px) top left / 22px 22px no-repeat,
+    linear-gradient(-45deg, rgba(229, 72, 80, 0.28) 0 10px, transparent 10px) bottom right / 22px 22px no-repeat;
+}
+
+[data-site-theme="sabbath-crew"] [role="dialog"]:not([aria-label*="Theme"]) section.rounded-2xl,
+[data-site-theme="sabbath-crew"] [role="dialog"]:not([aria-label*="Theme"]) form.rounded-2xl,
+[data-site-theme="sabbath-crew"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-2xl:not(.rounded-\[24px\]):not(.rounded-\[26px\]):not(.rounded-\[28px\]),
+[data-site-theme="sabbath-crew"] [role="dialog"]:not([aria-label*="Theme"]) article.rounded-xl,
+[data-site-theme="sabbath-crew"] [role="dialog"]:not([aria-label*="Theme"]) div.rounded-xl {
+  border-radius: 0.45rem;
+  background-color: rgba(15, 13, 18, 0.86);
+  border-color: rgba(242, 201, 76, 0.36);
+}
+
+[data-site-theme="sabbath-crew"] button.rounded-xl,
+[data-site-theme="sabbath-crew"] button.rounded-lg,
+[data-site-theme="sabbath-crew"] a.rounded-lg,
+[data-site-theme="sabbath-crew"] a.rounded-xl,
+[data-site-theme="sabbath-crew"] input[type="search"],
+[data-site-theme="sabbath-crew"] textarea {
+  border-radius: 0.38rem;
+}
+
+[data-site-theme="sabbath-crew"] button.rounded-xl,
+[data-site-theme="sabbath-crew"] button.rounded-lg,
+[data-site-theme="sabbath-crew"] a.rounded-lg,
+[data-site-theme="sabbath-crew"] a.rounded-xl {
+  box-shadow: 2px 2px 0 rgba(242, 201, 76, 0.26);
+}
+
+[data-site-theme="sabbath-crew"] span.rounded-md {
+  border-radius: 0.25rem;
+  border-width: 1.5px;
+  border-color: rgba(242, 201, 76, 0.55);
+  background-color: rgba(200, 52, 60, 0.24);
+  color: #F5E9C8;
+  transform: rotate(-1.2deg);
+}
+
+/* 5. Wind Breaker — Night Ride: Giao diện đêm khuya, CRT scanlines, 3 ngôi sao & thẻ cảm xúc phát sáng */
+[data-site-theme="night-ride"] {
+  --font-display: "Chakra Petch", "Be Vietnam Pro", system-ui, sans-serif;
+  --font-sans: "Be Vietnam Pro", system-ui, -apple-system, sans-serif;
+  --t-bg: #080A10;
+  --t-bg-rgb: 8, 10, 16;
+  --t-surface: #10141E;
+  --t-surface-rgb: 16, 20, 30;
+  --t-surface-alt: #182032;
+  --t-surface-alt-rgb: 24, 32, 50;
+  --t-accent: #F0C975;
+  --t-accent-rgb: 240, 201, 117;
+  --t-bright: #F7FAFF;
+  --t-bright-rgb: 247, 250, 255;
+  --t-soft: #FFE4A8;
+  --t-text: #F6F9FF;
+  --t-muted: #C2CCE0;
+  --t-btn-text: #080A10;
+  --t-grad-from: #D4A952;
+  --t-grad-to: #F7FAFF;
+  font-family: var(--font-sans);
+}
+
+[data-site-theme="night-ride"] .font-display {
+  font-family: var(--font-display);
+  letter-spacing: 0.01em;
+}
+
+[data-site-theme="night-ride"] header {
+  background-color: rgba(8, 10, 16, 0.86) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(247, 250, 255, 0.28);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.58), 0 1px 16px rgba(240, 201, 117, 0.14);
+}
+
+[data-site-theme="night-ride"] footer {
+  border-top: 1px solid rgba(247, 250, 255, 0.22);
+}
+
+[data-site-theme="night-ride"] .shimmer-card-border,
+[data-site-theme="night-ride"] section[aria-labelledby="trending-spotlight-heading"] article,
+[data-site-theme="night-ride"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-\[24px\],
+[data-site-theme="night-ride"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-\[26px\],
+[data-site-theme="night-ride"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-\[28px\],
+[data-site-theme="night-ride"] aside[aria-label="Trình phát nhạc nền"],
+[data-site-theme="night-ride"] aside[aria-label="Thông báo Khung Giờ Ma Thuật"],
+[data-site-theme="night-ride"] aside[role="status"],
+[data-site-theme="night-ride"] nav[aria-label="Phân trang danh sách nhân vật"] > div {
+  border-radius: 1.05rem;
+  background-color: rgba(14, 18, 28, 0.84) !important;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      rgba(247, 250, 255, 0.025) 0px,
+      rgba(247, 250, 255, 0.025) 1px,
+      transparent 1px,
+      transparent 3px
+    ),
+    radial-gradient(ellipse 80% 35% at 50% 0%, rgba(240, 201, 117, 0.14), transparent 72%) !important;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-color: rgba(247, 250, 255, 0.34);
+  box-shadow:
+    inset 0 1px 0 rgba(247, 250, 255, 0.28),
+    0 0 22px rgba(240, 201, 117, 0.1),
+    0 16px 34px rgba(2, 4, 10, 0.72);
+}
+
+[data-site-theme="night-ride"] .shimmer-card-border::after,
+[data-site-theme="night-ride"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-\[26px\]::after,
+[data-site-theme="night-ride"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-\[28px\]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    radial-gradient(circle 2.5px at 90% 9%, rgba(247, 250, 255, 0.75), transparent 65%),
+    radial-gradient(circle 2px at 84% 9%, rgba(240, 201, 117, 0.75), transparent 65%),
+    radial-gradient(circle 2.5px at 78% 9%, rgba(247, 250, 255, 0.75), transparent 65%);
+}
+
+[data-site-theme="night-ride"] [role="dialog"]:not([aria-label*="Theme"]) section.rounded-2xl,
+[data-site-theme="night-ride"] [role="dialog"]:not([aria-label*="Theme"]) form.rounded-2xl,
+[data-site-theme="night-ride"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-2xl:not(.rounded-\[24px\]):not(.rounded-\[26px\]):not(.rounded-\[28px\]),
+[data-site-theme="night-ride"] [role="dialog"]:not([aria-label*="Theme"]) article.rounded-xl,
+[data-site-theme="night-ride"] [role="dialog"]:not([aria-label*="Theme"]) div.rounded-xl {
+  border-radius: 0.85rem;
+  background-color: rgba(10, 14, 22, 0.82);
+  border-color: rgba(247, 250, 255, 0.24);
+}
+
+[data-site-theme="night-ride"] button.rounded-xl,
+[data-site-theme="night-ride"] button.rounded-lg,
+[data-site-theme="night-ride"] a.rounded-lg,
+[data-site-theme="night-ride"] a.rounded-xl,
+[data-site-theme="night-ride"] input[type="search"],
+[data-site-theme="night-ride"] textarea {
+  border-radius: 0.8rem;
+}
+
+[data-site-theme="night-ride"] [role="group"] button[aria-pressed="true"] {
+  background: #F7FAFF !important;
+  color: #080A10 !important;
+  border-color: #FFFFFF !important;
+  box-shadow: 0 0 18px rgba(247, 250, 255, 0.45);
+}
+
+[data-site-theme="night-ride"] span.rounded-md {
+  border-radius: 0.65rem;
+  border-color: rgba(247, 250, 255, 0.34);
+  background-color: rgba(24, 32, 50, 0.72);
+}
+
+/* 6. Ilay Riegrow: Tạp chí đen trắng tương phản cao, góc vuông sắc nét, khung ảnh cắt ghép */
+[data-site-theme="ilay-riegrow"] {
+  --font-display: "Oswald", "Be Vietnam Pro", system-ui, sans-serif;
+  --font-sans: "Be Vietnam Pro", system-ui, -apple-system, sans-serif;
+  --t-bg: #070709;
+  --t-bg-rgb: 7, 7, 9;
+  --t-surface: #111115;
+  --t-surface-rgb: 17, 17, 21;
+  --t-surface-alt: #1C1D24;
+  --t-surface-alt-rgb: 28, 29, 36;
+  --t-accent: #CFD4DE;
+  --t-accent-rgb: 207, 212, 222;
+  --t-bright: #FFFFFF;
+  --t-bright-rgb: 255, 255, 255;
+  --t-soft: #E5E8EF;
+  --t-text: #F8F9FB;
+  --t-muted: #C1C6D0;
+  --t-btn-text: #070709;
+  --t-grad-from: #9DA3B0;
+  --t-grad-to: #FFFFFF;
+  font-family: var(--font-sans);
+}
+
+[data-site-theme="ilay-riegrow"] .font-display {
+  font-family: var(--font-display);
+  letter-spacing: 0.02em;
+}
+
+[data-site-theme="ilay-riegrow"] header {
+  background-color: rgba(7, 7, 9, 0.94) !important;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.72);
+}
+
+[data-site-theme="ilay-riegrow"] footer {
+  border-top: 2px solid rgba(255, 255, 255, 0.45);
+}
+
+[data-site-theme="ilay-riegrow"] .shimmer-card-border,
+[data-site-theme="ilay-riegrow"] section[aria-labelledby="trending-spotlight-heading"] article,
+[data-site-theme="ilay-riegrow"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-\[24px\],
+[data-site-theme="ilay-riegrow"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-\[26px\],
+[data-site-theme="ilay-riegrow"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-\[28px\],
+[data-site-theme="ilay-riegrow"] aside[aria-label="Trình phát nhạc nền"],
+[data-site-theme="ilay-riegrow"] aside[aria-label="Thông báo Khung Giờ Ma Thuật"],
+[data-site-theme="ilay-riegrow"] aside[role="status"],
+[data-site-theme="ilay-riegrow"] nav[aria-label="Phân trang danh sách nhân vật"] > div {
+  border-radius: 2px;
+  background-color: rgba(14, 14, 18, 0.93) !important;
+  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(10, 10, 13, 0.96) 100%) !important;
+  border-width: 1.5px;
+  border-color: rgba(255, 255, 255, 0.56);
+  box-shadow:
+    inset 0 0 0 4px rgba(7, 7, 9, 0.9),
+    inset 0 0 0 5px rgba(255, 255, 255, 0.16),
+    4px 4px 0 rgba(255, 255, 255, 0.14),
+    0 16px 34px rgba(0, 0, 0, 0.78);
+}
+
+[data-site-theme="ilay-riegrow"] .shimmer-card-border::after,
+[data-site-theme="ilay-riegrow"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-\[26px\]::after,
+[data-site-theme="ilay-riegrow"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-\[28px\]::after {
+  content: "";
+  position: absolute;
+  inset: 7px;
+  border-radius: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(to right, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.72)) top left / 12px 1.5px no-repeat,
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.72)) top left / 1.5px 12px no-repeat,
+    linear-gradient(to left, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.72)) bottom right / 12px 1.5px no-repeat,
+    linear-gradient(to top, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.72)) bottom right / 1.5px 12px no-repeat;
+}
+
+[data-site-theme="ilay-riegrow"] .shimmer-card-border .aspect-square {
+  border-radius: 1px;
+  border-width: 2px;
+  border-color: rgba(255, 255, 255, 0.78);
+  padding: 3px;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-site-theme="ilay-riegrow"] [role="dialog"]:not([aria-label*="Theme"]) section.rounded-2xl,
+[data-site-theme="ilay-riegrow"] [role="dialog"]:not([aria-label*="Theme"]) form.rounded-2xl,
+[data-site-theme="ilay-riegrow"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-2xl:not(.rounded-\[24px\]):not(.rounded-\[26px\]):not(.rounded-\[28px\]),
+[data-site-theme="ilay-riegrow"] [role="dialog"]:not([aria-label*="Theme"]) article.rounded-xl,
+[data-site-theme="ilay-riegrow"] [role="dialog"]:not([aria-label*="Theme"]) div.rounded-xl {
+  border-radius: 2px;
+  background-color: rgba(11, 11, 14, 0.88);
+  border-color: rgba(255, 255, 255, 0.34);
+}
+
+[data-site-theme="ilay-riegrow"] button.rounded-xl,
+[data-site-theme="ilay-riegrow"] button.rounded-lg,
+[data-site-theme="ilay-riegrow"] a.rounded-lg,
+[data-site-theme="ilay-riegrow"] a.rounded-xl,
+[data-site-theme="ilay-riegrow"] input[type="search"],
+[data-site-theme="ilay-riegrow"] textarea {
+  border-radius: 2px;
+}
+
+[data-site-theme="ilay-riegrow"] [role="group"] button[aria-pressed="true"] {
+  background: #FFFFFF !important;
+  color: #070709 !important;
+  border-color: #FFFFFF !important;
+}
+
+[data-site-theme="ilay-riegrow"] span.rounded-md {
+  border-radius: 1px;
+  border-color: rgba(255, 255, 255, 0.5);
+  background-color: #09090C;
+  color: #FFFFFF;
+}
+
 /* Áp dụng token cho các Theme mới (trừ mặc định classic-gold) */
 [data-site-theme]:not([data-site-theme="classic-gold"]) {
   background-color: var(--t-bg);

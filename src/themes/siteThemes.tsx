@@ -27,7 +27,9 @@ export type SiteThemeId =
   | 'night-ride'
   | 'ilay-riegrow'
   | 'joo-jaekyung'
-  | 'zhenya';
+  | 'zhenya'
+  | 'caesar'
+  | 'sanzu-haruchiyo';
 
 export type ThemeParticleKind =
   | 'star'
@@ -40,7 +42,10 @@ export type ThemeParticleKind =
   | 'pixel-heart'
   | 'lightning'
   | 'noir-star'
-  | 'card-suit';
+  | 'card-suit'
+  | 'ribbon-bow'
+  | 'spiral-star'
+  | 'butterfly';
 
 export type ThemeFormVariant =
   | 'default'
@@ -51,7 +56,9 @@ export type ThemeFormVariant =
   | 'night-ride'
   | 'noir-editorial'
   | 'ring-magazine'
-  | 'agent-dossier';
+  | 'film-dossier'
+  | 'ribbon-cameo'
+  | 'manga-spiral';
 
 export interface SiteThemeDefinition {
   id: SiteThemeId;
@@ -549,28 +556,82 @@ export const SITE_THEMES: SiteThemeDefinition[] = [
     id: 'zhenya',
     name: 'Zhenya',
     shortName: 'Zhenya',
-    tagline: 'Hồ sơ đặc vụ nâu kem ấm, thẻ Profile 5 sao & ánh sao dịu lạnh',
-    mascotLabel: 'Mèo tông kem mắt xanh lạnh cùng ánh sao 5 cánh hồ sơ',
+    tagline: 'Cuộn phim noir cổ điển, quân Vua cờ vua & hoa hồng trắng',
+    mascotLabel: 'Mèo bạch kim mắt ngọc lạnh bên cuộn phim, quân Vua & bướm đêm',
     isSpecialTheme: true,
-    formVariant: 'agent-dossier',
-    bgImageUrl: '/assets/aistudio/2ad2773cd288f7881383e8969fb578d9_4a6da8c1.jpg',
+    formVariant: 'film-dossier',
+    bgImageUrl: '/assets/aistudio/6daa5fb43af7e8dee1ef31dffefce59b_68354afa.jpg',
     bgImageOpacity: 0.2,
-    bgColor: '#191410',
-    surfaceColor: '#251D17',
-    accentColor: '#DFC7A7',
-    brightColor: '#FAF2E6',
-    textColor: '#FAF5ED',
-    mutedTextColor: '#D6C8B8',
-    buttonTextColor: '#1B140F',
-    swatchFrom: '#8C7258',
-    swatchTo: '#FAF2E6',
-    particleKind: 'celestial',
-    particleColors: ['#FAF2E6', '#DFC7A7'],
-    fireworkPalette: ['#FFFFFF', '#FAF2E6', '#DFC7A7', '#BFA07A', '#EFE2CE'],
-    fogPrimary: 'rgba(223, 199, 167, 0.13)',
-    fogSecondary: 'rgba(250, 242, 230, 0.08)',
-    waxOuter: ['#FFF7EB', '#E4CCB0', '#967758', '#4A3625'],
-    waxInner: ['#B39270', '#7B5F44', '#38291C'],
+    bgColor: '#0C0C0E',
+    surfaceColor: '#151518',
+    accentColor: '#D8CEBE',
+    brightColor: '#F5EFE4',
+    textColor: '#F6F2EA',
+    mutedTextColor: '#C6C1B8',
+    buttonTextColor: '#0C0C0E',
+    swatchFrom: '#222226',
+    swatchTo: '#F0E6D6',
+    particleKind: 'butterfly',
+    particleColors: ['#F5EFE4', '#B9B4AA'],
+    fireworkPalette: ['#FFFFFF', '#F5EFE4', '#D8CEBE', '#A8A39A', '#EAE2D2'],
+    fogPrimary: 'rgba(216, 206, 190, 0.11)',
+    fogSecondary: 'rgba(245, 239, 228, 0.07)',
+    waxOuter: ['#FFFBF2', '#E2D8C7', '#6E6B64', '#1E1D1B'],
+    waxInner: ['#9A9488', '#524F49', '#191817'],
+  },
+  {
+    id: 'caesar',
+    name: 'Caesar Alexandrovich',
+    shortName: 'Caesar',
+    tagline: 'Nơ ruy băng hồng mềm mại, dấu son & sắc kem dịu ngọt',
+    mascotLabel: 'Mèo vàng kem mắt xanh băng cài nơ ruy băng hồng mềm mại',
+    isSpecialTheme: true,
+    formVariant: 'ribbon-cameo',
+    bgImageUrl: '/assets/aistudio/246f22b9d9cc424344a2a57988627c1c_e97f8ffe.jpg',
+    bgImageOpacity: 0.2,
+    bgColor: '#1D1717',
+    surfaceColor: '#292021',
+    accentColor: '#F2B5C4',
+    brightColor: '#FFF5F4',
+    textColor: '#FFF8F6',
+    mutedTextColor: '#DFCECE',
+    buttonTextColor: '#241417',
+    swatchFrom: '#C88EA0',
+    swatchTo: '#F7DCE2',
+    particleKind: 'ribbon-bow',
+    particleColors: ['#FFF5F4', '#F2B5C4'],
+    fireworkPalette: ['#FFFFFF', '#FFF5F4', '#F2B5C4', '#E59BB0', '#FBE3E8'],
+    fogPrimary: 'rgba(242, 181, 196, 0.14)',
+    fogSecondary: 'rgba(255, 245, 244, 0.08)',
+    waxOuter: ['#FFF7F8', '#F4C5D1', '#B37385', '#5C323E'],
+    waxInner: ['#D291A3', '#8B5263', '#3E2029'],
+  },
+  {
+    id: 'sanzu-haruchiyo',
+    name: 'Sanzu Haruchiyo',
+    shortName: 'Sanzu',
+    tagline: 'Ngôi sao sọc xoáy góc cạnh, nét truyện tranh & khí chất nổi loạn',
+    mascotLabel: 'Mèo xám đen vết sẹo khóe miệng cùng sao sọc xoáy & khuyên tai',
+    isSpecialTheme: true,
+    formVariant: 'manga-spiral',
+    bgImageUrl: '/assets/aistudio/7e87800219a2f7ac74574185d4cd1ab6_adc03568.jpg',
+    bgImageOpacity: 0.2,
+    bgColor: '#09090B',
+    surfaceColor: '#131317',
+    accentColor: '#D2D6E0',
+    brightColor: '#FFFFFF',
+    textColor: '#F7F8FA',
+    mutedTextColor: '#C4C8D4',
+    buttonTextColor: '#09090B',
+    swatchFrom: '#1C1D22',
+    swatchTo: '#FFFFFF',
+    particleKind: 'spiral-star',
+    particleColors: ['#FFFFFF', '#B2B7C4'],
+    fireworkPalette: ['#FFFFFF', '#E6E9F0', '#C4C8D4', '#8F95A3', '#F5F6FA'],
+    fogPrimary: 'rgba(210, 214, 224, 0.11)',
+    fogSecondary: 'rgba(255, 255, 255, 0.065)',
+    waxOuter: ['#FFFFFF', '#D5D8E0', '#5E626E', '#16171C'],
+    waxInner: ['#8B909E', '#464954', '#131418'],
   },
 ];
 
@@ -583,6 +644,8 @@ export const SPECIAL_SITE_THEME_IDS: readonly SiteThemeId[] = [
   'ilay-riegrow',
   'joo-jaekyung',
   'zhenya',
+  'caesar',
+  'sanzu-haruchiyo',
 ];
 
 export function isSpecialSiteTheme(id: SiteThemeId): boolean {

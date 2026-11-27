@@ -429,7 +429,9 @@ export const IntroSealDoors: React.FC<IntroSealDoorsProps> = ({
           themeId === 'night-ride' ||
           themeId === 'ilay-riegrow' ||
           themeId === 'joo-jaekyung' ||
-          themeId === 'zhenya';
+          themeId === 'zhenya' ||
+          themeId === 'caesar' ||
+          themeId === 'sanzu-haruchiyo';
 
         const cutoutAccentDecor: Partial<Record<SiteThemeId, { left: string; right: string; glow: string }>> = {
           'bien-dem-sua': {
@@ -468,9 +470,19 @@ export const IntroSealDoors: React.FC<IntroSealDoorsProps> = ({
             glow: 'radial-gradient(circle, rgba(255,255,255,0.38) 0%, rgba(214,216,222,0.22) 52%, transparent 74%)',
           },
           'zhenya': {
-            left: '✦',
-            right: '★',
-            glow: 'radial-gradient(circle, rgba(250,242,230,0.44) 0%, rgba(223,199,167,0.26) 52%, transparent 74%)',
+            left: '🎞️',
+            right: '🦋',
+            glow: 'radial-gradient(circle, rgba(245,239,228,0.4) 0%, rgba(216,206,190,0.22) 52%, transparent 74%)',
+          },
+          'caesar': {
+            left: '🎀',
+            right: '💋',
+            glow: 'radial-gradient(circle, rgba(242,181,196,0.5) 0%, rgba(255,245,244,0.28) 52%, transparent 74%)',
+          },
+          'sanzu-haruchiyo': {
+            left: '★',
+            right: '🌀',
+            glow: 'radial-gradient(circle, rgba(255,255,255,0.42) 0%, rgba(210,214,224,0.24) 52%, transparent 74%)',
           },
         };
 
@@ -579,7 +591,7 @@ export const IntroSealDoors: React.FC<IntroSealDoorsProps> = ({
                 </motion.div>
               )}
 
-              {/* 3 Theme Đặc Biệt: Khung hình trái tim kích thước lớn chứa hai chủ thể nằm ngay phía sau dấu sáp */}
+              {/* Theme Đặc Biệt: Khung đặc trưng phía sau dấu sáp (không dùng trái tim cố định cho Caesar / Sanzu / Zhenya) */}
               {specialDecor && activeTheme.bgImageUrl && (
                 <motion.div
                   aria-hidden="true"
@@ -609,238 +621,535 @@ export const IntroSealDoors: React.FC<IntroSealDoorsProps> = ({
                     {specialDecor.right}
                   </span>
 
-                  <svg
-                    viewBox="0 0 220 200"
-                    className="relative w-52 h-48 sm:w-64 sm:h-60 overflow-visible"
-                    style={{
-                      filter: `drop-shadow(0 14px 32px rgba(0,0,0,0.72)) drop-shadow(0 0 20px ${accentColor}4D)`,
-                    }}
-                  >
-                    <defs>
-                      <clipPath id={heartClipId}>
-                        <path d="M110 186 C110 186 16 128 16 64 C16 30 42 12 69 12 C88 12 103 23 110 37 C117 23 132 12 151 12 C178 12 204 30 204 64 C204 128 110 186 110 186 Z" />
-                      </clipPath>
+                  {themeId === 'caesar' ? (
+                    /* Caesar: Khung nơ ruy băng mềm mại phía sau dấu sáp */
+                    <svg
+                      viewBox="0 0 220 200"
+                      className="relative w-52 h-48 sm:w-64 sm:h-60 overflow-visible"
+                      style={{
+                        filter: `drop-shadow(0 14px 32px rgba(0,0,0,0.68)) drop-shadow(0 0 20px ${accentColor}59)`,
+                      }}
+                    >
+                      <defs>
+                        <clipPath id={`caesarRibbonClip-${heartUid}`}>
+                          <path d="M110 20 C145 20 176 32 188 58 C200 84 198 124 182 150 C166 176 138 188 110 188 C82 188 54 176 38 150 C22 124 20 84 32 58 C44 32 75 20 110 20 Z" />
+                        </clipPath>
+                        <linearGradient id={heartFadeMaskId} x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor={activeTheme.bgColor} stopOpacity="0" />
+                          <stop offset="70%" stopColor={activeTheme.bgColor} stopOpacity="0" />
+                          <stop offset="100%" stopColor={activeTheme.bgColor} stopOpacity="0.9" />
+                        </linearGradient>
+                        <linearGradient id={`${heartLeftMaskId}-grad`} x1="0" y1="0" x2="1" y2="0">
+                          <stop offset="0%" stopColor="#FFFFFF" stopOpacity="1" />
+                          <stop offset="47%" stopColor="#FFFFFF" stopOpacity="1" />
+                          <stop offset="56%" stopColor="#FFFFFF" stopOpacity="0" />
+                          <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0" />
+                        </linearGradient>
+                        <mask id={heartLeftMaskId}>
+                          <rect x="0" y="0" width="220" height="200" fill={`url(#${heartLeftMaskId}-grad)`} />
+                        </mask>
+                        <linearGradient id={`${heartRightMaskId}-grad`} x1="0" y1="0" x2="1" y2="0">
+                          <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0" />
+                          <stop offset="44%" stopColor="#FFFFFF" stopOpacity="0" />
+                          <stop offset="53%" stopColor="#FFFFFF" stopOpacity="1" />
+                          <stop offset="100%" stopColor="#FFFFFF" stopOpacity="1" />
+                        </linearGradient>
+                        <mask id={heartRightMaskId}>
+                          <rect x="0" y="0" width="220" height="200" fill={`url(#${heartRightMaskId}-grad)`} />
+                        </mask>
+                      </defs>
 
-                      <linearGradient id={heartFadeMaskId} x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor={activeTheme.bgColor} stopOpacity="0" />
-                        <stop offset="68%" stopColor={activeTheme.bgColor} stopOpacity="0" />
-                        <stop offset="100%" stopColor={activeTheme.bgColor} stopOpacity="0.88" />
-                      </linearGradient>
+                      <g clipPath={`url(#caesarRibbonClip-${heartUid})`}>
+                        <rect x="0" y="0" width="220" height="200" fill={activeTheme.surfaceColor} />
+                        {/* Nửa trái: Caesar chân dung với nơ nhỏ trên tóc */}
+                        <g mask={`url(#${heartLeftMaskId})`}>
+                          <image
+                            href={activeTheme.bgImageUrl}
+                            x="-14"
+                            y="-340"
+                            width="360"
+                            height="640"
+                            preserveAspectRatio="xMidYMid slice"
+                          />
+                        </g>
+                        {/* Nửa phải: Chuỗi ánh nhìn cận mặt Caesar */}
+                        <g mask={`url(#${heartRightMaskId})`}>
+                          <image
+                            href={activeTheme.bgImageUrl}
+                            x="-105"
+                            y="-172"
+                            width="320"
+                            height="569"
+                            preserveAspectRatio="xMidYMid slice"
+                          />
+                        </g>
+                        <rect x="0" y="0" width="220" height="200" fill={`url(#${heartFadeMaskId})`} />
+                      </g>
 
-                      <linearGradient id={`${heartLeftMaskId}-grad`} x1="0" y1="0" x2="1" y2="0">
-                        <stop offset="0%" stopColor="#FFFFFF" stopOpacity="1" />
-                        <stop offset="46%" stopColor="#FFFFFF" stopOpacity="1" />
-                        <stop offset="56%" stopColor="#FFFFFF" stopOpacity="0" />
-                        <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0" />
-                      </linearGradient>
-                      <mask id={heartLeftMaskId}>
-                        <rect x="0" y="0" width="220" height="200" fill={`url(#${heartLeftMaskId}-grad)`} />
-                      </mask>
+                      {/* Viền khung mềm mại đôi tông kem - hồng satin */}
+                      <path
+                        d="M110 20 C145 20 176 32 188 58 C200 84 198 124 182 150 C166 176 138 188 110 188 C82 188 54 176 38 150 C22 124 20 84 32 58 C44 32 75 20 110 20 Z"
+                        fill="none"
+                        stroke="#FFF5F4"
+                        strokeWidth="3"
+                        strokeOpacity="0.92"
+                      />
+                      <path
+                        d="M110 14 C148 14 182 28 195 56 C208 85 205 128 187 156 C169 183 140 194 110 194 C80 194 51 183 33 156 C15 128 12 85 25 56 C38 28 72 14 110 14 Z"
+                        fill="none"
+                        stroke="#F2B5C4"
+                        strokeWidth="1.4"
+                        strokeDasharray="6 4"
+                        strokeOpacity="0.72"
+                      />
 
-                      <linearGradient id={`${heartRightMaskId}-grad`} x1="0" y1="0" x2="1" y2="0">
-                        <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0" />
-                        <stop offset="44%" stopColor="#FFFFFF" stopOpacity="0" />
-                        <stop offset="54%" stopColor="#FFFFFF" stopOpacity="1" />
-                        <stop offset="100%" stopColor="#FFFFFF" stopOpacity="1" />
-                      </linearGradient>
-                      <mask id={heartRightMaskId}>
-                        <rect x="0" y="0" width="220" height="200" fill={`url(#${heartRightMaskId}-grad)`} />
-                      </mask>
-                    </defs>
+                      {/* Nơ ruy băng hồng satin lớn trên đỉnh khung */}
+                      <g transform="translate(110, 17)">
+                        <path
+                          d="M-5 2 C-18 14 -30 28 -36 46 C-28 43 -22 39 -16 32 C-11 22 -7 12 -3 4 Z"
+                          fill="#F2B5C4"
+                          fillOpacity="0.88"
+                          stroke="#FFF5F4"
+                          strokeWidth="1.2"
+                        />
+                        <path
+                          d="M5 2 C18 14 30 28 36 46 C28 43 22 39 16 32 C11 22 7 12 3 4 Z"
+                          fill="#F2B5C4"
+                          fillOpacity="0.88"
+                          stroke="#FFF5F4"
+                          strokeWidth="1.2"
+                        />
+                        <path
+                          d="M-4 0 L-36 -18 C-42 -6 -40 10 -28 16 L-4 4 Z"
+                          fill="#F7DCE2"
+                          stroke="#FFF5F4"
+                          strokeWidth="1.4"
+                          strokeLinejoin="round"
+                        />
+                        <path
+                          d="M4 0 L36 -18 C42 -6 40 10 28 16 L4 4 Z"
+                          fill="#F7DCE2"
+                          stroke="#FFF5F4"
+                          strokeWidth="1.4"
+                          strokeLinejoin="round"
+                        />
+                        <ellipse cx="0" cy="1" rx="6.5" ry="5.5" fill="#FFF5F4" stroke="#E59BB0" strokeWidth="1.4" />
+                      </g>
+                    </svg>
+                  ) : themeId === 'sanzu-haruchiyo' ? (
+                    /* Sanzu Haruchiyo: Khung sao sọc xoáy góc cạnh phía sau dấu sáp */
+                    <svg
+                      viewBox="0 0 220 200"
+                      className="relative w-52 h-48 sm:w-64 sm:h-60 overflow-visible"
+                      style={{
+                        filter: `drop-shadow(0 14px 32px rgba(0,0,0,0.8)) drop-shadow(0 0 20px rgba(255,255,255,0.34))`,
+                      }}
+                    >
+                      <defs>
+                        <clipPath id={`sanzuStarClip-${heartUid}`}>
+                          <polygon points="110,8 140,34 196,26 178,78 212,112 170,144 180,192 110,170 40,192 50,144 8,112 42,78 24,26 80,34" />
+                        </clipPath>
+                        <pattern id={`sanzuStripes-${heartUid}`} width="10" height="10" patternTransform="rotate(35)" patternUnits="userSpaceOnUse">
+                          <rect width="5" height="10" fill="#FFFFFF" />
+                          <rect x="5" width="5" height="10" fill="#09090B" />
+                        </pattern>
+                        <linearGradient id={heartFadeMaskId} x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor={activeTheme.bgColor} stopOpacity="0" />
+                          <stop offset="70%" stopColor={activeTheme.bgColor} stopOpacity="0" />
+                          <stop offset="100%" stopColor={activeTheme.bgColor} stopOpacity="0.92" />
+                        </linearGradient>
+                        <linearGradient id={`${heartLeftMaskId}-grad`} x1="0" y1="0" x2="1" y2="0">
+                          <stop offset="0%" stopColor="#FFFFFF" stopOpacity="1" />
+                          <stop offset="47%" stopColor="#FFFFFF" stopOpacity="1" />
+                          <stop offset="56%" stopColor="#FFFFFF" stopOpacity="0" />
+                          <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0" />
+                        </linearGradient>
+                        <mask id={heartLeftMaskId}>
+                          <rect x="0" y="0" width="220" height="200" fill={`url(#${heartLeftMaskId}-grad)`} />
+                        </mask>
+                        <linearGradient id={`${heartRightMaskId}-grad`} x1="0" y1="0" x2="1" y2="0">
+                          <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0" />
+                          <stop offset="44%" stopColor="#FFFFFF" stopOpacity="0" />
+                          <stop offset="53%" stopColor="#FFFFFF" stopOpacity="1" />
+                          <stop offset="100%" stopColor="#FFFFFF" stopOpacity="1" />
+                        </linearGradient>
+                        <mask id={heartRightMaskId}>
+                          <rect x="0" y="0" width="220" height="200" fill={`url(#${heartRightMaskId}-grad)`} />
+                        </mask>
+                      </defs>
 
-                    <g clipPath={`url(#${heartClipId})`}>
-                      <rect x="0" y="0" width="220" height="200" fill={activeTheme.surfaceColor} />
+                      {/* Lớp khung sao sọc xoáy lớn phía sau tạo viền sọc trắng đen góc cạnh */}
+                      <polygon
+                        points="110,2 143,30 203,20 183,76 218,113 174,147 185,197 110,174 35,197 46,147 2,113 37,76 17,20 77,30"
+                        fill={`url(#sanzuStripes-${heartUid})`}
+                        stroke="#FFFFFF"
+                        strokeWidth="1.6"
+                      />
 
-                      {themeId === 'bien-dem-sua' && (
-                        <>
-                          {/* Nửa trái trái tim: Yeo Taeju */}
-                          <g mask={`url(#${heartLeftMaskId})`}>
-                            <image
-                              href={activeTheme.bgImageUrl}
-                              x="-62"
-                              y="-116"
-                              width="315"
-                              height="560"
-                              preserveAspectRatio="xMidYMid slice"
-                            />
-                          </g>
-                          {/* Nửa phải trái tim: Kim Euihyun & Yeo Taeju */}
-                          <g mask={`url(#${heartRightMaskId})`}>
-                            <image
-                              href={activeTheme.bgImageUrl}
-                              x="-16"
-                              y="-260"
-                              width="350"
-                              height="622"
-                              preserveAspectRatio="xMidYMid slice"
-                            />
-                          </g>
-                        </>
-                      )}
+                      <g clipPath={`url(#sanzuStarClip-${heartUid})`}>
+                        <rect x="0" y="0" width="220" height="200" fill={activeTheme.surfaceColor} />
+                        {/* Nửa trái: Sanzu Haruchiyo góc trên trái */}
+                        <g mask={`url(#${heartLeftMaskId})`}>
+                          <image
+                            href={activeTheme.bgImageUrl}
+                            x="-12"
+                            y="-6"
+                            width="290"
+                            height="515"
+                            preserveAspectRatio="xMidYMid slice"
+                          />
+                        </g>
+                        {/* Nửa phải: Sanzu đưa tay lên khóe miệng */}
+                        <g mask={`url(#${heartRightMaskId})`}>
+                          <image
+                            href={activeTheme.bgImageUrl}
+                            x="-92"
+                            y="-154"
+                            width="315"
+                            height="560"
+                            preserveAspectRatio="xMidYMid slice"
+                          />
+                        </g>
+                        <rect x="0" y="0" width="220" height="200" fill={`url(#${heartFadeMaskId})`} />
+                      </g>
 
-                      {themeId === 'bao-cu-nhac' && (
+                      <polygon
+                        points="110,8 140,34 196,26 178,78 212,112 170,144 180,192 110,170 40,192 50,144 8,112 42,78 24,26 80,34"
+                        fill="none"
+                        stroke="#FFFFFF"
+                        strokeWidth="2.4"
+                      />
+
+                      {/* Huy hiệu ngôi sao sọc xoáy 5 cánh đặc trưng ở góc trên phải */}
+                      <g transform="translate(182, 28) rotate(12)">
+                        <path
+                          d="M0 -18 L5 -6 L18 -5 L8 4 L11 17 L0 10 L-11 17 L-8 4 L-18 -5 L-5 -6 Z"
+                          fill={`url(#sanzuStripes-${heartUid})`}
+                          stroke="#FFFFFF"
+                          strokeWidth="1.4"
+                        />
+                        <circle cx="0" cy="1" r="6.5" fill="#09090B" stroke="#FFFFFF" strokeWidth="1" />
+                        <path
+                          d="M0 1 C0 -0.5 1.8 -1.2 2.8 -0.1 C3.8 1.1 3.1 3.3 1.1 3.8 C-1.4 4.3 -3.5 2 -3.1 -0.6 C-2.7 -3.4 0.4 -5 3.1 -4"
+                          fill="none"
+                          stroke="#FFFFFF"
+                          strokeWidth="1.35"
+                          strokeLinecap="round"
+                        />
+                      </g>
+                    </svg>
+                  ) : themeId === 'zhenya' ? (
+                    /* Zhenya: Khung thẻ phim / hồ sơ cổ điển (cuộn phim noir + băng keo + kẹp giấy) */
+                    <svg
+                      viewBox="0 0 220 200"
+                      className="relative w-52 h-48 sm:w-64 sm:h-60 overflow-visible"
+                      style={{
+                        filter: `drop-shadow(0 14px 32px rgba(0,0,0,0.82)) drop-shadow(0 0 18px ${accentColor}40)`,
+                      }}
+                    >
+                      <defs>
+                        <clipPath id={`zhenyaFilmClip-${heartUid}`}>
+                          <rect x="26" y="14" width="168" height="170" rx="6" />
+                        </clipPath>
+                        <linearGradient id={heartFadeMaskId} x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor={activeTheme.bgColor} stopOpacity="0" />
+                          <stop offset="72%" stopColor={activeTheme.bgColor} stopOpacity="0" />
+                          <stop offset="100%" stopColor={activeTheme.bgColor} stopOpacity="0.92" />
+                        </linearGradient>
+                      </defs>
+
+                      {/* Thẻ hồ sơ nghiêng nhẹ phía sau cuộn phim */}
+                      <rect
+                        x="22"
+                        y="18"
+                        width="174"
+                        height="164"
+                        rx="4"
+                        transform="rotate(-4 110 100)"
+                        fill="#1C1B19"
+                        stroke="#D8CEBE"
+                        strokeOpacity="0.45"
+                        strokeWidth="1.2"
+                      />
+
+                      {/* Thân khung phim / hồ sơ chính */}
+                      <rect
+                        x="18"
+                        y="10"
+                        width="184"
+                        height="178"
+                        rx="6"
+                        fill="#0F0F12"
+                        stroke="#F5EFE4"
+                        strokeWidth="2"
+                        strokeOpacity="0.88"
+                      />
+
+                      {/* Lỗ đục cuộn phim cổ điển dọc 2 bên trái & phải */}
+                      {[20, 38, 56, 74, 92, 110, 128, 146, 164].map((py) => (
+                        <React.Fragment key={py}>
+                          <rect x="20.5" y={py} width="3.5" height="9" rx="1" fill="#F5EFE4" fillOpacity="0.72" />
+                          <rect x="196" y={py} width="3.5" height="9" rx="1" fill="#F5EFE4" fillOpacity="0.72" />
+                        </React.Fragment>
+                      ))}
+
+                      <g clipPath={`url(#zhenyaFilmClip-${heartUid})`}>
+                        <rect x="26" y="14" width="168" height="170" fill={activeTheme.surfaceColor} />
                         <image
                           href={activeTheme.bgImageUrl}
-                          x="-44"
-                          y="-26"
-                          width="308"
-                          height="548"
+                          x="-24"
+                          y="-94"
+                          width="268"
+                          height="476"
                           preserveAspectRatio="xMidYMid slice"
                         />
-                      )}
+                        <rect x="26" y="14" width="168" height="170" fill={`url(#${heartFadeMaskId})`} />
+                      </g>
 
-                      {themeId === 'pixel-doodles' && (
-                        <image
-                          href={activeTheme.bgImageUrl}
-                          x="6"
-                          y="-242"
-                          width="632"
-                          height="1124"
-                          preserveAspectRatio="xMidYMid slice"
-                        />
-                      )}
+                      <rect
+                        x="26"
+                        y="14"
+                        width="168"
+                        height="170"
+                        rx="4"
+                        fill="none"
+                        stroke="#D8CEBE"
+                        strokeWidth="1.1"
+                        strokeOpacity="0.65"
+                      />
 
-                      {themeId === 'sabbath-crew' && (
-                        <>
-                          {/* Nửa trái: Khung chân dung thành viên Sabbath Crew */}
-                          <g mask={`url(#${heartLeftMaskId})`}>
-                            <image
-                              href={activeTheme.bgImageUrl}
-                              x="-16"
-                              y="4"
-                              width="440"
-                              height="782"
-                              preserveAspectRatio="xMidYMid slice"
-                            />
-                          </g>
-                          {/* Nửa phải: Hai thành viên ngồi cùng nhau dưới ánh đèn đường */}
-                          <g mask={`url(#${heartRightMaskId})`}>
-                            <image
-                              href={activeTheme.bgImageUrl}
-                              x="-125"
-                              y="-85"
-                              width="480"
-                              height="853"
-                              preserveAspectRatio="xMidYMid slice"
-                            />
-                          </g>
-                        </>
-                      )}
+                      {/* Miếng băng keo giấy cổ điển dán góc trên phải */}
+                      <rect
+                        x="166"
+                        y="4"
+                        width="38"
+                        height="13"
+                        rx="1.5"
+                        transform="rotate(22 185 10.5)"
+                        fill="#EDE3D2"
+                        fillOpacity="0.45"
+                        stroke="#F5EFE4"
+                        strokeOpacity="0.55"
+                        strokeWidth="0.9"
+                      />
 
-                      {themeId === 'night-ride' && (
-                        <image
-                          href={activeTheme.bgImageUrl}
-                          x="-22"
-                          y="-12"
-                          width="264"
-                          height="469"
-                          preserveAspectRatio="xMidYMid slice"
-                        />
-                      )}
+                      {/* Kẹp giấy bạc đính hồ sơ ở góc trên trái */}
+                      <path
+                        d="M35 2V22C35 25.5 41 25.5 41 22V6C41 3.5 37 3.5 37 6V18"
+                        fill="none"
+                        stroke="#F5EFE4"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                      />
 
-                      {themeId === 'ilay-riegrow' && (
-                        <>
-                          {/* Nửa trái: Chân dung cận mặt trong khung tròn */}
-                          <g mask={`url(#${heartLeftMaskId})`}>
-                            <image
-                              href={activeTheme.bgImageUrl}
-                              x="-92"
-                              y="-12"
-                              width="330"
-                              height="587"
-                              preserveAspectRatio="xMidYMid slice"
-                            />
-                          </g>
-                          {/* Nửa phải: Ilay Riegrow trong bộ vest đen trắng */}
-                          <g mask={`url(#${heartRightMaskId})`}>
-                            <image
-                              href={activeTheme.bgImageUrl}
-                              x="-105"
-                              y="-156"
-                              width="300"
-                              height="533"
-                              preserveAspectRatio="xMidYMid slice"
-                            />
-                          </g>
-                        </>
-                      )}
+                      {/* Vương miện phác thảo nhỏ trên đỉnh khung */}
+                      <path
+                        d="M99 10L103 2L110 7L117 2L121 10Z"
+                        fill="none"
+                        stroke="#F5EFE4"
+                        strokeWidth="1.3"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  ) : (
+                    /* Các Theme đặc biệt trước đó giữ nguyên khung trái tim lớn */
+                    <svg
+                      viewBox="0 0 220 200"
+                      className="relative w-52 h-48 sm:w-64 sm:h-60 overflow-visible"
+                      style={{
+                        filter: `drop-shadow(0 14px 32px rgba(0,0,0,0.72)) drop-shadow(0 0 20px ${accentColor}4D)`,
+                      }}
+                    >
+                      <defs>
+                        <clipPath id={heartClipId}>
+                          <path d="M110 186 C110 186 16 128 16 64 C16 30 42 12 69 12 C88 12 103 23 110 37 C117 23 132 12 151 12 C178 12 204 30 204 64 C204 128 110 186 110 186 Z" />
+                        </clipPath>
 
-                      {themeId === 'joo-jaekyung' && (
-                        <>
-                          {/* Nửa trái: Chân dung chính diện Joo Jaekyung */}
-                          <g mask={`url(#${heartLeftMaskId})`}>
-                            <image
-                              href={activeTheme.bgImageUrl}
-                              x="-135"
-                              y="-212"
-                              width="400"
-                              height="711"
-                              preserveAspectRatio="xMidYMid slice"
-                            />
-                          </g>
-                          {/* Nửa phải: Joo Jaekyung đeo kính */}
-                          <g mask={`url(#${heartRightMaskId})`}>
-                            <image
-                              href={activeTheme.bgImageUrl}
-                              x="-148"
-                              y="4"
-                              width="370"
-                              height="658"
-                              preserveAspectRatio="xMidYMid slice"
-                            />
-                          </g>
-                        </>
-                      )}
+                        <linearGradient id={heartFadeMaskId} x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor={activeTheme.bgColor} stopOpacity="0" />
+                          <stop offset="68%" stopColor={activeTheme.bgColor} stopOpacity="0" />
+                          <stop offset="100%" stopColor={activeTheme.bgColor} stopOpacity="0.88" />
+                        </linearGradient>
 
-                      {themeId === 'zhenya' && (
-                        <>
-                          {/* Nửa trái: Zhenya bìa Profile */}
-                          <g mask={`url(#${heartLeftMaskId})`}>
-                            <image
-                              href={activeTheme.bgImageUrl}
-                              x="-52"
-                              y="2"
-                              width="340"
-                              height="604"
-                              preserveAspectRatio="xMidYMid slice"
-                            />
-                          </g>
-                          {/* Nửa phải: Chân dung cận mặt Zhenya */}
-                          <g mask={`url(#${heartRightMaskId})`}>
-                            <image
-                              href={activeTheme.bgImageUrl}
-                              x="-36"
-                              y="-202"
-                              width="340"
-                              height="604"
-                              preserveAspectRatio="xMidYMid slice"
-                            />
-                          </g>
-                        </>
-                      )}
+                        <linearGradient id={`${heartLeftMaskId}-grad`} x1="0" y1="0" x2="1" y2="0">
+                          <stop offset="0%" stopColor="#FFFFFF" stopOpacity="1" />
+                          <stop offset="46%" stopColor="#FFFFFF" stopOpacity="1" />
+                          <stop offset="56%" stopColor="#FFFFFF" stopOpacity="0" />
+                          <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0" />
+                        </linearGradient>
+                        <mask id={heartLeftMaskId}>
+                          <rect x="0" y="0" width="220" height="200" fill={`url(#${heartLeftMaskId}-grad)`} />
+                        </mask>
 
-                      <rect x="0" y="0" width="220" height="200" fill={`url(#${heartFadeMaskId})`} />
-                    </g>
+                        <linearGradient id={`${heartRightMaskId}-grad`} x1="0" y1="0" x2="1" y2="0">
+                          <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0" />
+                          <stop offset="44%" stopColor="#FFFFFF" stopOpacity="0" />
+                          <stop offset="54%" stopColor="#FFFFFF" stopOpacity="1" />
+                          <stop offset="100%" stopColor="#FFFFFF" stopOpacity="1" />
+                        </linearGradient>
+                        <mask id={heartRightMaskId}>
+                          <rect x="0" y="0" width="220" height="200" fill={`url(#${heartRightMaskId}-grad)`} />
+                        </mask>
+                      </defs>
 
-                    {/* Viền khung trái tim phát sáng đồng bộ Theme */}
-                    <path
-                      d="M110 186 C110 186 16 128 16 64 C16 30 42 12 69 12 C88 12 103 23 110 37 C117 23 132 12 151 12 C178 12 204 30 204 64 C204 128 110 186 110 186 Z"
-                      fill="none"
-                      stroke={brightColor}
-                      strokeWidth="3.2"
-                      strokeOpacity="0.92"
-                    />
-                    <path
-                      d="M110 192 C110 192 10 132 10 64 C10 26 39 6 69 6 C89 6 104 17 110 30 C116 17 131 6 151 6 C181 6 210 26 210 64 C210 132 110 192 110 192 Z"
-                      fill="none"
-                      stroke={accentColor}
-                      strokeWidth="1.2"
-                      strokeOpacity="0.55"
-                      strokeDasharray={
-                        themeId === 'pixel-doodles' || themeId === 'sabbath-crew' ? '5 4' : undefined
-                      }
-                    />
-                  </svg>
+                      <g clipPath={`url(#${heartClipId})`}>
+                        <rect x="0" y="0" width="220" height="200" fill={activeTheme.surfaceColor} />
+
+                        {themeId === 'bien-dem-sua' && (
+                          <>
+                            <g mask={`url(#${heartLeftMaskId})`}>
+                              <image
+                                href={activeTheme.bgImageUrl}
+                                x="-62"
+                                y="-116"
+                                width="315"
+                                height="560"
+                                preserveAspectRatio="xMidYMid slice"
+                              />
+                            </g>
+                            <g mask={`url(#${heartRightMaskId})`}>
+                              <image
+                                href={activeTheme.bgImageUrl}
+                                x="-16"
+                                y="-260"
+                                width="350"
+                                height="622"
+                                preserveAspectRatio="xMidYMid slice"
+                              />
+                            </g>
+                          </>
+                        )}
+
+                        {themeId === 'bao-cu-nhac' && (
+                          <image
+                            href={activeTheme.bgImageUrl}
+                            x="-44"
+                            y="-26"
+                            width="308"
+                            height="548"
+                            preserveAspectRatio="xMidYMid slice"
+                          />
+                        )}
+
+                        {themeId === 'pixel-doodles' && (
+                          <image
+                            href={activeTheme.bgImageUrl}
+                            x="6"
+                            y="-242"
+                            width="632"
+                            height="1124"
+                            preserveAspectRatio="xMidYMid slice"
+                          />
+                        )}
+
+                        {themeId === 'sabbath-crew' && (
+                          <>
+                            <g mask={`url(#${heartLeftMaskId})`}>
+                              <image
+                                href={activeTheme.bgImageUrl}
+                                x="-16"
+                                y="4"
+                                width="440"
+                                height="782"
+                                preserveAspectRatio="xMidYMid slice"
+                              />
+                            </g>
+                            <g mask={`url(#${heartRightMaskId})`}>
+                              <image
+                                href={activeTheme.bgImageUrl}
+                                x="-125"
+                                y="-85"
+                                width="480"
+                                height="853"
+                                preserveAspectRatio="xMidYMid slice"
+                              />
+                            </g>
+                          </>
+                        )}
+
+                        {themeId === 'night-ride' && (
+                          <image
+                            href={activeTheme.bgImageUrl}
+                            x="-22"
+                            y="-12"
+                            width="264"
+                            height="469"
+                            preserveAspectRatio="xMidYMid slice"
+                          />
+                        )}
+
+                        {themeId === 'ilay-riegrow' && (
+                          <>
+                            <g mask={`url(#${heartLeftMaskId})`}>
+                              <image
+                                href={activeTheme.bgImageUrl}
+                                x="-92"
+                                y="-12"
+                                width="330"
+                                height="587"
+                                preserveAspectRatio="xMidYMid slice"
+                              />
+                            </g>
+                            <g mask={`url(#${heartRightMaskId})`}>
+                              <image
+                                href={activeTheme.bgImageUrl}
+                                x="-105"
+                                y="-156"
+                                width="300"
+                                height="533"
+                                preserveAspectRatio="xMidYMid slice"
+                              />
+                            </g>
+                          </>
+                        )}
+
+                        {themeId === 'joo-jaekyung' && (
+                          <>
+                            <g mask={`url(#${heartLeftMaskId})`}>
+                              <image
+                                href={activeTheme.bgImageUrl}
+                                x="-135"
+                                y="-212"
+                                width="400"
+                                height="711"
+                                preserveAspectRatio="xMidYMid slice"
+                              />
+                            </g>
+                            <g mask={`url(#${heartRightMaskId})`}>
+                              <image
+                                href={activeTheme.bgImageUrl}
+                                x="-148"
+                                y="4"
+                                width="370"
+                                height="658"
+                                preserveAspectRatio="xMidYMid slice"
+                              />
+                            </g>
+                          </>
+                        )}
+
+                        <rect x="0" y="0" width="220" height="200" fill={`url(#${heartFadeMaskId})`} />
+                      </g>
+
+                      <path
+                        d="M110 186 C110 186 16 128 16 64 C16 30 42 12 69 12 C88 12 103 23 110 37 C117 23 132 12 151 12 C178 12 204 30 204 64 C204 128 110 186 110 186 Z"
+                        fill="none"
+                        stroke={brightColor}
+                        strokeWidth="3.2"
+                        strokeOpacity="0.92"
+                      />
+                      <path
+                        d="M110 192 C110 192 10 132 10 64 C10 26 39 6 69 6 C89 6 104 17 110 30 C116 17 131 6 151 6 C181 6 210 26 210 64 C210 132 110 192 110 192 Z"
+                        fill="none"
+                        stroke={accentColor}
+                        strokeWidth="1.2"
+                        strokeOpacity="0.55"
+                        strokeDasharray={
+                          themeId === 'pixel-doodles' || themeId === 'sabbath-crew' ? '5 4' : undefined
+                        }
+                      />
+                    </svg>
+                  )}
                 </motion.div>
               )}
 
@@ -1059,7 +1368,21 @@ const WaxSealArtwork: React.FC = () => {
           />
         )}
         {themeId === 'zhenya' && (
-          <path d="M60 27L61.2 30.8L65 32L61.2 33.2L60 37L58.8 33.2L55 32L58.8 30.8Z" fill={o0} fillOpacity="0.95" />
+          <path d="M55 34L57 29L60 32L63 29L65 34Z" fill={o0} fillOpacity="0.95" />
+        )}
+        {themeId === 'caesar' && (
+          <g fill={o0} fillOpacity="0.94">
+            <path d="M59 59L52.5 55.5C51.8 58 52.2 60.5 54 62L59 59.8Z" />
+            <path d="M61 59L67.5 55.5C68.2 58 67.8 60.5 66 62L61 59.8Z" />
+            <circle cx="60" cy="59.4" r="1.4" />
+          </g>
+        )}
+        {themeId === 'sanzu-haruchiyo' && (
+          <path
+            d="M60 27L61.8 31.2L66.4 31.6L62.8 34.6L63.8 39L60 36.6L56.2 39L57.2 34.6L53.6 31.6L58.2 31.2Z"
+            fill={o0}
+            fillOpacity="0.95"
+          />
         )}
 
         {/* Đôi mắt sáng nổi bật trên nền khắc đen */}

@@ -1436,44 +1436,44 @@ html[data-site-theme]:not([data-site-theme="classic-gold"]) ::-webkit-scrollbar-
   color: #FFFFFF;
 }
 
-/* 8. Zhenya: Form hồ sơ đặc vụ / thư mục ảnh nâu kem - xám ấm, thẻ Profile 5 sao & khung ảnh tinh gọn */
+/* 8. Zhenya: Cuộn phim noir cổ điển, masking tape, quân Vua cờ vua & hoa hồng trắng */
 [data-site-theme="zhenya"] {
-  --font-display: "Lexend", "Be Vietnam Pro", system-ui, sans-serif;
+  --font-display: "Cormorant Garamond", "Be Vietnam Pro", Georgia, serif;
   --font-sans: "Be Vietnam Pro", system-ui, -apple-system, sans-serif;
-  --t-bg: #191410;
-  --t-bg-rgb: 25, 20, 16;
-  --t-surface: #251D17;
-  --t-surface-rgb: 37, 29, 23;
-  --t-surface-alt: #332820;
-  --t-surface-alt-rgb: 51, 40, 32;
-  --t-accent: #DFC7A7;
-  --t-accent-rgb: 223, 199, 167;
-  --t-bright: #FAF2E6;
-  --t-bright-rgb: 250, 242, 230;
-  --t-soft: #EEDBC1;
-  --t-text: #FAF5ED;
-  --t-muted: #D6C8B8;
-  --t-btn-text: #1B140F;
-  --t-grad-from: #B89672;
-  --t-grad-to: #FAF2E6;
+  --t-bg: #0C0C0E;
+  --t-bg-rgb: 12, 12, 14;
+  --t-surface: #151518;
+  --t-surface-rgb: 21, 21, 24;
+  --t-surface-alt: #212025;
+  --t-surface-alt-rgb: 33, 32, 37;
+  --t-accent: #D8CEBE;
+  --t-accent-rgb: 216, 206, 190;
+  --t-bright: #F5EFE4;
+  --t-bright-rgb: 245, 239, 228;
+  --t-soft: #E8DFCE;
+  --t-text: #F6F2EA;
+  --t-muted: #C6C1B8;
+  --t-btn-text: #0C0C0E;
+  --t-grad-from: #9E988E;
+  --t-grad-to: #F5EFE4;
   font-family: var(--font-sans);
 }
 
 [data-site-theme="zhenya"] .font-display {
   font-family: var(--font-display);
-  letter-spacing: -0.01em;
+  letter-spacing: 0.012em;
 }
 
 [data-site-theme="zhenya"] header {
-  background-color: rgba(25, 20, 16, 0.88) !important;
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border-bottom: 1.5px solid rgba(250, 242, 230, 0.34);
-  box-shadow: 0 8px 28px rgba(10, 7, 4, 0.52);
+  background-color: rgba(12, 12, 14, 0.92) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1.5px solid rgba(216, 206, 190, 0.44);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.62);
 }
 
 [data-site-theme="zhenya"] footer {
-  border-top: 1.5px solid rgba(223, 199, 167, 0.32);
+  border-top: 1.5px dashed rgba(216, 206, 190, 0.36);
 }
 
 [data-site-theme="zhenya"] .shimmer-card-border,
@@ -1485,18 +1485,18 @@ html[data-site-theme]:not([data-site-theme="classic-gold"]) ::-webkit-scrollbar-
 [data-site-theme="zhenya"] aside[aria-label="Thông báo Khung Giờ Ma Thuật"],
 [data-site-theme="zhenya"] aside[role="status"],
 [data-site-theme="zhenya"] nav[aria-label="Phân trang danh sách nhân vật"] > div {
-  border-radius: 1.35rem;
-  background-color: rgba(37, 29, 23, 0.88) !important;
+  border-radius: 0.5rem;
+  background-color: rgba(21, 21, 24, 0.92) !important;
   background-image:
-    radial-gradient(ellipse 85% 42% at 50% 0%, rgba(250, 242, 230, 0.14), transparent 72%),
-    linear-gradient(175deg, rgba(140, 114, 88, 0.24) 0%, rgba(33, 26, 20, 0.94) 100%) !important;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+    radial-gradient(ellipse 85% 40% at 50% 0%, rgba(245, 239, 228, 0.09), transparent 72%),
+    linear-gradient(180deg, rgba(46, 44, 42, 0.24) 0%, rgba(15, 15, 18, 0.96) 100%) !important;
   border-width: 1.5px;
-  border-color: rgba(250, 242, 230, 0.48);
+  border-color: rgba(216, 206, 190, 0.5);
+  outline: 1px dashed rgba(245, 239, 228, 0.22);
+  outline-offset: -6px;
   box-shadow:
-    inset 0 1px 0 rgba(255, 252, 246, 0.34),
-    0 16px 36px rgba(10, 7, 4, 0.58);
+    inset 0 1px 0 rgba(245, 239, 228, 0.2),
+    0 18px 36px rgba(0, 0, 0, 0.72);
 }
 
 [data-site-theme="zhenya"] .shimmer-card-border::after,
@@ -1508,17 +1508,23 @@ html[data-site-theme]:not([data-site-theme="classic-gold"]) ::-webkit-scrollbar-
   border-radius: inherit;
   pointer-events: none;
   background:
-    radial-gradient(circle 14px at 90% 10%, rgba(250, 242, 230, 0.22), transparent 68%),
-    linear-gradient(90deg, rgba(250, 242, 230, 0.32), rgba(223, 199, 167, 0.16)) 14px 10px / 48px 2px no-repeat;
+    linear-gradient(135deg, rgba(245, 239, 228, 0.28), rgba(216, 206, 190, 0.14)) top right / 42px 9px no-repeat,
+    repeating-linear-gradient(
+      to right,
+      rgba(245, 239, 228, 0.34) 0px,
+      rgba(245, 239, 228, 0.34) 5px,
+      transparent 5px,
+      transparent 10px
+    ) bottom left / 48px 3px no-repeat;
 }
 
 [data-site-theme="zhenya"] .shimmer-card-border .aspect-square {
-  border-radius: 0.9rem;
+  border-radius: 0.35rem;
   border-width: 2px;
-  border-color: rgba(250, 242, 230, 0.78);
+  border-color: rgba(245, 239, 228, 0.72);
   padding: 3px;
-  background-color: rgba(250, 242, 230, 0.12);
-  box-shadow: 0 6px 18px rgba(12, 8, 5, 0.35);
+  background-color: rgba(245, 239, 228, 0.08);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.55);
 }
 
 [data-site-theme="zhenya"] [role="dialog"]:not([aria-label*="Theme"]) section.rounded-2xl,
@@ -1526,9 +1532,9 @@ html[data-site-theme]:not([data-site-theme="classic-gold"]) ::-webkit-scrollbar-
 [data-site-theme="zhenya"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-2xl:not(.rounded-\[24px\]):not(.rounded-\[26px\]):not(.rounded-\[28px\]),
 [data-site-theme="zhenya"] [role="dialog"]:not([aria-label*="Theme"]) article.rounded-xl,
 [data-site-theme="zhenya"] [role="dialog"]:not([aria-label*="Theme"]) div.rounded-xl {
-  border-radius: 1rem;
-  background-color: rgba(25, 20, 16, 0.78);
-  border-color: rgba(223, 199, 167, 0.36);
+  border-radius: 0.45rem;
+  background-color: rgba(14, 14, 17, 0.88);
+  border-color: rgba(216, 206, 190, 0.34);
 }
 
 [data-site-theme="zhenya"] button.rounded-xl,
@@ -1537,21 +1543,273 @@ html[data-site-theme]:not([data-site-theme="classic-gold"]) ::-webkit-scrollbar-
 [data-site-theme="zhenya"] a.rounded-xl,
 [data-site-theme="zhenya"] input[type="search"],
 [data-site-theme="zhenya"] textarea {
-  border-radius: 0.9rem;
+  border-radius: 0.45rem;
 }
 
 [data-site-theme="zhenya"] [role="group"] button[aria-pressed="true"] {
-  background: #FAF2E6 !important;
-  color: #1B140F !important;
-  border-color: #FAF2E6 !important;
-  box-shadow: 0 4px 14px rgba(250, 242, 230, 0.28);
+  background: #F5EFE4 !important;
+  color: #0C0C0E !important;
+  border-color: #F5EFE4 !important;
+  box-shadow: 0 4px 16px rgba(245, 239, 228, 0.25);
 }
 
 [data-site-theme="zhenya"] span.rounded-md {
+  border-radius: 0.25rem;
+  border-color: rgba(216, 206, 190, 0.45);
+  background-color: rgba(33, 32, 37, 0.86);
+  color: #F5EFE4;
+}
+
+/* 9. Caesar Alexandrovich: Nơ ruy băng hồng mềm mại, sắc kem ấm & dâu sữa dịu ngọt */
+[data-site-theme="caesar"] {
+  --font-display: "Playfair Display", "Cormorant Garamond", "Be Vietnam Pro", Georgia, serif;
+  --font-sans: "Be Vietnam Pro", system-ui, -apple-system, sans-serif;
+  --t-bg: #1D1717;
+  --t-bg-rgb: 29, 23, 23;
+  --t-surface: #292021;
+  --t-surface-rgb: 41, 32, 33;
+  --t-surface-alt: #382B2D;
+  --t-surface-alt-rgb: 56, 43, 45;
+  --t-accent: #F2B5C4;
+  --t-accent-rgb: 242, 181, 196;
+  --t-bright: #FFF5F4;
+  --t-bright-rgb: 255, 245, 244;
+  --t-soft: #F9D7DF;
+  --t-text: #FFF8F6;
+  --t-muted: #DFCECE;
+  --t-btn-text: #241417;
+  --t-grad-from: #D48C9E;
+  --t-grad-to: #FFF5F4;
+  font-family: var(--font-sans);
+}
+
+[data-site-theme="caesar"] .font-display {
+  font-family: var(--font-display);
+  letter-spacing: 0.006em;
+}
+
+[data-site-theme="caesar"] header {
+  background-color: rgba(29, 23, 23, 0.88) !important;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1.5px solid rgba(242, 181, 196, 0.38);
+  box-shadow: 0 10px 28px rgba(18, 10, 12, 0.45);
+}
+
+[data-site-theme="caesar"] footer {
+  border-top: 1.5px solid rgba(242, 181, 196, 0.32);
+}
+
+[data-site-theme="caesar"] .shimmer-card-border,
+[data-site-theme="caesar"] section[aria-labelledby="trending-spotlight-heading"] article,
+[data-site-theme="caesar"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-\[24px\],
+[data-site-theme="caesar"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-\[26px\],
+[data-site-theme="caesar"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-\[28px\],
+[data-site-theme="caesar"] aside[aria-label="Trình phát nhạc nền"],
+[data-site-theme="caesar"] aside[aria-label="Thông báo Khung Giờ Ma Thuật"],
+[data-site-theme="caesar"] aside[role="status"],
+[data-site-theme="caesar"] nav[aria-label="Phân trang danh sách nhân vật"] > div {
+  border-radius: 1.75rem;
+  background-color: rgba(41, 32, 33, 0.9) !important;
+  background-image:
+    radial-gradient(ellipse 85% 42% at 50% 0%, rgba(242, 181, 196, 0.16), transparent 72%),
+    linear-gradient(175deg, rgba(164, 114, 126, 0.22) 0%, rgba(35, 27, 28, 0.94) 100%) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-width: 1.5px;
+  border-color: rgba(242, 181, 196, 0.52);
+  outline: 1px solid rgba(255, 245, 244, 0.18);
+  outline-offset: -6px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 245, 244, 0.34),
+    0 16px 34px rgba(18, 10, 12, 0.52);
+}
+
+[data-site-theme="caesar"] .shimmer-card-border::after,
+[data-site-theme="caesar"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-\[26px\]::after,
+[data-site-theme="caesar"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-\[28px\]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    radial-gradient(circle 14px at 90% 10%, rgba(242, 181, 196, 0.26), transparent 68%),
+    radial-gradient(circle 10px at 10% 90%, rgba(255, 245, 244, 0.16), transparent 68%);
+}
+
+[data-site-theme="caesar"] .shimmer-card-border .aspect-square {
+  border-radius: 1.35rem;
+  border-width: 2px;
+  border-color: rgba(242, 181, 196, 0.72);
+  padding: 3px;
+  background-color: rgba(255, 245, 244, 0.12);
+  box-shadow: 0 8px 20px rgba(24, 12, 16, 0.4);
+}
+
+[data-site-theme="caesar"] [role="dialog"]:not([aria-label*="Theme"]) section.rounded-2xl,
+[data-site-theme="caesar"] [role="dialog"]:not([aria-label*="Theme"]) form.rounded-2xl,
+[data-site-theme="caesar"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-2xl:not(.rounded-\[24px\]):not(.rounded-\[26px\]):not(.rounded-\[28px\]),
+[data-site-theme="caesar"] [role="dialog"]:not([aria-label*="Theme"]) article.rounded-xl,
+[data-site-theme="caesar"] [role="dialog"]:not([aria-label*="Theme"]) div.rounded-xl {
+  border-radius: 1.25rem;
+  background-color: rgba(29, 23, 23, 0.8);
+  border-color: rgba(242, 181, 196, 0.34);
+}
+
+[data-site-theme="caesar"] button.rounded-xl,
+[data-site-theme="caesar"] button.rounded-lg,
+[data-site-theme="caesar"] a.rounded-lg,
+[data-site-theme="caesar"] a.rounded-xl,
+[data-site-theme="caesar"] input[type="search"],
+[data-site-theme="caesar"] textarea {
+  border-radius: 1.15rem;
+}
+
+[data-site-theme="caesar"] [role="group"] button[aria-pressed="true"] {
+  background: linear-gradient(135deg, #FFF5F4, #F2B5C4) !important;
+  color: #241417 !important;
+  border-color: #FFF5F4 !important;
+  box-shadow: 0 4px 16px rgba(242, 181, 196, 0.38);
+}
+
+[data-site-theme="caesar"] span.rounded-md {
   border-radius: 9999px;
-  border-color: rgba(250, 242, 230, 0.42);
-  background-color: rgba(94, 73, 56, 0.52);
-  color: #FAF2E6;
+  border-color: rgba(242, 181, 196, 0.46);
+  background-color: rgba(92, 56, 65, 0.56);
+  color: #FFF5F4;
+}
+
+/* 10. Sanzu Haruchiyo: Khung truyện tranh trắng đen góc cạnh & ngôi sao sọc xoáy */
+[data-site-theme="sanzu-haruchiyo"] {
+  --font-display: "Chakra Petch", "Be Vietnam Pro", system-ui, sans-serif;
+  --font-sans: "Be Vietnam Pro", system-ui, -apple-system, sans-serif;
+  --t-bg: #09090B;
+  --t-bg-rgb: 9, 9, 11;
+  --t-surface: #131317;
+  --t-surface-rgb: 19, 19, 23;
+  --t-surface-alt: #1E1F26;
+  --t-surface-alt-rgb: 30, 31, 38;
+  --t-accent: #D2D6E0;
+  --t-accent-rgb: 210, 214, 224;
+  --t-bright: #FFFFFF;
+  --t-bright-rgb: 255, 255, 255;
+  --t-soft: #E5E8F0;
+  --t-text: #F7F8FA;
+  --t-muted: #C4C8D4;
+  --t-btn-text: #09090B;
+  --t-grad-from: #9DA3B2;
+  --t-grad-to: #FFFFFF;
+  font-family: var(--font-sans);
+}
+
+[data-site-theme="sanzu-haruchiyo"] .font-display {
+  font-family: var(--font-display);
+  letter-spacing: 0.025em;
+}
+
+[data-site-theme="sanzu-haruchiyo"] header {
+  background-color: rgba(9, 9, 11, 0.94) !important;
+  border-bottom: 2.5px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 4px 0 rgba(255, 255, 255, 0.16), 0 12px 28px rgba(0, 0, 0, 0.72);
+}
+
+[data-site-theme="sanzu-haruchiyo"] footer {
+  border-top: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+[data-site-theme="sanzu-haruchiyo"] .shimmer-card-border,
+[data-site-theme="sanzu-haruchiyo"] section[aria-labelledby="trending-spotlight-heading"] article,
+[data-site-theme="sanzu-haruchiyo"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-\[24px\],
+[data-site-theme="sanzu-haruchiyo"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-\[26px\],
+[data-site-theme="sanzu-haruchiyo"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-\[28px\],
+[data-site-theme="sanzu-haruchiyo"] aside[aria-label="Trình phát nhạc nền"],
+[data-site-theme="sanzu-haruchiyo"] aside[aria-label="Thông báo Khung Giờ Ma Thuật"],
+[data-site-theme="sanzu-haruchiyo"] aside[role="status"],
+[data-site-theme="sanzu-haruchiyo"] nav[aria-label="Phân trang danh sách nhân vật"] > div {
+  border-radius: 0.25rem;
+  background-color: rgba(16, 16, 20, 0.94) !important;
+  background-image:
+    repeating-linear-gradient(
+      -45deg,
+      rgba(255, 255, 255, 0.028) 0px,
+      rgba(255, 255, 255, 0.028) 2px,
+      transparent 2px,
+      transparent 12px
+    ),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(10, 10, 14, 0.97) 100%) !important;
+  border-width: 2px;
+  border-color: rgba(255, 255, 255, 0.68);
+  box-shadow:
+    4px 4px 0 rgba(255, 255, 255, 0.2),
+    0 16px 34px rgba(0, 0, 0, 0.78);
+}
+
+[data-site-theme="sanzu-haruchiyo"] .shimmer-card-border::after,
+[data-site-theme="sanzu-haruchiyo"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-\[26px\]::after,
+[data-site-theme="sanzu-haruchiyo"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-\[28px\]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      rgba(255, 255, 255, 0.85) 0px,
+      rgba(255, 255, 255, 0.85) 4px,
+      #09090B 4px,
+      #09090B 8px
+    ) top center / 100% 3px no-repeat,
+    linear-gradient(to left, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)) bottom right / 14px 2px no-repeat,
+    linear-gradient(to top, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)) bottom right / 2px 14px no-repeat;
+}
+
+[data-site-theme="sanzu-haruchiyo"] .shimmer-card-border .aspect-square {
+  border-radius: 0.2rem;
+  border-width: 2px;
+  border-color: rgba(255, 255, 255, 0.84);
+  padding: 3px;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-site-theme="sanzu-haruchiyo"] [role="dialog"]:not([aria-label*="Theme"]) section.rounded-2xl,
+[data-site-theme="sanzu-haruchiyo"] [role="dialog"]:not([aria-label*="Theme"]) form.rounded-2xl,
+[data-site-theme="sanzu-haruchiyo"] [role="dialog"]:not([aria-label*="Theme"]) .rounded-2xl:not(.rounded-\[24px\]):not(.rounded-\[26px\]):not(.rounded-\[28px\]),
+[data-site-theme="sanzu-haruchiyo"] [role="dialog"]:not([aria-label*="Theme"]) article.rounded-xl,
+[data-site-theme="sanzu-haruchiyo"] [role="dialog"]:not([aria-label*="Theme"]) div.rounded-xl {
+  border-radius: 0.25rem;
+  background-color: rgba(11, 11, 15, 0.9);
+  border-color: rgba(255, 255, 255, 0.38);
+}
+
+[data-site-theme="sanzu-haruchiyo"] button.rounded-xl,
+[data-site-theme="sanzu-haruchiyo"] button.rounded-lg,
+[data-site-theme="sanzu-haruchiyo"] a.rounded-lg,
+[data-site-theme="sanzu-haruchiyo"] a.rounded-xl,
+[data-site-theme="sanzu-haruchiyo"] input[type="search"],
+[data-site-theme="sanzu-haruchiyo"] textarea {
+  border-radius: 0.22rem;
+}
+
+[data-site-theme="sanzu-haruchiyo"] button.rounded-xl,
+[data-site-theme="sanzu-haruchiyo"] button.rounded-lg,
+[data-site-theme="sanzu-haruchiyo"] a.rounded-lg,
+[data-site-theme="sanzu-haruchiyo"] a.rounded-xl {
+  box-shadow: 2px 2px 0 rgba(255, 255, 255, 0.24);
+}
+
+[data-site-theme="sanzu-haruchiyo"] [role="group"] button[aria-pressed="true"] {
+  background: #FFFFFF !important;
+  color: #09090B !important;
+  border-color: #FFFFFF !important;
+}
+
+[data-site-theme="sanzu-haruchiyo"] span.rounded-md {
+  border-radius: 0.15rem;
+  border-color: rgba(255, 255, 255, 0.6);
+  background-color: #111216;
+  color: #FFFFFF;
 }
 
 /* Áp dụng token cho các Theme mới (trừ mặc định classic-gold) */

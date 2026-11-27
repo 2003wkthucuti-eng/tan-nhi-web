@@ -2155,7 +2155,11 @@ function AppContent() {
                     : activeTheme.id === 'joo-jaekyung'
                     ? '🥊 Team Black · Tạp chí võ đài & bộ bài tây trắng đen'
                     : activeTheme.id === 'zhenya'
-                    ? '★★★★★ Profile · Hồ sơ đặc vụ Zhenya & bộ sưu tập ảnh'
+                    ? '🎞️ Zhenya · Cuộn phim noir, quân Vua cờ vua & hoa hồng trắng'
+                    : activeTheme.id === 'caesar'
+                    ? '🎀 Caesar Alexandrovich · Nơ ruy băng satin & ánh nhìn dịu êm'
+                    : activeTheme.id === 'sanzu-haruchiyo'
+                    ? '✦ Sanzu Haruchiyo · Ngôi sao sọc xoáy & khung truyện trắng đen'
                     : 'Bộ sưu tập nhân vật AI Chatbot'}
                 </p>
                 <h2 className="font-display text-2xl sm:text-3xl lg:text-[40px] font-semibold text-[#F5EFE0] leading-[1.15] [text-wrap:balance]">
@@ -2994,10 +2998,26 @@ function AppContent() {
                     </div>
                   )}
                   {activeTheme.id === 'zhenya' && (
-                    <div aria-hidden="true" className="mt-1 flex items-center gap-1.5 text-[9.5px] text-[#FAF2E6]/90">
-                      <span className="tracking-widest">★★★★★</span>
-                      <span className="px-1.5 py-[1px] rounded-full bg-[#FAF2E6] text-[#1B140F] font-semibold">
-                        Profile
+                    <div aria-hidden="true" className="mt-1 flex items-center gap-1.5 text-[9.5px] text-[#F5EFE4]/90">
+                      <span>♛</span>
+                      <span className="px-1.5 py-[1px] rounded bg-[#F5EFE4] text-[#0C0C0E] font-semibold">
+                        Noir Film
+                      </span>
+                    </div>
+                  )}
+                  {activeTheme.id === 'caesar' && (
+                    <div aria-hidden="true" className="mt-1 flex items-center gap-1.5 text-[9.5px] text-[#F2B5C4]">
+                      <span>🎀</span>
+                      <span className="px-1.5 py-[1px] rounded-full bg-[#F2B5C4] text-[#241417] font-semibold">
+                        Ribbon
+                      </span>
+                    </div>
+                  )}
+                  {activeTheme.id === 'sanzu-haruchiyo' && (
+                    <div aria-hidden="true" className="mt-1 flex items-center gap-1.5 text-[9.5px] text-[#FFFFFF]/90">
+                      <span>✦</span>
+                      <span className="px-1.5 py-[1px] rounded-[2px] bg-[#FFFFFF] text-[#09090B] font-semibold">
+                        Spiral ★
                       </span>
                     </div>
                   )}

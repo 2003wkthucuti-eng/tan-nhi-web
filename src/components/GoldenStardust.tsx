@@ -180,6 +180,58 @@ export const GoldenStardust: React.FC<GoldenStardustProps> = ({
                     d="M12 2.5C12 2.5 5 9.2 5 13.8C5 16.5 7 18.2 9.4 18.2C10.5 18.2 11.4 17.6 12 16.8C12.6 17.6 13.5 18.2 14.6 18.2C17 18.2 19 16.5 19 13.8C19 9.2 12 2.5 12 2.5ZM10.8 17.5L9.2 21.5H14.8L13.2 17.5H10.8Z"
                     fill={color}
                   />
+                ) : shapeKind === 'ribbon-bow' ? (
+                  <g>
+                    <path
+                      d="M10.5 11.5L3.5 7C2.2 9.5 2.5 13.2 4.5 15L10.5 12.6Z"
+                      fill={color}
+                      fillOpacity="0.88"
+                    />
+                    <path
+                      d="M13.5 11.5L20.5 7C21.8 9.5 21.5 13.2 19.5 15L13.5 12.6Z"
+                      fill={color}
+                      fillOpacity="0.88"
+                    />
+                    <path
+                      d="M10.8 13L7.2 20L9.8 18.8L11.8 13.4Z"
+                      fill={color}
+                      fillOpacity="0.72"
+                    />
+                    <path
+                      d="M13.2 13L16.8 20L14.2 18.8L12.2 13.4Z"
+                      fill={color}
+                      fillOpacity="0.72"
+                    />
+                    <circle cx="12" cy="12" r="2" fill={color} />
+                  </g>
+                ) : shapeKind === 'spiral-star' ? (
+                  <g>
+                    <path
+                      d="M12 1.8L14.9 8.2L21.9 9L16.7 13.8L18.1 20.8L12 17.3L5.9 20.8L7.3 13.8L2.1 9L9.1 8.2Z"
+                      fill={color}
+                      fillOpacity="0.85"
+                    />
+                    <path
+                      d="M12 12.2C12 11.2 13.1 10.8 13.7 11.5C14.4 12.3 13.9 13.8 12.6 14.1C11 14.4 9.7 13 9.9 11.3C10.1 9.5 12 8.4 13.9 9"
+                      stroke="#09090B"
+                      strokeWidth="1.25"
+                      strokeLinecap="round"
+                    />
+                  </g>
+                ) : shapeKind === 'butterfly' ? (
+                  <g>
+                    <path
+                      d="M11.4 11.5C8.5 7.5 4.2 5.8 3.2 8.2C2.4 10.2 5.4 12.5 8.5 13C6 14 4.8 16.5 6.4 18C8 19.5 10.6 17.2 11.4 14Z"
+                      fill={color}
+                      fillOpacity="0.86"
+                    />
+                    <path
+                      d="M12.6 11.5C15.5 7.5 19.8 5.8 20.8 8.2C21.6 10.2 18.6 12.5 15.5 13C18 14 19.2 16.5 17.6 18C16 19.5 13.4 17.2 12.6 14Z"
+                      fill={color}
+                      fillOpacity="0.86"
+                    />
+                    <line x1="12" y1="7.5" x2="12" y2="17.5" stroke={color} strokeWidth="1.4" strokeLinecap="round" />
+                  </g>
                 ) : (
                   <path
                     d="M12 0L14.4 9.6L24 12L14.4 14.4L12 24L9.6 14.4L0 12L9.6 9.6Z"

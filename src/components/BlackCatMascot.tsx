@@ -276,17 +276,43 @@ export const BlackCatMascot: React.FC<BlackCatMascotProps> = ({
       starWarm: '#D6D8DE',
     },
     'zhenya': {
-      gradStart: '#FAF2E6',
-      gradMid: '#DFC7A7',
-      gradEnd: '#7C6045',
-      bodyFill: '#EFE6D8',
-      eyeFill: '#8DB8A2',
-      pupilFill: '#1B140F',
-      noseFill: '#9B7C60',
-      auraInner: '#FAF2E6',
-      auraMid: '#DFC7A7',
-      starBright: '#FAF2E6',
-      starWarm: '#DFC7A7',
+      gradStart: '#F5EFE4',
+      gradMid: '#D8CEBE',
+      gradEnd: '#4A4842',
+      bodyFill: '#EDE7DC',
+      eyeFill: '#9BC4B4',
+      pupilFill: '#121215',
+      noseFill: '#8E887E',
+      auraInner: '#F5EFE4',
+      auraMid: '#D8CEBE',
+      starBright: '#F5EFE4',
+      starWarm: '#D8CEBE',
+    },
+    'caesar': {
+      gradStart: '#FFF5F4',
+      gradMid: '#F2B5C4',
+      gradEnd: '#B5788A',
+      bodyFill: '#F3E8DC',
+      eyeFill: '#BDD4E8',
+      pupilFill: '#241B20',
+      noseFill: '#E89BAE',
+      auraInner: '#FFF5F4',
+      auraMid: '#F2B5C4',
+      starBright: '#FFF5F4',
+      starWarm: '#F2B5C4',
+    },
+    'sanzu-haruchiyo': {
+      gradStart: '#FFFFFF',
+      gradMid: '#D2D6E0',
+      gradEnd: '#3B3E47',
+      bodyFill: '#16171C',
+      eyeFill: '#FFFFFF',
+      pupilFill: '#09090B',
+      noseFill: '#D2D6E0',
+      auraInner: '#FFFFFF',
+      auraMid: '#B2B7C4',
+      starBright: '#FFFFFF',
+      starWarm: '#D2D6E0',
     },
   };
 
@@ -938,38 +964,117 @@ export const BlackCatMascot: React.FC<BlackCatMascotProps> = ({
         </g>
       )}
 
-      {/* Zhenya: Thư mục hồ sơ nâu kem, 5 ngôi sao Profile & ánh sao vàng kem */}
+      {/* Zhenya: Cuộn phim noir cổ điển, quân Vua cờ vua & bướm đêm */}
       {variant !== 'badge' && effectiveThemeId === 'zhenya' && (
         <g aria-hidden="true">
+          {/* Cuộn phim dọc phía sau bên trái */}
           <rect
             x="16"
             y="18"
-            width="88"
-            height="84"
-            rx="12"
-            fill="#8C7258"
-            fillOpacity="0.14"
-            stroke="#FAF2E6"
-            strokeOpacity="0.45"
-            strokeWidth="1.3"
+            width="22"
+            height="76"
+            rx="2"
+            transform="rotate(-8 27 56)"
+            fill="#141418"
+            fillOpacity="0.86"
+            stroke="#D8CEBE"
+            strokeOpacity="0.55"
+            strokeWidth="1.2"
           />
-          {/* 5 ngôi sao hồ sơ nhỏ ở viền trên */}
-          <g fill="#FAF2E6" fillOpacity="0.88">
-            <circle cx="44" cy="18" r="1.7" />
-            <circle cx="52" cy="18" r="1.7" />
-            <circle cx="60" cy="18" r="1.7" />
-            <circle cx="68" cy="18" r="1.7" />
-            <circle cx="76" cy="18" r="1.7" />
+          <g fill="#F5EFE4" fillOpacity="0.65" transform="rotate(-8 27 56)">
+            <rect x="18.5" y="22" width="3" height="4" rx="0.6" />
+            <rect x="18.5" y="30" width="3" height="4" rx="0.6" />
+            <rect x="18.5" y="38" width="3" height="4" rx="0.6" />
+            <rect x="18.5" y="46" width="3" height="4" rx="0.6" />
+            <rect x="18.5" y="54" width="3" height="4" rx="0.6" />
+            <rect x="18.5" y="62" width="3" height="4" rx="0.6" />
           </g>
+          {/* Quân Vua cờ vua nhỏ bên phải */}
+          <g transform="translate(88, 56)" className="animate-cat-star-2">
+            <path d="M9 2V8M6.5 4.5H11.5" stroke="#F5EFE4" strokeWidth="1.3" strokeLinecap="round" />
+            <path d="M5 11H13L11.5 23H6.5L5 11Z" fill="#1C1C22" stroke="#D8CEBE" strokeWidth="1.1" />
+            <rect x="3.5" y="23" width="11" height="3.2" rx="1" fill="#D8CEBE" />
+          </g>
+          {/* Bướm nhỏ bay bên trên */}
+          <g className="animate-cat-star-1">
+            <path
+              d="M91 25C88.5 21.5 85 20 84.2 22C83.5 23.6 86 25.5 88.8 26C86.8 26.8 85.8 28.8 87.2 30C88.5 31.2 90.5 29.4 91 26.8Z"
+              fill="#F5EFE4"
+              fillOpacity="0.82"
+            />
+            <path
+              d="M92 25C94.5 21.5 98 20 98.8 22C99.5 23.6 97 25.5 94.2 26C96.2 26.8 97.2 28.8 95.8 30C94.5 31.2 92.5 29.4 92 26.8Z"
+              fill="#F5EFE4"
+              fillOpacity="0.82"
+            />
+          </g>
+        </g>
+      )}
+
+      {/* Caesar: Dải ruy băng hồng mềm mại, dấu son & trái tim dấu vân tay */}
+      {variant !== 'badge' && effectiveThemeId === 'caesar' && (
+        <g aria-hidden="true">
           <path
-            d="M22 33L24 38.5L29.5 40.5L24 42.5L22 48L20 42.5L14.5 40.5L20 38.5Z"
-            fill="#FAF2E6"
+            d="M15 32C30 22 46 27 60 22C74 17 90 22 105 30"
+            stroke="#F2B5C4"
+            strokeOpacity="0.52"
+            strokeWidth="3.6"
+            strokeLinecap="round"
+          />
+          <path
+            d="M15 32C30 22 46 27 60 22C74 17 90 22 105 30"
+            stroke="#FFF5F4"
+            strokeOpacity="0.45"
+            strokeWidth="1"
+            strokeLinecap="round"
+          />
+          {/* Dấu trái tim hồng nhỏ bên trái */}
+          <path
+            d="M22 44C22 44 17 40.8 17 37.8C17 36.2 18.2 35 19.8 35C20.8 35 21.6 35.6 22 36.4C22.4 35.6 23.2 35 24.2 35C25.8 35 27 36.2 27 37.8C27 40.8 22 44 22 44Z"
+            fill="#F2B5C4"
+            fillOpacity="0.72"
             className="animate-cat-star-1"
           />
+          {/* Dấu son môi nhỏ góc phải */}
+          <g transform="translate(91, 68) rotate(-14)" className="animate-cat-star-2">
+            <path d="M2 5C5 2.5 9 2.5 12 5C9 6.5 5 6.5 2 5Z" fill="#E89BAE" fillOpacity="0.82" />
+            <path d="M2 6.5C5 9 9 9 12 6.5C9 7.4 5 7.4 2 6.5Z" fill="#F2B5C4" fillOpacity="0.88" />
+          </g>
+        </g>
+      )}
+
+      {/* Sanzu Haruchiyo: Ngôi sao sọc xoáy góc cạnh phía sau mèo */}
+      {variant !== 'badge' && effectiveThemeId === 'sanzu-haruchiyo' && (
+        <g aria-hidden="true">
+          {/* Ngôi sao lớn sọc xoáy góc trên phải */}
+          <g className="animate-cat-star-1">
+            <path
+              d="M94 18L97.4 26L106 27L99.5 32.8L101.2 41.2L94 36.8L86.8 41.2L88.5 32.8L82 27L90.6 26Z"
+              fill="#FFFFFF"
+              stroke="#09090B"
+              strokeWidth="1.3"
+            />
+            <path
+              d="M94 31C94 29.8 95.4 29.3 96.2 30.2C97.1 31.2 96.5 33 94.8 33.4C92.8 33.8 91.2 32 91.5 29.9C91.8 27.6 94.2 26.2 96.5 27"
+              stroke="#09090B"
+              strokeWidth="1.4"
+              strokeLinecap="round"
+            />
+          </g>
+          {/* Ngôi sao góc cạnh nhỏ bên trái */}
           <path
-            d="M97 38L98.6 42.4L103 44L98.6 45.6L97 50L95.4 45.6L91 44L95.4 42.4Z"
-            fill="#DFC7A7"
+            d="M22 30L24.5 36L31 36.8L26 41L27.2 47.4L22 44L16.8 47.4L18 41L13 36.8L19.5 36Z"
+            fill="#D2D6E0"
+            fillOpacity="0.72"
+            stroke="#09090B"
+            strokeWidth="1"
             className="animate-cat-star-2"
+          />
+          <path
+            d="M21 76L23 80.5L28 81L24.2 84L25.2 88.8L21 86.2L16.8 88.8L17.8 84L14 81L19 80.5Z"
+            fill="#FFFFFF"
+            fillOpacity="0.82"
+            className="animate-cat-star-3"
           />
         </g>
       )}
@@ -1105,15 +1210,28 @@ export const BlackCatMascot: React.FC<BlackCatMascotProps> = ({
           <path d="M60 65.8C60 65.8 57.6 67.8 57.6 69.2C57.6 70 58.3 70.5 59 70.5C59.4 70.5 59.8 70.3 60 69.9C60.2 70.3 60.6 70.5 61 70.5C61.7 70.5 62.4 70 62.4 69.2C62.4 67.8 60 65.8 60 65.8Z" fill="#FFFFFF" />
         </g>
       ) : effectiveThemeId === 'zhenya' ? (
-        /* Zhenya: Vòng cổ nâu trầm & huy hiệu sao 4 cánh kem sáng */
+        /* Zhenya: Cổ áo noir tối & ghim hoa hồng trắng / vương miện nhỏ */
         <g aria-hidden="true">
-          <path d="M47 62C54 66 66 66 73 62" stroke="#3B2E24" strokeWidth="2.2" strokeLinecap="round" />
-          <path
-            d="M60 63.2L61.6 66.8L65.2 68.4L61.6 70L60 73.6L58.4 70L54.8 68.4L58.4 66.8Z"
-            fill="#FAF2E6"
-            stroke="#5E4938"
-            strokeWidth="0.9"
-          />
+          <path d="M47 62L55 68L60 64L65 68L73 62" fill="#1C1C22" stroke="#F5EFE4" strokeWidth="1.2" strokeLinejoin="round" />
+          <circle cx="60" cy="68.5" r="3" fill="#F5EFE4" stroke="#2D2B27" strokeWidth="1" />
+          <circle cx="60" cy="68.5" r="1.2" fill="#8E887E" />
+        </g>
+      ) : effectiveThemeId === 'caesar' ? (
+        /* Caesar: Nơ ruy băng hồng satin thắt trước cổ */
+        <g aria-hidden="true">
+          <path d="M47 62C54 66 66 66 73 62" stroke="#F2B5C4" strokeWidth="2.2" strokeLinecap="round" />
+          <path d="M58.5 65L48 60C47 64 47.5 68 50 70.5L58.5 66.8Z" fill="#F2B5C4" stroke="#FFF5F4" strokeWidth="1" strokeLinejoin="round" />
+          <path d="M61.5 65L72 60C73 64 72.5 68 70 70.5L61.5 66.8Z" fill="#F2B5C4" stroke="#FFF5F4" strokeWidth="1" strokeLinejoin="round" />
+          <path d="M58.8 67.2L55 76.5L58 74.8L59.5 67.5Z" fill="#E59BB0" stroke="#FFF5F4" strokeWidth="0.8" />
+          <path d="M61.2 67.2L65 76.5L62 74.8L60.5 67.5Z" fill="#E59BB0" stroke="#FFF5F4" strokeWidth="0.8" />
+          <circle cx="60" cy="66" r="2.6" fill="#FFF5F4" stroke="#C88EA0" strokeWidth="1" />
+        </g>
+      ) : effectiveThemeId === 'sanzu-haruchiyo' ? (
+        /* Sanzu Haruchiyo: Cà vạt sọc tối & charm ngôi sao xoáy trắng đen */
+        <g aria-hidden="true">
+          <path d="M47 62C54 66 66 66 73 62" stroke="#FFFFFF" strokeWidth="2.1" strokeDasharray="3.5 2.5" strokeLinecap="round" />
+          <path d="M58 64H62L63.5 79L60 83L56.5 79L58 64Z" fill="#23252E" stroke="#FFFFFF" strokeWidth="1" strokeLinejoin="round" />
+          <circle cx="60" cy="68.5" r="2.8" fill="#FFFFFF" stroke="#09090B" strokeWidth="0.9" />
         </g>
       ) : (
         <>
@@ -1257,6 +1375,36 @@ export const BlackCatMascot: React.FC<BlackCatMascotProps> = ({
         </g>
       )}
 
+      {/* Caesar: Nơ ruy băng hồng nhỏ kẹp trên mái tóc / tai mèo phải */}
+      {effectiveThemeId === 'caesar' && (
+        <g aria-hidden="true" transform="translate(72, 31) rotate(16)">
+          <path d="M0 0L-6.5 -3.5C-7.2 -0.5 -6.8 2.5 -4.5 4L0 1.2Z" fill="#F2B5C4" stroke="#FFF5F4" strokeWidth="0.9" />
+          <path d="M1.5 0L8 -3.5C8.7 -0.5 8.3 2.5 6 4L1.5 1.2Z" fill="#F2B5C4" stroke="#FFF5F4" strokeWidth="0.9" />
+          <circle cx="0.75" cy="0.5" r="1.7" fill="#FFF5F4" stroke="#C88EA0" strokeWidth="0.7" />
+        </g>
+      )}
+
+      {/* Sanzu Haruchiyo: Khuyên tai đôi, băng cá nhân trên má & sẹo khóe miệng hình thoi */}
+      {effectiveThemeId === 'sanzu-haruchiyo' && (
+        <g aria-hidden="true">
+          {/* 2 vòng khuyên tai bạc bên tai phải */}
+          <circle cx="83.5" cy="36" r="2.2" stroke="#FFFFFF" strokeWidth="1.2" fill="none" />
+          <circle cx="83" cy="40.5" r="2.2" stroke="#D2D6E0" strokeWidth="1.2" fill="none" />
+          {/* Băng dán nhỏ trên má trái */}
+          <rect
+            x="40"
+            y="50.5"
+            width="6.5"
+            height="3.2"
+            rx="1"
+            transform="rotate(-14 43.2 52.1)"
+            fill="#D2D6E0"
+            stroke="#09090B"
+            strokeWidth="0.7"
+          />
+        </g>
+      )}
+
       {/* Đôi mắt biểu cảm chớp nhẹ */}
       {effectiveThemeId === 'thuy-mac' ? (
         /* Thủy Mặc Sương Khói: Đôi mắt tĩnh lặng thanh thoát */
@@ -1299,24 +1447,38 @@ export const BlackCatMascot: React.FC<BlackCatMascotProps> = ({
         </>
       )}
 
-      {/* Rose Nebula & Collage Hai Bé: Má hồng dịu dàng */}
-      {(effectiveThemeId === 'rose-nebula' || effectiveThemeId === 'collage-hai-be') && (
+      {/* Rose Nebula, Collage Hai Bé & Caesar: Má hồng dịu dàng */}
+      {(effectiveThemeId === 'rose-nebula' ||
+        effectiveThemeId === 'collage-hai-be' ||
+        effectiveThemeId === 'caesar') && (
         <g aria-hidden="true">
           <ellipse
             cx="43.5"
             cy="53"
             rx="2.6"
             ry="1.4"
-            fill={effectiveThemeId === 'collage-hai-be' ? '#DF95A5' : '#F7A8C8'}
-            fillOpacity="0.45"
+            fill={
+              effectiveThemeId === 'caesar'
+                ? '#F2B5C4'
+                : effectiveThemeId === 'collage-hai-be'
+                ? '#DF95A5'
+                : '#F7A8C8'
+            }
+            fillOpacity="0.52"
           />
           <ellipse
             cx="76.5"
             cy="53"
             rx="2.6"
             ry="1.4"
-            fill={effectiveThemeId === 'collage-hai-be' ? '#DF95A5' : '#F7A8C8'}
-            fillOpacity="0.45"
+            fill={
+              effectiveThemeId === 'caesar'
+                ? '#F2B5C4'
+                : effectiveThemeId === 'collage-hai-be'
+                ? '#DF95A5'
+                : '#F7A8C8'
+            }
+            fillOpacity="0.52"
           />
         </g>
       )}
@@ -1330,6 +1492,14 @@ export const BlackCatMascot: React.FC<BlackCatMascotProps> = ({
         strokeLinecap="round"
         strokeLinejoin="round"
       />
+
+      {/* Sẹo khóe miệng hình thoi đặc trưng của Sanzu */}
+      {effectiveThemeId === 'sanzu-haruchiyo' && (
+        <g aria-hidden="true" fill="#D2D6E0">
+          <path d="M53 56.5L55 54.8L57 56.5L55 58.2Z" />
+          <path d="M63 56.5L65 54.8L67 56.5L65 58.2Z" />
+        </g>
+      )}
 
       {/* Ria mép thanh mảnh */}
       <path
